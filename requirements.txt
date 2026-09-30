@@ -1,0 +1,6 @@
+ultralytics>=8.3
+torch>=2.2
+opencv-python>=4.8
+numpy
+pyyaml
+requests

@@ -1,0 +1,6 @@
+# Court keypoint datasets (pose task) used to train the court detector.
+datasets:
+  - name: necromancer_pickleball_court
+    workspace: necromancer
+    project: pickleball-court-vbmkq
+    version: latest

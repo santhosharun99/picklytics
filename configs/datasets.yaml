@@ -1,0 +1,21 @@
+# Roboflow Universe datasets used to train the ball detector.
+# `version: latest` picks the newest dataset version; set a number to pin one.
+# `class_map` maps each source class name (case-insensitive) to a target class.
+# Source classes not listed are dropped.
+
+target_classes: [ball]
+
+datasets:
+  - name: liberin_pickleball_vision
+    workspace: liberin-technologies
+    project: pickleball-vision
+    version: latest
+    class_map:
+      ball: ball
+
+  - name: uninu_pickleball
+    workspace: pickleball-1uztf
+    project: pickleball-uninu
+    version: latest
+    class_map:
+      pickleball: ball
