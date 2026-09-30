@@ -12,7 +12,8 @@ import numpy as np
 
 from .court import COURT_L, COURT_W, KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y
 
-PLAYER_COLORS = {"P1": (80, 180, 255), "P2": (255, 120, 200), "P3": (120, 255, 120), "P4": (255, 220, 90)}
+# BGR, matching the dashboard's categorical palette (blue, orange, aqua, yellow)
+PLAYER_COLORS = {"P1": (214, 120, 42), "P2": (52, 104, 235), "P3": (122, 175, 27), "P4": (0, 161, 237)}
 SKELETON = [(5, 7), (7, 9), (6, 8), (8, 10), (5, 6), (5, 11), (6, 12), (11, 12), (11, 13), (13, 15), (12, 14), (14, 16)]
 
 
@@ -48,6 +49,10 @@ def render_video(out_dir: Path, width: int = 1280) -> Path:
     events_by_frame = {e["frame"]: e for e in rd["events"]}
     shots_by_frame = {s["frame"]: s for s in analysis["shots"]}
     bounces = [(b["frame"], *b["court"]) for b in analysis["bounces"]]
+    # write exactly the segments the dashboard maps its clock onto
+    keep = set()
+    for seg in analysis["segments"]:
+        keep.update(range(round(seg["start_t"] * fps), round(seg["end_t"] * fps) + 1))
 
     scale = width / meta["width"]
     height = int(meta["height"] * scale)
@@ -63,7 +68,7 @@ def render_video(out_dir: Path, width: int = 1280) -> Path:
         ok, frame = cap.read()
         if not ok:
             break
-        if f not in players:
+        if f not in players or f not in keep:
             trail.clear()
             continue
         img = cv2.resize(frame, (width, height))

@@ -46,6 +46,28 @@ python3 training/test_detect.py path/to/game.mp4 --max-frames 300
 
 Output goes to `outputs/`.
 
+## Analyse a match
+
+```bash
+python3 analyze.py "path/to/match.mp4" --names P1=Devilliers,P2=Boyer          # full match
+python3 analyze.py "path/to/match.mp4" --start 590 --end 650                    # a 1-minute clip
+python3 analyze.py "path/to/match.mp4" --skip-detect                            # re-analyse cached detections
+```
+
+Pipeline: `pickleball/detect.py` (models → `detections.jsonl`, skips non-court camera shots) →
+`pickleball/analysis.py` (players, ball track, hits/bounces, rallies, shots, stats → `analysis.json`) →
+`pickleball/render.py` (annotated video with top-down court).
+
+## Dashboard
+
+```bash
+python3 -m http.server 8001 --bind 127.0.0.1
+```
+
+Open http://127.0.0.1:8001/dashboard/ and pick a match. It shows the annotated video synced with a live
+top-down court, the rally list and per-rally shot log, player stats, shot mix, shot placement,
+rally lengths and court-coverage heatmaps.
+
 ## Datasets (CC BY 4.0)
 
 - Pickleball Vision, Liberin Technologies: https://universe.roboflow.com/liberin-technologies/pickleball-vision

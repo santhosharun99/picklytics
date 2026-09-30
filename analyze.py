@@ -38,7 +38,7 @@ def main() -> None:
     stem = re.sub(r"[^A-Za-z0-9]+", "_", Path(args.video).stem).strip("_")[:60]
     if args.start or args.end:
         stem += f"_{int(args.start)}-{int(args.end) if args.end else 'end'}"
-    out_dir = Path(args.out) if args.out else ROOT / "outputs" / stem
+    out_dir = (Path(args.out) if args.out else ROOT / "outputs" / stem).resolve()
     names = dict(kv.split("=", 1) for kv in args.names.split(",") if "=" in kv)
 
     if not args.skip_detect:
@@ -54,7 +54,21 @@ def main() -> None:
     if not args.no_render:
         print("[3/3] rendering ...")
         print("Saved", render_video(out_dir))
+    update_runs_index(out_dir, res)
     print("Output:", out_dir)
+    print("Dashboard: python3 -m http.server 8000  then open http://localhost:8000/dashboard/")
+
+
+def update_runs_index(out_dir: Path, res: dict) -> None:
+    """outputs/runs.json lists analysed runs for the dashboard's match picker."""
+    if out_dir.parent != ROOT / "outputs":
+        return
+    index_path = ROOT / "outputs" / "runs.json"
+    runs = json.loads(index_path.read_text()) if index_path.exists() else []
+    names = " vs ".join(p["name"] for _, p in sorted(res["players"].items()))
+    runs = [r for r in runs if r["dir"] != out_dir.name]
+    runs.insert(0, {"dir": out_dir.name, "label": f"{names} · {out_dir.name}"})
+    index_path.write_text(json.dumps(runs, indent=2))
 
 
 if __name__ == "__main__":
