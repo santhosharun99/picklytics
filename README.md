@@ -78,6 +78,8 @@ Hand-labelled rallies are the answer key for measuring accuracy.
 3. Per rally: `1` = hit by near player, `2` = hit by far player, `X` = bounce, then shot keys
    (S R D P K L O T G), `F`/`B` forehand/backhand, `V` volley, click the ball for its position, `]` to end
    the rally, and pick who won the point. Labels auto-save to `labels/<name>.json`.
+   Faster: `python3 training/prelabel.py outputs/<run> --video <name>` creates draft labels from a run;
+   click "Import auto-labels", fix mistakes, press Enter to mark each rally reviewed (only reviewed rallies are scored).
 4. Score a run: `python3 training/evaluate.py outputs/<run> labels/<name>.json`
 
 ## Datasets (CC BY 4.0)

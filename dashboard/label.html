@@ -75,6 +75,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
   <label>Player A <input class="name" id="nameA" value="Boyer"></label>
   <label>Player B <input class="name" id="nameB" value="Devilliers"></label>
   <label>FPS <input id="fps" value="29.97" style="width:60px"></label>
+  <button id="import" title="Load the system's draft labels to review">Import auto-labels</button>
   <a href="./" style="color:var(--text-secondary);font-size:13px">Dashboard</a>
   <span class="save" id="save">not saved yet</span>
 </header>
@@ -116,6 +117,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
         <kbd>V</kbd><span>toggle volley (hit before the bounce)</span>
         <kbd>[ ]</kbd><span>start / end rally (rallies also start on the first mark)</span>
         <kbd>W</kbd><span>swap ends (who is on the near side)</span>
+        <kbd>Enter</kbd><span><b>mark rally reviewed</b> (auto-labelled rallies only count once reviewed)</span>
         <kbd>Backspace</kbd><span>delete selected event</span>
         <kbd>Z</kbd><span>undo</span>
       </div>
@@ -226,15 +228,17 @@ function render() {
   const f = curFrame();
   const r = rallyAt(f) || openRally() || (selected && L.rallies.find(x => x.events.includes(selected)));
   $("#rallyCount").textContent = `${L.rallies.length} labelled · ${L.rallies.reduce((a, x) => a + x.events.filter(e => e.kind === "hit").length, 0)} hits`;
-  $("#rallies").innerHTML = `<thead><tr><th>#</th><th>Start</th><th>Hits</th><th>Bounces</th><th>Won by</th></tr></thead><tbody>` +
+  $("#rallies").innerHTML = `<thead><tr><th>#</th><th>Start</th><th>Hits</th><th>Bounces</th><th>Won by</th><th>Status</th></tr></thead><tbody>` +
     L.rallies.map(x => `<tr data-id="${x.id}" class="${r && r.id === x.id ? "sel" : ""}"><td>${x.id}</td><td>${fmt(x.start / fps())}</td>
       <td>${x.events.filter(e => e.kind === "hit").length}</td><td>${x.events.filter(e => e.kind === "bounce").length}</td>
-      <td>${x.winner ? pname(x.winner) : (x.end == null ? '<span class="warn">open</span>' : "–")}</td></tr>`).join("") + "</tbody>";
+      <td>${x.winner ? pname(x.winner) : (x.end == null ? '<span class="warn">open</span>' : "–")}</td>
+      <td>${x.reviewed === false ? '<span class="warn">to review</span>' : "✓"}</td></tr>`).join("") + "</tbody>";
   $("#rallies").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => {
     const x = L.rallies.find(y => y.id === +tr.dataset.id); seekFrame(x.start); selected = null; render();
   });
 
-  $("#evTitle").textContent = r ? `Rally ${r.id}${r.end == null ? " (open: press ] to end)" : ""} · near side: ${pname(r.near)}` : "No rally here";
+  $("#evTitle").innerHTML = r ? `Rally ${r.id}${r.end == null ? " (open: press ] to end)" : ""} · near side: ${pname(r.near)}` +
+    (r.reviewed === false ? ` · <span class="warn">auto-labelled: watch it, fix mistakes, then press Enter</span>` : r.auto ? " · reviewed ✓" : "") : "No rally here";
   if (!r) { $("#events").innerHTML = ""; $("#outcome").innerHTML = ""; }
   else {
     let hitNo = 0;
@@ -246,7 +250,7 @@ function render() {
           <td>${isHit ? `<span class="dot" style="background:${pcolor(e.player)}"></span>${pname(e.player)} <span class="muted">${e.side}</span>` : `<span class="dot" style="background:var(--bounce)"></span>bounce`}</td>
           <td>${isHit ? sel(SHOTS, e.shot, "shot") : ""}</td><td>${isHit ? sel(["forehand", "backhand"], e.stroke, "stroke") : ""}</td>
           <td>${isHit ? `<input type="checkbox" data-i="${i}" data-k="volley" ${e.volley ? "checked" : ""}>` : ""}</td>
-          <td class="muted">${e.xy ? "✓" : ""}</td></tr>`;
+          <td class="muted">${e.xy ? "✓" : ""}${e.auto ? ' <span title="from the system; edit if wrong">auto</span>' : ""}</td></tr>`;
       }).join("") + "</tbody>";
     $("#events").querySelectorAll("tbody tr").forEach(tr => tr.onclick = ev => {
       if (ev.target.matches("select,input")) return;
@@ -344,6 +348,10 @@ document.addEventListener("keydown", e => {
     if (r && !r.events.length) r.near = L.near;
     else if (r) { r.near = r.near === "A" ? "B" : "A"; r.events.forEach(ev => { if (ev.kind === "hit") ev.player = ev.side === "near" ? r.near : (r.near === "A" ? "B" : "A"); }); L.near = r.near; }
   });
+  else if (k === "enter") {
+    const r = rallyAt(curFrame()) || (selected && L.rallies.find(x => x.events.includes(selected)));
+    if (r) commit(() => { if (r.end == null) r.end = curFrame(); r.reviewed = r.reviewed === false ? true : (r.auto ? false : r.reviewed); });
+  }
   else if (k === "backspace" || k === "delete") {
     if (!selected) return;
     e.preventDefault();
@@ -360,6 +368,23 @@ window.addEventListener("resize", drawOverlay);
 
 // theme follows the dashboard's saved choice
 try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+$("#import").onclick = async () => {
+  if (!name) return;
+  let P = null;
+  try { P = await (await fetch(`/api/labels/${name.replace(/\.json$/, ".prelabel.json")}`)).json(); } catch {}
+  if (!P) return flash("No auto-labels yet for this video (run training/prelabel.py after the analysis).");
+  let added = 0;
+  commit(() => {
+    for (const r of P.rallies) {
+      const clash = L.rallies.some(x => x.start <= r.end && (x.end ?? Infinity) >= r.start);
+      if (clash) continue;
+      r.id = Math.max(0, ...L.rallies.map(x => x.id)) + 1;
+      L.rallies.push(r); added++;
+    }
+    L.rallies.sort((a, b) => a.start - b.start);
+  });
+  flash(`Imported ${added} auto-labelled rallies (${P.rallies.length - added} skipped: overlap your own). Review each and press Enter.`);
+};
 init();
 </script>
 </body>
