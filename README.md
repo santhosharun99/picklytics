@@ -61,12 +61,24 @@ Pipeline: `pickleball/detect.py` (models → `detections.jsonl`, skips non-court
 ## Dashboard
 
 ```bash
-python3 -m http.server 8001 --bind 127.0.0.1
+python3 serve.py
 ```
 
 Open http://127.0.0.1:8001/dashboard/ and pick a match. It shows the annotated video synced with a live
 top-down court, the rally list and per-rally shot log, player stats, shot mix, shot placement,
 rally lengths and court-coverage heatmaps.
+
+## Labelling & accuracy
+
+Hand-labelled rallies are the answer key for measuring accuracy.
+
+1. Make a browser-friendly copy of the match (same timing, 720p):
+   `ffmpeg -i match.mp4 -vf scale=1280:720 -c:v h264_videotoolbox -b:v 3000k -g 15 -c:a aac data/videos/<name>.mp4`
+2. `python3 serve.py`, open http://127.0.0.1:8001/dashboard/label.html
+3. Per rally: `1` = hit by near player, `2` = hit by far player, `X` = bounce, then shot keys
+   (S R D P K L O T G), `F`/`B` forehand/backhand, `V` volley, click the ball for its position, `]` to end
+   the rally, and pick who won the point. Labels auto-save to `labels/<name>.json`.
+4. Score a run: `python3 training/evaluate.py outputs/<run> labels/<name>.json`
 
 ## Datasets (CC BY 4.0)
 
