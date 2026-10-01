@@ -110,6 +110,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
         <kbd>1</kbd><span><b>hit by NEAR player</b> (bottom of screen)</span>
         <kbd>2</kbd><span><b>hit by FAR player</b> (top of screen)</span>
         <kbd>X</kbd><span><b>bounce</b></span>
+        <kbd>U</kbd><span>mark the selected bounce as <b>out</b> (landed outside the court)</span>
         <kbd>click</kbd><span>on the ball: set its position for the selected event (optional)</span>
         <kbd>S R D P K</kbd><span>serve, return, drive, drop, dink</span>
         <kbd>L O T G</kbd><span>lob, overhead, reset, groundstroke</span>
@@ -258,14 +259,15 @@ function render() {
   if (!r) { $("#events").innerHTML = ""; $("#outcome").innerHTML = ""; }
   else {
     let hitNo = 0;
-    $("#events").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Event</th><th>Shot</th><th>Stroke</th><th>Volley</th><th>Pos</th></tr></thead><tbody>` +
+    $("#events").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Event</th><th>Shot</th><th>Stroke</th><th>Volley / Out</th><th>Pos</th></tr></thead><tbody>` +
       r.events.map((e, i) => {
         const isHit = e.kind === "hit"; if (isHit) hitNo++;
         const sel = (opts, val, key) => `<select data-i="${i}" data-k="${key}"><option value="">–</option>${opts.map(o => `<option ${o === val ? "selected" : ""}>${o}</option>`).join("")}</select>`;
         return `<tr data-i="${i}" class="${e === selected ? "sel" : ""}"><td>${isHit ? hitNo : ""}</td><td>${fmt(e.frame / fps())}</td>
           <td>${isHit ? `<span class="dot" style="background:${pcolor(e.player)}"></span>${pname(e.player)} <span class="muted">${e.side}</span>` : `<span class="dot" style="background:var(--bounce)"></span>bounce`}</td>
           <td>${isHit ? sel(SHOTS, e.shot, "shot") : ""}</td><td>${isHit ? sel(["forehand", "backhand"], e.stroke, "stroke") : ""}</td>
-          <td>${isHit ? `<input type="checkbox" data-i="${i}" data-k="volley" ${e.volley ? "checked" : ""}>` : ""}</td>
+          <td>${isHit ? `<input type="checkbox" data-i="${i}" data-k="volley" ${e.volley ? "checked" : ""}>`
+                      : `<label class="muted"><input type="checkbox" data-i="${i}" data-k="out" ${e.out ? "checked" : ""}> out</label>`}</td>
           <td class="muted">${e.xy ? "✓" : ""}${e.auto ? ' <span title="from the system; edit if wrong">auto</span>' : ""}</td></tr>`;
       }).join("") + "</tbody>";
     $("#events").querySelectorAll("tbody tr").forEach(tr => tr.onclick = ev => {
@@ -292,7 +294,7 @@ function updateStatus() {
     $("#status").innerHTML = `Selected: <b>${pname(selected.player)}</b> ${selected.shot || "hit"}${selected.stroke ? ", " + selected.stroke : ""}${selected.volley ? ", volley" : ""} at ${fmt(selected.frame / fps())}` +
       (miss.length ? ` · <span class="warn">add ${miss.join(" and ")}</span>` : "") + (selected.xy ? "" : ` · <span class="muted">click the ball to set its position</span>`);
   } else {
-    $("#status").innerHTML = `Selected: <b>bounce</b> at ${fmt(selected.frame / fps())}` + (selected.xy ? "" : ` · <span class="muted">click where the ball touches the court</span>`);
+    $("#status").innerHTML = `Selected: <b>bounce</b>${selected.out ? " (out)" : ""} at ${fmt(selected.frame / fps())}` + (selected.xy ? "" : ` · <span class="muted">click where the ball touches the court</span>`);
   }
 }
 function drawOverlay() {
@@ -356,6 +358,10 @@ document.addEventListener("keydown", e => {
   else if (k === "f") setAttr("stroke", "forehand");
   else if (k === "b") setAttr("stroke", "backhand");
   else if (k === "v") setAttr("volley");
+  else if (k === "u") {
+    if (!selected || selected.kind !== "bounce") flash("Select a bounce first (mark one with X), then press U.");
+    else commit(() => { selected.out = !selected.out; });
+  }
   else if (k === "[") commit(() => { const r = openRally(); if (r) r.end = curFrame() - 1; ensureRally(curFrame() + Math.round(fps())); });
   else if (k === "]") { const r = openRally() || rallyAt(curFrame()); if (r) commit(() => { r.end = curFrame(); }); }
   else if (k === "w") commit(() => {

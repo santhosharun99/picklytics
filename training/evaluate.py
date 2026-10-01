@@ -106,6 +106,11 @@ def main() -> None:
         t, p = t_bounces[i], p_bounces[j]
         f = t["frame"]
         Hf = H.get(f) if f in H else next((H[g] for g in range(f - 3, f + 4) if g in H), None)
+        if "out" in t and p.get("court") is not None:
+            pc = p["court"]
+            pred_out = not (0 <= pc[0] <= 20 and 0 <= pc[1] <= 44)
+            agree["bounce_in_out"][1] += 1
+            agree["bounce_in_out"][0] += pred_out == bool(t["out"])
         if t.get("xy") and Hf is not None:
             c = cv2.perspectiveTransform(np.array([[t["xy"]]], np.float32), Hf)[0, 0]
             errs.append(float(np.hypot(c[0] - p["court"][0], c[1] - p["court"][1])))
