@@ -1,0 +1,6 @@
+# Stroke-pose datasets (keypoints + stroke-phase class), used to train a swing/stroke classifier.
+datasets:
+  - name: tennis_pose_estimation
+    workspace: degree-n9l9m
+    project: tennis-pose-estimation-erpft
+    version: latest

@@ -161,7 +161,10 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
         elif PERSIST["mode"] == "add":
             ph = persistent_reversal_hits(ball, players, fps, PERSIST["m"])
             fhits += [e for e in ph if not any(abs(e.frame - h.frame) < 10 for h in fhits)]
-        if GAPFILL["enabled"]:
+        _load_default_swing_model()
+        if SWING_MODEL["mode"] != "off" and SWING_MODEL["model"] is not None:
+            fhits = learned_swing_hits(ball, players, fhits, fps, SWING_MODEL)
+        elif GAPFILL["enabled"]:
             fhits = fill_gaps_with_swings(fhits, ball, players, fps, GAPFILL["min_score"])
         events = fhits + [e for e in flight + events if e.kind == "bounce"]
     else:
@@ -536,3 +539,65 @@ def persistent_reversal_hits(ball, players, fps, m: int = 25, smooth: int = 5) -
 
 
 PERSIST = {"mode": "off", "m": 25}  # off | only | add
+
+
+# ---------------------------------------------------------------------------
+# Learned swing detector (pickleball/swing.py) as a hit signal.
+# ---------------------------------------------------------------------------
+SWING_MODEL = {"model": None, "mode": "confirm", "thr": 0.95, "keep": 0.2, "min_gap": 12}  # off | primary | confirm
+# cross-set validated on 15 labelled rallies: flights confirmed by learned swing -> found 79%, real 81%, F1 80%
+
+
+def _load_default_swing_model():
+    from pathlib import Path
+    path = Path(__file__).resolve().parents[1] / "models" / "swing_clf.joblib"
+    if SWING_MODEL["model"] is None and path.exists():
+        import joblib
+        SWING_MODEL["model"] = joblib.load(path)
+
+
+def learned_swing_hits(ball, players, flight_hits, fps, cfg) -> list[Event]:
+    from .swing import swing_series
+    P, K = swing_series(players, cfg["model"])
+
+    def peaks(side, thr):
+        sp = P[side]
+        return [f for f, v in sp.items() if v >= thr and v >= max((sp.get(g, 0) for g in range(f - 5, f + 6) if g != f), default=0)]
+
+    def mk(f, side, sc):
+        p = K[side][f][2]
+        kp = np.asarray(p["kp"])
+        return Event("hit", f, f / fps, tuple(ball[f][:2]) if f in ball else tuple(p["foot"]), sc,
+                     player=p.get("id"), side=side, court=tuple(p["court"]),
+                     wrist="right" if kp[R_WRIST, 2] >= kp[L_WRIST, 2] else "left",
+                     body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean()))
+
+    if cfg["mode"] == "primary":
+        cands = sorted((f, s, P[s][f]) for s in ("near", "far") for f in peaks(s, cfg["thr"]))
+        # best alternating chain(s)
+        n = len(cands)
+        best, prev = [c[2] for c in cands], [-1] * n
+        for i in range(n):
+            for j in range(i):
+                gap = cands[i][0] - cands[j][0]
+                if cands[j][1] != cands[i][1] and cfg["min_gap"] <= gap <= 3 * fps and best[j] + cands[i][2] > best[i]:
+                    best[i], prev[i] = best[j] + cands[i][2], j
+        used, out = set(), []
+        for i in sorted(range(n), key=lambda k: -best[k]):
+            k = i
+            while k != -1 and k not in used:
+                used.add(k)
+                out.append(mk(cands[k][0], cands[k][1], 3.0 + cands[k][2]))
+                k = prev[k]
+        return out
+    # confirm: keep flight hits whose hitter swings around them, add confident swings that flights missed
+    out = []
+    for h in flight_hits:
+        ps = max((P[h.side].get(g, 0) for g in range(h.frame - 6, h.frame + 7)), default=0)
+        if ps >= cfg["keep"]:
+            out.append(h)
+    for s in ("near", "far"):
+        for f in peaks(s, cfg["thr"]):
+            if not any(abs(f - h.frame) <= 8 for h in out):
+                out.append(mk(f, s, 2.5 + P[s][f]))
+    return out
