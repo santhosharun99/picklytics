@@ -66,6 +66,8 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
 .outcome { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; font-size: 13px; }
 .muted { color: var(--text-muted); }
 .warn { color: var(--warn); }
+body.simple .full-only { display: none; }
+body:not(.simple) .simple-only { display: none; }
 </style>
 </head>
 <body>
@@ -75,6 +77,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
   <label>Player A <input class="name" id="nameA" value="Boyer"></label>
   <label>Player B <input class="name" id="nameB" value="Devilliers"></label>
   <label>FPS <input id="fps" value="29.97" style="width:60px"></label>
+  <label><input type="checkbox" id="simple" checked> Simple mode</label>
   <button id="import" title="Load the system's draft labels to review">Import auto-labels</button>
   <a href="./" style="color:var(--text-secondary);font-size:13px">Dashboard</a>
   <span class="save" id="save">not saved yet</span>
@@ -101,7 +104,19 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
     </div>
   </section>
   <aside class="side">
-    <div class="card">
+    <div class="card simple-only" style="font-size:15px;line-height:1.6">
+      <h2 style="font-size:16px">Just mark the hits</h2>
+      <ol style="margin:0;padding-left:20px">
+        <li>Click a rally on the right list. Press <kbd>Space</kbd> to play. Press <kbd>-</kbd> to slow down.</li>
+        <li>Every time a player <b>hits the ball</b>, pause and press<br>
+          <kbd>1</kbd> if it's the player at the <b>bottom</b> of the screen<br>
+          <kbd>2</kbd> if it's the player at the <b>top</b> of the screen</li>
+        <li>A hit in the list that didn't happen? Click it, press <kbd>Backspace</kbd>.</li>
+        <li>Rally finished? Press <kbd>Enter</kbd>. Next rally.</li>
+      </ol>
+      <p class="muted" style="font-size:13px;margin:10px 0 0">No bounces, no shot names. Being a frame or two off is fine. Use <kbd>←</kbd> <kbd>→</kbd> to step one frame if you want to be exact.</p>
+    </div>
+    <div class="card full-only">
       <h2>Keys</h2>
       <div class="keys">
         <kbd>Space</kbd><span>play / pause</span>
@@ -124,7 +139,7 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
       </div>
       <p class="muted" style="font-size:12px;margin:10px 0 0">Mark a hit at the frame the paddle touches the ball; mark a bounce at the frame the ball touches the court. Serve and return are filled in automatically. Third shots are derived later, so just label them drop, drive, etc.</p>
     </div>
-    <div class="card">
+    <div class="card full-only">
       <h2>Shot guide</h2>
       <div class="keys">
         <kbd>S</kbd><span><b>Serve</b>: first shot, underhand, diagonal</span>
@@ -259,6 +274,16 @@ function render() {
   if (!r) { $("#events").innerHTML = ""; $("#outcome").innerHTML = ""; }
   else {
     let hitNo = 0;
+    if (SIMPLE()) {
+      $("#events").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Hit by</th><th></th></tr></thead><tbody>` +
+        r.events.map((e, i) => e.kind !== "hit" ? "" : `<tr data-i="${i}" class="${e === selected ? "sel" : ""}"><td>${++hitNo}</td>
+          <td>${fmt(e.frame / fps())}</td><td><span class="dot" style="background:${pcolor(e.player)}"></span>${pname(e.player)}
+          <span class="muted">(${e.side === "near" ? "bottom" : "top"})</span></td><td class="muted">${e.auto ? "auto" : ""}</td></tr>`).join("") + "</tbody>";
+      $("#events").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => {
+        selected = r.events[+tr.dataset.i]; seekFrame(selected.frame); render();
+      });
+      $("#outcome").innerHTML = "";
+    } else {
     $("#events").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Event</th><th>Shot</th><th>Stroke</th><th>Volley / Out</th><th>Pos</th></tr></thead><tbody>` +
       r.events.map((e, i) => {
         const isHit = e.kind === "hit"; if (isHit) hitNo++;
@@ -283,11 +308,18 @@ function render() {
       `<span class="muted" style="margin-left:8px">ending</span><select id="ending"><option value="">–</option>${ENDINGS.map(o => `<option ${o === r.ending ? "selected" : ""}>${o}</option>`).join("")}</select>`;
     $("#outcome").querySelectorAll("button").forEach(b => b.onclick = () => commit(() => { r.winner = r.winner === b.dataset.w ? null : b.dataset.w; }));
     $("#ending").onchange = e => commit(() => { r.ending = e.target.value || null; });
+    }
   }
   drawOverlay();
   updateStatus();
 }
 function updateStatus() {
+  if (SIMPLE()) {
+    $("#status").innerHTML = selected && selected.kind === "hit"
+      ? `Marked: hit by <b>${pname(selected.player)}</b> at ${fmt(selected.frame / fps())}. Keep going, or press <kbd>Enter</kbd> when the rally ends.`
+      : "Press <kbd>1</kbd> (bottom player) or <kbd>2</kbd> (top player) at each hit.";
+    return;
+  }
   if (!selected) { $("#status").innerHTML = "Mark a hit with <kbd>1</kbd> (near) or <kbd>2</kbd> (far), or a bounce with <kbd>X</kbd>."; return; }
   if (selected.kind === "hit") {
     const miss = [!selected.shot && "shot type (S R D P K L O T G)", !selected.stroke && "forehand/backhand (F B)"].filter(Boolean);
@@ -372,7 +404,11 @@ document.addEventListener("keydown", e => {
   });
   else if (k === "enter") {
     const r = rallyAt(curFrame()) || (selected && L.rallies.find(x => x.events.includes(selected)));
-    if (r) commit(() => { if (r.end == null) r.end = curFrame(); r.reviewed = r.reviewed === false ? true : (r.auto ? false : r.reviewed); });
+    if (r) commit(() => {
+      if (r.end == null) r.end = curFrame();
+      r.reviewed = r.reviewed === false ? true : (r.auto ? false : r.reviewed);
+      if (SIMPLE()) r.mode = "hits";  // only hits were checked: score hits only
+    });
   }
   else if (k === "backspace" || k === "delete") {
     if (!selected) return;
@@ -390,6 +426,14 @@ window.addEventListener("resize", drawOverlay);
 
 // theme follows the dashboard's saved choice
 try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+const SIMPLE = () => $("#simple").checked;
+try { const v = localStorage.getItem("pb-label-simple"); if (v !== null) $("#simple").checked = v === "1"; } catch {}
+document.body.classList.toggle("simple", SIMPLE());
+$("#simple").onchange = () => {
+  document.body.classList.toggle("simple", SIMPLE());
+  try { localStorage.setItem("pb-label-simple", SIMPLE() ? "1" : "0"); } catch {}
+  render();
+};
 $("#import").onclick = async () => {
   if (!name) return;
   let P = null;

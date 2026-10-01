@@ -72,10 +72,13 @@ def main() -> None:
         raise SystemExit("No completed labelled rallies inside this run's time range.")
     in_labelled = lambda f: any(r["start"] <= f <= r["end"] for r in rallies)
 
+    # rallies labelled in simple mode only had their hits checked
+    full = [r for r in rallies if r.get("mode") != "hits"]
+    in_full = lambda f: any(r["start"] <= f <= r["end"] for r in full)
     t_hits = [e for r in rallies for e in r["events"] if e["kind"] == "hit"]
-    t_bounces = [e for r in rallies for e in r["events"] if e["kind"] == "bounce"]
+    t_bounces = [e for r in full for e in r["events"] if e["kind"] == "bounce"]
     p_hits = [s for s in A["shots"] if in_labelled(s["frame"])]
-    p_bounces = [b for b in A["bounces"] if in_labelled(b["frame"])]
+    p_bounces = [b for b in A["bounces"] if in_full(b["frame"])]
 
     hm = match([e["frame"] for e in t_hits], [s["frame"] for s in p_hits], args.tol)
     bm = match([e["frame"] for e in t_bounces], [b["frame"] for b in p_bounces], args.tol)
@@ -94,9 +97,10 @@ def main() -> None:
             agree[key][0] += tv == pv
         cmp("side", t.get("side"), p.get("side"))
         cmp("player", label_names.get(t.get("player")), names.get(p.get("player"), p.get("player")))
-        cmp("shot_type", norm_shot(t.get("shot")), norm_shot(p.get("shot_type")))
-        cmp("stroke", t.get("stroke"), p.get("stroke"))
-        cmp("volley", bool(t.get("volley")), bool(p.get("volley")))
+        if not any(r.get("mode") == "hits" and r["start"] <= t["frame"] <= r["end"] for r in rallies):
+            cmp("shot_type", norm_shot(t.get("shot")), norm_shot(p.get("shot_type")))
+            cmp("stroke", t.get("stroke"), p.get("stroke"))
+            cmp("volley", bool(t.get("volley")), bool(p.get("volley")))
         if t.get("shot"):
             confusion[norm_shot(t["shot"])][norm_shot(p["shot_type"])] += 1
 
