@@ -80,6 +80,43 @@ def _court_polygon_img(H_inv: np.ndarray, margin: float = 1.0) -> np.ndarray:
     return cv2.perspectiveTransform(corners.reshape(-1, 1, 2), H_inv).reshape(-1, 2)
 
 
+FLIGHT_SETTINGS = {"enabled": True, "penalty": 1200.0, "reach": 0.45, "only": True}  # tuned on 9 labelled rallies
+
+
+def _flight_events(ball, players, homographies, fps, penalty, reach) -> list[Event]:
+    """Contacts as boundaries between smooth ball flights (see flights.py)."""
+    from .flights import flight_boundaries
+    out = []
+    for f, pos, v_in, v_out in flight_boundaries(ball, penalty=penalty):
+        best = None
+        for ff in range(f - 4, f + 5):
+            for p in players.get(ff, []):
+                pts, h = _reach_points(p)
+                for xy, name in pts:
+                    d = np.hypot(xy[0] - pos[0], xy[1] - pos[1]) / h
+                    if best is None or d < best[0]:
+                        best = (d, p, name)
+        if best and best[0] <= reach:
+            d, p, name = best
+            kp = np.asarray(p["kp"])
+            wy = kp[L_WRIST if name == "left" else R_WRIST, 1]
+            out.append(Event("hit", f, f / fps, pos, 2.5 + (reach - d), player=p.get("id"), side=p["side"],
+                             court=tuple(p["court"]), wrist=name,
+                             body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean()),
+                             above_head=bool(kp[NOSE, 2] > 0.3 and wy < kp[NOSE, 1])))
+            continue
+        H = next((homographies[g] for g in (f, *range(f - 3, f + 4)) if g in homographies), None)
+        if H is None:
+            continue
+        poly = _court_polygon_img(np.linalg.inv(H))
+        if cv2.pointPolygonTest(poly.astype(np.float32), (float(pos[0]), float(pos[1])), False) < 0:
+            continue
+        cxy = cv2.perspectiveTransform(np.array([[pos]], np.float32), H)[0, 0]
+        out.append(Event("bounce", f, f / fps, pos, 2.0, side="far" if cxy[1] < COURT_L / 2 else "near",
+                         court=(float(cxy[0]), float(cxy[1]))))
+    return out
+
+
 def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict[int, np.ndarray],
                   fps: float, max_gap: int = 6, min_score: float = 1.2,
                   hit_radius: float = 0.45) -> list[Event]:
@@ -87,6 +124,8 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
     if not frames:
         return []
     events: list[Event] = []
+    fs = FLIGHT_SETTINGS
+    flight = _flight_events(ball, players, homographies, fps, fs["penalty"], fs["reach"]) if fs["enabled"] else []
     chunks = list(_chunks(frames, max_gap))
     events += _gap_reversals(chunks, ball, players, homographies, fps)
     events += _proximity_hits(ball, players, fps)
@@ -110,6 +149,12 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
             ev = _classify(f, (bx, by), float(scores[i]), players, homographies, fps, hit_radius, v_in, v_out)
             if ev:
                 events.append(ev)
+    if fs["enabled"] and fs["only"]:
+        # hits from flight boundaries; bounces from both (trajectory kinks find bounces that
+        # a single smooth fit can absorb)
+        events = flight + [e for e in events if e.kind == "bounce"]
+    else:
+        events += flight
     return _clean(events)
 
 
