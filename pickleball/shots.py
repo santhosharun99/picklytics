@@ -19,7 +19,9 @@ FT_PER_S_TO_MPH = 0.6818
 SHOT_RULES = {
     "kitchen_depth": 7.0,        # ft from net: lands in the kitchen
     "soft_mph": 22.0,            # at or below: soft shot (dink / drop)
-    "drive_mph": 32.0,           # at or above: drive
+    "drive_mph": 27.0,           # at or above: drive (tuned on labelled rallies: drives 28-69 mph)
+    "drive_flight_s": 0.65,      # or: from the back and this quick to its next event
+    "reset_depth": 15.0,         # soft shot hit from within this many ft of the net (transition) = reset
     "lob_flight_s": 1.3,         # long hang time...
     "lob_depth": 12.0,           # ...landing deep
     "overhead_mph": 25.0,
@@ -125,9 +127,11 @@ def _shot_type(n, volley, h, speed, flight, d_hit, d_land, r) -> str:
         return f"{third}drop"
     if speed is not None and speed >= r["drive_mph"]:
         return f"{third}drive"
+    if flight is not None and flight <= r["drive_flight_s"] and d_hit is not None and d_hit > r["near_net"]:
+        return f"{third}drive"
     if volley and d_hit is not None and d_hit <= r["near_net"]:
         return "volley"
-    if d_hit is not None and d_hit <= r["near_net"]:
+    if d_hit is not None and d_hit <= r["reset_depth"]:
         return "reset"
     return f"{third}groundstroke" if third else "groundstroke"
 
