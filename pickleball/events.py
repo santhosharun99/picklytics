@@ -156,6 +156,11 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
         # hits from flight boundaries; bounces from both (trajectory kinks find bounces that
         # a single smooth fit can absorb)
         fhits = [e for e in flight if e.kind == "hit"]
+        if PERSIST["mode"] == "only":
+            fhits = persistent_reversal_hits(ball, players, fps, PERSIST["m"])
+        elif PERSIST["mode"] == "add":
+            ph = persistent_reversal_hits(ball, players, fps, PERSIST["m"])
+            fhits += [e for e in ph if not any(abs(e.frame - h.frame) < 10 for h in fhits)]
         if GAPFILL["enabled"]:
             fhits = fill_gaps_with_swings(fhits, ball, players, fps, GAPFILL["min_score"])
         events = fhits + [e for e in flight + events if e.kind == "bounce"]
@@ -493,3 +498,41 @@ def fill_gaps_with_swings(hits: list[Event], ball, players, fps, min_score: floa
 
 
 GAPFILL = {"enabled": True, "min_score": 1.0}  # +5 pts recall at same precision on 15 labelled rallies
+
+
+def persistent_reversal_hits(ball, players, fps, m: int = 25, smooth: int = 5) -> list[Event]:
+    """Hit rule from ameynarwadkar/Tennis-Analysis-System (Apache-2.0), adapted: a hit is where the
+    ball's (smoothed) up/down screen direction flips and the new direction holds for >= m of the
+    next 1.2*m frames. Side from the new direction: moving up-screen = hit by the near player."""
+    fr = sorted(ball)
+    if len(fr) < 3:
+        return []
+    f0, f1 = fr[0], fr[-1]
+    ys = np.full(f1 - f0 + 1, np.nan)
+    for f in fr:
+        ys[f - f0] = ball[f][1]
+    idx = np.arange(len(ys))
+    ok = ~np.isnan(ys)
+    ys = np.interp(idx, idx[ok], ys[ok])  # their pipeline interpolates every gap
+    ym = np.convolve(ys, np.ones(smooth) / smooth, mode="full")[:len(ys)]  # trailing rolling mean
+    dy = np.diff(ym, prepend=ym[0])
+    out = []
+    span = int(m * 1.2)
+    for i in range(1, len(dy) - span):
+        if not ((dy[i] > 0 and dy[i + 1] < 0) or (dy[i] < 0 and dy[i + 1] > 0)):
+            continue
+        cnt = int(np.sum(np.sign(dy[i + 1:i + span + 1]) == np.sign(dy[i + 1])))
+        if cnt >= m:
+            f = f0 + i
+            if f not in ball:  # only where we actually track the ball nearby
+                if not any(g in ball for g in range(f - 3, f + 4)):
+                    continue
+            side = "near" if dy[i + 1] < 0 else "far"
+            cand = [p for g in range(f - 3, f + 4) for p in players.get(g, []) if p["side"] == side]
+            p = cand[0] if cand else None
+            out.append(Event("hit", f, f / fps, (0.0, float(ys[i])), 2.0, player=p.get("id") if p else None,
+                             side=side, court=tuple(p["court"]) if p else None))
+    return out
+
+
+PERSIST = {"mode": "off", "m": 25}  # off | only | add
