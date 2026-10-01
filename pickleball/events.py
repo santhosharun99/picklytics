@@ -16,7 +16,7 @@ import numpy as np
 
 from .court import COURT_L, COURT_W
 
-NOSE, L_SHOULDER, R_SHOULDER, L_WRIST, R_WRIST = 0, 5, 6, 9, 10
+NOSE, L_SHOULDER, R_SHOULDER, L_ELBOW, R_ELBOW, L_WRIST, R_WRIST = 0, 5, 6, 7, 8, 9, 10
 
 
 @dataclass
@@ -89,6 +89,7 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
     events: list[Event] = []
     chunks = list(_chunks(frames, max_gap))
     events += _gap_reversals(chunks, ball, players, homographies, fps)
+    events += _proximity_hits(ball, players, fps)
     for chunk in chunks:
         if len(chunk) < 9:
             continue
@@ -110,6 +111,60 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
             if ev:
                 events.append(ev)
     return _clean(events)
+
+
+def _reach_points(p):
+    """Wrists plus estimated paddle centres (wrist extended along the forearm)."""
+    kp = np.asarray(p["kp"])
+    h = max(p["box"][3] - p["box"][1], 1.0)
+    pts = []
+    for e, w, name in ((L_ELBOW, L_WRIST, "left"), (R_ELBOW, R_WRIST, "right")):
+        if kp[w, 2] < 0.3:
+            continue
+        pts.append((kp[w, :2], name))
+        if kp[e, 2] >= 0.3:
+            d = kp[w, :2] - kp[e, :2]
+            n = np.linalg.norm(d)
+            if n > 1:
+                pts.append((kp[w, :2] + d / n * 0.22 * h, name))
+    return pts, h
+
+
+def _proximity_hits(ball, players, fps, reach: float = 0.55, win: int = 6, rise: float = 0.2) -> list[Event]:
+    """Contacts seen as the ball reaching a player's paddle and then leaving it, whatever
+    the ball does on screen afterwards (lobs keep rising after a far-side contact)."""
+    out = []
+    for side in ("near", "far"):
+        series = {}
+        for f, (bx, by, _, _) in ball.items():
+            best = None
+            for p in players.get(f, []):
+                if p["side"] != side:
+                    continue
+                pts, h = _reach_points(p)
+                for xy, name in pts:
+                    d = np.hypot(xy[0] - bx, xy[1] - by) / h
+                    if best is None or d < best[0]:
+                        best = (d, p, name)
+            if best:
+                series[f] = best
+        for f, (d, p, name) in series.items():
+            if d > reach:
+                continue
+            around = [series[g][0] for g in range(f - win, f + win + 1) if g in series and g != f]
+            if not around or d > min(around):
+                continue  # not the closest approach
+            before = [series[g][0] for g in range(f - win, f) if g in series]
+            after = [series[g][0] for g in range(f + 1, f + win + 1) if g in series]
+            if not after or max(after) - d < rise or (before and max(before) - d < rise * 0.5):
+                continue  # the ball must come in and then leave
+            kp = np.asarray(p["kp"])
+            wy = kp[L_WRIST if name == "left" else R_WRIST, 1]
+            out.append(Event("hit", f, f / fps, tuple(ball[f][:2]), 2.0 + (reach - d), player=p.get("id"),
+                             side=side, court=tuple(p["court"]), wrist=name,
+                             body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean()),
+                             above_head=bool(kp[NOSE, 2] > 0.3 and wy < kp[NOSE, 1])))
+    return out
 
 
 def _gap_reversals(chunks, ball, players, homographies, fps, max_gap_s: float = 0.5) -> list[Event]:
