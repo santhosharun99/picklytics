@@ -31,8 +31,7 @@ football), not a consumer "rate my game" app. Every number must be backed by cli
 7. **Indian tournament database** (after the analysis tool is solid): results, draws, scores and stats of
    tournaments held in India -> player profiles, match history, head-to-head, form; feeds opponent
    shortlists for scouting. Sources to evaluate: national associations' results pages, DUPR (API, needs
-   approval), tournament platforms, organisers' posts; YouTube streams as video only with organiser /
-   broadcaster permission. Prefer official APIs or permission over scraping; respect site terms and
+   approval), tournament platforms, organisers' posts. Scope: scores and stats only, no video. Prefer official APIs or permission over scraping; respect site terms and
    robots.txt; store only public results data about players.
 
 ## Principles
