@@ -80,7 +80,7 @@ def _court_polygon_img(H_inv: np.ndarray, margin: float = 1.0) -> np.ndarray:
     return cv2.perspectiveTransform(corners.reshape(-1, 1, 2), H_inv).reshape(-1, 2)
 
 
-FLIGHT_SETTINGS = {"enabled": True, "penalty": 1200.0, "reach": 0.45, "only": True}  # tuned on 9 labelled rallies
+FLIGHT_SETTINGS = {"enabled": True, "penalty": 900.0, "reach": 0.45, "only": True}  # tuned on 15 labelled rallies (70 hits)
 
 
 def _flight_events(ball, players, homographies, fps, penalty, reach) -> list[Event]:
