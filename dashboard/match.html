@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Match Analysis</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f3ef; --surface-1: #fcfcfb; --surface-2: #f0efec; --border: #e2e1dc;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #85847f;
+  --series-1: #2a78d6; --series-2: #eb6834; --good: #1baf7a; --bad: #e34948; --note: #eda100;
+  --court: #256abf; --court-kitchen: #184f95; --court-line: #ffffff; --court-out: #3f6b4a;
+  --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
+    --series-1: #3987e5; --series-2: #d95926; --good: #199e70; --bad: #e66767; --note: #c98500;
+    --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
+    --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
+  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
+  --series-1: #3987e5; --series-2: #d95926; --good: #199e70; --bad: #e66767; --note: #c98500;
+  --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
+  --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text-primary);
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--surface-1);
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+header h1 { margin: 0; font-size: 19px; }
+header .sub { color: var(--text-secondary); font-size: 13px; }
+.tabs { display: flex; gap: 6px; }
+.tab { border: 1px solid var(--border); background: var(--surface-2); color: inherit; font: inherit;
+  padding: 7px 14px; border-radius: 999px; cursor: pointer; display: flex; gap: 8px; align-items: center; }
+.tab.on { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+main { max-width: 1300px; margin: 0 auto; padding: 20px 24px 60px; display: grid; gap: 18px; }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
+.card h2 { margin: 0 0 4px; font-size: 14px; }
+.card .why { color: var(--text-muted); font-size: 12px; margin: 0 0 12px; }
+.tiles { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.tile .l { font-size: 12px; color: var(--text-secondary); }
+.tile .v { font-size: 26px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.tile .n { font-size: 11px; color: var(--text-muted); }
+.ins { display: grid; gap: 8px; }
+.ins div { display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
+.badge { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; min-width: 72px; }
+.badge.strength { color: var(--good); } .badge.weakness { color: var(--bad); } .badge.pattern { color: var(--series-1); }
+.small { color: var(--note); font-size: 11px; white-space: nowrap; }
+.clips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.clip { border: 1px solid var(--border); background: var(--surface-1); color: inherit; font: inherit; font-size: 11px;
+  border-radius: 6px; padding: 1px 7px; cursor: pointer; }
+.clip:hover { border-color: var(--series-1); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--text-secondary); font-weight: 500; font-size: 12px; }
+svg text { fill: var(--text-secondary); font-size: 11px; }
+.empty { color: var(--text-muted); font-size: 13px; }
+.bar { display: grid; grid-template-columns: 120px 1fr 44px; gap: 8px; align-items: center; margin: 5px 0; font-size: 13px; }
+.bar .track { background: var(--surface-2); border-radius: 4px; height: 10px; overflow: hidden; }
+.bar .fill { height: 100%; border-radius: 4px; }
+.split { display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px; margin: 6px 0; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 20; }
+.modal.on { display: flex; }
+.modal .box { background: var(--surface-1); border-radius: 12px; padding: 14px; width: min(960px, 94vw); }
+.modal video { width: 100%; border-radius: 8px; background: #000; }
+.modal .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+button.plain { border: 1px solid var(--border); background: var(--surface-2); color: inherit; font: inherit; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <div><h1 id="title">Match analysis</h1><div class="sub" id="source"></div></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main id="main"></main>
+<div class="modal" id="modal"><div class="box">
+  <div class="row"><b id="clipTitle"></b><button class="plain" id="closeClip">Close</button></div>
+  <video id="clipVideo" controls></video>
+  <div class="row" style="margin-top:8px"><span class="small" id="clipInfo"></span><span><button class="plain" id="prevClip">◀ Prev</button> <button class="plain" id="nextClip">Next ▶</button></span></div>
+</div></div>
+<script>
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); if (p) p.appendChild(e); return e; };
+const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
+let R, current, rallyById = {};
+try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+
+async function init() {
+  const file = new URLSearchParams(location.search).get("report") || "boyer_devilliers";
+  R = await (await fetch(`../outputs/reports/${file}.json`, {cache: "no-store"})).json();
+  R.rallies.forEach(r => rallyById[r.id] = r);
+  $("#title").textContent = `Match analysis · ${R.title}`;
+  $("#source").textContent = `Based on ${R.source}. Small samples are marked.`;
+  const names = Object.keys(R.players);
+  $("#tabs").innerHTML = names.map((n, i) => `<button class="tab" data-p="${n}"><span class="dot" style="background:var(--series-${i + 1})"></span>${n}</button>`).join("");
+  document.querySelectorAll(".tab").forEach(b => b.onclick = () => show(b.dataset.p));
+  show(names[0]);
+}
+
+function clipButtons(ids) {
+  if (!ids || !ids.length) return "";
+  return `<span class="clips">${ids.slice(0, 8).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(rallyById[id]?.start_t || 0)}</button>`).join("")}${ids.length > 8 ? `<span class="small">+${ids.length - 8}</span>` : ""}</span>`;
+}
+
+function tile(label, s, suffix = "") {
+  const v = s.value == null ? "–" : s.value + suffix;
+  return `<div class="tile"><div class="l">${label}</div><div class="v">${v}</div><div class="n">${s.n} ${s.n === 1 ? "rally" : "rallies"}${s.n < 5 ? " · small sample" : ""}</div></div>`;
+}
+
+function show(name) {
+  current = name;
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.p === name));
+  const P = R.players[name], idx = Object.keys(R.players).indexOf(name), col = `var(--series-${idx + 1})`;
+  const s = P.summary;
+  $("#main").innerHTML = `
+    <section class="tiles">
+      ${tile("Rallies won", s.rallies_won_pct, "%")}${tile("Won when serving", s.won_on_serve_pct, "%")}
+      ${tile("Won when returning", s.won_on_return_pct, "%")}
+      <div class="tile"><div class="l">Shots hit</div><div class="v">${s.shots.value}</div><div class="n">in ${s.rallies.value} rallies</div></div>
+      <div class="tile"><div class="l">Avg distance from net</div><div class="v">${P.movement.avg_depth_ft ?? "–"}<span style="font-size:14px"> ft</span></div><div class="n">during rallies</div></div>
+      <div class="tile"><div class="l">Time at kitchen line</div><div class="v">${P.movement.kitchen_time_pct ?? "–"}%</div><div class="n">within 9 ft of the net</div></div>
+    </section>
+    <section class="card"><h2>Strengths, weaknesses and patterns</h2><p class="why">Plain-language findings for this match. Click ▶ to watch the rallies behind each one.</p>
+      <div class="ins">${P.insights.map(i => `<div><span class="badge ${i.kind}">${i.kind}</span><span>${i.text}${i.low_sample ? ` <span class="small">small sample (${i.n})</span>` : ""}</span>${clipButtons(i.rallies)}</div>`).join("") || '<span class="empty">Not enough data.</span>'}</div>
+    </section>
+    <section class="grid">
+      <div class="card"><h2>Shot mix</h2><p class="why">All shots this player hit, by type.</p><div id="mix"></div></div>
+      <div class="card"><h2>Forehand vs backhand</h2><p class="why">Overall, and per shot type.</p><div id="strokes"></div></div>
+      <div class="card"><h2>Third shot (when serving)</h2><p class="why">Choice and how often that rally was won.</p><div id="third"></div></div>
+    </section>
+    <section class="grid">
+      <div class="card"><h2>Where they hit from</h2><p class="why">Contact points, shown on their own half (net at top).</p><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
+      <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (darker = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
+      <div class="card"><h2>How rallies ended</h2><p class="why">When this player hit the last shot: won it (winner / forced error) or lost it (own error).</p><div id="endings"></div>
+        <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
+    </section>
+    <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P); renderLength(P, col); renderRallies(name);
+  document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
+}
+
+function bars(target, entries, col, max) {
+  max = max || Math.max(1, ...entries.map(e => e[1]));
+  $(target).innerHTML = entries.length ? entries.map(([k, v, extra]) => `<div class="bar"><span>${cap(k)}</span><div class="track"><div class="fill" style="width:${100 * v / max}%;background:${col}"></div></div><span style="text-align:right">${v}${extra || ""}</span></div>`).join("") : '<span class="empty">No data.</span>';
+}
+function renderMix(P, col) { bars("#mix", Object.entries(P.shot_mix), col); }
+function renderStrokes(P, col) {
+  const fh = P.stroke.forehand || 0, bh = P.stroke.backhand || 0, t = fh + bh || 1;
+  let h = `<div class="split"><div style="width:${100 * fh / t}%;background:${col}"></div><div style="width:${100 * bh / t}%;background:var(--border)"></div></div>
+    <div class="small" style="color:var(--text-secondary)">Forehand ${fh} (${Math.round(100 * fh / t)}%) · Backhand ${bh} (${Math.round(100 * bh / t)}%)</div>
+    <table style="margin-top:10px"><tr><th>Shot</th><th>Forehand</th><th>Backhand</th></tr>`;
+  for (const [k, v] of Object.entries(P.stroke_by_shot)) h += `<tr><td>${cap(k)}</td><td>${v.forehand || 0}</td><td>${v.backhand || 0}</td></tr>`;
+  $("#strokes").innerHTML = h + "</table>";
+}
+function renderThird(P, col) {
+  const e = Object.entries(P.third_shot);
+  $("#third").innerHTML = e.length ? e.map(([k, v]) => `<div class="bar"><span>${cap(k)}</span><div class="track"><div class="fill" style="width:${v.won_pct ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.won_pct ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">${v.count}× ${clipButtons(v.rallies)}</div>`).join("") : '<span class="empty">No tagged third shots for this player.</span>';
+}
+// own half: x 0..20 (from their right), depth 0 (net) .. 22 (baseline), plus 12 ft behind and 6 ft wide
+const S = 10, OX = 60, OY = 20;
+const hx = x => OX + x * S, hy = d => OY + d * S;
+function halfCourt(svg) {
+  svg.setAttribute("viewBox", `0 0 ${32 * S} ${36 * S}`); svg.innerHTML = "";
+  el("rect", {x: 0, y: 0, width: 32 * S, height: 36 * S, fill: "var(--court-out)", rx: 8}, svg);
+  el("rect", {x: hx(0), y: hy(0), width: 20 * S, height: 22 * S, fill: "var(--court)"}, svg);
+  el("rect", {x: hx(0), y: hy(0), width: 20 * S, height: 7 * S, fill: "var(--court-kitchen)"}, svg);
+  const L = (a, b, c, d, w = 2) => el("line", {x1: hx(a), y1: hy(b), x2: hx(c), y2: hy(d), stroke: "var(--court-line)", "stroke-width": w}, svg);
+  L(0, 0, 0, 22); L(20, 0, 20, 22); L(0, 22, 20, 22); L(0, 7, 20, 7); L(10, 7, 10, 22);
+  L(-1.5, 0, 21.5, 0, 4);
+  const t = el("text", {x: hx(10), y: hy(-0.6), "text-anchor": "middle", style: "fill:var(--court-line)"}, svg); t.textContent = "net";
+  return svg;
+}
+function renderContacts(P, col) {
+  const svg = halfCourt($("#contacts"));
+  P.movement.contact_points.forEach(([x, d]) => el("circle", {cx: hx(x), cy: hy(d), r: 6, fill: col, stroke: "var(--surface-1)", "stroke-width": 2, opacity: .9}, svg));
+}
+function renderHeat(P) {
+  const svg = halfCourt($("#heat"));
+  const g = P.movement.heatmap.grid, c = P.movement.heatmap.cell_ft, max = Math.max(1, ...g.flat());
+  g.forEach((row, i) => row.forEach((v, j) => {
+    if (!v) return;
+    el("rect", {x: hx(-6 + j * c) + 1, y: hy(i * c) + 1, width: c * S - 2, height: c * S - 2, rx: 2,
+      fill: `var(--seq-${Math.min(6, 1 + Math.floor(6 * v / max))})`, opacity: .9}, svg);
+  }));
+}
+function renderEndings(P) {
+  const f = Object.entries(P.finishing_shots), e = Object.entries(P.error_shots);
+  const rows = [...f.map(([k, v]) => ["Won with", k, v, "var(--good)"]), ...e.map(([k, v]) => ["Lost on own", k, v, "var(--bad)"])];
+  $("#endings").innerHTML = rows.length ? `<table><tr><th></th><th>Last shot</th><th>Count</th><th></th></tr>${rows.map(([a, k, v, c]) => `<tr><td style="color:${c}">${a}</td><td>${k}</td><td>${v.count}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No rallies with a known winner where this player hit last.</span>';
+}
+function renderLength(P, col) {
+  $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");
+}
+function renderRallies(name) {
+  $("#rallies").innerHTML = `<table><tr><th>Time</th><th>Server</th><th>Shots</th><th>Sequence</th><th>Won by</th><th></th></tr>${R.rallies.map(r => `
+    <tr><td>${fmt(r.start_t)}</td><td>${r.server}</td><td>${r.n_shots}</td>
+    <td style="font-size:12px">${r.shots.map(s => `<span style="color:${s.player === name ? "var(--text-primary)" : "var(--text-muted)"}">${s.shot || "hit"}${s.stroke ? (s.stroke === "forehand" ? " FH" : " BH") : ""}</span>`).join(" → ")}</td>
+    <td>${r.winner ? `<b style="color:${r.winner === name ? "var(--good)" : "var(--bad)"}">${r.winner}</b>` : '<span class="small">not tagged</span>'}</td>
+    <td>${clipButtons([r.id])}</td></tr>`).join("")}</table>`;
+}
+
+// ---- clip player ----
+let clipSet = [], clipIdx = 0;
+function openClip(id, set) {
+  clipSet = set; clipIdx = Math.max(0, set.indexOf(id));
+  playClip(); $("#modal").classList.add("on");
+}
+function playClip() {
+  const r = rallyById[clipSet[clipIdx]], v = $("#clipVideo");
+  $("#clipTitle").textContent = `Rally at ${fmt(r.start_t)} · ${r.n_shots} shots${r.winner ? " · won by " + r.winner : ""}`;
+  $("#clipInfo").textContent = `${clipIdx + 1} of ${clipSet.length}`;
+  if (!v.src.endsWith(R.video)) v.src = "../" + R.video;
+  const go = () => { v.currentTime = Math.max(0, r.start_t - 1); v.play(); };
+  v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
+  v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
+}
+$("#closeClip").onclick = () => { $("#modal").classList.remove("on"); $("#clipVideo").pause(); };
+$("#prevClip").onclick = () => { clipIdx = (clipIdx - 1 + clipSet.length) % clipSet.length; playClip(); };
+$("#nextClip").onclick = () => { clipIdx = (clipIdx + 1) % clipSet.length; playClip(); };
+$("#modal").onclick = e => { if (e.target.id === "modal") $("#closeClip").click(); };
+init();
+</script>
+</body>
+</html>

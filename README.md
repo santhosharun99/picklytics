@@ -68,6 +68,16 @@ Open http://127.0.0.1:8001/dashboard/ and pick a match. It shows the annotated v
 top-down court, the rally list and per-rally shot log, player stats, shot mix, shot placement,
 rally lengths and court-coverage heatmaps.
 
+## Match analysis (coach view)
+
+```bash
+python3 training/build_report.py labels/<video>.json outputs/<run> [outputs/<run2>] \
+    --video data/videos/<video>.mp4 --out outputs/reports/<name>.json
+```
+
+Open http://127.0.0.1:8001/dashboard/match.html?report=<name>: per-player summary, strengths / weaknesses /
+patterns, shot mix, forehand vs backhand, 3rd shot, contact map, coverage heatmap, how rallies ended, and clips.
+
 ## Labelling & accuracy
 
 Hand-labelled rallies are the answer key for measuring accuracy.
