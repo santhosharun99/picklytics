@@ -89,7 +89,10 @@ body:not(.simple) .simple-only { display: none; }
         <video id="vid" preload="auto" muted></video>
         <canvas id="overlay"></canvas>
       </div>
+      <input type="range" id="seek" min="0" max="1000" value="0" step="1" style="width:100%;margin-top:10px" aria-label="Seek">
       <div class="bar">
+        <button id="playBtn" title="Play / pause (Space)">▶ Play</button>
+        <label class="muted">Go to <input id="goto" placeholder="9:52" style="width:64px"></label>
         <span class="big" id="clock">0:00.00</span>
         <span class="muted" id="frame">frame 0</span>
         <span class="muted" id="speed">speed 1×</span>
@@ -157,6 +160,7 @@ body:not(.simple) .simple-only { display: none; }
     </div>
     <div class="card">
       <h2>Rallies <span class="muted" id="rallyCount"></span></h2>
+      <p class="muted" style="font-size:12px;margin:-4px 0 8px">Click a rally to jump straight to it.</p>
       <div class="scroll"><table id="rallies"></table></div>
     </div>
   </aside>
@@ -355,6 +359,8 @@ const tick = () => {
   $("#frame").textContent = `frame ${f}`;
   const r = rallyAt(f);
   $("#rallyInfo").textContent = r ? `in rally ${r.id}` : "";
+  if (vid.duration && !seeking) $("#seek").value = Math.round(1000 * vid.currentTime / vid.duration);
+  $("#playBtn").textContent = vid.paused ? "▶ Play" : "❚❚ Pause";
   drawOverlay();
 };
 if ("requestVideoFrameCallback" in HTMLVideoElement.prototype) {
@@ -371,6 +377,17 @@ cvs.addEventListener("click", e => {
 });
 cvs.addEventListener("dblclick", () => vid.paused ? vid.play() : vid.pause());
 const RATES = [0.25, 0.5, 0.75, 1];
+let seeking = false;
+$("#seek").addEventListener("input", () => { seeking = true; if (vid.duration) vid.currentTime = vid.duration * $("#seek").value / 1000; });
+$("#seek").addEventListener("change", () => { seeking = false; });
+$("#playBtn").onclick = () => { vid.paused ? vid.play() : vid.pause(); $("#playBtn").blur(); };
+vid.addEventListener("play", tick); vid.addEventListener("pause", tick);
+$("#goto").addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  const parts = e.target.value.trim().split(":").map(Number);
+  const secs = parts.length === 2 ? parts[0] * 60 + parts[1] : parts[0];
+  if (!isNaN(secs)) { vid.currentTime = secs; e.target.blur(); }
+});
 
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,select,textarea") || !L) return;
