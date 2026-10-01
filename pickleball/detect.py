@@ -13,7 +13,7 @@ import numpy as np
 import torch
 from ultralytics import YOLO
 
-from .court import CourtDetector, in_play_area
+from .court import CourtDetector, CourtLock, in_play_area
 
 DEVICE = "mps" if torch.backends.mps.is_available() else ("0" if torch.cuda.is_available() else "cpu")
 
@@ -40,6 +40,16 @@ def foot_point(box, kp) -> tuple[float, float]:
     return float((box[0] + box[2]) / 2), float(box[3])
 
 
+def plausible_height(view, court_xy, box, person_ft: float = 5.8) -> bool:
+    """Box height must fit a standing/crouching adult at that spot on the court
+    (rejects spectators' heads at the frame edge, reflections, partial bodies)."""
+    x, y = float(court_xy[0]), float(court_xy[1])
+    a, b = view.to_image([(x - 0.5, y), (x + 0.5, y)])
+    px_per_ft = float(np.hypot(*(b - a)))
+    ratio = (box[3] - box[1]) / max(person_ft * px_per_ft, 1.0)
+    return 0.45 <= ratio <= 1.9
+
+
 def torso_signature(hsv, box, kp) -> list[float]:
     """Colour signature of the shirt: hue histogram (16) + value histogram (4) of the torso."""
     pts = kp[[L_SHOULDER, R_SHOULDER, L_HIP, R_HIP]]
@@ -64,11 +74,16 @@ def torso_signature(hsv, box, kp) -> list[float]:
 
 def run_detection(video: str, out_dir: Path, court_model: str, ball_model: str,
                   pose_model: str = "yolo11m-pose.pt", start: float = 0.0, end: float | None = None,
-                  ball_imgsz: int = 960, court_every: int = 10) -> Path:
+                  ball_imgsz: int = 960, court_every: int = 10, camera: dict | None = None,
+                  pose_imgsz: int = 1280) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "detections.jsonl"
 
-    court = CourtDetector(court_model, device=DEVICE)
+    model_court = CourtDetector(court_model, device=DEVICE) if Path(court_model).exists() else None
+    if camera:  # calibrated fixed camera: line-snapping lock, model only as a fallback initialiser
+        court = CourtLock({tuple(p["court"]): tuple(p["img"]) for p in camera["points"]}, fallback=model_court)
+    else:
+        court = model_court
     ball = YOLO(ball_model)
     pose = YOLO(pose_model)
 
@@ -106,7 +121,7 @@ def run_detection(video: str, out_dir: Path, court_model: str, ball_model: str,
 
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
                 people = []
-                r = pose.predict(frame, conf=0.35, classes=[0], device=DEVICE, verbose=False)[0]
+                r = pose.predict(frame, conf=0.35, classes=[0], imgsz=pose_imgsz, device=DEVICE, verbose=False)[0]
                 if r.keypoints is not None:
                     boxes = r.boxes.xyxy.cpu().numpy()
                     confs = r.boxes.conf.cpu().numpy()
@@ -114,7 +129,7 @@ def run_detection(video: str, out_dir: Path, court_model: str, ball_model: str,
                     for box, c, kp in zip(boxes, confs, kps):
                         foot = foot_point(box, kp)
                         cxy = view.to_court([foot])[0]
-                        if not in_play_area(cxy)[0]:
+                        if not in_play_area(cxy)[0] or not plausible_height(view, cxy, box):
                             continue
                         people.append({"box": np.round(box, 1).tolist(), "conf": round(float(c), 3),
                                        "kp": np.round(kp, 2).tolist(), "foot": [round(v, 1) for v in foot],

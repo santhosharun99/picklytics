@@ -126,6 +126,9 @@ def render_video(out_dir: Path, width: int = 1280) -> Path:
     writer.release()
 
     out = out_dir / "annotated.mp4"
+    if raw.stat().st_size < 10_000:  # nothing written (no main-view frames)
+        raw.unlink()
+        return None
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-c:v", "libx264", "-preset", "veryfast",
                     "-crf", "26", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
     raw.unlink()

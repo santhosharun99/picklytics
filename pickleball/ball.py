@@ -12,9 +12,29 @@ def _center(b):
     return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
 
 
-def track_ball(frames: list[dict], max_jump: float = 120.0, fresh_conf: float = 0.35,
-               max_gap: int = 6, static_frames: int = 20, static_px: float = 3.0):
+def static_cells(frames: list[dict], cell: int = 12, min_share: float = 0.05) -> set:
+    """Grid cells where 'balls' are detected in many frames: logos, wall graphics, a spare
+    ball by the fence. A real ball never stays put."""
+    from collections import Counter
+    counts, n = Counter(), 0
+    for rec in frames:
+        if rec.get("court") is None:
+            continue
+        n += 1
+        seen = set()
+        for b in rec.get("balls", []):
+            cx, cy = _center(b)
+            seen.add((int(cx // cell), int(cy // cell)))
+        counts.update(seen)
+    limit = max(15, min_share * n)
+    hot = {c for c, k in counts.items() if k >= limit}
+    return {(x + dx, y + dy) for x, y in hot for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+
+
+def track_ball(frames: list[dict], max_jump: float = 120.0, fresh_conf: float = 0.3,
+               max_gap: int = 6, static_frames: int = 20, static_px: float = 3.0, cell: int = 12):
     """Return {frame: (x, y, conf, interpolated)} for main-view frames."""
+    static = static_cells(frames, cell)
     chosen: dict[int, tuple[float, float, float]] = {}
     prev, prev_f, vel = None, None, (0.0, 0.0)
     for rec in frames:
@@ -23,6 +43,7 @@ def track_ball(frames: list[dict], max_jump: float = 120.0, fresh_conf: float = 
             prev, vel = None, (0.0, 0.0)
             continue
         cands = [(*_center(b), b[4]) for b in rec.get("balls", [])]
+        cands = [c for c in cands if (int(c[0] // cell), int(c[1] // cell)) not in static]
         if not cands:
             continue
         pick = None

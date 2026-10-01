@@ -31,11 +31,15 @@ def main() -> None:
     ap.add_argument("--ball-model", default=str(ROOT / "models" / "ball_detector.pt"))
     ap.add_argument("--pose-model", default="yolo11m-pose.pt")
     ap.add_argument("--ball-imgsz", type=int, default=960)
+    ap.add_argument("--pose-imgsz", type=int, default=1280, help="1280 catches the small far-side player")
+    ap.add_argument("--camera", default=None, help="camera calibration json (default: configs/cameras/<video>.json if present)")
     ap.add_argument("--skip-detect", action="store_true")
     ap.add_argument("--no-render", action="store_true")
     args = ap.parse_args()
 
     stem = re.sub(r"[^A-Za-z0-9]+", "_", Path(args.video).stem).strip("_")[:60]
+    cam_path = Path(args.camera) if args.camera else ROOT / "configs" / "cameras" / f"{stem}.json"
+    camera = json.loads(cam_path.read_text()) if cam_path.exists() else None
     if args.start or args.end:
         stem += f"_{int(args.start)}-{int(args.end) if args.end else 'end'}"
     out_dir = (Path(args.out) if args.out else ROOT / "outputs" / stem).resolve()
@@ -44,7 +48,8 @@ def main() -> None:
     if not args.skip_detect:
         print("[1/3] detecting ...")
         run_detection(args.video, out_dir, args.court_model, args.ball_model, args.pose_model,
-                      args.start, args.end, args.ball_imgsz)
+                      args.start, args.end, args.ball_imgsz, camera=camera,
+                      pose_imgsz=args.pose_imgsz)
     print("[2/3] analysing ...")
     res = run_analysis(out_dir, args.players, names)
     print(json.dumps(res["summary"], indent=2))

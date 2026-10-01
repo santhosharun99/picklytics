@@ -87,33 +87,62 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
     if not frames:
         return []
     events: list[Event] = []
-    for chunk in _chunks(frames, max_gap):
+    chunks = list(_chunks(frames, max_gap))
+    events += _gap_reversals(chunks, ball, players, homographies, fps)
+    for chunk in chunks:
         if len(chunk) < 9:
             continue
         pts = np.array([ball[f][:2] for f in chunk], dtype=float)
         scores = _change_scores(pts)
-        # local maxima above threshold, at least 6 frames apart
-        order = np.argsort(-scores)
-        taken: list[int] = []
-        for i in order:
-            if scores[i] < min_score:
-                break
-            if any(abs(i - j) < 6 for j in taken):
-                continue
-            taken.append(int(i))
+        # every local maximum above threshold is classified; duplicates are merged after
+        taken = [i for i in range(len(scores)) if scores[i] >= min_score
+                 and scores[i] == scores[max(0, i - 3):i + 4].max()]
         # the first ball positions of a track can be a contact (e.g. the serve)
         if not any(i < 6 for i in taken):
             taken.append(1)
         for i in sorted(taken):
             f = chunk[i]
             bx, by = pts[i]
-            ev = _classify(f, (bx, by), float(scores[i]), players, homographies, fps, hit_radius)
+            a, b = max(0, i - 3), min(len(pts) - 1, i + 3)
+            v_in = (pts[i] - pts[a]) / max(i - a, 1)
+            v_out = (pts[b] - pts[i]) / max(b - i, 1)
+            ev = _classify(f, (bx, by), float(scores[i]), players, homographies, fps, hit_radius, v_in, v_out)
             if ev:
                 events.append(ev)
     return _clean(events)
 
 
-def _classify(f, ball_xy, score, players, homographies, fps, hit_radius) -> Event | None:
+def _gap_reversals(chunks, ball, players, homographies, fps, max_gap_s: float = 0.5) -> list[Event]:
+    """Contacts hidden by the hitter's body: the ball vanishes for a few frames and comes
+    back travelling the other way along the court (up-screen <-> down-screen)."""
+    out = []
+    for c1, c2 in zip(chunks, chunks[1:]):
+        gap = c2[0] - c1[-1]
+        if gap > max_gap_s * fps or len(c1) < 3 or len(c2) < 3:
+            continue
+        # direction a few frames before the ball vanished (it may already be turning
+        # right before the gap) and right after it reappears
+        k0, k1 = max(0, len(c1) - 9), max(1, len(c1) - 4)
+        p1 = np.array([ball[c1[k0]][:2], ball[c1[k1]][:2], ball[c1[-1]][:2]], float)
+        p2 = np.array([ball[f][:2] for f in c2[:3]], float)
+        vy_in = (p1[1, 1] - p1[0, 1]) / max(c1[k1] - c1[k0], 1)
+        vy_out = (p2[-1, 1] - p2[0, 1]) / (c2[2] - c2[0])
+        if vy_in < -1.0 and vy_out > 1.0:
+            side = "far"
+        elif vy_in > 1.0 and vy_out < -1.0:
+            side = "near"
+        else:
+            continue
+        f = (c1[-1] + c2[0]) // 2
+        xy = tuple(((p1[-1] + p2[0]) / 2).tolist())
+        cand = [p for ff in range(f - 3, f + 4) for p in players.get(ff, []) if p["side"] == side]
+        p = cand[0] if cand else None
+        out.append(Event("hit", f, f / fps, xy, 3.0, player=p.get("id") if p else None, side=side,
+                         court=tuple(p["court"]) if p else None))
+    return out
+
+
+def _classify(f, ball_xy, score, players, homographies, fps, hit_radius, v_in=None, v_out=None) -> Event | None:
     t = f / fps
     # nearest wrist over a small window (hit moment and detection moment differ by a frame or two)
     best = None
@@ -150,7 +179,17 @@ def _classify(f, ball_xy, score, players, homographies, fps, hit_radius) -> Even
     H = homographies.get(f)
     if H is None:
         return None
-    poly = _court_polygon_img(np.linalg.inv(H))
+    H_inv = np.linalg.inv(H)
+    # Far-side contact without a matched wrist (far player small/occluded): the ball was
+    # travelling away from the camera (up the screen) and now comes back, above the net line.
+    if v_in is not None:
+        net_y = cv2.perspectiveTransform(np.array([[[10.0, 22.0]]], np.float32), H_inv)[0, 0, 1]
+        if ball_xy[1] < net_y and v_in[1] < -1.0 and v_out[1] > 1.0:
+            far = [p for p in players.get(f, []) if p["side"] == "far"]
+            p = far[0] if far else None
+            return Event("hit", f, t, ball_xy, score, player=p.get("id") if p else None, side="far",
+                         court=tuple(p["court"]) if p else None)
+    poly = _court_polygon_img(H_inv)
     if cv2.pointPolygonTest(poly.astype(np.float32), (float(ball_xy[0]), float(ball_xy[1])), False) < 0:
         return None
     cxy = cv2.perspectiveTransform(np.array([[ball_xy]], np.float32), H)[0, 0]
@@ -158,7 +197,20 @@ def _classify(f, ball_xy, score, players, homographies, fps, hit_radius) -> Even
     return Event("bounce", f, t, ball_xy, score, side=side, court=(float(cxy[0]), float(cxy[1])))
 
 
+def _dedupe(events: list[Event], window: int = 6) -> list[Event]:
+    """Merge same-kind events closer than `window` frames, keeping the strongest."""
+    out: list[Event] = []
+    for e in sorted(events, key=lambda e: e.frame):
+        twin = next((o for o in out if o.kind == e.kind and abs(o.frame - e.frame) < window), None)
+        if twin is None:
+            out.append(e)
+        elif e.score > twin.score:
+            out[out.index(twin)] = e
+    return out
+
+
 def _clean(events: list[Event]) -> list[Event]:
+    events = _dedupe(events)
     # 1. consecutive hits must alternate sides. Two close "hits" on the same side are
     #    really bounce-then-hit: the earlier one becomes a bounce at its ground point.
     hits: list[Event] = []
