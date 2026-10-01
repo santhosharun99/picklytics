@@ -138,3 +138,48 @@ def _shot_type(n, volley, h, speed, flight, d_hit, d_land, r) -> str:
 
 def shots_to_dicts(shots: list[Shot]) -> list[dict]:
     return [asdict(s) for s in shots]
+
+
+# ---------------------------------------------------------------------------
+# Learned shot types (trained on pklmart: 300k labelled doubles shots, positions only).
+# pklmart coordinates are from the hitter's view: x 0 = hitter's right sideline,
+# y 0 = net, 22 = baseline. Ours: x 0..20 left->right on screen, y 0 far baseline .. 44 near.
+# ---------------------------------------------------------------------------
+PKL_NAMES = {"SE": "serve", "R": "return", "tsDrp": "third-shot drop", "tsDrv": "third-shot drive",
+             "tsLob": "third-shot lob", "D": "dink", "SP": "speed-up", "HB": "hand battle", "Res": "reset",
+             "L": "lob", "tzApp": "transition approach", "tzRep": "transition repel"}
+_ML = None
+
+
+def _hitter_view(court, side):
+    x, y = court
+    return (20 - x, y - 22) if side == "near" else (x, 22 - y)
+
+
+def ml_shot_types(shots: list[Shot], model_path) -> list[str | None]:
+    """Predict pklmart shot types for one rally's shots (None where positions are missing)."""
+    global _ML
+    import joblib
+    if _ML is None:
+        _ML = joblib.load(model_path)
+    out = []
+    for i, s in enumerate(shots):
+        if not s.hitter_court or not s.side:
+            out.append(None)
+            continue
+        lx, ly = _hitter_view(s.hitter_court, s.side)
+        nxt = shots[i + 1] if i + 1 < len(shots) else None
+        if nxt and nxt.hitter_court and nxt.side:
+            nx, ny = _hitter_view(nxt.hitter_court, nxt.side)
+        elif s.landing_court:
+            nx, ny = _hitter_view(s.landing_court, "far" if s.side == "near" else "near")
+        else:
+            nx = ny = np.nan
+        prv = shots[i - 1] if i > 0 else None
+        px, py = _hitter_view(prv.hitter_court, prv.side) if prv and prv.hitter_court and prv.side else (np.nan, np.nan)
+        travel = float(np.hypot(lx - (20 - nx), ly + ny)) if not np.isnan(nx) else np.nan
+        row = {"shot_nbr_c": min(s.index + 1, 5), "loc_x": lx, "loc_y": ly, "next_loc_x": nx, "next_loc_y": ny,
+               "prev_x": px, "prev_y": py, "is_last": int(nxt is None), "travel": travel}
+        import pandas as pd
+        out.append(PKL_NAMES.get(_ML["model"].predict(pd.DataFrame([row])[_ML["features"]])[0]))
+    return out

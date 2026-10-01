@@ -6,3 +6,4 @@ outputs/
 !models/.gitkeep
 __pycache__/
 .DS_Store
+data/pklmart/

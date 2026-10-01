@@ -65,7 +65,8 @@ def main() -> None:
                 if lbl.exists():
                     for row in lbl.read_text().splitlines():
                         parts = row.split()
-                        if len(parts) == 5 and int(parts[0]) in remap:
+                        if len(parts) == 5 and int(parts[0]) in remap and \
+                                max(float(parts[3]), float(parts[4])) <= ds.get("max_box", 1.0):
                             cls = remap[int(parts[0])]
                             lines.append(" ".join([str(cls), *parts[1:]]))
                             stats[f"{dst_split}/{targets[cls]}"] += 1

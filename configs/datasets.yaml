@@ -19,3 +19,12 @@ datasets:
     version: latest
     class_map:
       pickleball: ball
+
+  - name: pbd_pickleball_bal_detection
+    workspace: pickleball-ball-detector
+    project: pickleball-bal-detection
+    version: latest
+    max_box: 0.06          # drop mislabelled huge "ball" boxes (fraction of image width/height)
+    class_map:
+      ball: ball
+      pickleball - v5 2024-09-06 7-41am: ball   # the dataset's main ball class (odd export name)
