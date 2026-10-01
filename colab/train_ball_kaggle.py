@@ -59,7 +59,7 @@ import torch
 devices = list(range(torch.cuda.device_count())) or "cpu"
 YOLO("yolo11s.pt").train(
     data=str(MERGED / "data.yaml"), epochs=60, imgsz=960, batch=16 * max(1, len(devices) if isinstance(devices, list) else 1),
-    device=devices, workers=4, patience=12, time=9.0,  # hours: stop cleanly before Kaggle's 12 h limit
+    device=devices, workers=4, patience=12,  # NOTE: ultralytics `time=` overrides `epochs` (trains for the full time) - keep epochs as the limit
     fliplr=0.5, flipud=0.0, scale=0.3, mosaic=1.0, close_mosaic=10,
     project="/kaggle/working/runs", name="ball_v2", exist_ok=True, plots=True)
 shutil.copy("/kaggle/working/runs/ball_v2/weights/best.pt", "/kaggle/working/ball_detector_v2.pt")
