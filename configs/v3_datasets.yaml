@@ -1,0 +1,18 @@
+# Candidate datasets for the v3 specialist models (ball v3, paddle). All CC BY 4.0 unless noted.
+datasets:
+  - {name: pbb_annotations_pickleball, workspace: pickleballbadminton, project: annotations_pickleball, version: latest}
+  # dropped: no exportable version
+  # - {name: wavrj_auto_label_s2, workspace: pickleball-wavrj, project: auto_label_yolo_s-2, version: latest}
+  - {name: duong_pb_ball_core, workspace: duong-0nbek, project: pb_ball_core, version: latest}
+  - {name: trns_06_09_lan1, workspace: trns-workspace-pwwqf, project: 06-09-lan1, version: latest}
+  - {name: pbds_bigannotation, workspace: pickleball-dataset, project: bigannotationds-rxifp, version: latest}
+  - {name: pkball_huy, workspace: pk-ball, project: pk_ball-huy-mw1ws, version: latest}
+  - {name: pkball, workspace: pk-ball, project: pk_ball, version: latest}
+  - {name: pbds_anotation678, workspace: pickleball-dataset, project: anotation678combined-u8mgg, version: latest}
+  - {name: pbbd_detector, workspace: pickleball-ball-detection, project: pickleball-detector, version: latest}
+  - {name: swz_pickleball, workspace: s-workspace-zbpen, project: pickleball-7kgpr, version: latest}
+  - {name: owl_ball_mit, workspace: owl-q3a4r, project: pickleball-ball-detection-pf7zc, version: latest}
+  - {name: od_pickleball_pbcbd, workspace: object-detection-sb2zh, project: pickleball-pbcbd, version: latest}
+  # paddle sources
+  - {name: od8al_version2_seg, workspace: pickleball-od8al, project: pickleball-version2, version: latest}
+  - {name: pbtraining_ball_paddle, workspace: pbtrainingset, project: pickleball-object-detection, version: latest}

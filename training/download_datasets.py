@@ -9,6 +9,7 @@ Reads ROBOFLOW_API_KEY from the environment or from a `.env` file in the project
 import io
 import os
 import sys
+import time
 import zipfile
 from pathlib import Path
 
@@ -40,7 +41,7 @@ def resolve_version(ws: str, proj: str, version, key: str) -> int:
     r.raise_for_status()
     versions = r.json().get("versions", [])
     if not versions:
-        sys.exit(f"No versions found for {ws}/{proj}")
+        raise RuntimeError(f"No versions found for {ws}/{proj}")
     return max(int(v["id"].rsplit("/", 1)[-1]) for v in versions)
 
 
@@ -54,9 +55,18 @@ def download(ds: dict, key: str) -> None:
         return
 
     print(f"[export] {ws}/{proj} v{version} ({EXPORT_FORMAT})")
-    r = requests.get(f"{API}/{ws}/{proj}/{version}/{EXPORT_FORMAT}", params={"api_key": key}, timeout=300)
-    r.raise_for_status()
-    link = r.json()["export"]["link"]
+    link = None
+    for _ in range(80):  # Roboflow may still be preparing the export: poll up to ~20 min
+        r = requests.get(f"{API}/{ws}/{proj}/{version}/{EXPORT_FORMAT}", params={"api_key": key}, timeout=300)
+        r.raise_for_status()
+        j = r.json()
+        if "export" in j and j["export"].get("link"):
+            link = j["export"]["link"]
+            break
+        print(f"[wait] {ds['name']}: export being prepared ({j.get('progress', '?')})", flush=True)
+        time.sleep(15)
+    if link is None:
+        raise RuntimeError("export not ready after 20 min")
 
     print(f"[download] {ds['name']} ...")
     z = requests.get(link, timeout=1800)
@@ -73,7 +83,10 @@ def main() -> None:
     cfg = yaml.safe_load(cfg_path.read_text())
     key = load_api_key()
     for ds in cfg["datasets"]:
-        download(ds, key)
+        try:
+            download(ds, key)
+        except Exception as e:  # one bad dataset must not stop the rest
+            print(f"[fail] {ds['name']}: {e}", flush=True)
 
 
 if __name__ == "__main__":
