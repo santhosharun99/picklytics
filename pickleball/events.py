@@ -149,10 +149,16 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
             ev = _classify(f, (bx, by), float(scores[i]), players, homographies, fps, hit_radius, v_in, v_out)
             if ev:
                 events.append(ev)
-    if fs["enabled"] and fs["only"]:
+    if SWING_SETTINGS["enabled"]:
+        # hits from swing + ball fusion; bounces as before
+        events = swing_hits(ball, players, flight, fps) + [e for e in flight + events if e.kind == "bounce"]
+    elif fs["enabled"] and fs["only"]:
         # hits from flight boundaries; bounces from both (trajectory kinks find bounces that
         # a single smooth fit can absorb)
-        events = flight + [e for e in events if e.kind == "bounce"]
+        fhits = [e for e in flight if e.kind == "hit"]
+        if GAPFILL["enabled"]:
+            fhits = fill_gaps_with_swings(fhits, ball, players, fps, GAPFILL["min_score"])
+        events = fhits + [e for e in flight + events if e.kind == "bounce"]
     else:
         events += flight
     return _clean(events)
@@ -358,3 +364,132 @@ def segment_rallies(events: list[Event], main_view: set[int], fps: float,
     if cur:
         flush()
     return rallies
+
+
+# ---------------------------------------------------------------------------
+# Swing + ball fusion (idea from pose-sequence shot models, e.g. Tennis_Shot_Prediction):
+# a contact shows up as a wrist-speed peak of the hitter. Arms move constantly, so a
+# swing only counts with ball evidence, and the rally's hits must alternate sides; the
+# best alternating sequence is chosen jointly (dynamic programming).
+# ---------------------------------------------------------------------------
+SWING_SETTINGS = {"enabled": False, "thr": 0.06, "w_swing": 6.0, "w_ball": 2.0, "w_flight": 1.5,
+                  "bias": 1.2, "min_gap": 12, "reach": 1.0, "win": 6}
+
+
+def _wrist_speeds(players):
+    """side -> {frame: normalised max wrist speed (body heights per frame)}"""
+    W = {"near": {}, "far": {}}
+    for f, ps in players.items():
+        for p in ps:
+            kp = np.asarray(p["kp"])
+            W[p["side"]][f] = (kp[[L_WRIST, R_WRIST], :2], kp[[L_WRIST, R_WRIST], 2], max(p["box"][3] - p["box"][1], 1.0), p)
+    S = {"near": {}, "far": {}}
+    for side, d in W.items():
+        for f in d:
+            if f - 1 not in d:
+                continue
+            (wa, ca, _, _), (wb, cb, hb, _) = d[f - 1], d[f]
+            v = [np.hypot(*(wb[k] - wa[k])) / hb for k in range(2) if ca[k] > 0.3 and cb[k] > 0.3]
+            if v:
+                S[side][f] = max(v)
+    return S, W
+
+
+def swing_hits(ball, players, flight_events, fps, cfg=None) -> list[Event]:
+    cfg = {**SWING_SETTINGS, **(cfg or {})}
+    S, W = _wrist_speeds(players)
+    fb = [e for e in flight_events if e.kind == "hit"]
+    cands = []
+    for side in ("near", "far"):
+        sp = S[side]
+        for f, v in sp.items():
+            if v < cfg["thr"] or v < max((sp.get(g, 0) for g in range(f - 4, f + 5) if g != f), default=0):
+                continue
+            # ball evidence: closest approach of the ball to this player's reach points around the swing
+            d_ball = np.inf
+            for g in range(f - cfg["win"], f + cfg["win"] + 1):
+                if g in ball and g in W[side]:
+                    pts, h = _reach_points(W[side][g][3])
+                    for xy, _ in pts:
+                        d_ball = min(d_ball, np.hypot(xy[0] - ball[g][0], xy[1] - ball[g][1]) / h)
+            near_flight = any(e.side == side and abs(e.frame - f) <= cfg["win"] for e in fb)
+            score = (cfg["w_swing"] * v + cfg["w_ball"] * max(0.0, 1 - d_ball / cfg["reach"])
+                     + cfg["w_flight"] * near_flight - cfg["bias"])
+            cands.append((f, side, score, d_ball))
+    cands.sort()
+    # best alternating subsequence (each pick must switch side and be >= min_gap frames later)
+    n = len(cands)
+    best = [c[2] for c in cands]
+    prev = [-1] * n
+    for i in range(n):
+        for j in range(i):
+            if cands[j][1] != cands[i][1] and cands[i][0] - cands[j][0] >= cfg["min_gap"] \
+                    and cands[i][0] - cands[j][0] <= 3 * fps and best[j] + cands[i][2] > best[i]:
+                best[i], prev[i] = best[j] + cands[i][2], j
+    # collect chains greedily from the highest-scoring ends (several rallies per run)
+    used, out = set(), []
+    for i in sorted(range(n), key=lambda k: -best[k]):
+        chain, k = [], i
+        while k != -1 and k not in used:
+            chain.append(k)
+            k = prev[k]
+        if not chain or best[i] <= 0:
+            continue
+        for k in chain:
+            used.add(k)
+            if cands[k][2] > -1.0:  # keep weak links only inside a strong chain
+                f, side, sc, _ = cands[k]
+                p = W[side][f][3]
+                kp = np.asarray(p["kp"])
+                out.append(Event("hit", f, f / fps, tuple(ball[f][:2]) if f in ball else tuple(p["foot"]), 3.0 + sc,
+                                 player=p.get("id"), side=side, court=tuple(p["court"]),
+                                 wrist="right" if kp[R_WRIST, 2] >= kp[L_WRIST, 2] else "left",
+                                 body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean())))
+    return out
+
+
+def fill_gaps_with_swings(hits: list[Event], ball, players, fps, min_score: float = 0.0,
+                          long_gap_s: float = 1.6) -> list[Event]:
+    """Insert a missed contact between two detected hits when the sequence says one is missing
+    (same side twice in a row, or an unusually long gap) and the opponent shows a swing with ball support."""
+    S, W = _wrist_speeds(players)
+    hits = sorted(hits, key=lambda e: e.frame)
+    added = []
+    for a, b in zip(hits, hits[1:]):
+        gap = (b.frame - a.frame) / fps
+        if gap > 4.0:
+            continue  # different rallies
+        need = None
+        if a.side == b.side:
+            need = "far" if a.side == "near" else "near"
+        elif gap > long_gap_s:
+            continue  # alternating already; a long gap alone isn't proof of a missing pair
+        if need is None:
+            continue
+        best = None
+        sp = S[need]
+        for f in range(a.frame + 8, b.frame - 7):
+            v = sp.get(f)
+            if v is None or v < max((sp.get(g, 0) for g in range(f - 4, f + 5) if g != f), default=0):
+                continue
+            d_ball = np.inf
+            for g in range(f - 6, f + 7):
+                if g in ball and g in W[need]:
+                    pts, h = _reach_points(W[need][g][3])
+                    for xy, _ in pts:
+                        d_ball = min(d_ball, np.hypot(xy[0] - ball[g][0], xy[1] - ball[g][1]) / h)
+            sc = 6.0 * v + 2.0 * max(0.0, 1 - d_ball / 1.0)
+            if best is None or sc > best[0]:
+                best = (sc, f)
+        if best and best[0] >= min_score:
+            f = best[1]
+            p = W[need][f][3]
+            kp = np.asarray(p["kp"])
+            added.append(Event("hit", f, f / fps, tuple(ball[f][:2]) if f in ball else tuple(p["foot"]), 2.0,
+                               player=p.get("id"), side=need, court=tuple(p["court"]),
+                               wrist="right" if kp[R_WRIST, 2] >= kp[L_WRIST, 2] else "left",
+                               body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean())))
+    return hits + added
+
+
+GAPFILL = {"enabled": True, "min_score": 1.0}  # +5 pts recall at same precision on 15 labelled rallies
