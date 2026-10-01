@@ -124,6 +124,22 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
       <p class="muted" style="font-size:12px;margin:10px 0 0">Mark a hit at the frame the paddle touches the ball; mark a bounce at the frame the ball touches the court. Serve and return are filled in automatically. Third shots are derived later, so just label them drop, drive, etc.</p>
     </div>
     <div class="card">
+      <h2>Shot guide</h2>
+      <div class="keys">
+        <kbd>S</kbd><span><b>Serve</b>: first shot, underhand, diagonal</span>
+        <kbd>R</kbd><span><b>Return</b>: second shot, after the bounce</span>
+        <kbd>K</kbd><span><b>Dink</b>: soft tap near the net that drops into the kitchen</span>
+        <kbd>P</kbd><span><b>Drop</b>: soft arc from the back of the court into the kitchen</span>
+        <kbd>D</kbd><span><b>Drive</b>: hard, fast, flat</span>
+        <kbd>L</kbd><span><b>Lob</b>: high, over the opponent's head</span>
+        <kbd>O</kbd><span><b>Overhead</b>: smash from above the head</span>
+        <kbd>T</kbd><span><b>Reset</b>: soft block that takes the pace off a hard shot</span>
+        <kbd>G</kbd><span><b>Groundstroke</b>: normal hit from the back, not soft, not a drive</span>
+        <kbd>V</kbd><span><b>Volley</b>: hit before the ball bounced (add to any shot)</span>
+      </div>
+      <p class="muted" style="font-size:12px;margin:10px 0 0">Kitchen = the 7 ft zone each side of the net. Not sure? Leave the shot blank; hits and bounces matter most.</p>
+    </div>
+    <div class="card">
       <h2>Rallies <span class="muted" id="rallyCount"></span></h2>
       <div class="scroll"><table id="rallies"></table></div>
     </div>
