@@ -25,10 +25,9 @@ import pickleball.events as ev
 from pickleball.analysis import load_detections, run_analysis
 from pickleball.ball import track_ball
 from pickleball.camera3d import calibrate_from_run
-from pickleball.flights import flight_boundaries
 from pickleball.players import PlayerIdentifier, select_players
 from pickleball.swing import frame_features, pose_index
-from pickleball.trajectory3d import anchored_track, ground_point, plane_y_point, track_flights
+import pickleball.hitmodel as hm
 from training.evaluate import match
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +35,17 @@ LABELS = json.loads((ROOT / "labels" / "Mens_Singles_GOLD_2026_US_Open.json").re
 RUNS = sorted((ROOT / "outputs").glob("cmp_ball_detector_v3_kaggle_*"))
 NAMES = {"P1": "Devilliers", "P2": "Boyer"}
 TOL, NMS = 4, 8
+
+
+def features(S, f, sp):
+    return hm.features(S.ctx, f, sp)
+
+
+def candidates(S, rally, sp):
+    return hm.candidates(S.ctx, sp, rally["start"] - 5, rally["end"] + 5)
+
+
+nms_pick = hm.nms_pick
 
 
 class Stretch:
@@ -54,11 +64,9 @@ class Stretch:
         self.ball = {f: v for f, v in ball.items() if f in self.pl}
         lo, hi = self.meta["first_frame"], self.meta["last_frame"]
         self.rallies = [r for r in LABELS["rallies"] if r["end"] and lo <= r["start"] and r["end"] < hi and r.get("reviewed", True)]
-        self.fb = {f: (vi, vo) for f, _, vi, vo in flight_boundaries(self.ball, penalty=400)}
-        self.vit, _ = anchored_track(self.P, self.ball, sorted(self.fb), self.pl, self.fps, beta=0.5, penalty=2000)
-        _, self.free = track_flights(self.P, self.ball, self.fps, beta=0.5, penalty=900, joint=False)
         pf = run / "paddles.json"
-        self.paddles = {int(k): v for k, v in json.loads(pf.read_text()).items()} if pf.exists() else {}
+        paddles = {int(k): v for k, v in json.loads(pf.read_text()).items()} if pf.exists() else {}
+        self.ctx = hm.Context.build(self.ball, self.pl, self.P, self.fps, paddles)
         # per-frame swing features (model applied per fold)
         self.sf = {s: {} for s in ("near", "far")}
         for r in self.rallies:
@@ -90,96 +98,16 @@ def train_swing(rows):
     return HistGradientBoostingClassifier(max_iter=300, learning_rate=0.05, class_weight="balanced", random_state=0).fit(X, y)
 
 
-def ball_at(S, f):
-    for d in (0, -1, 1, -2, 2, -3, 3):
-        if f + d in S.ball:
-            return np.array(S.ball[f + d][:2], float)
-    return None
 
 
-def player_at(S, f, side):
-    for d in (0, -1, 1, -2, 2, -3, 3):
-        for p in S.pl.get(f + d, []):
-            if p["side"] == side:
-                return p
-    return None
 
 
-def features(S, f, sp):
-    """sp: side -> {frame: swing prob} for this rally. Returns (base, 3d, paddle) feature lists."""
-    base = []
-    for s in ("near", "far"):
-        w = [(sp[s].get(g, 0.0), g - f) for g in range(f - 6, f + 7)]
-        m = max(w)
-        base += [m[0], m[1], sp[s].get(f, 0.0)]
-    meas = [g for g in range(f - 5, f + 6) if g in S.ball and not S.ball[g][3]]
-    base.append(len(meas))
-    def vel(a, b):
-        pts = [np.array(S.ball[g][:2]) for g in range(a, b + 1) if g in S.ball]
-        return (pts[-1] - pts[0]) / max(len(pts) - 1, 1) if len(pts) >= 2 else np.zeros(2)
-    vb, va = vel(f - 5, f), vel(f, f + 5)
-    nb, na = np.linalg.norm(vb), np.linalg.norm(va)
-    cos = float(vb @ va / (nb * na)) if nb > 0 and na > 0 else 0.0
-    base += [*vb, *va, nb, na, cos, float(vb[1] * va[1] < 0)]
-    base.append(min((abs(g - f) for g in S.fb), default=99))
-    xy = ball_at(S, f)
-    for s in ("near", "far"):
-        p = player_at(S, f, s)
-        if p is None or xy is None:
-            base += [9.0, 9.0]
-            continue
-        x1, y1, x2, y2 = p["box"]
-        h = max(y2 - y1, 1)
-        dx, dy = max(x1 - xy[0], 0, xy[0] - x2), max(y1 - xy[1], 0, xy[1] - y2)
-        kp = np.asarray(p["kp"])
-        wr = min(np.hypot(*(kp[k, :2] - xy)) for k in (9, 10))
-        base += [np.hypot(dx, dy) / h, wr / h]
-    d3 = []
-    for s in ("near", "far"):
-        p = player_at(S, f, s)
-        if p is None or xy is None:
-            d3 += [-9, 9, 99]
-            continue
-        X = plane_y_point(S.P, xy, p["court"][1])[0]
-        G = ground_point(S.P, xy)[0]
-        d3 += [float(np.clip(X[2], -10, 20)), abs(X[0] - p["court"][0]), float(np.hypot(G[0] - p["court"][0], G[1] - p["court"][1]))]
-    v = min(S.vit, key=lambda e: abs(e["frame"] - f), default=None)
-    near_v = v if v and abs(v["frame"] - f) <= 3 else None
-    d3 += [float(bool(near_v) and near_v["kind"] == "hit"), float(bool(near_v) and near_v["kind"] == "bounce"),
-           near_v["pos"][2] if near_v else -1.0]
-    c = min(S.free, key=lambda e: abs(e["frame"] - f), default=None)
-    if c and abs(c["frame"] - f) <= 4:
-        d3 += [1.0, float(np.clip(c["pos"][2], -5, 20)), float(c["v_in"][1] * c["v_out"][1] < 0),
-               min(c["speed_in_mph"], 120), min(c["speed_out_mph"], 120)]
-    else:
-        d3 += [0.0, -1.0, 0.0, 0.0, 0.0]
-    pad = []
-    best, cnt, off = 999.0, 0, 0
-    for g in range(f - 3, f + 4):
-        bx = ball_at(S, g)
-        if bx is None:
-            continue
-        for b in S.paddles.get(g, []):
-            d = float(np.hypot((b[0] + b[2]) / 2 - bx[0], (b[1] + b[3]) / 2 - bx[1]))
-            cnt += d < 80
-            if d < best:
-                best, off = d, g - f
-    pad += [min(best, 999.0) / 100, cnt, off]
-    return base, d3, pad
 
 
-def candidates(S, rally, sp):
-    lo, hi = rally["start"] - 5, rally["end"] + 5
-    c = {f for f in S.fb if lo <= f <= hi}
-    for s in ("near", "far"):
-        for f, p in sp[s].items():
-            if lo <= f <= hi and p >= 0.15 and p >= max(sp[s].get(g, 0) for g in range(f - 5, f + 6)):
-                c.add(f)
-    out = []
-    for f in sorted(c):
-        if not out or f - out[-1] > 2:
-            out.append(f)
-    return out
+
+
+
+
 
 
 MODELS = {
@@ -198,12 +126,7 @@ def fit(name, X, y):
     return m.fit(X, y)
 
 
-def nms_pick(frames, probs, thr):
-    keep = []
-    for i in np.argsort(-probs):
-        if probs[i] >= thr and all(abs(frames[i] - frames[j]) > NMS for j in keep):
-            keep.append(i)
-    return [frames[i] for i in keep]
+
 
 
 def pick_threshold(name, X, y, groups, frames_by_row):

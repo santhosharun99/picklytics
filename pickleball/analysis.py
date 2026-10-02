@@ -35,6 +35,23 @@ def _segments(main_frames: list[int]) -> list[tuple[int, int]]:
     return [tuple(s) for s in segs]
 
 
+def _hit_context(out_dir: Path, meta: dict, ball: dict, players_by_frame: dict):
+    """Inputs for the learned hit decider: 3D camera, main-view ball track, cached paddles."""
+    from .events import HIT_MODEL
+    from .hitmodel import MODEL_PATH, Context
+    if not HIT_MODEL["enabled"] or not MODEL_PATH.exists() or not players_by_frame:
+        return None
+    from .camera3d import calibrate_from_run
+    from .paddles import PaddleCache
+    try:
+        cam = calibrate_from_run(out_dir)
+    except Exception as e:  # no usable court view
+        print("hit model skipped (camera):", e)
+        return None
+    main_ball = {f: v for f, v in ball.items() if f in players_by_frame}
+    return Context.build(main_ball, players_by_frame, cam.P, meta["fps"], PaddleCache(out_dir, meta.get("video")))
+
+
 def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None = None) -> dict:
     meta, recs = load_detections(out_dir)
     fps = meta["fps"]
@@ -51,7 +68,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
         players_by_frame[f] = ident.assign(select_players(r.get("people", []), per_side))
 
     ball = track_ball(recs)
-    events = detect_events(ball, players_by_frame, homs, fps)
+    events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=_hit_context(out_dir, meta, ball, players_by_frame))
     rallies = segment_rallies(events, main, fps)
     hand = infer_handedness(rallies)
     shots = [s for r in rallies for s in classify_rally(r, hand)]

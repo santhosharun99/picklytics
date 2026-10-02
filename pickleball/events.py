@@ -117,9 +117,40 @@ def _flight_events(ball, players, homographies, fps, penalty, reach) -> list[Eve
     return out
 
 
+HIT_MODEL = {"enabled": True, "bundle": None}  # learned hit decider (hitmodel.py), used when a Context is given
+
+
+def model_hits(ctx, players, fps) -> list[Event]:
+    """Hits from the learned hit decider (Random Forest on swing/ball/3D/paddle clues)."""
+    from . import hitmodel as hm
+    from .swing import swing_series
+    _load_default_swing_model()
+    if HIT_MODEL["bundle"] is None:
+        HIT_MODEL["bundle"] = hm.load_bundle()
+    if HIT_MODEL["bundle"] is None or SWING_MODEL["model"] is None or not ctx.ball:
+        return []
+    sp, _ = swing_series(players, SWING_MODEL["model"])
+    out = []
+    for f, prob, side in hm.predict_hits(ctx, sp, HIT_MODEL["bundle"], min(ctx.ball), max(ctx.ball)):
+        p = hm.player_at(ctx, f, side)
+        if p is None:
+            continue
+        kp = np.asarray(p["kp"])
+        xy = hm.ball_at(ctx, f)
+        name = "right" if kp[R_WRIST, 2] >= kp[L_WRIST, 2] else "left"
+        if xy is not None and kp[L_WRIST, 2] > 0.3 and kp[R_WRIST, 2] > 0.3:
+            name = "left" if np.hypot(*(kp[L_WRIST, :2] - xy)) < np.hypot(*(kp[R_WRIST, :2] - xy)) else "right"
+        wy = kp[L_WRIST if name == "left" else R_WRIST, 1]
+        out.append(Event("hit", f, f / fps, tuple(xy) if xy is not None else tuple(p.get("foot", p["court"])),
+                         3.0 + prob, player=p.get("id"), side=side, court=tuple(p["court"]), wrist=name,
+                         body_x=float(kp[[L_SHOULDER, R_SHOULDER], 0].mean()),
+                         above_head=bool(kp[NOSE, 2] > 0.3 and wy < kp[NOSE, 1])))
+    return out
+
+
 def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict[int, np.ndarray],
                   fps: float, max_gap: int = 6, min_score: float = 1.2,
-                  hit_radius: float = 0.45) -> list[Event]:
+                  hit_radius: float = 0.45, hit_ctx=None) -> list[Event]:
     frames = sorted(ball)
     if not frames:
         return []
@@ -149,7 +180,11 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
             ev = _classify(f, (bx, by), float(scores[i]), players, homographies, fps, hit_radius, v_in, v_out)
             if ev:
                 events.append(ev)
-    if SWING_SETTINGS["enabled"]:
+    mh = model_hits(hit_ctx, players, fps) if hit_ctx is not None and HIT_MODEL["enabled"] else []
+    if mh:
+        # learned hit decider; bounces from the trajectory as before
+        events = mh + [e for e in flight + events if e.kind == "bounce"]
+    elif SWING_SETTINGS["enabled"]:
         # hits from swing + ball fusion; bounces as before
         events = swing_hits(ball, players, flight, fps) + [e for e in flight + events if e.kind == "bounce"]
     elif fs["enabled"] and fs["only"]:
