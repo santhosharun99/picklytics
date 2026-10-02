@@ -196,6 +196,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
     }
     profile["speed"] = speed_profile(name, rallies)
     profile["running"] = running_profile(name, rallies)
+    profile["placement"] = placement_profile(name, rallies)
     profile["insights"] = insights(profile, opponent)
     return profile
 
@@ -255,6 +256,30 @@ def running_profile(name: str, rallies: list[dict]) -> dict:
             "top_sprint_mph": round(float(max(pk)), 1),
             "sprint_time_pct": round(100 * sum(x["fast_s"] for _, x in per) / max(sum(x["dur_s"] for _, x in per), 1e-3)),
             "top_sprints": [{"rally": rid, "mph": round(x["peak_mph"], 1)} for rid, x in top]}
+
+
+def placement_profile(name: str, rallies: list[dict]) -> dict:
+    """Where this player's shots land on the opponent's half, by shot group. Positions are normalised to
+    the receiving half as seen from the hitter: x from the hitter's left (0..20), depth from the net (0..22)."""
+    groups = {"Serve": ("serve",), "Return": ("return",), "Drive": ("drive", "third-shot drive"),
+              "Drop / reset": ("drop", "third-shot drop", "reset", "dink")}
+    out = {}
+    for label, types in groups.items():
+        pts = []
+        for r in rallies:
+            for s in r["shots"]:
+                if s["player"] != name or s.get("shot") not in types or not s.get("land"):
+                    continue
+                x, y = s["land"]
+                if s["side"] == "near":      # hitting from the near side: lands on the far half (y < 22)
+                    pts.append([round(20 - x, 1), round(22 - y, 1), r["id"]])
+                else:                        # hitting from the far side: lands on the near half
+                    pts.append([round(x, 1), round(y - 22, 1), r["id"]])
+        if pts:
+            deep = sum(p[1] >= 15 for p in pts)
+            out[label] = {"points": pts, "n": len(pts), "deep_pct": round(100 * deep / len(pts)),
+                          "out_pct": round(100 * sum(not (0 <= p[0] <= 20 and 0 <= p[1] <= 22) for p in pts) / len(pts))}
+    return out
 
 
 def speed_profile(name: str, rallies: list[dict]) -> dict:
@@ -378,6 +403,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             shots.append({"i": i, "t": round(s["t"], 2), "player": name_of.get(s["player"], s["player"]), "side": s["side"],
                           "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
                           "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
+                          "land": s.get("landing_court"),
                           "speed_mph": s.get("ball_mph"), "speed_err": s.get("ball_mph_err"),
                           "speed_conf": s.get("speed_conf")})
         if not shots:

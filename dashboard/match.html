@@ -147,6 +147,9 @@ function show(name) {
       <div class="card"><h2>Fastest shots</h2><p class="why">Click ▶ to watch.</p><div id="fastest"></div></div>
     </section>
     <section class="grid">
+      <div class="card" style="grid-column: span 3"><h2>Shot placement</h2><p class="why">Where this player's shots landed on the other side (net at the top, seen from the hitter). Dots = landing spots; click a dot to watch. "Deep" = past the kitchen, in the back 15 ft. In/out calls are not reliable yet, so they are not shown.</p><div id="placement" style="display:flex;flex-wrap:wrap;gap:18px"></div></div>
+    </section>
+    <section class="grid">
       <div class="card" style="grid-column: span 3"><h2>Movement</h2><p class="why">How much and how fast this player moved during rallies (feet positions, smoothed over 0.5 s; top speeds must be held for 0.5 s).</p><div id="running"></div></div>
     </section>
     <section class="grid">
@@ -211,6 +214,21 @@ function renderEndings(P) {
   const sg = Object.entries(sp.groups);
   $("#speed").innerHTML = sg.length ? `<table><tr><th>Shot</th><th>Typical</th><th>Top</th><th>Shots</th><th></th></tr>${sg.map(([k, v]) => `<tr><td>${k}</td><td><b>${v.avg}</b> mph</td><td>${v.max ?? "–"}${v.max ? " mph" : ""}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No measured speeds.</span>';
   $("#fastest").innerHTML = sp.fastest.length ? `<table>${sp.fastest.map(f => `<tr><td><b>${f.mph}</b> mph${f.err ? ` <span class="small">±${f.err}</span>` : ""}</td><td>${cap(f.shot || "shot")}</td><td>${clipButtons([f.rally])}</td></tr>`).join("")}</table>` : '<span class="empty">–</span>';
+  const pl = P.placement || {};
+  const half = (label, g) => {
+    const W = 160, Hh = 176, sx = W / 26, sy = Hh / 28, ox = 3 * sx, oy = 2 * sy;   // 20x22 ft half + margins
+    const X = x => ox + x * sx, Y = d => oy + d * sy;
+    const dots = g.points.map(([x, d, rid]) => `<circle cx="${X(x)}" cy="${Y(d)}" r="4" fill="${col}" fill-opacity="0.75" stroke="var(--surface-1, #fff)" stroke-width="1" style="cursor:pointer" data-r="${rid}"><title>${label}: rally ${rid}</title></circle>`).join("");
+    return `<div><div style="font-size:13px;margin-bottom:4px"><b>${label}</b> <span class="small" style="color:var(--text-muted)">${g.n} shots · ${g.deep_pct}% deep</span></div>
+      <svg width="${W}" height="${Hh}" viewBox="0 0 ${W} ${Hh}" class="placement">
+        <rect x="${X(0)}" y="${Y(0)}" width="${20 * sx}" height="${22 * sy}" fill="none" stroke="var(--text-muted)" />
+        <line x1="${X(0)}" y1="${Y(7)}" x2="${X(20)}" y2="${Y(7)}" stroke="var(--text-muted)" stroke-dasharray="3 3"/>
+        <line x1="${X(10)}" y1="${Y(7)}" x2="${X(10)}" y2="${Y(22)}" stroke="var(--text-muted)"/>
+        <line x1="${X(-2)}" y1="${Y(0)}" x2="${X(22)}" y2="${Y(0)}" stroke="var(--text-primary)" stroke-width="2"/>
+        ${dots}</svg></div>`;
+  };
+  $("#placement").innerHTML = Object.keys(pl).length ? Object.entries(pl).map(([k, g]) => half(k, g)).join("") : '<span class="empty">No landing spots.</span>';
+  document.querySelectorAll("svg.placement circle").forEach(c => c.onclick = () => openClip(+c.dataset.r, [+c.dataset.r]));
   const rn = P.running || {};
   $("#running").innerHTML = rn.rallies ? `<div class="tiles" style="margin:0">
       <div class="tile"><div class="l">Distance per rally</div><div class="v">${rn.dist_per_rally_ft}<span style="font-size:14px"> ft</span></div><div class="n">${rn.total_dist_ft} ft in ${rn.rallies} rallies</div></div>
