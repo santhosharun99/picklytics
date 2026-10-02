@@ -39,3 +39,14 @@ football), not a consumer "rate my game" app. Every number must be backed by cli
 - Accuracy before features: a wrong stat in a scouting report is worse than a missing one.
 - Measure everything against analyst-labelled rallies (`training/evaluate.py`).
 - Analyst-in-the-loop: AI drafts, the analyst reviews, the report uses reviewed data.
+
+## Research notes (reviewed 2026-10-02)
+- **ChatMatch** (Zhang et al., Computer Speech & Language 2025, open access): badminton videos -> vision models extract
+  per-frame meta-features (locations, actions, gestures, results) -> rules turn them into structured match data ->
+  LLM agents (task identifier, coach, statistician, video manager) answer coach questions in plain language and pull
+  matching clips. Fits us later: our analysis.json + clips are the structured data; add an "ask the match" box on
+  match.html ("where does Boyer lose points on the backhand?"). Does not improve detection.
+- **Lightweight 3D pose estimation and matching** (Zhang et al., Neurocomputing 2026, pickleball): BlazePose keypoints
+  + genetic-algorithm alignment over time to compare a player's stroke with a reference stroke, giving a match score
+  and visual feedback. Fits a later "technique" module (compare a player's dink/drive form to a model stroke).
+  Needs a closer camera than a broadcast; does not improve hit detection.
