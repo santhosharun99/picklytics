@@ -147,6 +147,9 @@ function show(name) {
       <div class="card"><h2>Fastest shots</h2><p class="why">Click ▶ to watch.</p><div id="fastest"></div></div>
     </section>
     <section class="grid">
+      <div class="card" style="grid-column: span 3"><h2>Movement</h2><p class="why">How much and how fast this player moved during rallies (feet positions, smoothed over 0.5 s; top speeds must be held for 0.5 s).</p><div id="running"></div></div>
+    </section>
+    <section class="grid">
       <div class="card"><h2>Where they hit from</h2><p class="why">Contact points, shown on their own half (net at top).</p><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (darker = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>How rallies ended</h2><p class="why">When this player hit the last shot: won it (winner / forced error) or lost it (own error).</p><div id="endings"></div>
@@ -208,6 +211,13 @@ function renderEndings(P) {
   const sg = Object.entries(sp.groups);
   $("#speed").innerHTML = sg.length ? `<table><tr><th>Shot</th><th>Typical</th><th>Top</th><th>Shots</th><th></th></tr>${sg.map(([k, v]) => `<tr><td>${k}</td><td><b>${v.avg}</b> mph</td><td>${v.max ?? "–"}${v.max ? " mph" : ""}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No measured speeds.</span>';
   $("#fastest").innerHTML = sp.fastest.length ? `<table>${sp.fastest.map(f => `<tr><td><b>${f.mph}</b> mph${f.err ? ` <span class="small">±${f.err}</span>` : ""}</td><td>${cap(f.shot || "shot")}</td><td>${clipButtons([f.rally])}</td></tr>`).join("")}</table>` : '<span class="empty">–</span>';
+  const rn = P.running || {};
+  $("#running").innerHTML = rn.rallies ? `<div class="tiles" style="margin:0">
+      <div class="tile"><div class="l">Distance per rally</div><div class="v">${rn.dist_per_rally_ft}<span style="font-size:14px"> ft</span></div><div class="n">${rn.total_dist_ft} ft in ${rn.rallies} rallies</div></div>
+      <div class="tile"><div class="l">Typical top speed</div><div class="v">${rn.typical_peak_mph}<span style="font-size:14px"> mph</span></div><div class="n">per rally (median)</div></div>
+      <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${clipButtons(rn.top_sprints.map(x => x.rally))}</div></div>
+      <div class="tile"><div class="l">Time sprinting</div><div class="v">${rn.sprint_time_pct}%</div><div class="n">of rally time above 6 mph</div></div>
+    </div>` : '<span class="empty">No movement data.</span>';
   $("#endings").innerHTML = rows.length ? `<table><tr><th></th><th>Last shot</th><th>Count</th><th></th></tr>${rows.map(([a, k, v, c]) => `<tr><td style="color:${c}">${a}</td><td>${k}</td><td>${v.count}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No rallies with a known winner where this player hit last.</span>';
 }
 function renderLength(P, col) {
