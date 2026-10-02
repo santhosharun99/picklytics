@@ -43,7 +43,7 @@ def main():
         t0 = time.time()
         meta, cam, ball, flights, contacts = contacts_for(run, a.beta, a.penalty)
         lo, hi = meta["first_frame"], meta["last_frame"]
-        ral = [r for r in L["rallies"] if r["end"] is not None and lo <= r["start"] and r["end"] < hi and r.get("reviewed", True)]
+        ral = [r for r in L["rallies"] if r["end"] is not None and lo <= r["start"] <= r["end"] < hi and r.get("reviewed", True)]
         inl = lambda f: any(r["start"] <= f <= r["end"] for r in ral)
         cs = [c for c in contacts if inl(c["frame"])]
         th = [e["frame"] for r in ral for e in r["events"] if e["kind"] == "hit"]

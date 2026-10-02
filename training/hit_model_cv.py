@@ -63,7 +63,7 @@ class Stretch:
         ball = track_ball(recs)
         self.ball = {f: v for f, v in ball.items() if f in self.pl}
         lo, hi = self.meta["first_frame"], self.meta["last_frame"]
-        self.rallies = [r for r in LABELS["rallies"] if r["end"] and lo <= r["start"] and r["end"] < hi and r.get("reviewed", True)]
+        self.rallies = [r for r in LABELS["rallies"] if r["end"] and lo <= r["start"] <= r["end"] < hi and r.get("reviewed", True)]
         pf = run / "paddles.json"
         paddles = {int(k): v for k, v in json.loads(pf.read_text()).items()} if pf.exists() else {}
         self.ctx = hm.Context.build(self.ball, self.pl, self.P, self.fps, paddles)

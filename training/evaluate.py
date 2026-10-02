@@ -66,7 +66,7 @@ def main() -> None:
                 H[r["f"]] = np.asarray(r["court"]["H"])
 
     # auto-labelled rallies only count once a person has reviewed them
-    rallies = [r for r in L["rallies"] if r["end"] is not None and lo <= r["start"] and r["end"] < hi
+    rallies = [r for r in L["rallies"] if r["end"] is not None and lo <= r["start"] <= r["end"] < hi
                and r.get("reviewed", True)]
     if not rallies:
         raise SystemExit("No completed labelled rallies inside this run's time range.")

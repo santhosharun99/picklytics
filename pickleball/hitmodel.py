@@ -186,3 +186,61 @@ def predict_hits(c: Context, sp, bundle, lo, hi):
     picked = nms_pick(cs, pr, bundle["threshold"])
     p_of = dict(zip(cs, pr))
     return [(f, float(p_of[f]), hitter_side(c, f, sp)) for f in sorted(picked)]
+
+
+# ---------------------------------------------------------------------------------------------
+# Bounces: same candidates + clues, plus where the ball meets the ground. Chosen with
+# training/bounce_model_cv.py (leave-one-rally-out F1 ~83% vs 57% for the trajectory rules).
+# ---------------------------------------------------------------------------------------------
+BOUNCE_PATH = MODEL_PATH.parent / "bounce_clf.joblib"
+
+
+def bounce_candidates(c: Context, sp, lo, hi, extra=()):
+    cs = set(candidates(c, sp, lo, hi))
+    cs |= {e["frame"] for e in c.free if lo <= e["frame"] <= hi}
+    cs |= {f for f in extra if lo <= f <= hi}
+    fr = [f for f in range(lo, hi + 1) if f in c.ball]
+    for a, f, b in zip(fr, fr[1:], fr[2:]):  # image-y turning points
+        if (c.ball[f][1] - c.ball[a][1]) * (c.ball[b][1] - c.ball[f][1]) < 0:
+            cs.add(f)
+    out = []
+    for f in sorted(cs):
+        if not out or f - out[-1] > 2:
+            out.append(f)
+    return out
+
+
+def bounce_row(c: Context, f, sp):
+    b, d3, pad = features(c, f, sp)
+    xy = ball_at(c, f)
+    if xy is None:
+        g = [-99.0, -99.0, 0.0]
+    else:
+        G = ground_point(c.P, xy)[0]
+        g = [float(np.clip(G[0], -40, 60)), float(np.clip(G[1], -40, 90)), float(-1 <= G[0] <= 21 and -1 <= G[1] <= 45)]
+    return b + d3 + pad + g
+
+
+def load_bounce_bundle():
+    if not BOUNCE_PATH.exists():
+        return None
+    import joblib
+    return joblib.load(BOUNCE_PATH)
+
+
+def predict_bounces(c: Context, sp, bundle, lo, hi, extra=()):
+    """[(frame, prob, ground (x, y) in court feet)] bounces in [lo, hi]."""
+    cs = bounce_candidates(c, sp, lo, hi, extra)
+    if not cs:
+        return []
+    if hasattr(c.paddles, "ensure"):
+        c.paddles.ensure({g for f in cs for g in range(f - 3, f + 4)})
+    X = np.array([bounce_row(c, f, sp) for f in cs], float)
+    pr = bundle["model"].predict_proba(X)[:, 1]
+    p_of = dict(zip(cs, pr))
+    out = []
+    for f in sorted(nms_pick(cs, pr, bundle["threshold"])):
+        xy = ball_at(c, f)
+        G = ground_point(c.P, xy)[0] if xy is not None else None
+        out.append((f, float(p_of[f]), (float(G[0]), float(G[1])) if G is not None else None))
+    return out

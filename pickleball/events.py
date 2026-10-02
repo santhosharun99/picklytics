@@ -117,7 +117,29 @@ def _flight_events(ball, players, homographies, fps, penalty, reach) -> list[Eve
     return out
 
 
-HIT_MODEL = {"enabled": True, "bundle": None}  # learned hit decider (hitmodel.py), used when a Context is given
+HIT_MODEL = {"enabled": True, "bundle": None, "bounce_bundle": None}  # learned hit/bounce deciders (hitmodel.py), used when a Context is given
+
+
+def model_bounces(ctx, players, homographies, fps, rule_bounces) -> list[Event]:
+    """Bounces from the learned bounce detector; the rule-based bounces are extra candidates."""
+    from . import hitmodel as hm
+    from .swing import swing_series
+    if HIT_MODEL["bounce_bundle"] is None:
+        HIT_MODEL["bounce_bundle"] = hm.load_bounce_bundle()
+    if HIT_MODEL["bounce_bundle"] is None or SWING_MODEL["model"] is None or not ctx.ball:
+        return []
+    sp, _ = swing_series(players, SWING_MODEL["model"])
+    out = []
+    for f, prob, G in hm.predict_bounces(ctx, sp, HIT_MODEL["bounce_bundle"], min(ctx.ball), max(ctx.ball),
+                                         [e.frame for e in rule_bounces]):
+        xy = hm.ball_at(ctx, f)
+        H = next((homographies[g] for g in (f, *range(f - 3, f + 4)) if g in homographies), None)
+        if xy is None or H is None:
+            continue
+        cxy = cv2.perspectiveTransform(np.array([[xy]], np.float32), H)[0, 0]
+        out.append(Event("bounce", f, f / fps, tuple(xy), 2.0 + prob, side="far" if cxy[1] < COURT_L / 2 else "near",
+                         court=(float(cxy[0]), float(cxy[1]))))
+    return out
 
 
 def model_hits(ctx, players, fps) -> list[Event]:
@@ -182,8 +204,10 @@ def detect_events(ball: dict, players: dict[int, list[dict]], homographies: dict
                 events.append(ev)
     mh = model_hits(hit_ctx, players, fps) if hit_ctx is not None and HIT_MODEL["enabled"] else []
     if mh:
-        # learned hit decider; bounces from the trajectory as before
-        events = mh + [e for e in flight + events if e.kind == "bounce"]
+        # learned hit decider; learned bounce detector (falls back to trajectory-rule bounces)
+        rule_b = [e for e in flight + events if e.kind == "bounce"]
+        mb = model_bounces(hit_ctx, players, homographies, fps, rule_b)
+        events = mh + (mb if mb else rule_b)
     elif SWING_SETTINGS["enabled"]:
         # hits from swing + ball fusion; bounces as before
         events = swing_hits(ball, players, flight, fps) + [e for e in flight + events if e.kind == "bounce"]
