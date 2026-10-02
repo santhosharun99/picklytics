@@ -261,3 +261,86 @@ def build_report(labels_path: Path, run_dirs: list[Path], video: str, out_path: 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=1))
     return report
+
+
+# ---------------------------------------------------------------------------------------------
+# Fully automatic report: rallies, shots and positions from an analysis run (analysis.json),
+# point winners from the broadcast scoreboard (scoreboard.py). No analyst labels needed.
+# ---------------------------------------------------------------------------------------------
+
+def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_next_s: float = 40.0):
+    from . import scoreboard as sb
+    run_dir = Path(run_dir)
+    A = json.loads((run_dir / "analysis.json").read_text())
+    fps = A["meta"]["fps"]
+    name_of = {pid: p.get("name") or pid for pid, p in A["players"].items()}
+    tracks = load_tracks([run_dir])
+    shots_by = defaultdict(list)
+    for s in A["shots"]:
+        shots_by[s["rally"]].append(s)
+    rallies = sorted(A["rallies"], key=lambda r: r["start_t"])
+    readings = {}
+
+    def reading(t0, t1):
+        key = (round(t0, 1), round(t1, 1))
+        if key not in readings:
+            readings[key] = sb.stable_reading(video_file, int(t0 * fps), int(t1 * fps), sb_cfg) if sb_cfg else None
+        return readings[key]
+
+    out = []
+    for k, r in enumerate(rallies):
+        shots = []
+        for i, s in enumerate(sorted(shots_by[r["index"]], key=lambda s: s["frame"])):
+            p = s.get("hitter_court")
+            shots.append({"i": i, "t": round(s["t"], 2), "player": name_of.get(s["player"], s["player"]), "side": s["side"],
+                          "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
+                          "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
+                          "speed_mph": s.get("speed_mph")})
+        if not shots:
+            continue
+        for s, nxt in zip(shots, shots[1:]):
+            s["next_pos"] = nxt["pos"]
+        winner, server = None, shots[0]["player"]
+        if sb_cfg:
+            before = reading(r["start_t"] - 4, r["start_t"] - 0.2)
+            if before and before["server"] is not None:
+                server = sb_cfg["names"][before["server"]]
+            nxt = rallies[k + 1] if k + 1 < len(rallies) else None
+            if nxt and nxt["start_t"] - r["end_t"] <= max_next_s:
+                after = reading(nxt["start_t"] - 4, nxt["start_t"] - 0.2)
+            else:
+                after = reading(r["end_t"] + 5, r["end_t"] + 20)
+            w = sb.point_winner(before, after)
+            winner = sb_cfg["names"][w] if w is not None else None
+        side_of = {}
+        for s in shots:
+            side_of.setdefault(s["player"], s["side"])
+        move = defaultdict(list)
+        step = max(1, int(fps / 10))
+        for f in range(int(r["start_t"] * fps), int(r["end_t"] * fps) + 1, step):
+            for side, xy in tracks.get(f, {}).items():
+                move[side].append([round(v, 1) for v in xy])
+        out.append({
+            "id": r["index"], "start_t": round(r["start_t"], 2), "end_t": round(r["end_t"], 2),
+            "server": server, "winner": winner, "ending": None,
+            "shots": shots, "n_shots": len(shots),
+            "movement": {n: move.get(sd, []) for n, sd in side_of.items()},
+            "detail": True,
+        })
+    return out, name_of
+
+
+def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: Path, sb_cfg: dict | None) -> dict:
+    rallies, name_of = build_rallies_auto(run_dir, video_file, sb_cfg)
+    a, b = list(name_of.values())[:2]
+    known = sum(1 for r in rallies if r["winner"])
+    report = {
+        "title": f"{a} vs {b}",
+        "source": f"{len(rallies)} automatically detected rallies (full match; point winners read from the scoreboard for {known})",
+        "video": video_url,
+        "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
+        "rallies": [{k: v for k, v in r.items() if k != "movement"} for r in rallies],
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(report, indent=1))
+    return report
