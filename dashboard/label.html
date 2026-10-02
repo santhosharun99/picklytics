@@ -68,6 +68,8 @@ kbd { font: 12px ui-monospace, Menlo, monospace; background: var(--surface-2); b
 .warn { color: var(--warn); }
 body.simple .full-only { display: none; }
 body:not(.simple) .simple-only { display: none; }
+body.bmode .hits-only { display: none; }
+body:not(.bmode) .bounce-only { display: none; }
 </style>
 </head>
 <body>
@@ -77,7 +79,7 @@ body:not(.simple) .simple-only { display: none; }
   <label>Player A <input class="name" id="nameA" value="Boyer"></label>
   <label>Player B <input class="name" id="nameB" value="Devilliers"></label>
   <label>FPS <input id="fps" value="29.97" style="width:60px"></label>
-  <label><input type="checkbox" id="simple" checked> Simple mode</label>
+  <label>Mode <select id="mode"><option value="hits">Hits only</option><option value="bounces">Bounces</option><option value="full">Full</option></select></label>
   <button id="import" title="Load the system's draft labels to review">Import auto-labels</button>
   <a href="./" style="color:var(--text-secondary);font-size:13px">Dashboard</a>
   <span class="save" id="save">not saved yet</span>
@@ -107,7 +109,18 @@ body:not(.simple) .simple-only { display: none; }
     </div>
   </section>
   <aside class="side">
-    <div class="card simple-only" style="font-size:15px;line-height:1.6">
+    <div class="card simple-only bounce-only" style="font-size:15px;line-height:1.6">
+      <h2 style="font-size:16px">Add the bounces</h2>
+      <ol style="margin:0;padding-left:20px">
+        <li>Click a rally in the list on the right (start with ones that show <b>0</b> bounces). Your hits are already there.</li>
+        <li>Play it (<kbd>Space</kbd>, <kbd>-</kbd> to slow down). Every time the ball <b>touches the ground</b>, pause and press <kbd>X</kbd>.</li>
+        <li>Ball landed <b>outside</b> the court lines? Press <kbd>U</kbd> right after <kbd>X</kbd>.</li>
+        <li>Wrong one? Click it in the list, press <kbd>Backspace</kbd>.</li>
+        <li>Done with the rally? Press <kbd>Enter</kbd>. The Bounces column gets a ✓.</li>
+      </ol>
+      <p class="muted" style="font-size:13px;margin:10px 0 0">Every rally has at least 2: the serve and the return must bounce. Ball into the net and dropping: no need to mark. A frame or two off is fine (<kbd>←</kbd> <kbd>→</kbd> steps one frame).</p>
+    </div>
+    <div class="card simple-only hits-only" style="font-size:15px;line-height:1.6">
       <h2 style="font-size:16px">Just mark the hits</h2>
       <ol style="margin:0;padding-left:20px">
         <li>Click a rally on the right list. Press <kbd>Space</kbd> to play. Press <kbd>-</kbd> to slow down.</li>
@@ -266,7 +279,7 @@ function render() {
   $("#rallyCount").textContent = `${L.rallies.length} labelled · ${L.rallies.reduce((a, x) => a + x.events.filter(e => e.kind === "hit").length, 0)} hits`;
   $("#rallies").innerHTML = `<thead><tr><th>#</th><th>Start</th><th>Hits</th><th>Bounces</th><th>Won by</th><th>Status</th></tr></thead><tbody>` +
     L.rallies.map(x => `<tr data-id="${x.id}" class="${r && r.id === x.id ? "sel" : ""}"><td>${x.id}</td><td>${fmt(x.start / fps())}</td>
-      <td>${x.events.filter(e => e.kind === "hit").length}</td><td>${x.events.filter(e => e.kind === "bounce").length}</td>
+      <td>${x.events.filter(e => e.kind === "hit").length}</td><td>${x.events.filter(e => e.kind === "bounce").length}${bouncesChecked(x) ? ' <span title="bounces checked">✓</span>' : ""}</td>
       <td>${x.winner ? pname(x.winner) : (x.end == null ? '<span class="warn">open</span>' : "–")}</td>
       <td>${x.reviewed === false ? '<span class="warn">to review</span>' : "✓"}</td></tr>`).join("") + "</tbody>";
   $("#rallies").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => {
@@ -280,7 +293,9 @@ function render() {
     let hitNo = 0;
     if (SIMPLE()) {
       $("#events").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Hit by</th><th></th></tr></thead><tbody>` +
-        r.events.map((e, i) => e.kind !== "hit" ? "" : `<tr data-i="${i}" class="${e === selected ? "sel" : ""}"><td>${++hitNo}</td>
+        r.events.map((e, i) => e.kind === "bounce" ? (!BMODE() ? "" : `<tr data-i="${i}" class="${e === selected ? "sel" : ""}"><td></td>
+          <td>${fmt(e.frame / fps())}</td><td><span class="dot" style="background:var(--bounce)"></span>bounce${e.out ? ' <span class="warn">out</span>' : ""}</td><td></td></tr>`)
+          : `<tr data-i="${i}" class="${e === selected ? "sel" : ""}"><td>${++hitNo}</td>
           <td>${fmt(e.frame / fps())}</td><td><span class="dot" style="background:${pcolor(e.player)}"></span>${pname(e.player)}
           <span class="muted">(${e.side === "near" ? "bottom" : "top"})</span></td><td class="muted">${e.auto ? "auto" : ""}</td></tr>`).join("") + "</tbody>";
       $("#events").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => {
@@ -318,6 +333,12 @@ function render() {
   updateStatus();
 }
 function updateStatus() {
+  if (BMODE()) {
+    $("#status").innerHTML = selected && selected.kind === "bounce"
+      ? `Marked: bounce${selected.out ? " (<b>out</b>)" : ""} at ${fmt(selected.frame / fps())}. <kbd>U</kbd> if it landed out. Keep going, or <kbd>Enter</kbd> when the rally ends.`
+      : "Press <kbd>X</kbd> each time the ball touches the ground.";
+    return;
+  }
   if (SIMPLE()) {
     $("#status").innerHTML = selected && selected.kind === "hit"
       ? `Marked: hit by <b>${pname(selected.player)}</b> at ${fmt(selected.frame / fps())}. Keep going, or press <kbd>Enter</kbd> when the rally ends.`
@@ -424,7 +445,8 @@ document.addEventListener("keydown", e => {
     if (r) commit(() => {
       if (r.end == null) r.end = curFrame();
       r.reviewed = r.reviewed === false ? true : (r.auto ? false : r.reviewed);
-      if (SIMPLE()) r.mode = "hits";  // only hits were checked: score hits only
+      if (MODE() === "hits" && r.mode !== "hits+bounces" && !(r.mode == null && r.events.some(x => x.kind === "bounce"))) r.mode = "hits";  // only hits were checked: score hits only
+      else if (MODE() === "bounces") r.mode = "hits+bounces";  // hits and bounces checked (shot names not)
     });
   }
   else if (k === "backspace" || k === "delete") {
@@ -443,12 +465,19 @@ window.addEventListener("resize", drawOverlay);
 
 // theme follows the dashboard's saved choice
 try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
-const SIMPLE = () => $("#simple").checked;
-try { const v = localStorage.getItem("pb-label-simple"); if (v !== null) $("#simple").checked = v === "1"; } catch {}
-document.body.classList.toggle("simple", SIMPLE());
-$("#simple").onchange = () => {
-  document.body.classList.toggle("simple", SIMPLE());
-  try { localStorage.setItem("pb-label-simple", SIMPLE() ? "1" : "0"); } catch {}
+const bouncesChecked = r => r.mode === "hits+bounces" || (r.mode == null && r.events.some(e => e.kind === "bounce"));
+const MODE = () => $("#mode").value;
+const SIMPLE = () => MODE() !== "full";
+const BMODE = () => MODE() === "bounces";
+try {
+  const m = localStorage.getItem("pb-label-mode"), old = localStorage.getItem("pb-label-simple");
+  $("#mode").value = m || (old === "0" ? "full" : "hits");
+} catch {}
+const applyMode = () => { document.body.classList.toggle("simple", SIMPLE()); document.body.classList.toggle("bmode", BMODE()); };
+applyMode();
+$("#mode").onchange = () => {
+  applyMode();
+  try { localStorage.setItem("pb-label-mode", MODE()); } catch {}
   render();
 };
 $("#import").onclick = async () => {

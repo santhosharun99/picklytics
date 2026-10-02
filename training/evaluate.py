@@ -73,7 +73,9 @@ def main() -> None:
     in_labelled = lambda f: any(r["start"] <= f <= r["end"] for r in rallies)
 
     # rallies labelled in simple mode only had their hits checked
-    full = [r for r in rallies if r.get("mode") != "hits"]
+    # bounces count only where someone actually marked them
+    full = [r for r in rallies if r.get("mode") == "hits+bounces"
+            or (r.get("mode") is None and any(e["kind"] == "bounce" for e in r["events"]))]
     in_full = lambda f: any(r["start"] <= f <= r["end"] for r in full)
     t_hits = [e for r in rallies for e in r["events"] if e["kind"] == "hit"]
     t_bounces = [e for r in full for e in r["events"] if e["kind"] == "bounce"]
