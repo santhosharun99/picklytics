@@ -77,3 +77,51 @@ def smooth_positions(track: list[tuple[int, float, float]], window: int = 5):
     xs[:half], xs[-half:] = arr[:half, 1], arr[-half:, 1]
     ys[:half], ys[-half:] = arr[:half, 2], arr[-half:, 2]
     return [(int(f), float(x), float(y)) for f, x, y in zip(arr[:, 0], xs, ys)]
+
+
+def identify_players(frames: dict[int, list[dict]], n_players: int = 2, seg_gap: int = 15) -> dict[int, list[dict]]:
+    """Global player identity for singles: {frame: selected players} -> same with "id" set.
+
+    The online PlayerIdentifier adapts its shirt prototypes every frame and can drift onto the
+    wrong player (seen when players switch ends). Here: (1) two shirt-colour clusters from the
+    whole video (k-means on Hellinger-mapped signatures), (2) one side->player mapping per
+    continuous camera segment, decided by majority vote over all its frames. Players only change
+    sides between points, and every point sits inside one segment, so a single bad frame can't
+    flip identities. P1 = the far-side player of the first segment (old convention).
+    """
+    if n_players != 2:
+        ident = PlayerIdentifier(n_players)
+        return {f: ident.assign(ps) for f, ps in sorted(frames.items())}
+    rows = [(f, p["side"], np.sqrt(np.asarray(p["sig"], float))) for f, ps in frames.items() for p in ps if p.get("sig") is not None]
+    if len(rows) < 20:
+        ident = PlayerIdentifier(n_players)
+        return {f: ident.assign(ps) for f, ps in sorted(frames.items())}
+    X = np.stack([r[2] for r in rows])
+    # k-means (k=2), initialised with the mean far / near signature of the first frames
+    first = sorted({r[0] for r in rows})[: max(50, len(rows) // 50)]
+    init = [X[[i for i, r in enumerate(rows) if r[0] in first and r[1] == s]].mean(0) for s in ("far", "near")]
+    C = np.stack([c if np.isfinite(c).all() else X[k] for k, c in enumerate(init)])
+    for _ in range(30):
+        lab = np.argmin(((X[:, None] - C[None]) ** 2).sum(2), 1)
+        newC = np.stack([X[lab == k].mean(0) if (lab == k).any() else C[k] for k in range(2)])
+        if np.allclose(newC, C):
+            break
+        C = newC
+    # segments of consecutive main-view frames
+    fs = sorted(frames)
+    seg_of, seg = {}, 0
+    for a, b in zip([None] + fs, fs):
+        if a is not None and b - a > seg_gap:
+            seg += 1
+        seg_of[b] = seg
+    # vote per segment: score of mapping "far = cluster 0" vs "far = cluster 1"
+    vote = {}
+    for f, side, x in rows:
+        d0, d1 = ((x - C[0]) ** 2).sum(), ((x - C[1]) ** 2).sum()
+        v = (d1 - d0) if side == "far" else (d0 - d1)  # > 0 supports far = cluster 0
+        vote[seg_of[f]] = vote.get(seg_of[f], 0.0) + v
+    out = {}
+    for f, ps in frames.items():
+        far_is_0 = vote.get(seg_of[f], 0.0) >= 0
+        out[f] = [{**p, "id": ("P1" if (p["side"] == "far") == far_is_0 else "P2")} for p in ps]
+    return out

@@ -280,6 +280,15 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
         shots_by[s["rally"]].append(s)
     rallies = sorted(A["rallies"], key=lambda r: r["start_t"])
     readings = {}
+    from .outcome import winners_from_serves
+    seq = []
+    for r in rallies:
+        rs = sorted(shots_by[r["index"]], key=lambda s: s["frame"])
+        if rs:
+            srv = name_of.get(rs[0]["player"], rs[0]["player"])
+            seq.append({"index": r["index"], "start_t": r["start_t"], "end_t": r["end_t"], "server": srv,
+                        "receiver": next((n for n in name_of.values() if n != srv), None)})
+    track_w = {x["index"]: x for x in winners_from_serves(seq)}
 
     def reading(t0, t1):
         key = (round(t0, 1), round(t1, 1))
@@ -300,18 +309,21 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             continue
         for s, nxt in zip(shots, shots[1:]):
             s["next_pos"] = nxt["pos"]
-        winner, server = None, shots[0]["player"]
-        if sb_cfg:
+        # tracking decides: server = first hitter, winner from the next rally's server (side-out logic)
+        tw = track_w.get(r["index"], {})
+        server, winner = shots[0]["player"], tw.get("winner")
+        sb_server = sb_winner = None
+        if sb_cfg and sb_cfg.get("mode", "ocr") == "ocr":  # scoreboard only as an independent cross-check
             before = reading(r["start_t"] - 4, r["start_t"] - 0.2)
             if before and before["server"] is not None:
-                server = sb_cfg["names"][before["server"]]
+                sb_server = sb_cfg["names"][before["server"]]
             nxt = rallies[k + 1] if k + 1 < len(rallies) else None
             if nxt and nxt["start_t"] - r["end_t"] <= max_next_s:
                 after = reading(nxt["start_t"] - 4, nxt["start_t"] - 0.2)
             else:
                 after = reading(r["end_t"] + 5, r["end_t"] + 20)
             w = sb.point_winner(before, after)
-            winner = sb_cfg["names"][w] if w is not None else None
+            sb_winner = sb_cfg["names"][w] if w is not None else None
         side_of = {}
         for s in shots:
             side_of.setdefault(s["player"], s["side"])
@@ -322,7 +334,9 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
                 move[side].append([round(v, 1) for v in xy])
         out.append({
             "id": r["index"], "start_t": round(r["start_t"], 2), "end_t": round(r["end_t"], 2),
-            "server": server, "winner": winner, "ending": None,
+            "server": server, "winner": winner, "ending": None, "game": tw.get("game"), "how": tw.get("how"),
+            "scoreboard": {"server": sb_server, "winner": sb_winner,
+                           "agrees": None if sb_winner is None else (sb_winner == winner and (sb_server in (None, server)))},
             "shots": shots, "n_shots": len(shots),
             "movement": {n: move.get(sd, []) for n, sd in side_of.items()},
             "detail": True,
@@ -333,10 +347,13 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
 def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: Path, sb_cfg: dict | None) -> dict:
     rallies, name_of = build_rallies_auto(run_dir, video_file, sb_cfg)
     a, b = list(name_of.values())[:2]
-    known = sum(1 for r in rallies if r["winner"])
+    checked = [r for r in rallies if r["scoreboard"]["agrees"] is not None]
+    agree = sum(r["scoreboard"]["agrees"] for r in checked)
+    games = max((r["game"] or 1 for r in rallies), default=1)
     report = {
         "title": f"{a} vs {b}",
-        "source": f"{len(rallies)} automatically detected rallies (full match; point winners read from the scoreboard for {known})",
+        "source": f"{len(rallies)} automatically detected rallies in {games} games (full match; server and point winner from tracking"
+                  + (f"; scoreboard agrees on {agree}/{len(checked)}" if checked else "") + ")",
         "video": video_url,
         "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
         "rallies": [{k: v for k, v in r.items() if k != "movement"} for r in rallies],

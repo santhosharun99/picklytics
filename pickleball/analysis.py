@@ -12,7 +12,7 @@ import numpy as np
 from .ball import track_ball
 from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y
 from .events import detect_events, segment_rallies
-from .players import PlayerIdentifier, select_players, smooth_positions
+from .players import identify_players, select_players, smooth_positions
 from .shots import classify_rally, infer_handedness, shots_to_dicts
 
 HEAT_CELL_FT = 2.0
@@ -68,8 +68,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     fps = meta["fps"]
     per_side = 1 if n_players == 2 else 2
 
-    homs, players_by_frame, main = {}, {}, set()
-    ident = PlayerIdentifier(n_players)
+    homs, selected, main = {}, {}, set()
     off_camera = _other_camera_frames(recs)
     for r in recs:
         if r.get("court") is None or r["f"] in off_camera:
@@ -77,7 +76,8 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
         f = r["f"]
         main.add(f)
         homs[f] = np.asarray(r["court"]["H"])
-        players_by_frame[f] = ident.assign(select_players(r.get("people", []), per_side))
+        selected[f] = select_players(r.get("people", []), per_side)
+    players_by_frame = identify_players(selected, n_players)
 
     ball = track_ball(recs)
     events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=_hit_context(out_dir, meta, ball, players_by_frame))

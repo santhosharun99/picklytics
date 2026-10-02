@@ -1,0 +1,19 @@
+{
+  "note": "PPA Las Vegas 2026 main broadcast camera (blue court), hand-calibrated on frame 28620 and line-snapped (93% line match). Court model does not detect this court. Court feet -> 1920x1080 pixels.",
+  "points": [
+    {"court": [0, 0],   "img": [689.3, 314.7]},
+    {"court": [20, 0],  "img": [1219.2, 313.4]},
+    {"court": [0, 44],  "img": [266.9, 820.5]},
+    {"court": [20, 44], "img": [1650.1, 817.9]},
+    {"court": [0, 29],  "img": [509.5, 530.0]},
+    {"court": [20, 29], "img": [1402.5, 528.0]}
+  ],
+  "scoreboard": {
+    "note": "pbtv score bug top-left: row 0 = Kate Fahey, row 1 = Aiko Yoshitomi; one score column per game (current game = rightmost, earlier games grey); green dot left of the scores marks the server. Thin font: tesseract unreliable -> mode diff.",
+    "mode": "diff",
+    "rows": [[64, 102], [114, 152]],
+    "board_x": [350, 480],
+    "serve_x": [334, 356],
+    "names": ["Kate Fahey", "Aiko Yoshitomi"]
+  }
+}
