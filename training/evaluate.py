@@ -79,7 +79,7 @@ def main() -> None:
     in_full = lambda f: any(r["start"] <= f <= r["end"] for r in full)
     t_hits = [e for r in rallies for e in r["events"] if e["kind"] == "hit"]
     t_bounces = [e for r in full for e in r["events"] if e["kind"] == "bounce"]
-    p_hits = [s for s in A["shots"] if in_labelled(s["frame"])]
+    p_hits = [s for s in A["shots"] if in_labelled(s["frame"]) and not s.get("inferred")]  # detector hits only
     p_bounces = [b for b in A["bounces"] if in_full(b["frame"])]
 
     hm = match([e["frame"] for e in t_hits], [s["frame"] for s in p_hits], args.tol)

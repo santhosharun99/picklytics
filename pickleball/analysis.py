@@ -11,7 +11,7 @@ import numpy as np
 
 from .ball import track_ball
 from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y
-from .events import detect_events, segment_rallies
+from .events import add_missed_serves, detect_events, segment_rallies
 from .players import identify_players, select_players, smooth_positions
 from .shots import classify_rally, infer_handedness, shots_to_dicts
 
@@ -82,6 +82,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     ball = track_ball(recs)
     events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=_hit_context(out_dir, meta, ball, players_by_frame))
     rallies = segment_rallies(events, main, fps)
+    n_inferred = add_missed_serves(rallies, ball, players_by_frame, events, homs, fps)
     hand = infer_handedness(rallies)
     shots = [s for r in rallies for s in classify_rally(r, hand)]
 

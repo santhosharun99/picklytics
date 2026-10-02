@@ -47,6 +47,7 @@ class Shot:
     landing_court: tuple | None
     landing_zone: str | None
     out: bool | None
+    inferred: bool = False       # serve deduced from the two-bounce rule, not seen by the detector
 
 
 def infer_handedness(rallies: list[Rally]) -> dict[str, str]:
@@ -105,7 +106,7 @@ def classify_rally(rally: Rally, handedness: dict[str, str], rules=SHOT_RULES) -
             hitter_court=tuple(round(v, 1) for v in h.court) if h.court else None,
             hitter_zone=court_zone(h.court[1]) if h.court else None,
             landing_court=tuple(round(v, 1) for v in land) if land else None,
-            landing_zone=court_zone(land[1]) if land else None, out=out,
+            landing_zone=court_zone(land[1]) if land else None, out=out, inferred=h.inferred,
         ))
     return shots
 

@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 import cv2
 import numpy as np
 
-from .court import COURT_L, COURT_W
+from .court import COURT_L, COURT_W, NET_Y
 
 NOSE, L_SHOULDER, R_SHOULDER, L_ELBOW, R_ELBOW, L_WRIST, R_WRIST = 0, 5, 6, 7, 8, 9, 10
 
@@ -33,6 +33,7 @@ class Event:
     body_x: float | None = None     # hitter's shoulder-midpoint x in the image (hits)
     above_head: bool = False        # hitting wrist above the head (overheads)
     ground: tuple[float, float] | None = None  # ball image point projected onto the court plane
+    inferred: bool = False          # not seen: deduced from the rules (e.g. a missed serve)
 
 
 @dataclass
@@ -660,3 +661,97 @@ def learned_swing_hits(ball, players, flight_hits, fps, cfg) -> list[Event]:
             if not any(abs(f - h.frame) <= 8 for h in out):
                 out.append(mk(f, s, 2.5 + P[s][f]))
     return out
+
+
+# ---------------------------------------------------------------------------
+# Missed serves. A rally's first detected hit cannot be the serve if the ball reached the
+# hitter from across the net (or bounced on the hitter's side) just before it: by the
+# two-bounce rule that hit is the RETURN, so the opponent served and the detector missed it
+# (typically the far player's serve). Such rallies get an inferred serve by the opponent,
+# so server, point winner (serve sequence) and serve/return/third-shot labels stay right.
+# ---------------------------------------------------------------------------
+
+def _net_image_y(H):
+    """Image y of the net's ground line at the court centre, from an image->court homography."""
+    p = cv2.perspectiveTransform(np.array([[[COURT_W / 2, NET_Y]]], np.float32), np.linalg.inv(H))[0, 0]
+    return float(p[1])
+
+
+def crossings_before(h1: Event, ball: dict, all_events: list[Event], homographies: dict, fps: float,
+                     max_s: float = 3.5, max_gap: int = 8, margin_px: float = 20.0, min_run: int = 3):
+    """Ball sides before the first detected hit, oldest first, e.g. ["far", "near"] = it came from the
+    far side, crossed the net once, then h1 (near) hit it. Each crossing is one shot we missed; the
+    oldest side is where the rally began (the server's side). Follows the ball back only while it is
+    tracked continuously, so a ball fed back between points is not mistaken for a shot."""
+    H = next((homographies[g] for g in (h1.frame, *range(h1.frame - 10, h1.frame + 10)) if g in homographies), None)
+    runs = []
+    if H is not None:
+        ny = _net_image_y(H)
+        seq, last = [], h1.frame
+        for f in range(h1.frame - 1, h1.frame - int(max_s * fps), -1):
+            if f in ball and not ball[f][3]:
+                if last - f > max_gap:
+                    break
+                last = f
+                y = ball[f][1]
+                side = "far" if y < ny - margin_px else ("near" if y > ny + margin_px else None)
+                if side:
+                    seq.append(side)
+        for side in reversed(seq):  # oldest first, runs of the same side
+            if runs and runs[-1][0] == side:
+                runs[-1][1] += 1
+            else:
+                runs.append([side, 1])
+        runs = [r for r in runs if r[1] >= min_run]
+        merged = []
+        for side, n in runs:
+            if merged and merged[-1][0] == side:
+                merged[-1][1] += n
+            else:
+                merged.append([side, n])
+        runs = merged
+    sides = [r[0] for r in runs]
+    if sides and sides[-1] != h1.side:  # ball not yet seen arriving on the hitter's side
+        sides.append(h1.side)
+    if len(sides) < 2:
+        lo = h1.frame - int(1.6 * fps)
+        if any(e.kind == "bounce" and lo <= e.frame < h1.frame - 1 and e.side == h1.side for e in all_events):
+            return ["far" if h1.side == "near" else "near", h1.side]  # incoming bounce: at least the serve
+        return [h1.side]
+    return sides
+
+
+def add_missed_serves(rallies: list[Rally], ball: dict, players: dict, all_events: list[Event],
+                      homographies: dict, fps: float) -> int:
+    """Insert inferred shots for every net crossing seen before the first detected hit (missed serve,
+    or serve + return, ...), so the server and the serve/return/third-shot order stay right."""
+    n = 0
+    for r in rallies:
+        hits = [e for e in r.events if e.kind == "hit"]
+        if not hits:
+            continue
+        h1 = hits[0]
+        sides = crossings_before(h1, ball, all_events, homographies, fps)
+        missed = sides[:-1]  # every side before the hitter's own run had a shot that sent the ball over
+        if len(missed) > 2:  # more than serve + return missed: the older crossings are balls fed back between points
+            missed = missed[-2:]
+        if not missed:
+            continue
+        new = []
+        for k, side in enumerate(missed):
+            f = max(h1.frame - int((len(missed) - k) * 1.1 * fps), 0)  # ~1.1 s per missed shot
+            p = None
+            for g in [f + d for d in range(0, 30)] + [f - d for d in range(1, 30)]:
+                p = next((q for q in players.get(g, []) if q["side"] == side), None)
+                if p:
+                    break
+            if p is None:
+                new = []
+                break
+            new.append(Event("hit", f, f / fps, tuple(p.get("foot", p["court"])), 0.5, player=p.get("id"),
+                             side=side, court=tuple(p["court"]), inferred=True))
+        if new:
+            r.events[:0] = new
+            r.start_frame = new[0].frame
+            n += len(new)
+    return n
