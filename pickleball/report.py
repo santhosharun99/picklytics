@@ -280,15 +280,9 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
         shots_by[s["rally"]].append(s)
     rallies = sorted(A["rallies"], key=lambda r: r["start_t"])
     readings = {}
-    from .outcome import winners_from_serves
-    seq = []
-    for r in rallies:
-        rs = sorted(shots_by[r["index"]], key=lambda s: s["frame"])
-        if rs:
-            srv = name_of.get(rs[0]["player"], rs[0]["player"])
-            seq.append({"index": r["index"], "start_t": r["start_t"], "end_t": r["end_t"], "server": srv,
-                        "receiver": next((n for n in name_of.values() if n != srv), None)})
-    track_w = {x["index"]: x for x in winners_from_serves(seq)}
+    # tracking + game rules decide server, winner and games (end changes observed from the players' looks)
+    from .outcome import match_from_analysis
+    track_w = {x["index"]: x for x in match_from_analysis(A, run_dir=run_dir)}
 
     def reading(t0, t1):
         key = (round(t0, 1), round(t1, 1))
@@ -311,7 +305,9 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             s["next_pos"] = nxt["pos"]
         # tracking decides: server = first hitter, winner from the next rally's server (side-out logic)
         tw = track_w.get(r["index"], {})
-        server, winner = shots[0]["player"], tw.get("winner")
+        if tw.get("after_match"):
+            continue  # play after the match was decided (warm-down, celebrations) is not part of the analysis
+        server, winner = tw.get("server") or shots[0]["player"], tw.get("winner")
         sb_server = sb_winner = None
         if sb_cfg and sb_cfg.get("mode", "ocr") == "ocr":  # scoreboard only as an independent cross-check
             before = reading(r["start_t"] - 4, r["start_t"] - 0.2)
@@ -334,7 +330,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
                 move[side].append([round(v, 1) for v in xy])
         out.append({
             "id": r["index"], "start_t": round(r["start_t"], 2), "end_t": round(r["end_t"], 2),
-            "server": server, "winner": winner, "ending": None, "game": tw.get("game"), "how": tw.get("how"),
+            "server": server, "winner": winner, "ending": None, "game": tw.get("game"), "score_before": tw.get("score_before"),
             "scoreboard": {"server": sb_server, "winner": sb_winner,
                            "agrees": None if sb_winner is None else (sb_winner == winner and (sb_server in (None, server)))},
             "shots": shots, "n_shots": len(shots),

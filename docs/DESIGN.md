@@ -53,9 +53,16 @@ Severity: **High** = gives wrong answers on real matches; **Medium** = wrong in 
 | # | Status |
 |---|---|
 | L1 | Done: 1-hit rallies kept when the hit looks like a serve (`segment_rallies.serve_only`). |
-| L2, L3, L4 | Done as `outcome.reconstruct` / `match_from_analysis` (rules by court side; score; serve-side parity check; names per game). Being validated on Las Vegas. |
+| L2, L3, L4 | Done (`outcome.py`, `appearance.py`): scores per player slot; END CHANGES OBSERVED from the near player's upper+lower body colours (skirt/shorts differ even when shirts match), rules-only search as fallback; game ends at 11 (win by 2) or at a long break near 11 when the first server alternates (not a timeout); best of 3, post-match play excluded; serve-position rule only as a flag (adding "missed points" from it inflated scores). Formats differ: Las Vegas switched at 6 in each game and NOT between games; US Open broadcast edited out the game break. |
 | L8 | Done: order-preserving alignment in `training/compare_referee.py`. |
-| L14 | Done in detection; Las Vegas being repaired. |
+| L14 | Done in detection + repaired Las Vegas (far player added in 12,848/16,379 frames). |
+
+**Results after the fixes** (server / point winner from tracking + rules only):
+
+| Match | Rallies | Server | Winner | Games |
+|---|---|---|---|---|
+| US Open (Boyer-Devilliers), vs scoreboard | 62 (4 post-match excluded) | 19/19 vs tags | 56/56 | 2: 11-4, 11-3 |
+| Las Vegas (Fahey-Yoshitomi), vs referee log | 48 of 53 points seen (5 not shown / missed), 1 split | 47/48 (98%) | 45/48 (94%) | 2: 11-4 (true 11-3), 9-0 (true 11-1) |
 | L5, L6, L7, L9-L13 | Open. |
 
 ## 4. What is verified vs assumed

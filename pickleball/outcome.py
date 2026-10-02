@@ -94,70 +94,126 @@ def _right_half(side: str, x: float) -> bool:
     return x > 10.0 if side == "near" else x < 10.0
 
 
-def reconstruct(rallies: list[dict], target: int = 11, game_break_s: float = 40.0, use_parity: bool = True) -> list[dict]:
-    """rallies (time order): {"start_t","end_t","server_side","serve_x"}. Returns copies with game, score_before
-    (server-receiver), winner_side, parity_ok, missed_points_before."""
-    out, game = [], 1
-    score = {"near": 0, "far": 0}
+def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: float, add_missed: bool = False):
+    """One pass of the rules for a given set of end changes (players change ends after rally k for k in
+    switch_after). Scores are per player SLOT ("A" = near player at the start)."""
+    out, game, swapped = [], 1, False
+    score = {"A": 0, "B": 0}
+    parity_hits = 0
+    first_server, violations = {}, 0  # rule: the first server alternates from game to game
+    games_won = {"A": 0, "B": 0}      # best of 3: a player's 2nd game ends the match
+    match_over = False
     for k, r in enumerate(rallies):
-        s = r["server_side"]
-        o = "far" if s == "near" else "near"
-        missed = 0
-        parity_ok = None
-        if use_parity and r.get("serve_x") is not None:
-            parity_ok = _right_half(s, r["serve_x"]) == (score[s] % 2 == 0)
-            if not parity_ok:  # a point the server won is missing (the server kept the serve)
+        slot = lambda side, sw: ("A" if side == "near" else "B") if not sw else ("B" if side == "near" else "A")
+        s = slot(r["server_side"], swapped)
+        o = "B" if s == "A" else "A"
+        if game not in first_server:
+            first_server[game] = s
+            violations += game > 1 and first_server.get(game - 1) == s
+        missed, parity_ok = 0, None
+        x = r.get("serve_x")
+        if x is not None and abs(x - 10.0) >= 2.5 and not r.get("serve_inferred"):  # clearly on one half
+            parity_ok = _right_half(r["server_side"], x) == (score[s] % 2 == 0)
+            parity_hits += parity_ok
+            if not parity_ok and add_missed:  # a point the server won may be missing
                 score[s] += 1
                 missed = 1
         before = f"{score[s]}-{score[o]}"
         nxt = rallies[k + 1] if k + 1 < len(rallies) else None
         gap = (nxt["start_t"] - r["end_t"]) if nxt else None
         game_point = score[s] + 1 >= target and score[s] + 1 - score[o] >= 2
-        if nxt is None:
-            w = s
-        elif game_point and gap > game_break_s:
+        sw_next = swapped != (k in switch_after)
+        if nxt is None or (game_point and gap > game_break_s):
             w = s
         else:
-            w = s if nxt["server_side"] == s else o
+            w = slot(nxt["server_side"], sw_next)  # the rally winner serves next
         if w == s:
             score[s] += 1
-        out.append({**r, "game": game, "score_before": before, "winner_side": w, "parity_ok": parity_ok,
-                    "missed_points_before": missed})
-        if score[s] >= target and score[s] - score[o] >= 2:  # game over: new game, players change ends
-            game += 1
-            score = {"near": 0, "far": 0}
-    return out
+        if match_over:  # after someone won 2 games: warm-down / post-match play, not part of the match
+            out.append({**r, "game": None, "after_match": True, "server_slot": s, "winner_slot": w,
+                        "score_before": None, "parity_ok": None, "missed_points_before": 0, "swapped": swapped})
+            swapped = sw_next
+            continue
+        out.append({**r, "game": game, "server_slot": s, "winner_slot": w, "score_before": before,
+                    "parity_ok": parity_ok, "missed_points_before": missed, "swapped": swapped})
+        long_break = gap is not None and gap > game_break_s
+        # a long break near 11 ends the game only if the NEXT game's first server is the other player
+        # (the first server alternates by game); a timeout keeps the same server
+        next_first_ok = nxt is not None and slot(nxt["server_side"], sw_next) != first_server.get(game)
+        rallies_left = 0  # rallies still to come before the next long break (post-match hitting comes after one)
+        for j in range(k + 1, len(rallies)):
+            if rallies[j]["start_t"] - rallies[j - 1]["end_t"] > game_break_s and j > k + 1:
+                break
+            rallies_left += 1
+        match_would_end = games_won[s] + 1 >= 2
+        reached = score[s] >= target and score[s] - score[o] >= 2
+        assumed = long_break and next_first_ok and w == s and score[s] >= target - 2 and score[s] - score[o] >= 2
+        fake_match_end = match_would_end and rallies_left >= 3  # play continues: that was not match point
+        if (reached or assumed) and not fake_match_end:
+            games_won[s] += 1
+            match_over = games_won[s] >= 2
+            game += 1  # game over (or its last points were not seen and a long break followed)
+            score = {"A": 0, "B": 0}
+        swapped = sw_next
+    return out, (parity_hits, violations)
+
+
+def reconstruct(rallies: list[dict], target: int = 11, game_break_s: float = 40.0, switch_break_s: float = 40.0,
+                switch_after: set | None = None, max_breaks: int = 10) -> list[dict]:
+    """Rules-based reconstruction (singles, side-out scoring). rallies (time order):
+    {"start_t","end_t","server_side","serve_x"}.
+
+    Players only change ends during a long break, but tournaments differ (between games, at 6, both).
+    So the end changes are NOT assumed: every long break (> switch_break_s) is a candidate, and the
+    combination that best fits the rules is chosen: the first server alternates from game to game, and
+    the serve-position rule (right half on an even own score, left on odd) over the whole match. Returns copies with game, server_slot, winner_slot, score_before
+    (server-receiver), parity_ok, missed_points_before, swapped (True = slot A is on the far side)."""
+    if switch_after is not None:
+        return _reconstruct_once(rallies, set(switch_after), target, game_break_s)[0]
+    cands = [k for k in range(len(rallies) - 1)
+             if rallies[k + 1]["start_t"] - rallies[k]["end_t"] > switch_break_s]
+    cands = sorted(cands, key=lambda k: rallies[k + 1]["start_t"] - rallies[k]["end_t"], reverse=True)[:max_breaks]
+    best = None
+    for mask in range(1 << len(cands)):
+        sw = {cands[i] for i in range(len(cands)) if mask >> i & 1}
+        out, (hits, viol) = _reconstruct_once(rallies, sw, target, game_break_s)
+        key = (-viol, hits, -len(sw))  # first server alternates by game; best serve-position fit; fewest end changes
+        if best is None or key > best[0]:
+            best = (key, out)
+    return best[1]
 
 
 def name_sides(recon: list[dict], side_votes: list[dict]) -> list[dict]:
-    """Attach player names: side_votes[k] = {"near": Counter(names), "far": Counter(names)} for rally k.
-    One mapping per game by majority; adds "server", "receiver", "winner"."""
+    """Attach player names to slots A/B with ONE decision for the whole match: every rally's shirt-colour
+    votes (by side) are converted to slot votes using that rally's side->slot link, then pooled.
+    side_votes[k] = {"near": Counter(names), "far": Counter(names)}. Adds "server", "receiver", "winner"."""
     from collections import Counter
+    names = sorted({n for v in side_votes for side in v.values() for n in side})
+    tally = Counter()
+    for r, v in zip(recon, side_votes):
+        near_slot = "B" if r["swapped"] else "A"
+        for side, cnt in v.items():
+            sl = near_slot if side == "near" else ("A" if near_slot == "B" else "B")
+            for name, n in cnt.items():
+                tally[(sl, name)] += n
+    if len(names) == 2:
+        a, b = names
+        keep = tally[("A", a)] + tally[("B", b)] >= tally[("A", b)] + tally[("B", a)]
+        slot_name = {"A": a, "B": b} if keep else {"A": b, "B": a}
+    else:
+        slot_name = {"A": names[0] if names else "A", "B": names[1] if len(names) > 1 else "B"}
     out = []
-    games = sorted({r["game"] for r in recon})
-    mapping = {}
-    for g in games:
-        tally = Counter()
-        for r, v in zip(recon, side_votes):
-            if r["game"] == g:
-                for name, n in v.get("near", {}).items():
-                    tally[name] += n
-                for name, n in v.get("far", {}).items():
-                    tally[name] -= n
-        names = sorted({n for v in side_votes for side in v.values() for n in side})
-        if len(names) == 2:
-            a, b = names
-            near = a if tally[a] - tally[b] >= 0 else b
-            mapping[g] = {"near": near, "far": b if near == a else a}
     for r in recon:
-        m = mapping.get(r["game"], {})
-        srv, rcv = m.get(r["server_side"]), m.get("far" if r["server_side"] == "near" else "near")
-        out.append({**r, "server": srv, "receiver": rcv, "winner": m.get(r["winner_side"])})
+        other = "B" if r["server_slot"] == "A" else "A"
+        out.append({**r, "server": slot_name[r["server_slot"]], "receiver": slot_name[other],
+                    "winner": slot_name[r["winner_slot"]]})
     return out
 
 
-def match_from_analysis(A: dict, **kw) -> list[dict]:
-    """Rules-based reconstruction straight from an analysis.json dict (one entry per rally, time order)."""
+def match_from_analysis(A: dict, run_dir=None, **kw) -> list[dict]:
+    """Rules-based reconstruction straight from an analysis.json dict (one entry per rally, time order).
+    With run_dir, end changes are OBSERVED from the near player's look (appearance.end_changes);
+    otherwise (or if the players look alike) they are searched with the rules."""
     from collections import Counter
     name = {pid: p.get("name") or pid for pid, p in A["players"].items()}
     seq, votes = [], []
@@ -166,10 +222,16 @@ def match_from_analysis(A: dict, **kw) -> list[dict]:
         if not sh:
             continue
         seq.append({"index": r["index"], "start_t": r["start_t"], "end_t": r["end_t"], "server_side": sh[0]["side"],
-                    "serve_x": sh[0]["hitter_court"][0] if sh[0].get("hitter_court") else None})
+                    "serve_x": sh[0]["hitter_court"][0] if sh[0].get("hitter_court") else None,
+                    "serve_inferred": bool(sh[0].get("inferred"))})
         v = {"near": Counter(), "far": Counter()}
         for s in sh:
             if not s.get("inferred"):
                 v[s["side"]][name.get(s["player"], s["player"])] += 1
         votes.append(v)
+    if run_dir is not None and "switch_after" not in kw:
+        from .appearance import end_changes, near_looks
+        sw = end_changes(near_looks(run_dir, seq))
+        if sw is not None:
+            kw["switch_after"] = sw
     return name_sides(reconstruct(seq, **kw), votes)
