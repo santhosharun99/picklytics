@@ -35,6 +35,17 @@ def _segments(main_frames: list[int]) -> list[tuple[int, int]]:
     return [tuple(s) for s in segs]
 
 
+def _other_camera_frames(recs, max_dev_px: float = 40.0, min_frames: int = 300) -> set:
+    """Frames whose court sits far from where the (fixed) main camera puts it: replays or
+    cut-aways from other cameras that the court check let through. Dropped so a replayed
+    point is not counted twice and the single 3D camera stays valid."""
+    kp = {r["f"]: np.asarray(r["court"]["kp"]) for r in recs if r.get("court")}
+    if len(kp) < min_frames:
+        return set()
+    med = np.median(np.stack(list(kp.values())), 0)
+    return {f for f, k in kp.items() if np.linalg.norm(k - med, axis=1).max() > max_dev_px}
+
+
 def _hit_context(out_dir: Path, meta: dict, ball: dict, players_by_frame: dict):
     """Inputs for the learned hit decider: 3D camera, main-view ball track, cached paddles."""
     from .events import HIT_MODEL
@@ -59,8 +70,9 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
 
     homs, players_by_frame, main = {}, {}, set()
     ident = PlayerIdentifier(n_players)
+    off_camera = _other_camera_frames(recs)
     for r in recs:
-        if r.get("court") is None:
+        if r.get("court") is None or r["f"] in off_camera:
             continue
         f = r["f"]
         main.add(f)
