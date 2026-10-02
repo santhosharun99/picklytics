@@ -3,69 +3,304 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>3D Ball Replay</title>
-<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<title>3D Rally Replay</title>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <style>
-  :root { --bg:#f6f7f9; --card:#fff; --ink:#1d2330; --muted:#667085; --line:#e3e6eb; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#12151b; --card:#1b1f27; --ink:#e7e9ee; --muted:#9aa3b2; --line:#2a303b; } }
-  :root[data-theme="dark"] { --bg:#12151b; --card:#1b1f27; --ink:#e7e9ee; --muted:#9aa3b2; --line:#2a303b; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui, sans-serif; }
-  header { padding:14px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-bottom:1px solid var(--line); }
-  h1 { font-size:17px; margin:0; }
-  select { font:inherit; padding:5px 8px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--ink); }
-  #plot { height:calc(100vh - 130px); min-height:420px; }
-  .note { color:var(--muted); padding:8px 16px; font-size:13px; }
-  .key span { display:inline-block; margin-right:14px; }
-  .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; vertical-align:-1px; }
+  :root { --bg:#f5f6f8; --card:#ffffff; --ink:#1c2230; --muted:#667085; --line:#e2e5ea; --accent:#2563eb; --in:#16a34a; --out:#dc2626; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#101319; --card:#191d25; --ink:#e8eaef; --muted:#98a1b2; --line:#2a303b; --accent:#5b8def; } }
+  :root[data-theme="dark"] { --bg:#101319; --card:#191d25; --ink:#e8eaef; --muted:#98a1b2; --line:#2a303b; --accent:#5b8def; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui, -apple-system, sans-serif; }
+  header { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line); }
+  h1 { font-size:16px; margin:0 8px 0 0; }
+  select, button { font:inherit; color:var(--ink); background:var(--card); border:1px solid var(--line); border-radius:7px; padding:5px 9px; }
+  button { cursor:pointer; } button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .grid { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); gap:12px; padding:12px 16px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  video { width:100%; display:block; background:#000; aspect-ratio:16/9; }
+  #stage { position:relative; width:100%; aspect-ratio:16/10; background:#0b0f16; }
+  #stage canvas { display:block; width:100%; height:100%; }
+  .label { position:absolute; transform:translate(-50%,-120%); padding:2px 7px; border-radius:6px; font-size:12px;
+           background:rgba(15,20,28,.82); color:#fff; white-space:nowrap; pointer-events:none; }
+  .label b { color:#ffd84d; font-weight:600; }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px; border-top:1px solid var(--line); }
+  .muted { color:var(--muted); }
+  #time { font-variant-numeric: tabular-nums; min-width:110px; }
+  input[type=range] { flex:1; min-width:140px; }
+  .info { padding:10px 12px; display:grid; gap:6px; }
+  .shots { max-height:240px; overflow:auto; }
+  .shot { display:grid; grid-template-columns: 52px 1fr auto; gap:8px; padding:4px 6px; border-radius:6px; cursor:pointer; }
+  .shot:hover { background:rgba(127,127,127,.12); } .shot.cur { background:rgba(37,99,235,.16); }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:5px; vertical-align:0; }
+  .legend span { margin-right:12px; font-size:12.5px; }
+  .note { font-size:12.5px; color:var(--muted); padding:0 16px 16px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>3D ball replay</h1>
-  <select id="rally"></select>
-  <span class="key"><span><i class="dot" style="background:#e8590c"></i>ball path (fitted)</span><span><i class="dot" style="background:#1971c2"></i>detected hit</span><span><i class="dot" style="background:#2f9e44"></i>detected bounce</span><span><i class="dot" style="background:#fff;border:2px solid #c92a2a"></i>your tagged hit (position = nearest detected contact)</span></span>
+  <h1 id="title">3D rally replay</h1>
+  <select id="match" aria-label="Match">
+    <option value="boyer_devilliers">Boyer vs Devilliers (US Open)</option>
+    <option value="fahey_yoshitomi">Fahey vs Yoshitomi (Las Vegas)</option>
+  </select>
+  <select id="rally" aria-label="Rally"></select>
+  <span class="legend muted"><span><span class="dot" style="background:#ffd84d"></span>ball</span><span><span class="dot" style="background:var(--in)"></span>bounce in</span><span><span class="dot" style="background:var(--out)"></span>bounce out</span><span>faded = uncertain</span></span>
 </header>
-<div id="plot"></div>
-<div class="note" id="note"></div>
+<div class="grid">
+  <div class="card">
+    <video id="vid" preload="auto" muted playsinline></video>
+    <div class="info">
+      <div id="rallyInfo" class="muted"></div>
+      <div class="shots" id="shots"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="stage"></div>
+    <div class="bar">
+      <button id="play">▶ Play</button>
+      <select id="speed" aria-label="Speed"><option value="0.25">0.25×</option><option value="0.5" selected>0.5×</option><option value="1">1×</option></select>
+      <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Time">
+      <span id="time" class="muted"></span>
+    </div>
+    <div class="bar">
+      <span class="muted">View</span>
+      <button data-cam="broadcast" class="on">Broadcast</button><button data-cam="side">Side</button><button data-cam="top">Top</button><button data-cam="low">Low behind</button>
+    </div>
+  </div>
+</div>
+<div class="note">The 3D path is pinned to what the system detected: bounces sit on the ground, hits sit at the hitter, and gravity plus air drag shape the flight in between, checked against the ball seen in the video. Speeds are at the moment of contact. Uncertain stretches (a contact may have been missed) are drawn faded.</div>
 <script>
-const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-function courtTraces() {
-  const L = (xs, ys, zs, color, w) => ({type:'scatter3d', mode:'lines', x:xs, y:ys, z:zs, line:{color, width:w}, hoverinfo:'skip', showlegend:false});
-  const c = '#9aa3b2';
-  return [
-    L([0,20,20,0,0],[0,0,44,44,0],[0,0,0,0,0],c,4),
-    L([0,20],[15,15],[0,0],c,3), L([0,20],[29,29],[0,0],c,3),
-    L([10,10],[0,15],[0,0],c,2), L([10,10],[29,44],[0,0],c,2),
-    L([-1,10,21],[22,22,22],[3,2.83,3],'#495057',6),
-    L([-1,-1],[22,22],[0,3],'#495057',4), L([21,21],[22,22],[0,3],'#495057',4),
-  ];
+const $ = s => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+let D = null, R = null, T = 0, playing = false, lastNow = 0;
+const PCOL = [0xf472b6, 0x60a5fa];
+
+// ---------- three.js scene (court feet: x across 0..20, y along 0..44, h up) ----------
+const stage = $("#stage");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+stage.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0f16);
+const camera = new THREE.PerspectiveCamera(40, 16 / 10, 0.1, 500);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 2, 0);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 0.9));
+const sun = new THREE.DirectionalLight(0xffffff, 0.6); sun.position.set(20, 40, 30); scene.add(sun);
+const P = (x, y, h) => new THREE.Vector3(x - 10, h, y - 22);
+
+function box(w, d, color, y = 0) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshLambertMaterial({ color }));
+  m.rotation.x = -Math.PI / 2; m.position.y = y; return m;
 }
-fetch('replay3d.json').then(r => r.json()).then(data => {
-  const sel = document.getElementById('rally');
-  data.forEach((r, i) => sel.add(new Option(`Rally at ${r.name}  (${r.true_hits.length} tagged hits)`, i)));
-  sel.onchange = () => draw(data[sel.value]);
-  draw(data[0]);
-});
-function draw(r) {
-  const tr = courtTraces();
-  r.arcs.forEach((a, i) => tr.push({type:'scatter3d', mode:'lines', x:a.map(p=>p[0]), y:a.map(p=>p[1]), z:a.map(p=>p[2]),
-    line:{color:'#e8590c', width:5}, name:'ball', showlegend:false, hovertemplate:'x %{x:.1f} ft<br>y %{y:.1f} ft<br>height %{z:.1f} ft<extra></extra>'}));
-  const ev = k => r.events.filter(e => e.kind === k);
-  [['hit','#1971c2'],['bounce','#2f9e44']].forEach(([k,c]) => tr.push({type:'scatter3d', mode:'markers', name:k,
-    x:ev(k).map(e=>e.pos[0]), y:ev(k).map(e=>e.pos[1]), z:ev(k).map(e=>e.pos[2]), marker:{size:6, color:c},
-    text:ev(k).map(e=>`${k}${e.player ? ' by '+e.player : ''} · frame ${e.frame} · height ${e.pos[2].toFixed(1)} ft`), hovertemplate:'%{text}<extra></extra>', showlegend:false}));
-  const tagged = r.true_hits.map(f => r.events.reduce((b, e) => !b || Math.abs(e.frame-f) < Math.abs(b.frame-f) ? e : b, null)).filter(Boolean);
-  tr.push({type:'scatter3d', mode:'markers', x:tagged.map(e=>e.pos[0]), y:tagged.map(e=>e.pos[1]), z:tagged.map(e=>e.pos[2]),
-    marker:{size:10, color:'rgba(0,0,0,0)', line:{color:'#c92a2a', width:3}}, hoverinfo:'skip', showlegend:false});
-  Object.entries(r.players).forEach(([id, pts]) => tr.push({type:'scatter3d', mode:'lines', x:pts.map(p=>p[0]), y:pts.map(p=>p[1]), z:pts.map(()=>0.05),
-    line:{color:'#adb5bd', width:2, dash:'dot'}, name:id, hoverinfo:'name', showlegend:false}));
-  const ax = (t, r) => ({title:t, range:r, color:css('--muted'), gridcolor:css('--line'), zerolinecolor:css('--line')});
-  Plotly.react('plot', tr, {paper_bgcolor:css('--bg'), margin:{l:0,r:0,t:0,b:0},
-    scene:{xaxis:ax('across (ft)',[-8,28]), yaxis:ax('along court (ft)',[-15,60]), zaxis:ax('height (ft)',[0,15]),
-      aspectmode:'manual', aspectratio:{x:0.6, y:1.25, z:0.35}, camera:{eye:{x:1.4, y:1.3, z:0.7}}}}, {responsive:true});
-  const hits = ev('hit').length, b = ev('bounce').length;
-  document.getElementById('note').textContent = `Auto-detected from video only (your tags not used): ${hits} hits, ${b} bounces. You tagged ${r.true_hits.length} hits. Dotted grey = player paths. Drag to rotate, scroll to zoom.`;
+scene.add(box(44, 70, 0x1f6b3a, -0.02));                      // surround
+const court = box(20, 44, 0x2563a8, 0); scene.add(court);      // court
+const kitchen = box(20, 14, 0x2f7d4f, 0.005); scene.add(kitchen); // kitchen zone (7 ft each side)
+function line(pts, color = 0xffffff) {
+  const g = new THREE.BufferGeometry().setFromPoints(pts.map(p => P(...p)));
+  return new THREE.Line(g, new THREE.LineBasicMaterial({ color }));
 }
+const L = [[[0,0,0.02],[20,0,0.02]],[[0,44,0.02],[20,44,0.02]],[[0,0,0.02],[0,44,0.02]],[[20,0,0.02],[20,44,0.02]],
+           [[0,15,0.02],[20,15,0.02]],[[0,29,0.02],[20,29,0.02]],[[10,0,0.02],[10,15,0.02]],[[10,29,0.02],[10,44,0.02]]];
+L.forEach(l => scene.add(line(l)));
+// net: posts at x=-1 and 21, 36 in at posts, 34 in at centre
+const netPts = []; for (let i = 0; i <= 22; i++) { const x = -1 + i; netPts.push([x, 22, 3 - (2/12) * (1 - Math.abs(x - 10) / 11)]); }
+const netGeo = new THREE.BufferGeometry();
+const verts = []; for (let i = 0; i < netPts.length - 1; i++) {
+  const a = netPts[i], b = netPts[i + 1];
+  const q = [P(a[0],22,0), P(b[0],22,0), P(b[0],22,b[2]), P(a[0],22,0), P(b[0],22,b[2]), P(a[0],22,a[2])];
+  q.forEach(v => verts.push(v.x, v.y, v.z));
+}
+netGeo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
+scene.add(new THREE.Mesh(netGeo, new THREE.MeshBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.55, side: THREE.DoubleSide })));
+scene.add(line(netPts, 0xffffff));
+[-1, 21].forEach(x => scene.add(line([[x,22,0],[x,22,3]], 0xcccccc)));
+
+// players: simple capsule (body + head)
+function playerMesh(color) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshLambertMaterial({ color });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.8, 4.2, 16), mat); body.position.y = 2.6; g.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.55, 16, 12), mat); head.position.y = 5.3; g.add(head);
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(1.0, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25 }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.03; g.add(shadow);
+  return g;
+}
+const nearMesh = playerMesh(PCOL[0]), farMesh = playerMesh(PCOL[1]);
+scene.add(nearMesh, farMesh);
+
+// ball + trail + shadow
+const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 14), new THREE.MeshLambertMaterial({ color: 0xffd84d, emissive: 0x332200 }));
+scene.add(ball);
+const ballShadow = new THREE.Mesh(new THREE.CircleGeometry(0.3, 16), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
+ballShadow.rotation.x = -Math.PI / 2; scene.add(ballShadow);
+const TRAIL = 45;
+const trailGeo = new THREE.BufferGeometry();
+trailGeo.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(TRAIL * 3), 3));
+trailGeo.setAttribute("color", new THREE.Float32BufferAttribute(new Float32Array(TRAIL * 3), 3));
+const trail = new THREE.Line(trailGeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true }));
+scene.add(trail);
+let markers = new THREE.Group(); scene.add(markers);
+
+// HTML labels for hits
+const labels = [];
+function clearLabels() { labels.forEach(l => l.el.remove()); labels.length = 0; }
+function addLabel(pos, html, t0) { const el = document.createElement("div"); el.className = "label"; el.innerHTML = html; stage.appendChild(el); labels.push({ el, pos, t0 }); }
+
+const CAMS = {
+  broadcast: [[10, 30, 80], [10, 2, 30]],   // behind the near baseline, raised (like the TV camera)
+  side: [[-30, 14, 22], [10, 2, 22]],
+  top: [[10, 70, 22.01], [10, 0, 22]],
+  low: [[10, 6, 58], [10, 3, 22]],
+};
+function setCam(name) {
+  const [p, t] = CAMS[name];
+  camera.position.copy(P(p[0], p[2], p[1])); controls.target.copy(P(t[0], t[2], t[1])); controls.update();
+  document.querySelectorAll("[data-cam]").forEach(b => b.classList.toggle("on", b.dataset.cam === name));
+}
+document.querySelectorAll("[data-cam]").forEach(b => b.onclick = () => setCam(b.dataset.cam));
+setCam("broadcast");
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+
+// ---------- data ----------
+function interp(arr, t, k) { // arr rows [t, ...]; linear interpolation of column k
+  if (!arr.length || t < arr[0][0] || t > arr[arr.length - 1][0]) return null;
+  let lo = 0, hi = arr.length - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (arr[m][0] <= t) lo = m; else hi = m; }
+  const a = arr[lo], b = arr[hi];
+  if (a[k] == null || b[k] == null) return a[k] ?? b[k];
+  const u = b[0] > a[0] ? (t - a[0]) / (b[0] - a[0]) : 0;
+  return a[k] + u * (b[k] - a[k]);
+}
+function ballAt(t) {
+  const B = R.ball; if (!B.length) return null;
+  let lo = 0, hi = B.length - 1;
+  if (t < B[0][0] || t > B[hi][0]) return null;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (B[m][0] <= t) lo = m; else hi = m; }
+  if (B[hi][0] - B[lo][0] > 0.2) return null; // gap between arcs: no estimate
+  const a = B[lo], b = B[hi], u = b[0] > a[0] ? (t - a[0]) / (b[0] - a[0]) : 0;
+  return [a[1] + u * (b[1] - a[1]), a[2] + u * (b[2] - a[2]), Math.max(0.15, a[3] + u * (b[3] - a[3])), a[4]];
+}
+
+function loadRally(i) {
+  R = D.rallies[i];
+  markers.remove(...markers.children); clearLabels();
+  // bounce rings
+  R.bounces.forEach(b => {
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.6, 24), new THREE.MeshBasicMaterial({ color: b.in ? 0x16a34a : 0xdc2626, side: THREE.DoubleSide }));
+    ring.rotation.x = -Math.PI / 2; ring.position.copy(P(b.x, b.y, 0.04)); ring.userData.t = b.t; markers.add(ring);
+  });
+  // hit labels
+  R.hits.forEach(h => {
+    const p = ballAt(h.t + 0.02) || (h.pos ? [h.pos[0], h.pos[1], 3] : null);
+    if (!p || h.inferred) return;
+    addLabel(P(p[0], p[1], p[2] + 0.6), `${h.player.split(" ").pop()} · ${h.shot || "hit"}${h.speed_mph ? ` · <b>${h.speed_mph} mph</b>` : ""}`, h.t);
+  });
+  const names = [R.near, R.far];
+  nearMesh.children.forEach(c => c.material && c.material.color && c !== nearMesh.children[2] && c.material.color.setHex(PCOL[D.players.indexOf(R.near) % 2]));
+  farMesh.children.forEach(c => c.material && c.material.color && c !== farMesh.children[2] && c.material.color.setHex(PCOL[D.players.indexOf(R.far) % 2]));
+  $("#rallyInfo").innerHTML = `Game ${R.game ?? "–"} · score ${R.score ?? "–"} (server first) · <b>${R.server ?? "?"}</b> serves · won by <b>${R.winner ?? "?"}</b>` +
+    `<br><span class="dot" style="background:#${PCOL[D.players.indexOf(R.near) % 2].toString(16)}"></span>${R.near ?? "near"} (near) &nbsp; <span class="dot" style="background:#${PCOL[D.players.indexOf(R.far) % 2].toString(16)}"></span>${R.far ?? "far"} (far)`;
+  $("#shots").innerHTML = R.hits.map((h, k) => `<div class="shot" data-t="${h.t}"><span class="muted">${(h.t - R.t0).toFixed(1)} s</span>
+    <span><span class="dot" style="background:#${PCOL[D.players.indexOf(h.player) % 2].toString(16)}"></span>${h.player}: ${h.shot || "hit"}${h.stroke ? ", " + h.stroke : ""}${h.inferred ? ' <span class="muted">(not seen, deduced)</span>' : ""}</span>
+    <span class="muted">${h.speed_mph ? h.speed_mph + " mph" : ""}${h.net_clear_ft != null ? ` · ${h.net_clear_ft >= 0 ? "+" : ""}${h.net_clear_ft} ft over net` : ""}</span></div>`).join("");
+  document.querySelectorAll(".shot").forEach(el => el.onclick = () => seek(+el.dataset.t - 0.4));
+  seek(R.t0);
+}
+
+function seek(t) {
+  T = Math.max(R.t0, Math.min(R.t1, t));
+  if (vid.readyState >= 1 && Math.abs(vid.currentTime - T) > 0.05) vid.currentTime = T;
+  draw();
+}
+
+// ---------- per-frame update ----------
+function draw() {
+  if (!R) return;
+  const t = T;
+  const b = ballAt(t);
+  ball.visible = ballShadow.visible = !!b;
+  if (b) {
+    ball.position.copy(P(b[0], b[1], b[2])); ballShadow.position.copy(P(b[0], b[1], 0.03));
+    ball.material.opacity = b[3] ? 1 : 0.45; ball.material.transparent = !b[3];
+  }
+  // trail: last ~1.5 s
+  const pos = trail.geometry.attributes.position.array, col = trail.geometry.attributes.color.array;
+  let n = 0;
+  for (let k = TRAIL - 1; k >= 0; k--) {
+    const q = ballAt(t - k * (1.5 / TRAIL));
+    const v = q ? P(q[0], q[1], q[2]) : (b ? ball.position : new THREE.Vector3());
+    pos[n * 3] = v.x; pos[n * 3 + 1] = v.y; pos[n * 3 + 2] = v.z;
+    const fade = (TRAIL - k) / TRAIL * (q && q[3] ? 1 : 0.35);
+    col[n * 3] = 1 * fade; col[n * 3 + 1] = 0.85 * fade; col[n * 3 + 2] = 0.3 * fade; n++;
+  }
+  trail.geometry.attributes.position.needsUpdate = true; trail.geometry.attributes.color.needsUpdate = true;
+  trail.visible = !!b;
+  // players
+  const nx = interp(R.players, t, 1), ny = interp(R.players, t, 2), fx = interp(R.players, t, 3), fy = interp(R.players, t, 4);
+  nearMesh.visible = nx != null && ny != null; if (nearMesh.visible) nearMesh.position.copy(P(nx, ny, 0));
+  farMesh.visible = fx != null && fy != null; if (farMesh.visible) farMesh.position.copy(P(fx, fy, 0));
+  // markers / labels appear when reached
+  markers.children.forEach(m => m.visible = t >= m.userData.t);
+  const w = stage.clientWidth, h = stage.clientHeight;
+  labels.forEach(l => {
+    const show = t >= l.t0 && t <= l.t0 + 1.6;
+    l.el.style.display = show ? "block" : "none";
+    if (show) { const v = l.pos.clone().project(camera); l.el.style.left = ((v.x + 1) / 2 * w) + "px"; l.el.style.top = ((1 - v.y) / 2 * h) + "px"; }
+  });
+  document.querySelectorAll(".shot").forEach(el => { const ht = +el.dataset.t; el.classList.toggle("cur", t >= ht && t < ht + 1.0); });
+  $("#scrub").value = Math.round((t - R.t0) / Math.max(R.t1 - R.t0, 0.01) * 1000);
+  $("#time").textContent = `${(t - R.t0).toFixed(2)} / ${(R.t1 - R.t0).toFixed(1)} s`;
+}
+
+const vid = $("#vid");
+vid.addEventListener("loadedmetadata", () => { if (R) vid.currentTime = T; });
+function loop(now) {
+  if (playing && R) {
+    const synced = !vid.paused && vid.readyState >= 2 && !vid.error && Math.abs(vid.currentTime - T) < 0.6;
+    if (synced) T = vid.currentTime;                                   // follow the video once it is on the rally
+    else {
+      T += (now - lastNow) / 1000 * +$("#speed").value;               // own clock until the video catches up
+      if (vid.readyState >= 1 && !vid.seeking && Math.abs(vid.currentTime - T) >= 0.6) vid.currentTime = T;
+    }
+    if (T >= R.t1) { T = R.t1; setPlaying(false); }
+  }
+  lastNow = now;
+  controls.update(); draw(); renderer.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+function setPlaying(p) {
+  playing = p; $("#play").textContent = p ? "❚❚ Pause" : "▶ Play";
+  vid.playbackRate = +$("#speed").value;
+  if (p) { if (T >= R.t1 - 0.05) seek(R.t0); vid.play().catch(() => {}); } else vid.pause();
+}
+$("#play").onclick = () => setPlaying(!playing);
+$("#speed").onchange = () => { vid.playbackRate = +$("#speed").value; };
+$("#scrub").oninput = e => { setPlaying(false); seek(R.t0 + e.target.value / 1000 * (R.t1 - R.t0)); };
+$("#rally").onchange = e => { setPlaying(false); loadRally(+e.target.value); };
+$("#match").onchange = e => { location.search = "?match=" + e.target.value; };
+
+async function init() {
+  const m = params.get("match") || "boyer_devilliers";
+  $("#match").value = m;
+  D = await (await fetch(`replay3d_${m}.json`, { cache: "no-store" })).json();
+  $("#title").textContent = "3D replay · " + D.title;
+  vid.src = D.video;
+  $("#rally").innerHTML = D.rallies.map((r, i) => `<option value="${i}">G${r.game ?? "–"} ${r.score ?? ""} · ${r.server?.split(" ").pop() ?? "?"} serves · ${r.hits.length} shots · won by ${r.winner?.split(" ").pop() ?? "?"}</option>`).join("");
+  const start = +(params.get("rally") || 0);
+  $("#rally").value = start;
+  loadRally(start);
+  resize();
+  requestAnimationFrame(loop);
+}
+init();
 </script>
 </body>
 </html>
