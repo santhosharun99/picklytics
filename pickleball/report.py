@@ -194,8 +194,30 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
             "return_to_kitchen_s": {"median": float(np.median(arrive)) if arrive else None, "n": len(arrive)},
         },
     }
+    profile["speed"] = speed_profile(name, rallies)
     profile["insights"] = insights(profile, opponent)
     return profile
+
+
+def speed_profile(name: str, rallies: list[dict]) -> dict:
+    """Ball speed off the paddle by shot group, from shots with a trustworthy speed (high/medium confidence)."""
+    groups = {"Serve": ("serve",), "Return": ("return",), "Drive": ("drive", "third-shot drive"),
+              "Third-shot drop": ("third-shot drop",), "Reset / drop": ("reset", "drop"), "Volley": ("volley",)}
+    mine = [(r["id"], s) for r in rallies for s in r["shots"]
+            if s["player"] == name and s.get("speed_mph") and s.get("speed_conf") in ("high", "medium")]
+    out = {"groups": {}, "fastest": []}
+    for label, types in groups.items():
+        v = [(rid, s["speed_mph"], s.get("speed_conf")) for rid, s in mine if s.get("shot") in types]
+        if v:
+            mph = [x for _, x, _ in v]
+            sure = [x for _, x, c in v if c == "high"]  # top speeds only where both measurements agree
+            out["groups"][label] = {"avg": round(float(np.median(mph))), "max": round(max(sure)) if sure else None,
+                                    "n": len(v), "rallies": sorted({rid for rid, _, _ in v})}
+    sure_shots = [(rid, s) for rid, s in mine if s.get("speed_conf") == "high"]
+    for rid, s in sorted(sure_shots, key=lambda x: -x[1]["speed_mph"])[:5]:
+        out["fastest"].append({"rally": rid, "t": s["t"], "shot": s.get("shot"), "mph": s["speed_mph"],
+                               "err": s.get("speed_err")})
+    return out
 
 
 def insights(p: dict, opponent: str) -> list[dict]:
@@ -298,7 +320,8 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             shots.append({"i": i, "t": round(s["t"], 2), "player": name_of.get(s["player"], s["player"]), "side": s["side"],
                           "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
                           "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
-                          "speed_mph": s.get("speed_mph")})
+                          "speed_mph": s.get("ball_mph"), "speed_err": s.get("ball_mph_err"),
+                          "speed_conf": s.get("speed_conf")})
         if not shots:
             continue
         for s, nxt in zip(shots, shots[1:]):

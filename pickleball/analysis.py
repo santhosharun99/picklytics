@@ -46,6 +46,19 @@ def _other_camera_frames(recs, max_dev_px: float = 40.0, min_frames: int = 300) 
     return {f for f, k in kp.items() if np.linalg.norm(k - med, axis=1).max() > max_dev_px}
 
 
+def _add_ball_speeds(result: dict, ball: dict, hit_ctx) -> None:
+    """Ball speed off the paddle for every shot (pickleball/speed.py): stopwatch + 3D arc, cross-checked.
+    Adds ball_mph, ball_mph_err and speed_conf (high / medium / low) to each shot."""
+    if hit_ctx is None:
+        return
+    from .speed import match_speeds
+    sp = match_speeds(result, ball, hit_ctx.P)
+    for s in result["shots"]:
+        v = sp.get(s["frame"])
+        if v:
+            s["ball_mph"], s["ball_mph_err"], s["speed_conf"] = v["mph"], v["err_mph"], v["conf"]
+
+
 def _hit_context(out_dir: Path, meta: dict, ball: dict, players_by_frame: dict):
     """Inputs for the learned hit decider: 3D camera, main-view ball track, cached paddles."""
     from .events import HIT_MODEL
@@ -80,7 +93,8 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     players_by_frame = identify_players(selected, n_players)
 
     ball = track_ball(recs)
-    events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=_hit_context(out_dir, meta, ball, players_by_frame))
+    hit_ctx = _hit_context(out_dir, meta, ball, players_by_frame)
+    events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=hit_ctx)
     rallies = segment_rallies(events, main, fps)
     n_inferred = add_missed_serves(rallies, ball, players_by_frame, events, homs, fps)
     hand = infer_handedness(rallies)
@@ -181,6 +195,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
             for f in sorted(players_by_frame)[:: max(1, int(fps / 10))]
         ],
     }
+    _add_ball_speeds(result, ball, hit_ctx)
     (out_dir / "analysis.json").write_text(json.dumps(result, separators=(",", ":")))
     _save_intermediate(out_dir, ball, events, players_by_frame)
     return result
