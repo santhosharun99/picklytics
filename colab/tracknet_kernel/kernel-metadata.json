@@ -1,0 +1,3 @@
+{"id": "santhosharun/pickleball-tracknet-train", "title": "pickleball-tracknet-train", "code_file": "tracknet_kernel.py",
+ "language": "python", "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": false,
+ "dataset_sources": ["santhosharun/pickleball-tracknet"], "machine_shape": "NvidiaTeslaT4"}
