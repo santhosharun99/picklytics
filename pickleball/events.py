@@ -417,8 +417,19 @@ def segment_rallies(events: list[Event], main_view: set[int], fps: float,
             return False
         return all(f in main_view for f in range(a.frame, b.frame + 1, 3))
 
+    def serve_only(evs) -> bool:
+        """A 1-hit rally is still a point (ace, unreturned serve) when that hit looks like a serve:
+        hitter behind the baseline and the ball then bounces on the other side of the net."""
+        hits = [e for e in evs if e.kind == "hit"]
+        if len(hits) != 1 or not hits[0].court:
+            return False
+        h = hits[0]
+        behind = h.court[1] <= 1.0 if h.side == "far" else h.court[1] >= COURT_L - 1.0
+        lands = any(e.kind == "bounce" and e.side != h.side and 0 < e.t - h.t <= 2.5 for e in evs)
+        return behind and lands
+
     def flush():
-        if sum(e.kind == "hit" for e in cur) >= min_hits:
+        if sum(e.kind == "hit" for e in cur) >= min_hits or serve_only(cur):
             # a rally starts with a hit (the serve); drop leading bounces
             while cur and cur[0].kind != "hit":
                 cur.pop(0)

@@ -76,3 +76,100 @@ def winners_from_serves(rallies: list[dict], game_gap_s: float = 100.0) -> list[
         if nxt is not None and gap > game_gap_s:
             game += 1
     return out
+
+
+# ---------------------------------------------------------------------------------------------
+# Rules-based match reconstruction (singles, side-out scoring). Works on court SIDES, not player
+# names, because which side served is what tracking sees reliably:
+#   - rally winner = the side that serves next (the rally winner always serves next in singles);
+#   - only the server scores; a game ends at 11, win by 2; players change ends after each game;
+#   - serve position check: a player serves from the RIGHT half when their own score is even,
+#     from the LEFT when odd. A mismatch means a point was missed -> credit it to the server.
+#   - at game point a long break before the next rally (> game_break_s) = the game ended (server won).
+# Names are then attached per game (one side->player vote per game; players swap ends between games).
+# ---------------------------------------------------------------------------------------------
+
+def _right_half(side: str, x: float) -> bool:
+    """Is court x on the right half from that player's point of view? (camera behind the near baseline)"""
+    return x > 10.0 if side == "near" else x < 10.0
+
+
+def reconstruct(rallies: list[dict], target: int = 11, game_break_s: float = 40.0, use_parity: bool = True) -> list[dict]:
+    """rallies (time order): {"start_t","end_t","server_side","serve_x"}. Returns copies with game, score_before
+    (server-receiver), winner_side, parity_ok, missed_points_before."""
+    out, game = [], 1
+    score = {"near": 0, "far": 0}
+    for k, r in enumerate(rallies):
+        s = r["server_side"]
+        o = "far" if s == "near" else "near"
+        missed = 0
+        parity_ok = None
+        if use_parity and r.get("serve_x") is not None:
+            parity_ok = _right_half(s, r["serve_x"]) == (score[s] % 2 == 0)
+            if not parity_ok:  # a point the server won is missing (the server kept the serve)
+                score[s] += 1
+                missed = 1
+        before = f"{score[s]}-{score[o]}"
+        nxt = rallies[k + 1] if k + 1 < len(rallies) else None
+        gap = (nxt["start_t"] - r["end_t"]) if nxt else None
+        game_point = score[s] + 1 >= target and score[s] + 1 - score[o] >= 2
+        if nxt is None:
+            w = s
+        elif game_point and gap > game_break_s:
+            w = s
+        else:
+            w = s if nxt["server_side"] == s else o
+        if w == s:
+            score[s] += 1
+        out.append({**r, "game": game, "score_before": before, "winner_side": w, "parity_ok": parity_ok,
+                    "missed_points_before": missed})
+        if score[s] >= target and score[s] - score[o] >= 2:  # game over: new game, players change ends
+            game += 1
+            score = {"near": 0, "far": 0}
+    return out
+
+
+def name_sides(recon: list[dict], side_votes: list[dict]) -> list[dict]:
+    """Attach player names: side_votes[k] = {"near": Counter(names), "far": Counter(names)} for rally k.
+    One mapping per game by majority; adds "server", "receiver", "winner"."""
+    from collections import Counter
+    out = []
+    games = sorted({r["game"] for r in recon})
+    mapping = {}
+    for g in games:
+        tally = Counter()
+        for r, v in zip(recon, side_votes):
+            if r["game"] == g:
+                for name, n in v.get("near", {}).items():
+                    tally[name] += n
+                for name, n in v.get("far", {}).items():
+                    tally[name] -= n
+        names = sorted({n for v in side_votes for side in v.values() for n in side})
+        if len(names) == 2:
+            a, b = names
+            near = a if tally[a] - tally[b] >= 0 else b
+            mapping[g] = {"near": near, "far": b if near == a else a}
+    for r in recon:
+        m = mapping.get(r["game"], {})
+        srv, rcv = m.get(r["server_side"]), m.get("far" if r["server_side"] == "near" else "near")
+        out.append({**r, "server": srv, "receiver": rcv, "winner": m.get(r["winner_side"])})
+    return out
+
+
+def match_from_analysis(A: dict, **kw) -> list[dict]:
+    """Rules-based reconstruction straight from an analysis.json dict (one entry per rally, time order)."""
+    from collections import Counter
+    name = {pid: p.get("name") or pid for pid, p in A["players"].items()}
+    seq, votes = [], []
+    for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
+        sh = sorted([s for s in A["shots"] if s["rally"] == r["index"]], key=lambda s: s["frame"])
+        if not sh:
+            continue
+        seq.append({"index": r["index"], "start_t": r["start_t"], "end_t": r["end_t"], "server_side": sh[0]["side"],
+                    "serve_x": sh[0]["hitter_court"][0] if sh[0].get("hitter_court") else None})
+        v = {"near": Counter(), "far": Counter()}
+        for s in sh:
+            if not s.get("inferred"):
+                v[s["side"]][name.get(s["player"], s["player"])] += 1
+        votes.append(v)
+    return name_sides(reconstruct(seq, **kw), votes)

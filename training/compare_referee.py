@@ -19,7 +19,10 @@ from pickleball.outcome import winners_from_serves
 TOL = 4.0  # seconds
 
 
-def our_rallies(A):
+def our_rallies(A, rules=True):
+    if rules:
+        from pickleball.outcome import match_from_analysis
+        return match_from_analysis(A)
     name = {pid: p.get("name") or pid for pid, p in A["players"].items()}
     seq = []
     for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
@@ -33,29 +36,35 @@ def our_rallies(A):
     return winners_from_serves(seq)
 
 
-def align(ours, ref, window=8):
-    rs = np.array([r["start_s"] for r in ref], float)
-    os_ = np.array([r["start_t"] for r in ours], float)
-    match = {}
-    for i in range(len(ours)):
-        lo, hi = max(0, i - window // 2), min(len(ours), i + window // 2 + 1)
-        best = (0, None)
-        for off in {rs[j] - os_[k] for k in range(lo, hi) for j in range(len(rs)) if abs((rs[j] - os_[k]) - (rs[0] - os_[0])) < 7200}:
-            n = sum(np.min(np.abs(rs - (os_[k] + off))) <= TOL for k in range(lo, hi))
-            if n > best[0]:
-                best = (n, off)
-        if best[1] is None:
-            continue
-        d = np.abs(rs - (os_[i] + best[1]))
-        j = int(np.argmin(d))
-        if d[j] <= TOL:
-            match[i] = j
-    # one-to-one: keep the closest our-rally per referee rally
-    by_ref = {}
-    for i, j in match.items():
-        if j not in by_ref:
-            by_ref[j] = i
-    return {i: j for j, i in by_ref.items()}
+def align(ours, ref, jump_penalty=0.15, max_back=TOL):
+    """Order-preserving matching (dynamic programming). offset = referee time - video time can only
+    grow (the broadcast removes dead time, never adds it) and should stay steady between cuts.
+    Score = matched pairs - jump_penalty * (offset change in seconds) / 10; offset may shrink by at
+    most max_back s (timing noise)."""
+    t = [r["start_t"] for r in ours]
+    s = [r["start_s"] for r in ref]
+    pairs = [(i, j) for i in range(len(t)) for j in range(len(s))]
+    best, prev = {}, {}
+    for i, j in pairs:  # pairs in (i, j) order
+        off = s[j] - t[i]
+        b, p = 1.0, None
+        for (i2, j2), v in best.items():
+            if i2 < i and j2 < j:
+                d = off - (s[j2] - t[i2])
+                if d < -max_back:
+                    continue
+                cand = v + 1.0 - jump_penalty * abs(d) / 10.0
+                if cand > b:
+                    b, p = cand, (i2, j2)
+        best[(i, j)], prev[(i, j)] = b, p
+    if not best:
+        return {}
+    cur = max(best, key=best.get)
+    out = {}
+    while cur is not None:
+        out[cur[0]] = cur[1]
+        cur = prev[cur]
+    return out
 
 
 def main(run, ref_path):
