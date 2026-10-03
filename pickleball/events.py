@@ -407,7 +407,7 @@ def _clean(events: list[Event]) -> list[Event]:
 
 
 def segment_rallies(events: list[Event], main_view: set[int], fps: float,
-                    max_pause: float = 2.5, min_hits: int = 2) -> list[Rally]:
+                    max_pause: float = 2.5, min_hits: int = 2, min_point_gap_s: float = 5.5) -> list[Rally]:
     """Group events into rallies: split on long pauses or camera cuts between events."""
     rallies: list[Rally] = []
     cur: list[Event] = []
@@ -442,7 +442,20 @@ def segment_rallies(events: list[Event], main_view: set[int], fps: float,
         cur.append(e)
     if cur:
         flush()
-    return rallies
+    # A new point can't start seconds after the last one ended (ball back to the server, score called):
+    # in tagged matches the next serve comes >= 8.4 s after the previous point's last shot. A "rally" that
+    # starts sooner is the same point, split by a few seconds without a detected hit -> merge it back.
+    merged: list[Rally] = []
+    for r in rallies:
+        if merged and (r.start_frame - merged[-1].end_frame) / fps < min_point_gap_s:
+            prev = merged[-1]
+            prev.events = prev.events + r.events
+            prev.end_frame = max(prev.end_frame, r.end_frame)
+        else:
+            merged.append(r)
+    for i, r in enumerate(merged):
+        r.index = i + 1
+    return merged
 
 
 # ---------------------------------------------------------------------------
