@@ -6,14 +6,15 @@ Swing clues for each rally come from a swing model trained WITHOUT that rally (a
 hit_model_cv.py), so the decider learns from the same kind of swing scores it gets on new video.
 Needs outputs/<run>/paddles.json for the labelled rallies (training/detect_paddles.py).
 """
-import argparse
+import argparse, json
 
 import joblib
 import numpy as np
 
 import pickleball.hitmodel as hm
 from training.evaluate import match
-from training.hit_model_cv import MODELS, RUNS, Stretch, TOL, fit, pick_threshold, train_swing
+from training.hit_model_cv import MODELS, Stretch, TOL, fit, pick_threshold, train_swing
+from training.cross_match_cv import SOURCES
 
 
 def main():
@@ -21,7 +22,7 @@ def main():
     ap.add_argument("--model", default="Random Forest", choices=list(MODELS))
     ap.add_argument("--clues", default="+3D+paddle", choices=["base", "+3D", "+paddle", "+3D+paddle"])
     a = ap.parse_args()
-    S = [Stretch(r) for r in RUNS]
+    S = [Stretch(run, json.loads(lab.read_text())) for _, run, lab in SOURCES]  # all tagged matches
     items = [(s, r) for s in S for r in s.rallies]
     swing_rows = [s.swing_xy(r) for s, r in items]
     X, y, g, fr = [], [], [], []

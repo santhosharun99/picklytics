@@ -67,7 +67,7 @@ def main() -> None:
 
     # auto-labelled rallies only count once a person has reviewed them
     rallies = [r for r in L["rallies"] if r["end"] is not None and lo <= r["start"] <= r["end"] < hi
-               and r.get("reviewed", True)]
+               and r.get("reviewed", True) and (r["end"] - r["start"]) / L.get("fps", 29.97) <= 60]  # >60 s = mis-set end
     if not rallies:
         raise SystemExit("No completed labelled rallies inside this run's time range.")
     in_labelled = lambda f: any(r["start"] <= f <= r["end"] for r in rallies)

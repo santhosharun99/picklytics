@@ -19,6 +19,67 @@ BETAS = (0.0, 0.4, 0.8, 1.2)   # air drag strengths tried per arc (1/s)
 MAX_FLIGHT_S = 2.6
 NET_TOP_FT = 2.9               # 34 in at the centre, 36 in at the posts
 BAD_PX = 40.0                  # an arc further than this from the ball seen in the video is not trusted
+ROBUST = True                  # outlier-resistant fitting (robust contact pixel + down-weighting stray points)
+HUBER_PX = 8.0
+
+
+def _robust_contact_px(ball, f, k=6):
+    """Ball pixel at a hit frame from the frames AROUND it, not the single (often blurred / mis-detected)
+    contact frame: robust quadratic fits of the incoming (f-k..f-1) and outgoing (f+1..f+k) track, each
+    extrapolated to f; average when they agree, else the side with more points; else the raw pixel."""
+    ests = []
+    for lo, hi in ((f - k, f - 1), (f + 1, f + k)):
+        fr = [g for g in range(lo, hi + 1) if g in ball and not ball[g][3]]
+        if len(fr) < 4:
+            continue
+        t = np.array(fr, float) - f
+        P = np.array([ball[g][:2] for g in fr], float)
+        w = np.ones(len(t))
+        for _ in range(3):  # iteratively down-weight points far from the fit
+            cx = np.polyfit(t, P[:, 0], 2, w=w)
+            cy = np.polyfit(t, P[:, 1], 2, w=w)
+            r = np.hypot(np.polyval(cx, t) - P[:, 0], np.polyval(cy, t) - P[:, 1])
+            w = np.minimum(1.0, HUBER_PX / np.maximum(r, 1e-6))
+        ests.append((len(fr), np.array([np.polyval(cx, 0.0), np.polyval(cy, 0.0)])))
+    if len(ests) == 2 and np.linalg.norm(ests[0][1] - ests[1][1]) <= 25:
+        return (ests[0][1] + ests[1][1]) / 2
+    if ests:
+        return max(ests, key=lambda e: e[0])[1]
+    return None
+
+
+def _robust_free_end(P, uv, t, anchor, beta, iters=4):
+    """_arc_free_end with iteratively re-weighted least squares (Huber): stray ball detections cannot bend it."""
+    w = np.ones(len(t))
+    th = _arc_free_end(P, uv, t, anchor, 0.0, beta)
+    for _ in range(iters):
+        r = np.linalg.norm(reproject(P, positions(th, t, beta)) - uv, axis=1)
+        med = np.median(r)
+        w = np.minimum(1.0, HUBER_PX / np.maximum(r, 1e-6))
+        w[r > max(5 * med, 3 * HUBER_PX)] = 0.0  # clear outliers out
+        keep = w > 0
+        if keep.sum() < 4:
+            break
+        # weighted fit = fit on points repeated by weight (approximation via row scaling)
+        sw = np.sqrt(w[keep])
+        th = _weighted_free_end(P, uv[keep], t[keep], anchor, beta, sw)
+    return th
+
+
+def _weighted_free_end(P, uv, t, anchor, beta, sw, depth=60.0):
+    from .trajectory3d import S, _basis
+    pa, fa = _basis(np.array([0.0]), beta)
+    phi, force = _basis(t, beta)
+    rows, rhs = [], []
+    for r in (0, 1):
+        q = uv[:, r:r + 1] * P[2] - P[r]
+        q3 = q[:, :3] * S
+        rows.append(q3 * (phi - pa[0])[:, None] / depth * sw[:, None])
+        rhs.append(-(q3 @ anchor + q3[:, 2] * (force - fa[0]) + q[:, 3]) / depth * sw)
+    B = np.linalg.lstsq(np.vstack(rows), np.concatenate(rhs), rcond=None)[0]
+    A = anchor - B * pa[0]
+    A[2] -= fa[0]
+    return np.r_[A, B]
 
 
 def _ball_px(ball, f, win=3):
@@ -40,7 +101,9 @@ def rally_anchors(shots, bounces, ball, P, start_f, end_f):
     for s in shots:
         if s.get("inferred") or not s.get("hitter_court"):
             continue
-        uv = _ball_px(ball, s["frame"])
+        uv = (_robust_contact_px(ball, s["frame"]) if ROBUST else None)
+        if uv is None:
+            uv = _ball_px(ball, s["frame"])
         hx, hy = s["hitter_court"]
         if uv is not None:
             X = plane_y_point(P, uv, hy)[0]
@@ -92,7 +155,7 @@ def rally_arcs(anchors, ball, P, fps, tail_s=1.2):
             # the two ends don't explain the flight (usually a missed contact in between): pin only the
             # start and let the sightings decide the velocity; keep it if it matches the video better
             for b2 in BETAS:
-                th2 = _arc_free_end(P, uv, t, X0, 0.0, b2)
+                th2 = _robust_free_end(P, uv, t, X0, b2) if ROBUST else _arc_free_end(P, uv, t, X0, 0.0, b2)
                 e2 = _px_err(P, th2, b2, t, uv)
                 if e2 < e:
                     beta, th, e = b2, th2, e2
@@ -112,7 +175,7 @@ def rally_arcs(anchors, ball, P, fps, tail_s=1.2):
             t = (fr - f0) / fps
             best = None
             for beta in BETAS:
-                th = _arc_free_end(P, uv, t, X0, 0.0, beta)
+                th = _robust_free_end(P, uv, t, X0, beta) if ROBUST else _arc_free_end(P, uv, t, X0, 0.0, beta)
                 e = _px_err(P, th, beta, t, uv)
                 if best is None or e < best[0]:
                     best = (e, beta, th)

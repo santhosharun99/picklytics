@@ -11,12 +11,13 @@ import numpy as np
 import pickleball.hitmodel as hm
 from training.bounce_model_cv import checked
 from training.evaluate import match
-from training.hit_model_cv import MODELS, RUNS, TOL, Stretch, fit, pick_threshold, train_swing
+from training.hit_model_cv import MODELS, TOL, Stretch, fit, pick_threshold, train_swing
+from training.cross_match_cv import SOURCES
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--model", default="Logistic Regression", choices=list(MODELS))
 a = ap.parse_args()
-S = [Stretch(r) for r in RUNS]
+S = [Stretch(run, json.loads(lab.read_text())) for _, run, lab in SOURCES]  # all tagged matches
 items = [(s, r) for s in S for r in s.rallies]
 swing_rows = [s.swing_xy(r) for s, r in items]
 X, y, g, fr = [], [], [], []

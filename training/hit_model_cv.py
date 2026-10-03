@@ -49,7 +49,7 @@ nms_pick = hm.nms_pick
 
 
 class Stretch:
-    def __init__(self, run: Path):
+    def __init__(self, run: Path, labels: dict | None = None, lazy_paddles: bool = False):
         self.run = run
         self.meta, recs = load_detections(run)
         self.fps = self.meta["fps"]
@@ -63,9 +63,16 @@ class Stretch:
         ball = track_ball(recs)
         self.ball = {f: v for f, v in ball.items() if f in self.pl}
         lo, hi = self.meta["first_frame"], self.meta["last_frame"]
-        self.rallies = [r for r in LABELS["rallies"] if r["end"] and lo <= r["start"] <= r["end"] < hi and r.get("reviewed", True)]
-        pf = run / "paddles.json"
-        paddles = {int(k): v for k, v in json.loads(pf.read_text()).items()} if pf.exists() else {}
+        labels = labels or LABELS
+        fps_l = labels.get("fps", 29.97)
+        self.rallies = [r for r in labels["rallies"] if r["end"] and lo <= r["start"] <= r["end"] < hi
+                        and r.get("reviewed", True) and (r["end"] - r["start"]) / fps_l <= 60]  # >60 s = mis-set end
+        if lazy_paddles:
+            from pickleball.paddles import PaddleCache
+            paddles = PaddleCache(run, self.meta["video"])
+        else:
+            pf = run / "paddles.json"
+            paddles = {int(k): v for k, v in json.loads(pf.read_text()).items()} if pf.exists() else {}
         self.ctx = hm.Context.build(self.ball, self.pl, self.P, self.fps, paddles)
         # per-frame swing features (model applied per fold)
         self.sf = {s: {} for s in ("near", "far")}
