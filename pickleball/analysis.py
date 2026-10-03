@@ -46,6 +46,22 @@ def _other_camera_frames(recs, max_dev_px: float = 40.0, min_frames: int = 300) 
     return {f for f, k in kp.items() if np.linalg.norm(k - med, axis=1).max() > max_dev_px}
 
 
+def _add_lifted_paths(out_dir: Path, result: dict, ball: dict, hit_ctx) -> None:
+    """3D path of every shot from the simulation-trained lifter (pickleball/lifter.py): writes <out>/lift.json and
+    adds land_3d (landing spot), net_clear_ft to each shot. Skipped if the model or the camera is missing."""
+    from .lifter import lift_match
+    model = Path(__file__).resolve().parents[1] / "models" / "lifter.pt"
+    if hit_ctx is None or not model.exists():
+        return
+    from .camera3d import calibrate_from_run
+    lifted = lift_match(result, ball, calibrate_from_run(out_dir), str(model))
+    for s in result["shots"]:
+        v = lifted.get(s["frame"])
+        if v:
+            s["land_3d"], s["net_clear_ft"] = v["land"], v["net_clear_ft"]
+    (out_dir / "lift.json").write_text(json.dumps({str(k): v for k, v in lifted.items()}, separators=(",", ":")))
+
+
 def _add_ball_speeds(result: dict, ball: dict, hit_ctx) -> None:
     """Ball speed off the paddle for every shot (pickleball/speed.py): stopwatch + 3D arc, cross-checked.
     Adds ball_mph, ball_mph_err and speed_conf (high / medium / low) to each shot."""
@@ -196,6 +212,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
         ],
     }
     _add_ball_speeds(result, ball, hit_ctx)
+    _add_lifted_paths(out_dir, result, ball, hit_ctx)
     (out_dir / "analysis.json").write_text(json.dumps(result, separators=(",", ":")))
     _save_intermediate(out_dir, ball, events, players_by_frame)
     return result

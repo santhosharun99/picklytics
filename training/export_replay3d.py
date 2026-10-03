@@ -28,6 +28,7 @@ REP = json.loads(report_path.read_text())
 cam = calibrate_from_run(run)
 ball = track_ball(recs)
 arcs_by = match_arcs(A, ball, cam.P)
+lifted = {int(k): v for k, v in json.loads((run / "lift.json").read_text()).items()} if (run / "lift.json").exists() else {}
 outc = {o["index"]: o for o in match_from_analysis(A, run_dir=run)}
 pname = {pid: p.get("name") or pid for pid, p in A["players"].items()}
 R = {r["f"]: r for r in recs if r.get("court")}
@@ -38,9 +39,16 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
     if o.get("after_match"):
         continue
     f0, f1 = int(r["start_t"] * fps) - int(0.5 * fps), int(r["end_t"] * fps) + int(0.5 * fps)
-    # ball path, frame by frame
-    path = []
+    # ball path, frame by frame: the 3D lifter for every hit-to-hit shot, event-pinned arcs only where it has none
+    path, covered = [], set()
+    for seg in lifted.values():
+        if f0 <= seg["f0"] <= f1:
+            for k, x in enumerate(seg["path"]):
+                path.append([round((seg["f0"] + k) / fps, 3), *x, 1])
+                covered.add(seg["f0"] + k)
     for a in arcs_by.get(r["index"], []):
+        if a["f0"] in covered or a["f1"] in covered:
+            continue
         fr = np.arange(a["f0"], a["f1"] + 1)
         X = positions(np.asarray(a["theta"]), (fr - a["f0"]) / fps, a["beta"])
         for f, x in zip(fr, X):
@@ -54,8 +62,8 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
         a = start_speed.get(s["frame"])
         hits.append({"t": round(s["frame"] / fps, 3), "player": pname.get(s["player"], s["player"]), "side": s["side"],
                      "shot": s.get("shot_type"), "stroke": s.get("stroke"), "inferred": bool(s.get("inferred")),
-                     "speed_mph": round(a["speed_mph"]) if a and a.get("confident") else None,
-                     "net_clear_ft": round(a["net_clear_ft"], 1) if a and a.get("net_clear_ft") is not None and a.get("confident") else None,
+                     "speed_mph": round(s["ball_mph"]) if s.get("ball_mph") and s.get("speed_conf") in ("high", "medium") else None,
+                     "net_clear_ft": round(s["net_clear_ft"], 1) if s.get("net_clear_ft") is not None else None,
                      "pos": s.get("hitter_court")})
     bounces = [{"t": round(b["frame"] / fps, 3), "x": round(b["court"][0], 2), "y": round(b["court"][1], 2),
                 "in": bool(-0.5 <= b["court"][0] <= 20.5 and -0.5 <= b["court"][1] <= 44.5)}

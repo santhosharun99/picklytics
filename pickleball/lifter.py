@@ -263,6 +263,42 @@ def lift_track(K, R, t, frames, uv, f0, f1, net=None):
     return y * SCALE + COURT_C
 
 
+def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
+    """3D path for every shot (from a detected hit to the next detected hit) of an analysis dict.
+    Returns {shot frame: {"f0", "f1", "path" [[x, y, h], ...], "land" (x, y) | None, "bounce_frame", "net_clear_ft"}}."""
+    import cv2
+    from pathlib import Path
+    if _NET is None:
+        load(model_path or str(Path(__file__).resolve().parents[1] / "models" / "lifter.pt"))
+    R, _ = cv2.Rodrigues(cam.rvec)
+    K, t = cam.K, cam.tvec.ravel()
+    meas = {f: v[:2] for f, v in ball.items() if not v[3]}
+    out = {}
+    for r in A["rallies"]:
+        shots = sorted([s for s in A["shots"] if s["rally"] == r["index"] and not s.get("inferred")], key=lambda s: s["frame"])
+        for s0, s1 in zip(shots, shots[1:]):
+            f0, f1 = s0["frame"], s1["frame"]
+            fr = [f for f in range(f0, f1 + 1) if f in meas]
+            if len(fr) < 4 or f1 - f0 + 1 > MAX_T:
+                continue
+            X = lift_track(K, R, t, fr, np.array([meas[f] for f in fr], float), f0, f1)
+            if X is None:
+                continue
+            ib = int(np.argmin(X[:, 2]))
+            bounced = X[ib, 2] < 1.0 and 0 < ib < len(X) - 1
+            side = np.sign(X[:, 1] - 22.0)
+            c = np.where(np.diff(side) != 0)[0]
+            clear = None
+            if len(c):
+                i = c[0]
+                a = (22.0 - X[i, 1]) / (X[i + 1, 1] - X[i, 1] + 1e-9)
+                clear = float(X[i, 2] + a * (X[i + 1, 2] - X[i, 2]) - 2.9)
+            out[f0] = {"f0": f0, "f1": f1, "path": np.round(X, 2).tolist(),
+                       "land": [round(float(X[ib, 0]), 2), round(float(X[ib, 1]), 2)] if bounced else None,
+                       "bounce_frame": f0 + ib if bounced else None, "net_clear_ft": round(clear, 2) if clear is not None else None}
+    return out
+
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "train":

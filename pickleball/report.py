@@ -403,7 +403,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             shots.append({"i": i, "t": round(s["t"], 2), "player": name_of.get(s["player"], s["player"]), "side": s["side"],
                           "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
                           "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
-                          "land": s.get("landing_court"),
+                          "land": s.get("land_3d") or s.get("landing_court"),  # 3D lifter landing spot first
                           "speed_mph": s.get("ball_mph"), "speed_err": s.get("ball_mph_err"),
                           "speed_conf": s.get("speed_conf")})
         if not shots:
