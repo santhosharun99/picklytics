@@ -76,3 +76,29 @@ Davis 2019 Player2Vec, Singh 2018 expected threat.
 Injury / orthopedic stress scores and paddle-speed load (medical claims, not measurable), momentum scores, Markowitz
 "risk frontier", left-handedness effects (sample), reinforcement-learning valuation (data volume), work:rest ratio
 (broadcast edits distort rest time).
+
+## Tracks 03-11, second pass (Gemini "deep research" rewrite, checked 2026-10-04)
+41 DOIs (40 unique), each checked against Crossref (title + first author) or arXiv:
+- 29 correct and on topic (some with wrong year/author, e.g. Prieto-Lage 2024 again cited as "Wang et al.").
+- 4 resolve to an UNRELATED paper: 10.1371/journal.pone.0310706 (diabetes costs, Nepal; cited as tennis
+  technical-tactical diversity), 10.3390/s23156686 (nitrous-oxide sensor; cited as soccer playing-styles review),
+  10.1111/1467-9876.00155 (cited as Glickman 1999; real Glickman paper is a different DOI), 10.1214/23-AOAS1768
+  (cited as NBA timeout causal study). 10.3390/ijerph17217838 is a real padel paper but not the title cited.
+- 6 do not resolve (two repeated from the first pass, incl. the "Wei 2016 TKDE" tennis paper).
+- Several real ones are from weak venues (Advances in Nano Research, Academic Journal of Computing & Information
+  Science, IJIRMPS); treated as ideas, not evidence.
+Conclusion: the "every indicator cites a precise DOI" claim is not true; about 3 in 10 citations fail. Keep verifying.
+
+New ideas with a real, on-topic source that change the plan:
+- Movement efficiency / competition load (distance per minute, distance per shot): Miralles et al. 2026 Biol Sport
+  (elite women's padel) -> Tier 1, our court tracks support it now.
+- Shot risk-reward frontier: Fichman & O'Brien 2019 JQAS (NBA optimal shot selection) -> moved from "not pursuing"
+  to Tier 2 (needs rally-ending tags + several matches).
+- Mechanical work as a fatigue indicator: Emmerson et al. PLoS ONE (tennis, markerless capture) -> Tier 2; needs
+  per-match movement noise check first.
+- Reachability / time-to-intercept per shot: fits inside the Tier 2 court-control item (Martens 2021 Front Sports, soccer
+  space control, is the verified source).
+- Shot diversity score (technical-tactical diversity): source DOI is wrong, but the idea is cheap (entropy of shot
+  types/directions) -> fold into the Tier 2 predictability/entropy item.
+Unchanged: VAEP/EPV/xT (verified: Decroos 2019, Cervone 2016 JASA, Fernandez 2021 Mach Learn, Hassani 2025 DxT) and
+ShuttleNet stay Tier 3; injury/load, momentum and EWM-TOPSIS scores stay out.
