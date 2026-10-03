@@ -13,3 +13,19 @@ pickleball activity profile); Filipcic et al. 2015 JPES (DOI exists, title not i
 - DATA NEEDED: rally-ending tags (winner / forced / unforced error, net / out) -> unforced error rate and
   winner:error ratio (strong padel/tennis evidence). Tagging task for the labeller in label.html.
 - SKIP: "first serve %" (tennis-only), work:rest ratio (broadcast edits distort rest time).
+
+## Track 02 - Tactics, rally models, win probability (Gemini result 02, reviewed 2026-10-03)
+Sources: Walker & Wooders 2001 AER "Minimax Play at Wimbledon" (verified); momentum paper verified but authors are
+Ding et al. 2026 (Gemini: "Shen 2024"); T-pattern paper verified, author Magnusson (Gemini: "Amatria"); "Rhythms of
+Victory" IEEE Access 2024 verified, Lei et al. (Gemini: "Li"); arXiv 2005.12853 (tennis decision-making, VON CRAMM)
+title verified; Newton & Keller 2005 and Wei et al. 2016 TKDE are known papers but Gemini's DOIs do not resolve.
+Lesson: Gemini's author names are often wrong -> always verify.
+- BUILD (Tier 1): side-out-scoring Markov model -> win-probability graph per game + point importance (leverage);
+  performance on high-importance points. Inputs: server, winner, score (94-100%). Use pooled/shrunk serve-point
+  probabilities (see track 09) because one match is small.
+- BUILD when several matches per player (Tier 2): serve-direction predictability / minimax test (lateral serve
+  landing is a reliable axis); shot-direction entropy per situation (pooled).
+- BUILD after depth fix (Tier 2): court control as "how far the opponent had to move to reach each ball".
+- LATER (Tier 3, data volume): rally shot-value model (EPV-style, see track 06), T-pattern mining (needs better shot
+  labels), deep next-shot forecasting (track 10).
+- SKIP for now: momentum score (contested evidence, misleading risk).
