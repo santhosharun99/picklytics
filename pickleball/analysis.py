@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from .ball import track_ball
+from . import depth
 from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y
 from .events import add_missed_serves, detect_events, segment_rallies
 from .players import identify_players, select_players, smooth_positions
@@ -113,6 +114,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     events = detect_events(ball, players_by_frame, homs, fps, hit_ctx=hit_ctx)
     rallies = segment_rallies(events, main, fps)
     n_inferred = add_missed_serves(rallies, ball, players_by_frame, events, homs, fps)
+    depth_model = _correct_depth(out_dir, rallies, events, players_by_frame)
     hand = infer_handedness(rallies)
     shots = [s for r in rallies for s in classify_rally(r, hand)]
 
@@ -199,6 +201,7 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
             "ball_frames_pct": round(100 * sum(1 for f in ball if f in main) / max(1, len(main)), 1),
         },
         "players": player_stats,
+        "depth_correction": depth_model,
         "rallies": rally_list,
         "shots": shots_to_dicts(shots),
         "bounces": [{"t": round(e.t, 2), "frame": e.frame, "court": [round(v, 2) for v in e.court], "side": e.side}
@@ -216,6 +219,36 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     (out_dir / "analysis.json").write_text(json.dumps(result, separators=(",", ":")))
     _save_intermediate(out_dir, ball, events, players_by_frame)
     return result
+
+
+def _correct_depth(out_dir, rallies, events, players_by_frame):
+    """Move player positions off the ankle-height bias (pickleball/depth.py), calibrated on server
+    stances. Runs after hit detection (trained on raw positions), before every position metric."""
+    from .camera3d import calibrate_from_run
+    try:
+        cam_xyh = depth.camera_ground(calibrate_from_run(out_dir))
+    except Exception as e:  # no usable court view
+        print("depth correction skipped (camera):", e)
+        return None
+    stances = []
+    for r in rallies:
+        hits = [e for e in r.events if e.kind == "hit" and not e.inferred]
+        if hits and hits[0].court:
+            stances.append(hits[0].court)
+    D = depth.calibrate(stances, cam_xyh)
+    seen = set()
+    for e in [*events, *(e for r in rallies for e in r.events)]:
+        if e.kind == "hit" and e.court and id(e) not in seen:
+            seen.add(id(e))
+            e.court = depth.correct(e.court, D)
+    for ps in players_by_frame.values():
+        for p in ps:
+            if "court_raw" not in p:
+                p["court_raw"] = p["court"]
+                p["court"] = list(depth.correct(p["court"], D))
+    print(f"depth: h={D['h_ft']} ft ({D['method']}), server stance behind baseline "
+          f"raw {D['server_stance_ft']['raw']} -> {D['server_stance_ft']['corrected']}")
+    return D
 
 
 def _save_intermediate(out_dir, ball, events, players_by_frame):

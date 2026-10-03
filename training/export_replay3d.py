@@ -16,6 +16,7 @@ from pickleball.analysis import load_detections
 from pickleball.ball import track_ball
 from pickleball.ball3d import match_arcs, positions
 from pickleball.camera3d import calibrate_from_run
+from pickleball.depth import correct as correct_depth
 from pickleball.outcome import match_from_analysis
 from pickleball.players import select_players
 
@@ -76,7 +77,7 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
         rec = R.get(f)
         if not rec:
             continue
-        sel = {p["side"]: p["court"] for p in select_players(rec.get("people", []), 1)}
+        sel = {p["side"]: correct_depth(p["court"], A.get("depth_correction")) for p in select_players(rec.get("people", []), 1)}
         players.append([round(f / fps, 2), *(sel.get("near") or [None, None]), *(sel.get("far") or [None, None])])
     rallies.append({"id": r["index"], "t0": round(f0 / fps, 2), "t1": round(f1 / fps, 2), "game": o.get("game"),
                     "score": o.get("score_before"), "server": o.get("server"), "winner": o.get("winner"),

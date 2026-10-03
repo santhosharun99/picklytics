@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
+from .depth import correct as correct_depth
 from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y, court_zone
 from .players import select_players
 
@@ -27,6 +28,8 @@ def load_tracks(run_dirs: list[Path]):
     """frame -> {'near': (x, y), 'far': (x, y)} court positions of the two players."""
     pos = {}
     for d in run_dirs:
+        a = Path(d) / "analysis.json"
+        D = json.loads(a.read_text()).get("depth_correction") if a.exists() else None  # pickleball/depth.py
         with (Path(d) / "detections.jsonl").open() as fh:
             for line in fh:
                 r = json.loads(line)
@@ -34,7 +37,7 @@ def load_tracks(run_dirs: list[Path]):
                     continue
                 sel = select_players(r.get("people", []), 1)
                 if sel:
-                    pos[r["f"]] = {p["side"]: tuple(p["court"]) for p in sel}
+                    pos[r["f"]] = {p["side"]: tuple(correct_depth(p["court"], D)) for p in sel}
     return pos
 
 
