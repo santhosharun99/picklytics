@@ -65,6 +65,10 @@ Severity: **High** = gives wrong answers on real matches; **Medium** = wrong in 
 | Las Vegas (Fahey-Yoshitomi), vs referee log | 48 of 53 points seen (5 not shown / missed), 1 split | 47/48 (98%) | 45/48 (94%) | 2: 11-4 (true 11-3), 9-0 (true 11-1) |
 | L5, L6, L7, L9-L13 | Open. |
 
+**Tried and rejected:** TrackNet-style 3-frame ball gap filler (own implementation, labels from YOLO + trusted
+3D arcs, trained on Kaggle). Used only where YOLO has no ball, it lowered trusted 3D arcs (-4 to -5 points) and
+hits found (82 -> 77 of 87) on the match it was not trained on. Not used.
+
 ## 4. What is verified vs assumed
 
 - Verified with tags / referee / scoreboard: steps 6, 7, 9, 10-12 (US Open), court and camera (both matches).
