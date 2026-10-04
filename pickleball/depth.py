@@ -43,7 +43,11 @@ def calibrate(stances, cam_xyh) -> dict:
     far = [s for s in stances if s[1] < NET_Y]
     gap = lambda h: (np.median([behind_baseline(shrink(s, cam_xyh, h)) for s in near])
                      - np.median([behind_baseline(shrink(s, cam_xyh, h)) for s in far]))
-    if len(near) >= MIN_SERVES and len(far) >= MIN_SERVES:
+    raw = lambda ss: float(np.median([behind_baseline(x) for x in ss])) if ss else 0.0
+    # the rule only holds if the first hitter really is a server standing behind the baseline; in doubles the
+    # first detected hit can be another player (server measured 4 ft INSIDE the court) -> keep the default height
+    plausible = raw(near) > -1.0 and raw(far) > -1.0
+    if len(near) >= MIN_SERVES and len(far) >= MIN_SERVES and plausible:
         lo, hi = H_RANGE   # near stance grows and far stance shrinks with h: bisect for equal stances
         if gap(lo) >= 0:
             h = lo
@@ -56,7 +60,7 @@ def calibrate(stances, cam_xyh) -> dict:
             h = (lo + hi) / 2
         how = "rules"
     else:
-        h, how = DEFAULT_H, "default"
+        h, how = DEFAULT_H, "default" if plausible else "default (server stances implausible)"
     st = lambda ss, hh: round(float(np.median([behind_baseline(shrink(s, cam_xyh, hh)) for s in ss])), 2) if ss else None
     return {"camera": list(cam_xyh), "h_ft": round(float(h), 3), "method": how,
             "serves": {"near": len(near), "far": len(far)},
