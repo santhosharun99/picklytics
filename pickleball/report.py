@@ -160,11 +160,8 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
     for r in rallies:
         if r["server"] == opponent and len(r["shots"]) >= 2:
             t0 = r["shots"][1]["t"]
-            track = r["movement"].get(name, [])
-            dt = 0.1
-            for k, xy in enumerate(track):
-                t = r["start_t"] + k * dt
-                if t >= t0 and _own_half(*xy)[1] <= 9:
+            for t, x, y in r.get("movement_t", {}).get(name, []):
+                if t >= t0 and _own_half(x, y)[1] <= 9:
                     arrive.append(round(t - t0, 2))
                     break
 
@@ -200,6 +197,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
     profile["speed"] = speed_profile(name, rallies)
     profile["running"] = running_profile(name, rallies)
     profile["placement"] = placement_profile(name, rallies)
+    profile["pressure"] = pressure_profile(name, rallies)
     profile["insights"] = insights(profile, opponent)
     return profile
 
@@ -251,7 +249,13 @@ def running_profile(name: str, rallies: list[dict]) -> dict:
     d = [x["dist_ft"] for _, x in per]
     pk = [x["peak_mph"] for _, x in per]
     top = sorted(per, key=lambda p: -p[1]["peak_mph"])[:3]
+    # movement efficiency (cf. distance per minute in elite padel, Miralles et al. 2026 Biol Sport)
+    ids = {rid for rid, _ in per}
+    n_shots = sum(1 for r in rallies if r["id"] in ids for s in r["shots"] if s["player"] == name)
+    minutes = sum(r["end_t"] - r["start_t"] for r in rallies if r["id"] in ids) / 60
     return {"rallies": len(per),
+            "ft_per_shot": round(float(np.sum(d)) / n_shots, 1) if n_shots else None,
+            "ft_per_min": round(float(np.sum(d)) / minutes) if minutes > 0 else None,
             "dist_per_rally_ft": round(float(np.median(d))),
             "total_dist_ft": round(float(np.sum(d))),
             "avg_speed_mph": round(float(np.median([x["avg_mph"] for _, x in per])), 1),
@@ -259,6 +263,75 @@ def running_profile(name: str, rallies: list[dict]) -> dict:
             "top_sprint_mph": round(float(max(pk)), 1),
             "sprint_time_pct": round(100 * sum(x["fast_s"] for _, x in per) / max(sum(x["dur_s"] for _, x in per), 1e-3)),
             "top_sprints": [{"rally": rid, "mph": round(x["peak_mph"], 1)} for rid, x in top]}
+
+
+REACT_S, RUN_FT_S, RUSHED_S = 0.25, 12.0, 0.3  # reaction time, movement speed, "rushed" below this spare time
+
+
+def _pos_near(track, t, w=0.2):
+    v = [(x, y) for tt, x, y in track if abs(tt - t) <= w]
+    return np.median(np.array(v), 0) if v else None
+
+
+def add_time_pressure(rallies: list[dict]):
+    """Time pressure per shot (after Mlakar & Kovalchik 2020, J Sports Analytics, tennis): the time the hitter had
+    since the opponent's shot, minus a reaction time and the time needed to cover the distance they actually moved
+    (feet positions at the two hits, from the court tracks). spare_s < RUSHED_S = rushed. Validation on our two
+    matches: rushed shots end the rally as the hitter's error 22% of the time vs 15% otherwise."""
+    for r in rallies:
+        sh = r["shots"]
+        for a, b in zip(sh, sh[1:]):
+            if a["player"] == b["player"] or "spare_s" in b:
+                continue
+            tr = r.get("movement_t", {}).get(b["player"], [])
+            p0, p1 = _pos_near(tr, a["t"]), _pos_near(tr, b["t"])
+            if p0 is None or p1 is None:
+                continue
+            dt, dist = b["t"] - a["t"], float(np.hypot(*(p1 - p0)))
+            b["time_s"], b["moved_ft"] = round(dt, 2), round(dist, 1)
+            b["spare_s"] = round(dt - REACT_S - dist / RUN_FT_S, 2)
+
+
+def pressure_profile(name: str, rallies: list[dict]) -> dict:
+    """Pressure the player faced (their shots) and applied (the opponent's next shot), and how rushed shots end."""
+    add_time_pressure(rallies)
+    faced, applied = [], []   # (spare_s, rally won by the hitter, shot ended the rally as the hitter's error, rally, shot)
+    for r in rallies:
+        if not r["winner"]:
+            continue
+        sh = r["shots"]
+        for k, s in enumerate(sh):
+            if "spare_s" not in s:
+                continue
+            row = (s["spare_s"], r["winner"] == s["player"], k == len(sh) - 1 and r["winner"] != s["player"], r["id"],
+                   sh[k - 1].get("shot"))
+            if s["player"] == name:
+                faced.append(row)
+            elif sh[k - 1]["player"] == name:
+                applied.append(row)
+    if not faced and not applied:
+        return {}
+    rate = lambda rows, i: _pct(sum(x[i] for x in rows), len(rows))
+    rushed = [x for x in faced if x[0] < RUSHED_S]
+    calm = [x for x in faced if x[0] >= RUSHED_S]
+    opp_rushed = [x for x in applied if x[0] < RUSHED_S]
+    by_shot = defaultdict(list)
+    for x in applied:
+        if x[4]:
+            by_shot[x[4]].append(x[0] < RUSHED_S)
+    return {
+        "model": {"reaction_s": REACT_S, "run_ft_s": RUN_FT_S, "rushed_below_s": RUSHED_S},
+        "faced": {"n": len(faced), "median_spare_s": round(float(np.median([x[0] for x in faced])), 2) if faced else None,
+                  "rushed_pct": _pct(len(rushed), len(faced)), "n_rushed": len(rushed),
+                  "error_when_rushed_pct": rate(rushed, 2), "error_otherwise_pct": rate(calm, 2),
+                  "won_when_rushed_pct": rate(rushed, 1), "won_otherwise_pct": rate(calm, 1),
+                  "rushed_rallies": sorted({x[3] for x in rushed})},
+        "applied": {"n": len(applied), "rushed_opponent_pct": _pct(len(opp_rushed), len(applied)), "n_rushed": len(opp_rushed),
+                    "opponent_error_when_rushed_pct": rate(opp_rushed, 2),
+                    "by_shot": {k: {"n": len(v), "rushed_pct": _pct(sum(v), len(v))}
+                                for k, v in sorted(by_shot.items(), key=lambda kv: -len(kv[1])) if len(v) >= 5},
+                    "rushed_rallies": sorted({x[3] for x in opp_rushed})},
+    }
 
 
 def placement_profile(name: str, rallies: list[dict]) -> dict:
@@ -343,6 +416,20 @@ def insights(p: dict, opponent: str) -> list[dict]:
         add("strength" if better == "long" else "weakness",
             f"Wins {sh['value']}% of short rallies vs {lg['value']}% of long ones: better in {better} rallies.",
             sh["n"] + lg["n"], lg["rallies"] if better == "long" else sh["rallies"])
+    pr = p.get("pressure") or {}
+    fc, ap = pr.get("faced", {}), pr.get("applied", {})
+    if fc.get("n_rushed", 0) >= 5 and fc.get("error_when_rushed_pct") is not None and fc.get("error_otherwise_pct") is not None:
+        a, b = fc["error_when_rushed_pct"], fc["error_otherwise_pct"]
+        if a - b >= 10:
+            add("weakness", f"Breaks down under time pressure: {a}% of rushed shots end the rally as an error vs {b}% otherwise "
+                            f"({fc['n_rushed']} rushed shots).", fc["n_rushed"], fc["rushed_rallies"])
+        elif a <= b:
+            add("strength", f"Holds up under time pressure: errors on {a}% of rushed shots vs {b}% otherwise "
+                            f"({fc['n_rushed']} rushed shots).", fc["n_rushed"], fc["rushed_rallies"])
+    if ap.get("by_shot"):
+        k, v = max(ap["by_shot"].items(), key=lambda kv: kv[1]["rushed_pct"] or 0)
+        add("pattern", f"Rushes the opponent on {ap['rushed_opponent_pct']}% of shots; most with the {k} ({v['rushed_pct']}% of {v['n']}).",
+            ap["n"], ap["rushed_rallies"])
     mv = p["movement"]
     if mv["return_to_kitchen_s"]["median"] is not None:
         add("pattern", f"Reaches the kitchen line about {mv['return_to_kitchen_s']['median']} s after returning.",

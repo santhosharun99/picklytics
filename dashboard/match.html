@@ -153,13 +153,16 @@ function show(name) {
       <div class="card" style="grid-column: span 3"><h2>Movement</h2><p class="why">How much and how fast this player moved during rallies (feet positions, smoothed over 0.5 s; top speeds must be held for 0.5 s).</p><div id="running"></div></div>
     </section>
     <section class="grid">
+      <div class="card" style="grid-column: span 3"><h2>Time pressure</h2><p class="why">Time to spare on each shot: the time since the opponent's hit, minus 0.25 s to react and the time needed to cover the distance actually moved (at 12 ft/s). Under 0.3 s = rushed. Method after Mlakar &amp; Kovalchik (2020, tennis). An "error" = the shot was the last of a rally this player lost. Click ▶ to watch the rushed rallies.</p><div id="pressure"></div></div>
+    </section>
+    <section class="grid">
       <div class="card"><h2>Where they hit from</h2><p class="why">Contact points, shown on their own half (net at top).</p><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (darker = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>How rallies ended</h2><p class="why">When this player hit the last shot: won it (winner / forced error) or lost it (own error).</p><div id="endings"></div>
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
-  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P); renderLength(P, col); renderRallies(name);
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderRallies(name);
   document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
 }
 
@@ -207,7 +210,7 @@ function renderHeat(P) {
       fill: `var(--seq-${Math.min(6, 1 + Math.floor(6 * v / max))})`, opacity: .9}, svg);
   }));
 }
-function renderEndings(P) {
+function renderEndings(P, col) {
   const f = Object.entries(P.finishing_shots), e = Object.entries(P.error_shots);
   const rows = [...f.map(([k, v]) => ["Won with", k, v, "var(--good)"]), ...e.map(([k, v]) => ["Lost on own", k, v, "var(--bad)"])];
   const sp = P.speed || { groups: {}, fastest: [] };
@@ -235,7 +238,16 @@ function renderEndings(P) {
       <div class="tile"><div class="l">Typical top speed</div><div class="v">${rn.typical_peak_mph}<span style="font-size:14px"> mph</span></div><div class="n">per rally (median)</div></div>
       <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${clipButtons(rn.top_sprints.map(x => x.rally))}</div></div>
       <div class="tile"><div class="l">Time sprinting</div><div class="v">${rn.sprint_time_pct}%</div><div class="n">of rally time above 6 mph</div></div>
+      <div class="tile"><div class="l">Movement per shot</div><div class="v">${rn.ft_per_shot ?? "–"}<span style="font-size:14px"> ft</span></div><div class="n">${rn.ft_per_min ?? "–"} ft per minute of rally</div></div>
     </div>` : '<span class="empty">No movement data.</span>';
+  const pr = P.pressure || {}, fc = pr.faced || {}, ap = pr.applied || {};
+  const pc = v => v == null ? "–" : v + "%";
+  $("#pressure").innerHTML = fc.n ? `<div class="tiles" style="margin:0">
+      <div class="tile"><div class="l">Rushed on</div><div class="v">${pc(fc.rushed_pct)}</div><div class="n">of ${fc.n} shots · median ${fc.median_spare_s} s to spare ${clipButtons(fc.rushed_rallies.slice(0, 6))}</div></div>
+      <div class="tile"><div class="l">Errors when rushed</div><div class="v">${pc(fc.error_when_rushed_pct)}</div><div class="n">vs ${pc(fc.error_otherwise_pct)} otherwise (${fc.n_rushed} rushed${fc.n_rushed < 10 ? ", small sample" : ""})</div></div>
+      <div class="tile"><div class="l">Rushes the opponent</div><div class="v">${pc(ap.rushed_opponent_pct)}</div><div class="n">of ${ap.n} shots · opponent errs ${pc(ap.opponent_error_when_rushed_pct)} of those ${clipButtons((ap.rushed_rallies || []).slice(0, 6))}</div></div>
+    </div>
+    ${Object.keys(ap.by_shot || {}).length ? `<h2 style="margin-top:14px">Which shots rush the opponent</h2>` + Object.entries(ap.by_shot).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.rushed_pct}%;background:${col}"></div></div><span style="text-align:right">${v.rushed_pct}% of ${v.n}</span></div>`).join("") : ""}` : '<span class="empty">No pressure data.</span>';
   $("#endings").innerHTML = rows.length ? `<table><tr><th></th><th>Last shot</th><th>Count</th><th></th></tr>${rows.map(([a, k, v, c]) => `<tr><td style="color:${c}">${a}</td><td>${k}</td><td>${v.count}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No rallies with a known winner where this player hit last.</span>';
 }
 function renderLength(P, col) {
