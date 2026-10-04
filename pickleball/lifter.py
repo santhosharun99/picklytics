@@ -135,10 +135,76 @@ def simulate_shot(rng):
     return np.vstack([A, Bp]), len(A)
 
 
-def make_sample(rng, camera=None):
+def _bounce_on(p, v, beta, t_left, rng, max_bounces=3):
+    """Continue a ball from p (on the ground) with velocity v, bouncing up to max_bounces times, for t_left s."""
+    out, t_used = [], 0.0
+    for _ in range(max_bounces):
+        e, mu = rng.uniform(0.5, 0.8), rng.uniform(0.6, 0.9)
+        v = np.array([v[0] * mu, v[1] * mu, abs(v[2]) * e])
+        # time to come down again (no drag on the vertical for this estimate)
+        tf = max(2 * v[2] / G, 1 / FPS)
+        T = min(tf, t_left - t_used)
+        if T <= 0:
+            break
+        ts = np.arange(1 / FPS, T + 1e-9, 1 / FPS)
+        if not len(ts):
+            break
+        seg = _fly(p, v, beta, ts)
+        seg[:, 2] = np.maximum(seg[:, 2], 0.0)
+        out.append(seg)
+        t_used += T
+        p = np.array([seg[-1, 0], seg[-1, 1], 0.0])
+        v = _vel(v, beta, T)
+        if t_used >= t_left or v[2] > -1.0:   # rolling: stop simulating
+            break
+    return np.vstack(out) if out else np.zeros((0, 3))
+
+
+def simulate_end_shot(rng):
+    """A rally's LAST shot: no next hit. The ball goes into the net, long, wide, or is a winner that bounces on and
+    away; the track ends 0.2-1.5 s after the decisive moment (or when it leaves the picture). Returns (positions, -1)."""
+    near = rng.random() < 0.5
+    hy = rng.uniform(30, 50) if near else rng.uniform(-6, 14)
+    p0 = np.array([rng.uniform(-2, 22), hy, rng.uniform(0.6, 7.5)])
+    kind = rng.choice(["net", "long", "wide", "winner"], p=[0.3, 0.25, 0.15, 0.3])
+    beta = rng.uniform(0.2, 1.3)
+    sgn = -1 if near else 1                                # direction of travel along y
+    tail = rng.uniform(0.2, 1.5)
+    if kind == "net":
+        T1 = rng.uniform(0.25, 0.9)
+        pn = np.array([rng.uniform(0, 20), 22.0, rng.uniform(0.3, 2.7)])     # hits the net below the tape
+        v0 = _aim(p0, pn, T1, beta)
+        A = _fly(p0, v0, beta, np.arange(0, T1, 1 / FPS))
+        vb = _vel(v0, beta, T1)
+        v = np.array([vb[0] * 0.3, -vb[1] * rng.uniform(0.02, 0.15), min(vb[2], 0.0) * 0.2])  # dies in the net
+        ts = np.arange(1 / FPS, 3.0, 1 / FPS)
+        B = _fly(pn + np.array([0, -sgn * 0.3, 0]), v, beta, ts)
+        hit = np.where(B[:, 2] <= 0)[0]
+        B = B[: hit[0] + 1] if len(hit) else B
+        B[:, 2] = np.maximum(B[:, 2], 0.0)
+        C = _bounce_on(np.array([B[-1, 0], B[-1, 1], 0.0]), _vel(v, beta, len(B) / FPS) * [1, 1, -1], beta, tail, rng, 2)
+        return np.vstack([A, B, C]) if len(C) else np.vstack([A, B]), -1
+    if kind == "long":
+        ly = (rng.uniform(-6, -0.3) if near else rng.uniform(44.3, 50))
+        lx = rng.uniform(-1, 21)
+    elif kind == "wide":
+        ly = rng.uniform(0, 21) if near else rng.uniform(23, 44)
+        lx = rng.uniform(-6, -0.3) if rng.random() < 0.5 else rng.uniform(20.3, 26)
+    else:   # winner: lands in, nobody gets it
+        ly = rng.uniform(0, 21.5) if near else rng.uniform(22.5, 44)
+        lx = rng.uniform(-0.5, 20.5)
+    T1 = rng.uniform(1.3, 2.3) if rng.random() < 0.15 else rng.uniform(0.35, 1.1)   # some lobs
+    p1 = np.array([lx, ly, 0.0])
+    v0 = _aim(p0, p1, T1, beta)
+    A = _fly(p0, v0, beta, np.arange(0, T1, 1 / FPS))
+    C = _bounce_on(p1, _vel(v0, beta, T1), beta, tail, rng, 3)
+    return (np.vstack([A, C]) if len(C) else A), -1
+
+
+def make_sample(rng, camera=None, sim=None):
     """Synthetic (inputs (MAX_T, 9), target (MAX_T, 3), mask (MAX_T,)) like real tracking of one shot."""
     while True:
-        X, bi = simulate_shot(rng)
+        X, bi = (sim or simulate_shot)(rng)
         if 6 <= len(X) <= MAX_T and X[:, 2].min() > -0.2:
             break
     K, R, t = camera if camera is not None else random_camera(rng)
@@ -263,15 +329,33 @@ def lift_track(K, R, t, frames, uv, f0, f1, net=None):
     return y * SCALE + COURT_C
 
 
-def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0):
+_END_NET = None
+
+
+def _end_net():
+    """End-of-rally lifter (trained only on simulated last shots: into the net, long, wide, winners bouncing on),
+    models/lifter_end.pt from colab/lifter_end_kernel. None if not trained yet."""
+    global _END_NET
+    if _END_NET is None:
+        from pathlib import Path
+        f = Path(__file__).resolve().parents[1] / "models" / "lifter_end.pt"
+        if f.exists():
+            import torch
+            net = build_net(); net.load_state_dict(torch.load(f, map_location="cpu")); net.eval()
+            _END_NET = net
+    return _END_NET
+
+
+def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0, end_model=False):
     """A rally's last flight has no next hit, which the lifter never saw in training; after the ball goes out
     the tracker may also follow something else. Keep it only up to the first ground contact, and only if it fits
     the video (median <= max_px) and moves like a ball: steadily away from the hitter along the court, without
     turning back sideways. Returns the cut path or None."""
     import cv2
-    ground = np.where(X[:, 2] < 0.4)[0]
-    if len(ground):
-        X = X[:max(int(ground[0]) + 1, 4)]
+    if not end_model:   # the hit-to-hit model knows nothing after the ground: stop there
+        ground = np.where(X[:, 2] < 0.4)[0]
+        if len(ground):
+            X = X[:max(int(ground[0]) + 1, 4)]
     keep = np.array(fr) - f0 < len(X)
     if keep.sum() < 4:
         return None
@@ -281,7 +365,7 @@ def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0):
         return None
     dy = np.diff(X[:, 1])
     away = -1 if side == "near" else 1                         # near player hits toward the far end (y down)
-    if np.mean(np.sign(dy) == away) < 0.9:
+    if np.mean(np.sign(dy) == away) < (0.7 if end_model else 0.9):   # a ball dying in the net drifts back a little
         return None
     dx = np.diff(X[:, 0])
     if dx.max() > 0.15 and dx.min() < -0.15 and min(dx.max(), -dx.min()) > 0.3 * max(dx.max(), -dx.min()):
@@ -317,7 +401,13 @@ def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
             if X is None:
                 continue
             if "rally" not in s1:   # rally-ending shot: keep only a trustworthy, physically plausible flight
-                X = _plausible_tail(X, K, R, t, fr, np.array([meas[f] for f in fr], float), f0, s0.get("side"))
+                en = _end_net()
+                if en is not None:
+                    Xe = lift_track(K, R, t, fr, np.array([meas[f] for f in fr], float), f0, f1, net=en)
+                    if Xe is not None:
+                        X = Xe
+                X = _plausible_tail(X, K, R, t, fr, np.array([meas[f] for f in fr], float), f0, s0.get("side"),
+                                    end_model=en is not None)
                 if X is None:
                     continue
                 f1 = f0 + len(X) - 1

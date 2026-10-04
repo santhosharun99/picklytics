@@ -1,0 +1,1 @@
+{"id": "santhosharun/pickleball-lifter-end-train", "title": "pickleball-lifter-end-train", "code_file": "lifter_end_train.py", "language": "python", "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": false, "dataset_sources": [], "machine_shape": "NvidiaTeslaT4"}
