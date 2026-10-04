@@ -147,7 +147,7 @@ function show(name) {
     num("Backhand share", P.stroke ? Math.round(100 * (P.stroke.backhand || 0) / ((P.stroke.backhand || 0) + (P.stroke.forehand || 0))) + "%" : null, "of shots");
   $("#acc").innerHTML = `Labels: <b>solid</b> = 20+ examples, <b>indicative</b> = 8-19, <b>thin</b> = under 8 - treat thin points as things to watch for, not facts. ` +
     `All from one match unless stated. Measured accuracy: rally winner 96%, server 98%, hits found 86-94%, forehand/backhand 95%, ` +
-    `shot types on new matches: drives 85%, dinks 73%, lobs 73%, drops 25%, resets 10%, player positions about ±1 ft, ball speed ±3-4 mph. ` +
+    `shot types on new matches: drives 88%, dinks 70%, lobs 40%, drops 30%, resets 5%, player positions about ±1 ft, ball speed ±3-4 mph. ` +
     `"Rushed" uses hit timing (exact to 0.03 s) and positions; "error" = the last detected shot of a lost rally (about 1 in 10 final shots is missed).`;
   document.querySelectorAll(".clip").forEach(b => b.onclick = () => { clipSet = b.dataset.set.split(",").map(Number); clipIdx = Math.max(0, clipSet.indexOf(+b.dataset.r)); play(); $("#modal").classList.add("on"); });
 }

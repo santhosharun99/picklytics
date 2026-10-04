@@ -20,7 +20,9 @@ from pickleball.shottype import FEATURES, MODEL_PATH, features
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = [("full_match", "Mens_Singles_GOLD_2026_US_Open"), ("lv_fahey_yoshitomi", "Fahey_Yoshitomi_LV2026"),
            ("lv_waters_johns", "Waters_Johns_Black_Tardio_LV2026"), ("lv_bright_patriquin", "Bright_Patriquin_Fahey_Staksrud_LV2026")]
-BASE = {"third-shot drive": "drive", "third-shot drop": "drop", "third-shot groundstroke": "groundstroke"}
+# "groundstroke" is merged into "drive" (2026-10-04): the line between them is subjective (the tagger could not
+# tell them apart reliably) and pace comes from the measured ball speed instead. Merged: macro-F1 0.36 -> 0.39.
+BASE = {"third-shot drive": "drive", "third-shot drop": "drop", "third-shot groundstroke": "drive", "groundstroke": "drive"}
 SKIP = {"serve", "return", None}
 
 

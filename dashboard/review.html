@@ -61,13 +61,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
   <aside class="card">
     <h2 style="margin:0 0 4px;font-size:15px">What each shot means</h2>
     <dl class="defs">
-      <dt>Drive (D)</dt><dd>Hit hard and fast, flat over the net, to attack or rush the opponent.</dd>
+      <dt>Drive (D)</dt><dd>Any hard or medium-pace ball hit after the bounce (includes what used to be "groundstroke" - how hard it was comes from the measured speed).</dd>
       <dt>Drop (P)</dt><dd>Soft ball that falls into the kitchen, hit from the back or middle of the court.</dd>
       <dt>Dink (K)</dt><dd>Soft ball into the kitchen, hit from the kitchen line (both teams usually at the net).</dd>
       <dt>Reset (T)</dt><dd>Soft block of a fast incoming ball that takes the pace off, usually defensive.</dd>
       <dt>Lob (L)</dt><dd>High ball over the opponent's head.</dd>
       <dt>Overhead (O)</dt><dd>Smash hit from above the head.</dd>
-      <dt>Groundstroke (G)</dt><dd>A normal medium-pace shot that is none of the above.</dd>
       <dt>Not a hit (N)</dt><dd>Nothing was hit here: a missed swing, the ball hitting the net, picking the ball up after the rally, a bounce. These teach the hit detector.</dd>
       <dt>Wrong player / marker (W)</dt><dd>A real shot, but the dashed box is on the wrong player or the yellow ring is not on the ball.</dd>
       <dt>Unclear (U)</dt><dd>Can't tell, wrong player marked, or not a real hit - use it freely; unclear answers are not used for training.</dd>
@@ -77,7 +76,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
 </main>
 <script>
 const $ = s => document.querySelector(s);
-const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"], ["not a hit", "N"], ["wrong player / marker", "W"]];
+const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["unclear", "U"], ["not a hit", "N"], ["wrong player / marker", "W"]];
 const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, "0")}`;
 let Q, A = {answers: {}}, stem, i = 0, volley = false, slow = false, showGuess = false, saving = Promise.resolve();
 const v = $("#v");
