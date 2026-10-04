@@ -1,0 +1,65 @@
+{
+ "note": "PPA Tour Europe outer court, fixed elevated camera (full-day feed). Corners read by hand at 82 min, line-snapped at 140 min (97%).",
+ "points": [
+  {
+   "court": [
+    0,
+    0
+   ],
+   "img": [
+    737.3,
+    381.1
+   ]
+  },
+  {
+   "court": [
+    20,
+    0
+   ],
+   "img": [
+    1177.0,
+    377.7
+   ]
+  },
+  {
+   "court": [
+    0,
+    44
+   ],
+   "img": [
+    568.4,
+    694.4
+   ]
+  },
+  {
+   "court": [
+    20,
+    44
+   ],
+   "img": [
+    1353.0,
+    691.8
+   ]
+  },
+  {
+   "court": [
+    0,
+    22
+   ],
+   "img": [
+    676.6,
+    493.8
+   ]
+  },
+  {
+   "court": [
+    20,
+    22
+   ],
+   "img": [
+    1240.1,
+    490.4
+   ]
+  }
+ ]
+}
