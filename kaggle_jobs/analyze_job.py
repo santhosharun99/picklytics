@@ -17,10 +17,12 @@ except ImportError:
 
 code = Path(glob.glob("/kaggle/input/**/pickleball/detect.py", recursive=True)[0]).parents[1]
 video = (glob.glob(f"/kaggle/input/**/{STEM}.mp4", recursive=True) or glob.glob("/kaggle/input/**/*.mp4", recursive=True))[0]
-run_in = Path(glob.glob("/kaggle/input/**/detections.jsonl.gz", recursive=True)[0]).parent
+# Kaggle unpacks .gz files in datasets, so accept the detections either compressed or already unpacked
+det = (glob.glob("/kaggle/input/**/detections.jsonl.gz", recursive=True) + glob.glob("/kaggle/input/**/detections.jsonl", recursive=True))[0]
+run_in = Path(det).parent
 out = Path("/kaggle/working/out")
 out.mkdir(parents=True, exist_ok=True)
-with gzip.open(run_in / "detections.jsonl.gz", "rb") as fi, open(out / "detections.jsonl", "wb") as fo:
+with (gzip.open(det, "rb") if det.endswith(".gz") else open(det, "rb")) as fi, open(out / "detections.jsonl", "wb") as fo:
     shutil.copyfileobj(fi, fo)
 meta = json.loads((run_in / "meta.json").read_text())
 meta["video"] = video
