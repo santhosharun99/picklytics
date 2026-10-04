@@ -1,0 +1,65 @@
+{
+ "note": "PPA Las Vegas 2026 Court CC main broadcast camera (mixed doubles SF), started from the singles LV calibration and line-snapped on frame t=1790s (74% line match). Court feet -> 1920x1080 pixels.",
+ "points": [
+  {
+   "court": [
+    0,
+    0
+   ],
+   "img": [
+    689.5,
+    309.6
+   ]
+  },
+  {
+   "court": [
+    20,
+    0
+   ],
+   "img": [
+    1226.8,
+    304.7
+   ]
+  },
+  {
+   "court": [
+    0,
+    44
+   ],
+   "img": [
+    270.5,
+    819.8
+   ]
+  },
+  {
+   "court": [
+    20,
+    44
+   ],
+   "img": [
+    1653.4,
+    816.2
+   ]
+  },
+  {
+   "court": [
+    0,
+    22
+   ],
+   "img": [
+    571.8,
+    452.9
+   ]
+  },
+  {
+   "court": [
+    20,
+    22
+   ],
+   "img": [
+    1345.7,
+    447.3
+   ]
+  }
+ ]
+}

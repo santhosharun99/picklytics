@@ -128,12 +128,19 @@ _SAMPLES, _DIRS = _line_samples()
 
 
 def white_mask(frame) -> np.ndarray:
-    """Thin bright, unsaturated structures (painted court lines)."""
+    """Thin bright, unsaturated structures (painted court lines).
+    Two tests: plainly white pixels, and - for lines in sun shadows, where they are no longer bright - thin
+    structures clearly brighter than their surroundings (top-hat on brightness). Las Vegas doubles, heavy
+    shadows: line match 0.35 -> 0.64 on main-camera frames; other camera angles stay <= 0.47 (< 0.55 needed)."""
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     white = ((hsv[..., 1] < 70) & (hsv[..., 2] > 165)).astype(np.uint8) * 255
     # keep thin structures only: white minus its opening with a large kernel
     big = cv2.morphologyEx(white, cv2.MORPH_OPEN, np.ones((15, 15), np.uint8))
-    return cv2.subtract(white, big)
+    lit = cv2.subtract(white, big)
+    v = hsv[..., 2]
+    tophat = cv2.morphologyEx(v, cv2.MORPH_TOPHAT, np.ones((15, 15), np.uint8))
+    shade = ((tophat > 15) & (hsv[..., 1] < 130) & (v > 60)).astype(np.uint8) * 255
+    return cv2.max(lit, shade)
 
 
 def _project(H_inv, pts):
