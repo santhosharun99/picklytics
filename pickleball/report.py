@@ -114,7 +114,7 @@ def _third_quality(shots: list[dict], nxt: list[dict]) -> dict:
             "rushed_next_pct": _pct(sum(rush), len(rush)), "n_next": len(rush)}
 
 
-def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
+def player_profile(name: str, opponent: str, rallies: list[dict], hands: dict | None = None) -> dict:
     add_time_pressure(rallies)
     mine = [s for r in rallies for s in r["shots"] if s["player"] == name]
     decided = [r for r in rallies if r["winner"]]
@@ -219,6 +219,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
     profile["pressure"] = pressure_profile(name, rallies)
     profile["big_points"] = winprob.big_points(name, rallies)
     profile["net"] = net_profile(name, rallies)
+    profile["tactics"] = tactics_profile(name, rallies, (hands or {}).get(name, "right"))
     profile["insights"] = insights(profile, opponent)
     return profile
 
@@ -396,6 +397,113 @@ def net_profile(name: str, rallies: list[dict]) -> dict:
             "first_pct": _pct(first, first + opp_first), "n_contested": first + opp_first,
             "won_when_first_pct": _pct(first_won, first), "n_first": first,
             "won_when_opp_first_pct": _pct(opp_first_won, opp_first), "n_opp_first": opp_first, "first_rallies": first_r}
+
+
+MOVE_FT = 3.0  # lateral move that counts as being pulled wide / running around
+SHOT_GROUP = {"serve": "Serve", "return": "Return", "drive": "Drive", "third-shot drive": "Drive",
+              "groundstroke": "Groundstroke", "third-shot groundstroke": "Groundstroke", "volley": "Volley",
+              "drop": "Drop / dink / reset", "third-shot drop": "Drop / dink / reset", "dink": "Drop / dink / reset",
+              "reset": "Drop / dink / reset", "lob": "Lob", "overhead": "Overhead"}
+
+
+def _zone(y):
+    d = abs(y - NET_Y)
+    return "net" if d <= NET_FT else ("mid" if d <= 18 else "back")
+
+
+def tactics_profile(name: str, rallies: list[dict], hand: str = "right") -> dict:
+    """How the player moves and chooses shots, from the court tracks (approximate, rule-based shot types):
+    - strokes: each forehand / backhand split by the move before it (from where the player stood at the opponent's
+      hit to the contact): pulled wide to that side (>= MOVE_FT), ball near the body (choice / positioning), or
+      ran around (moved toward the other side, e.g. run-around forehand).
+    - situations: shot choice by where the player and the opponent stand at contact (net / mid / back), with the
+      direction (cross-court vs down the line), depth of the landing and the rally win rate.
+    - response: for each kind of opponent shot, the average move from start to contact (own-half coordinates)."""
+    strokes = {"forehand": Counter(), "backhand": Counter()}
+    stroke_r = defaultdict(list)
+    sit = defaultdict(list)
+    resp = defaultdict(list)
+    for r in rallies:
+        sh, mt = r["shots"], r.get("movement_t", {})
+        if name not in mt or len(mt) != 2:
+            continue
+        opp = next(n for n in mt if n != name)
+        for k in range(1, len(sh)):
+            a, b = sh[k - 1], sh[k]
+            if b["player"] != name or a["player"] == name:
+                continue
+            p0, p1, q = _pos_near(mt[name], a["t"]), _pos_near(mt[name], b["t"]), _pos_near(mt[opp], b["t"])
+            if p0 is None or p1 is None:
+                continue
+            right = (p1[0] - p0[0]) * (1 if p1[1] >= NET_Y else -1)       # lateral move to the player's right
+            fh = right if hand != "left" else -right                       # ... toward the forehand side
+            if b.get("stroke") in strokes:
+                to_side = fh if b["stroke"] == "forehand" else -fh
+                kind = "pulled_wide" if to_side >= MOVE_FT else ("ran_around" if to_side <= -MOVE_FT else "near_body")
+                strokes[b["stroke"]][kind] += 1
+                stroke_r[(b["stroke"], kind)].append(r["id"])
+            s0, s1 = _own_half(*p0), _own_half(*p1)
+            resp[SHOT_GROUP.get(a.get("shot"), "Other")].append((s0, s1, b.get("spare_s"), r["id"]))
+            if q is None or not r["winner"]:
+                continue
+            cross = deep = short = None
+            if b.get("land") and abs(p1[0] - 10) >= 2:
+                lx, ly = b["land"]
+                cross = (p1[0] - 10) * (lx - 10) < 0
+                dep = abs(ly - NET_Y)
+                deep, short = dep >= 15, dep <= 7
+            sit[(_zone(p1[1]), _zone(q[1]))].append((b.get("shot"), cross, deep, short, r["winner"] == name, r["id"], k))
+    pct = lambda xs: _pct(sum(1 for x in xs if x), sum(1 for x in xs if x is not None))
+    situations = []
+    for (me, op), v in sorted(sit.items(), key=lambda kv: -len(kv[1])):
+        c = Counter(x[0] for x in v if x[0])
+        situations.append({"me": me, "opp": op, "n": len(v),
+                           "shots": [[k, n] for k, n in c.most_common(3)],
+                           "cross_pct": pct([x[1] for x in v]), "deep_pct": pct([x[2] for x in v]),
+                           "short_pct": pct([x[3] for x in v]), "won_pct": _pct(sum(x[4] for x in v), len(v)),
+                           "rallies": sorted({x[5] for x in v})})
+    response = {}
+    for g, v in sorted(resp.items(), key=lambda kv: -len(kv[1])):
+        if len(v) < 3:
+            continue
+        a0 = np.mean([x[0] for x in v], 0); a1 = np.mean([x[1] for x in v], 0)
+        sp = [x[2] for x in v if x[2] is not None]
+        response[g] = {"n": len(v), "from": [round(float(a0[0]), 1), round(float(a0[1]), 1)],
+                       "to": [round(float(a1[0]), 1), round(float(a1[1]), 1)],
+                       "moved_ft": round(float(np.median([np.hypot(x[1][0] - x[0][0], x[1][1] - x[0][1]) for x in v])), 1),
+                       "spare_s": round(float(np.median(sp)), 2) if sp else None,
+                       "rushed_pct": _pct(sum(x < RUSHED_S for x in sp), len(sp)), "rallies": sorted({x[3] for x in v})}
+    out = {"strokes": {k: dict(v) for k, v in strokes.items()},
+           "stroke_rallies": {f"{a}:{b}": sorted(set(v)) for (a, b), v in stroke_r.items()},
+           "situations": situations, "response": response, "move_ft": MOVE_FT}
+    out["takeaways"] = _tactics_takeaways(out)
+    return out
+
+
+def _tactics_takeaways(t: dict) -> dict:
+    """One plain sentence per tactics card (numbers only; no claim the data cannot carry)."""
+    tk = {}
+    bh, fh = t["strokes"].get("backhand", {}), t["strokes"].get("forehand", {})
+    nb, nf = sum(bh.values()), sum(fh.values())
+    if nb >= 8:
+        wide, body = _pct(bh.get("pulled_wide", 0), nb), _pct(bh.get("near_body", 0), nb)
+        tk["strokes"] = (f"{wide}% of backhands came after being pulled wide to that side (forced); {body}% with the ball "
+                         f"near the body (positioning or choice)." +
+                         (f" Ran around the backhand to hit a forehand {fh.get('ran_around')}x." if fh.get("ran_around", 0) >= 3 else ""))
+    main = [x for x in t["situations"] if not any(k in ("serve", "return") for k, _ in x["shots"][:1]) and x["n"] >= 5]
+    if main:
+        x = main[0]
+        top, n = x["shots"][0]
+        where = {"net": "at the net", "mid": "in mid-court", "back": "at the back"}
+        dirn = (f", {x['cross_pct']}% cross-court" if x["cross_pct"] is not None else "")
+        tk["situations"] = (f"Most common spot: {where[x['me']]} with the opponent {where[x['opp']]} ({x['n']} shots) - "
+                            f"plays {top} {_pct(n, x['n'])}% of the time{dirn}; wins {x['won_pct']}% of those rallies.")
+    if t["response"]:
+        g, v = max(t["response"].items(), key=lambda kv: kv[1]["moved_ft"] if kv[1]["n"] >= 5 else -1)
+        if v["n"] >= 5:
+            tk["response"] = (f"Moves most against the opponent's {g.lower()}: {v['moved_ft']} ft on average "
+                              f"(rushed on {v['rushed_pct']}% of them, {v['n']} shots).")
+    return tk
 
 
 def placement_profile(name: str, rallies: list[dict]) -> dict:
@@ -625,6 +733,8 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
 def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: Path, sb_cfg: dict | None) -> dict:
     rallies, name_of = build_rallies_auto(run_dir, video_file, sb_cfg)
     a, b = list(name_of.values())[:2]
+    A = json.loads((Path(run_dir) / "analysis.json").read_text())
+    hands = {p.get("name") or pid: p.get("dominant_hand") or "right" for pid, p in A["players"].items()}
     checked = [r for r in rallies if r["scoreboard"]["agrees"] is not None]
     agree = sum(r["scoreboard"]["agrees"] for r in checked)
     games = max((r["game"] or 1 for r in rallies), default=1)
@@ -634,7 +744,7 @@ def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: 
                   + (f"; scoreboard agrees on {agree}/{len(checked)}" if checked else "") + ")",
         "video": video_url,
         "win_probability": winprob.annotate(rallies, a, b),  # adds wp_before / wp_after / importance per rally
-        "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
+        "players": {a: player_profile(a, b, rallies, hands), b: player_profile(b, a, rallies, hands)},
         "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)

@@ -123,6 +123,13 @@ function show(name) {
       <div class="card" style="grid-column: span 3"><h2>Win probability &amp; big points</h2><p class="why">Live chance of winning the match before each rally (side-out scoring model that learns each player's serve-rally win rate as the match goes; starts at about 50%). Dots = the most important rallies (where winning or losing the rally moved the match odds most, for equal players at that score); click to watch. "Big points" = the top quarter of rallies by importance.</p><div id="wp"></div></div>
     </section>
     <section class="grid">
+      <div class="card"><h2>Forehand &amp; backhand: forced or chosen?</h2><p class="why">Each stroke split by the move before it: from where the player stood when the opponent hit, to the contact. Pulled wide = moved 3+ ft toward that side. Near the body = little movement (positioning or choice). Ran around = moved the other way first (e.g. a run-around forehand). Click a segment to watch.</p><div id="strokeWhy"></div></div>
+      <div class="card" style="grid-column: span 2"><h2>Shot choice by position</h2><p class="why">What this player plays depending on where both players stand at contact (net = within 9 ft of the net, mid = 9-18 ft, back = deeper). Each box: number of shots, most played shots, direction and depth of the ball, and how often that rally was won. Click a box to watch. Shot types are automatic (about 2 in 3 right).</p><div id="situ"></div></div>
+    </section>
+    <section class="grid">
+      <div class="card" style="grid-column: span 2"><h2>How they move after each opponent shot</h2><p class="why">Average position when the opponent hit (circle) and at their own contact (arrow head), on their own half with the net at the top. "Rushed" = less than 0.3 s to spare.</p><div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start"><svg id="moveSvg" style="width:100%;max-width:340px"></svg><div id="moveList" style="flex:1;min-width:240px"></div></div></div>
+    </section>
+    <section class="grid">
       <div class="card"><h2>Shot mix</h2><p class="why">All shots this player hit, by type.</p><div id="mix"></div></div>
       <div class="card"><h2>Forehand vs backhand</h2><p class="why">Overall, and per shot type.</p><div id="strokes"></div></div>
       <div class="card"><h2>Third shot (when serving)</h2><p class="why">Choice, how often that rally was won, and its quality: median pace, share crossing under 1.5 ft above the net, share landing deep (15+ ft past the net), share where the opponent&#39;s reply was rushed.</p><div id="third"></div></div>
@@ -141,13 +148,13 @@ function show(name) {
       <div class="card" style="grid-column: span 3"><h2>Time pressure</h2><p class="why">Time to spare on each shot: the time since the opponent's hit, minus 0.25 s to react and the time needed to cover the distance actually moved (at 12 ft/s). Under 0.3 s = rushed. Method after Mlakar &amp; Kovalchik (2020, tennis). An "error" = the shot was the last of a rally this player lost. Click ▶ to watch the rushed rallies.</p><div id="pressure"></div></div>
     </section>
     <section class="grid">
-      <div class="card"><h2>Where they hit from</h2><p class="why">Contact points, shown on their own half (net at top).</p><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
+      <div class="card"><h2>Where they hit from</h2><p class="why">Contact points on their own half (net at top). Pick a shot type to see where they play it from.</p><div id="contactChips" class="chips"></div><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (brighter = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>How rallies ended</h2><p class="why">When this player hit the last shot: won it (winner / forced error) or lost it (own error).</p><div id="endings"></div>
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
-  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderRallies(name);
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); addTakeaways(P, name);
   document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
 }
 
@@ -190,9 +197,19 @@ function halfCourt(svg) {
   const t = el("text", {x: hx(10), y: hy(-0.6), "text-anchor": "middle", style: "fill:var(--court-line)"}, svg); t.textContent = "net";
   return svg;
 }
-function renderContacts(P, col) {
+const GROUP = {"serve": "Serve", "return": "Return", "drive": "Drive", "third-shot drive": "Drive", "groundstroke": "Groundstroke",
+  "third-shot groundstroke": "Groundstroke", "volley": "Volley", "drop": "Drop / dink / reset", "third-shot drop": "Drop / dink / reset",
+  "dink": "Drop / dink / reset", "reset": "Drop / dink / reset", "lob": "Lob", "overhead": "Overhead"};
+function renderContacts(P, col, pick = "All") {
+  const mine = R.rallies.flatMap(r => r.shots.filter(s => s.player === current && s.pos).map(s => ({...s, g: GROUP[s.shot] || "Other"})));
+  const counts = {}; mine.forEach(s => counts[s.g] = (counts[s.g] || 0) + 1);
+  $("#contactChips").innerHTML = ["All", ...Object.keys(counts).sort((a, b) => counts[b] - counts[a])].map(g =>
+    `<button class="chip${g === pick ? " on" : ""}" data-g="${g}">${g} <span>${g === "All" ? mine.length : counts[g]}</span></button>`).join("");
+  document.querySelectorAll("#contactChips .chip").forEach(b => b.onclick = () => renderContacts(P, col, b.dataset.g));
   const svg = halfCourt($("#contacts"));
-  P.movement.contact_points.forEach(([x, d]) => el("circle", {cx: hx(x), cy: hy(d), r: 6, fill: "var(--ball)", stroke: "var(--paddle)", "stroke-width": 1, opacity: .95}, svg));
+  const own = ([x, y]) => y >= 22 ? [20 - x, y - 22] : [x, 22 - y];
+  mine.filter(s => pick === "All" || s.g === pick).forEach(s => { const [x, d] = own(s.pos);
+    el("circle", {cx: hx(x), cy: hy(d), r: 6, fill: "var(--ball)", stroke: "var(--paddle)", "stroke-width": 1, opacity: .95}, svg); });
 }
 function renderHeat(P) {
   const svg = halfCourt($("#heat"));
@@ -267,6 +284,78 @@ function renderWP(P, name, col) {
       <div class="tile"><div class="l">Big points won</div><div class="v">${bp.big_won_pct}%</div><div class="n">of ${bp.n_big} most important rallies${bp.n_big < 10 ? " · small sample" : ""} ${clipButtons(bp.big_rallies)}</div></div>
       <div class="tile"><div class="l">Other rallies won</div><div class="v">${bp.rest_won_pct}%</div><div class="n">of ${bp.n_rest}</div></div></div>` : ""}`;
   document.querySelectorAll("#wpsvg circle[data-r]").forEach(c => c.onclick = () => openClip(+c.dataset.r, [...top]));
+}
+function renderTactics(P, col) {
+  const T = P.tactics || {}, tk = T.takeaways || {};
+  // strokes
+  const seg = {pulled_wide: ["Pulled wide", "var(--paddle)"], near_body: ["Near the body", "var(--series-1)"], ran_around: ["Ran around", "var(--series-2)"]};
+  const st = T.strokes || {};
+  $("#strokeWhy").innerHTML = (tk.strokes ? `<p class="take">${tk.strokes}</p>` : "") + ["forehand", "backhand"].map(k => {
+    const c = st[k] || {}, n = Object.values(c).reduce((a, b) => a + b, 0);
+    if (!n) return "";
+    return `<div style="margin:10px 0 4px;font-size:13px"><b>${cap(k)}</b> <span class="muted-n">${n} shots</span></div><div class="split" style="height:22px">` +
+      Object.entries(seg).filter(([s]) => c[s]).map(([s, [lab, colr]]) => `<div class="seg" data-k="${k}:${s}" title="${lab}: ${c[s]}" style="flex:${c[s]};background:${colr};cursor:pointer;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">${Math.round(100 * c[s] / n)}%</div>`).join("") + `</div>`;
+  }).join("") + `<div class="legend-row">${Object.values(seg).map(([l, c]) => `<span><span class="dot" style="background:${c}"></span>${l}</span>`).join("")}</div>`;
+  document.querySelectorAll("#strokeWhy .seg").forEach(d => d.onclick = () => { const ids = (T.stroke_rallies || {})[d.dataset.k] || []; if (ids.length) openClip(ids[0], ids); });
+  // situations: rows = me (net at top), cols = opponent
+  const Z = ["net", "mid", "back"], lab = {net: "Net", mid: "Mid-court", back: "Back"};
+  const by = {}; (T.situations || []).forEach(x => by[x.me + "|" + x.opp] = x);
+  const maxN = Math.max(1, ...(T.situations || []).map(x => x.n));
+  let g = `<div class="situ-grid"><div></div>${Z.map(z => `<div class="situ-h">Opponent at<br><b>${lab[z]}</b></div>`).join("")}`;
+  Z.forEach(me => {
+    g += `<div class="situ-h situ-row">They are at<br><b>${lab[me]}</b></div>`;
+    Z.forEach(op => {
+      const x = by[me + "|" + op];
+      if (!x) { g += `<div class="situ-cell empty-cell">–</div>`; return; }
+      const a = 0.08 + 0.32 * x.n / maxN;
+      g += `<div class="situ-cell" data-k="${me}|${op}" style="background:rgba(46,107,69,${a.toFixed(2)})">
+        <div class="situ-n">${x.n} shots${x.n < 5 ? " · small" : ""}</div>
+        ${x.shots.slice(0, 2).map(([k, n]) => `<div class="situ-shot"><b>${Math.round(100 * n / x.n)}%</b> ${k}</div>`).join("")}
+        <div class="situ-meta">${x.cross_pct != null ? x.cross_pct + "% cross-court" : ""}${x.deep_pct != null ? " · " + x.deep_pct + "% deep" : ""}${x.short_pct ? " · " + x.short_pct + "% short" : ""}</div>
+        <div class="situ-won">won ${x.won_pct}%</div></div>`;
+    });
+  });
+  $("#situ").innerHTML = (tk.situations ? `<p class="take">${tk.situations}</p>` : "") + g + `</div>`;
+  document.querySelectorAll("#situ .situ-cell[data-k]").forEach(c => c.onclick = () => { const ids = by[c.dataset.k].rallies; openClip(ids[0], ids); });
+  // response arrows
+  const svg = halfCourt($("#moveSvg")), rs = Object.entries(T.response || {}).filter(([, v]) => v.n >= 4);
+  if (!svg.querySelector("defs")) { const d = el("defs", {}, svg); const m = el("marker", {id: "ah", viewBox: "0 0 10 10", refX: 8, refY: 5, markerWidth: 5, markerHeight: 5, orient: "auto-start-reverse"}, d); el("path", {d: "M0,0 L10,5 L0,10 z", fill: "var(--ball)"}, m); }
+  rs.forEach(([k, v], i) => {
+    el("circle", {cx: hx(v.from[0]), cy: hy(v.from[1]), r: 4, fill: "#fff", opacity: .9}, svg);
+    el("line", {x1: hx(v.from[0]), y1: hy(v.from[1]), x2: hx(v.to[0]), y2: hy(v.to[1]), stroke: "var(--ball)", "stroke-width": 3, "marker-end": "url(#ah)"}, svg);
+    el("circle", {cx: hx(v.to[0]) + 10, cy: hy(v.to[1]) - 10, r: 8, fill: "var(--paddle)", stroke: "#fff", "stroke-width": 1}, svg);
+    const t = el("text", {x: hx(v.to[0]) + 10, y: hy(v.to[1]) - 6, "text-anchor": "middle", style: "fill:#fff;font-size:10.5px;font-weight:700"}, svg); t.textContent = i + 1;
+  });
+  $("#moveList").innerHTML = (tk.response ? `<p class="take">${tk.response}</p>` : "") + (rs.length ? `<table><tr><th>Opponent's shot</th><th>Shots</th><th>Moved</th><th>Rushed</th><th></th></tr>` +
+    rs.map(([k, v], i) => `<tr><td><span class="num">${i + 1}</span>${k}</td><td>${v.n}</td><td>${v.moved_ft} ft</td><td>${v.rushed_pct ?? "–"}%</td><td>${clipButtons(v.rallies.slice(0, 4))}</td></tr>`).join("") + `</table>` : '<span class="empty">No movement data.</span>');
+}
+
+// one bold takeaway line per card, written from that card's numbers
+function addTakeaways(P, name) {
+  const put = (sel, text) => { const box = $(sel)?.closest(".card"); if (!box || !text) return;
+    const h = box.querySelector("h2"); const p = document.createElement("p"); p.className = "take"; p.innerHTML = text; h.after(p); };
+  const opp = Object.keys(R.players).find(n => n !== name), O = R.players[opp] || {};
+  const mix = Object.entries(P.shot_mix || {}), tot = mix.reduce((a, [, v]) => a + v, 0);
+  if (tot) put("#mix", "Mostly " + mix.slice(0, 3).map(([k, v]) => `${k}s (${Math.round(100 * v / tot)}%)`).join(", ") + ".");
+  const st = P.stroke || {}, ns = (st.forehand || 0) + (st.backhand || 0);
+  if (ns) put("#strokes", `Backhand on ${Math.round(100 * (st.backhand || 0) / ns)}% of shots - see "forced or chosen?" below for why.`);
+  const th = Object.entries(P.third_shot || {}).filter(([, v]) => v.count >= 3).sort((a, b) => b[1].count - a[1].count);
+  if (th.length) put("#third", `Third ball: ${th.map(([k, v]) => `${k.replace("third-shot ", "")} ${v.count}x, won ${v.won_pct}%`).join("; ")}.`);
+  const sg = (P.speed || {}).groups || {};
+  if (sg.Drive) put("#speed", `Drives average ${sg.Drive.avg} mph` + ((O.speed || {}).groups?.Drive ? ` (${opp}: ${O.speed.groups.Drive.avg} mph)` : "") + (sg.Serve ? `; serves ${sg.Serve.avg} mph.` : "."));
+  const pl = P.placement || {};
+  const deep = Object.entries(pl).filter(([, g]) => g.n >= 5).map(([k, g]) => `${k.toLowerCase()} ${g.deep_pct}%`);
+  if (deep.length) put("#placement", `Lands deep (back 15 ft): ${deep.join(", ")}.`);
+  const rn = P.running || {}, nt = P.net || {};
+  if (rn.rallies) put("#running", `Runs ${rn.dist_per_rally_ft} ft per rally (${opp}: ${(O.running || {}).dist_per_rally_ft ?? "–"} ft); gets to the net in ${nt.reached_pct ?? "–"}% of rallies.`);
+  const fc = (P.pressure || {}).faced || {}, ofc = (O.pressure || {}).faced || {};
+  if (fc.n) put("#pressure", `Rushed on ${fc.rushed_pct}% of shots vs ${ofc.rushed_pct ?? "–"}% for ${opp}` + (fc.rushed_pct > (ofc.rushed_pct ?? 100) ? " - the opponent dictates the pace." : " - they dictate the pace."));
+  const bp = P.big_points || {};
+  if (bp.n_big) put("#wp", `Won ${bp.big_won_pct}% of the ${bp.n_big} most important rallies vs ${bp.rest_won_pct}% of the rest` + (Math.abs(bp.big_won_pct - bp.rest_won_pct) < 15 ? " - no real difference." : " (not yet conclusive on one match)."));
+  const mv = P.movement || {};
+  if (mv.avg_depth_ft != null) put("#heat", `Plays on average ${mv.avg_depth_ft} ft from the net; at the kitchen line ${mv.kitchen_time_pct}% of rally time.`);
+  const er = Object.entries(P.error_shots || {})[0], fi = Object.entries(P.finishing_shots || {})[0];
+  if (er || fi) put("#endings", [fi ? `Wins most often with a ${fi[0]} (${fi[1].count}x)` : "", er ? `loses most often on a ${er[0]} (${er[1].count}x)` : ""].filter(Boolean).join("; ") + ".");
 }
 function renderLength(P, col) {
   $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");

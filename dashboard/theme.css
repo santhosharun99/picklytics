@@ -50,3 +50,26 @@ button:focus-visible, select:focus-visible, .tab:focus-visible { outline: 2px so
 
 /* value labels next to bars need room for "100% of 34" */
 .bar { grid-template-columns: 120px 1fr 74px !important; }
+
+/* takeaway line under each card title */
+.take { font-weight: 600; color: var(--paddle); font-size: 13.5px; margin: 2px 0 8px; padding-left: 9px; border-left: 3px solid var(--ball); }
+.legend-row { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+.legend-row .dot { margin-right: 5px; }
+.muted-n { color: var(--text-muted); font-size: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.chip { border: 1px solid var(--border); background: var(--surface-2); font: inherit; font-size: 12px; border-radius: 999px; padding: 3px 10px; cursor: pointer; color: inherit; }
+.chip span { color: var(--text-muted); margin-left: 3px; }
+.chip.on { background: var(--paddle); color: #fff; border-color: var(--paddle); } .chip.on span { color: var(--ball); }
+/* shot choice grid */
+.situ-grid { display: grid; grid-template-columns: 92px repeat(3, minmax(0, 1fr)); gap: 6px; }
+.situ-h { font-size: 11.5px; color: var(--text-secondary); text-align: center; align-self: end; padding-bottom: 2px; }
+.situ-row { text-align: right; align-self: center; padding-right: 4px; }
+.situ-cell { border-radius: 8px; padding: 8px 9px; min-height: 92px; cursor: pointer; border: 1px solid rgba(46,107,69,.25); font-size: 12.5px; }
+.situ-cell:hover { outline: 2px solid var(--ball); }
+.situ-cell.empty-cell { background: var(--surface-2); color: var(--text-muted); cursor: default; display: flex; align-items: center; justify-content: center; border-style: dashed; }
+.situ-n { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; }
+.situ-shot b { font-variant-numeric: tabular-nums; }
+.situ-meta { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+.situ-won { font-size: 11.5px; font-weight: 600; margin-top: 3px; color: var(--paddle); }
+@media (max-width: 600px) { .situ-grid { grid-template-columns: 64px repeat(3, minmax(0, 1fr)); } .situ-cell { padding: 6px; font-size: 11.5px; } }
+.num { display: inline-flex; width: 18px; height: 18px; border-radius: 50%; background: var(--paddle); color: #fff; font-size: 10.5px; font-weight: 700; align-items: center; justify-content: center; margin-right: 7px; }
