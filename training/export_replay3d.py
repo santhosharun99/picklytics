@@ -48,8 +48,8 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
                 path.append([round((seg["f0"] + k) / fps, 3), *x, 0 if seg.get("rough") else 1])
                 covered.add(seg["f0"] + k)
     for a in arcs_by.get(r["index"], []):
-        if a["f0"] in covered or a["f1"] in covered:
-            continue
+        if a["f0"] in covered or a["f1"] in covered or not a.get("confident"):
+            continue   # untrustworthy physics fits are not drawn: no path is better than a wrong one
         fr = np.arange(a["f0"], a["f1"] + 1)
         X = positions(np.asarray(a["theta"]), (fr - a["f0"]) / fps, a["beta"])
         for f, x in zip(fr, X):

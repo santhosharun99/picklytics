@@ -263,6 +263,32 @@ def lift_track(K, R, t, frames, uv, f0, f1, net=None):
     return y * SCALE + COURT_C
 
 
+def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0):
+    """A rally's last flight has no next hit, which the lifter never saw in training; after the ball goes out
+    the tracker may also follow something else. Keep it only up to the first ground contact, and only if it fits
+    the video (median <= max_px) and moves like a ball: steadily away from the hitter along the court, without
+    turning back sideways. Returns the cut path or None."""
+    import cv2
+    ground = np.where(X[:, 2] < 0.4)[0]
+    if len(ground):
+        X = X[:max(int(ground[0]) + 1, 4)]
+    keep = np.array(fr) - f0 < len(X)
+    if keep.sum() < 4:
+        return None
+    rv, _ = cv2.Rodrigues(R)
+    proj, _ = cv2.projectPoints((X[np.array(fr)[keep] - f0] * [1, 1, -1]).astype(np.float64), rv, t.astype(np.float64), K, None)
+    if np.median(np.linalg.norm(proj.reshape(-1, 2) - uv[keep], axis=1)) > max_px:
+        return None
+    dy = np.diff(X[:, 1])
+    away = -1 if side == "near" else 1                         # near player hits toward the far end (y down)
+    if np.mean(np.sign(dy) == away) < 0.9:
+        return None
+    dx = np.diff(X[:, 0])
+    if dx.max() > 0.15 and dx.min() < -0.15 and min(dx.max(), -dx.min()) > 0.3 * max(dx.max(), -dx.min()):
+        return None                                            # sideways U-turn: not a ball flight
+    return X
+
+
 def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
     """3D path for every shot (from a detected hit to the next detected hit) of an analysis dict.
     Returns {shot frame: {"f0", "f1", "path" [[x, y, h], ...], "land" (x, y) | None, "bounce_frame", "net_clear_ft"}}."""
@@ -290,6 +316,11 @@ def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
             X = lift_track(K, R, t, fr, np.array([meas[f] for f in fr], float), f0, f1)
             if X is None:
                 continue
+            if "rally" not in s1:   # rally-ending shot: keep only a trustworthy, physically plausible flight
+                X = _plausible_tail(X, K, R, t, fr, np.array([meas[f] for f in fr], float), f0, s0.get("side"))
+                if X is None:
+                    continue
+                f1 = f0 + len(X) - 1
             ib = int(np.argmin(X[:, 2]))
             bounced = X[ib, 2] < 1.0 and 0 < ib < len(X) - 1
             side = np.sign(X[:, 1] - 22.0)

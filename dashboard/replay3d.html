@@ -229,7 +229,7 @@ function loadRally(i) {
   $("#rallyInfo").innerHTML = `Game ${R.game ?? "–"} · score ${R.score ?? "–"} (server first) · <b>${R.server ?? "?"}</b> serves · won by <b>${R.winner ?? "?"}</b>` +
     `<br><span class="dot" style="background:#${PCOL[D.players.indexOf(R.near) % 2].toString(16)}"></span>${R.near ?? "near"} (near) &nbsp; <span class="dot" style="background:#${PCOL[D.players.indexOf(R.far) % 2].toString(16)}"></span>${R.far ?? "far"} (far)`;
   $("#shots").innerHTML = R.hits.map((h, k) => `<div class="shot" data-t="${h.t}"><span class="muted">${(h.t - R.t0).toFixed(1)} s</span>
-    <span><span class="dot" style="background:#${PCOL[D.players.indexOf(h.player) % 2].toString(16)}"></span>${h.player}: ${h.shot || "hit"}${h.stroke ? ", " + h.stroke : ""}${h.inferred ? ' <span class="muted">(not seen, deduced)</span>' : ""}</span>
+    <span><span class="dot" style="background:#${PCOL[D.players.indexOf(h.player) % 2].toString(16)}"></span>${h.player}: ${h.shot || "hit"}${h.stroke ? ", " + h.stroke : ""}${h.inferred ? ' <span class="muted">(not seen, deduced)</span>' : ""}${ballAt(h.t + 0.25) ? "" : ' <span class="muted">(flight not tracked)</span>'}</span>
     <span class="muted">${h.speed_mph ? h.speed_mph + " mph" : ""}${h.net_clear_ft != null ? ` · ${h.net_clear_ft >= 0 ? "+" : ""}${h.net_clear_ft} ft over net` : ""}</span></div>`).join("");
   document.querySelectorAll(".shot").forEach(el => el.onclick = () => seek(+el.dataset.t - 0.4));
   seek(R.t0);
