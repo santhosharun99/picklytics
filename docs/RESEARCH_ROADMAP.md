@@ -102,3 +102,9 @@ New ideas with a real, on-topic source that change the plan:
   types/directions) -> fold into the Tier 2 predictability/entropy item.
 Unchanged: VAEP/EPV/xT (verified: Decroos 2019, Cervone 2016 JASA, Fernandez 2021 Mach Learn, Hassani 2025 DxT) and
 ShuttleNet stay Tier 3; injury/load, momentum and EWM-TOPSIS scores stay out.
+
+## Built so far (2026-10-04)
+Foundation 1 (depth fix), replay filter, time pressure, movement efficiency, win probability + importance + big points,
+third-shot quality. Findings on our 2 matches: rushed shots -> more errors (22% vs 15%); third-shot drive -> server
+wins 61% vs 19% (p<0.001); per-player big-point / pressure differences not significant yet (p~0.3) -> shown as
+numbers only. Remaining Tier 1: kitchen-line control (first to the net), change-of-direction load.
