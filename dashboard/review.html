@@ -17,6 +17,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
 .stage video { width: 100%; display: block; aspect-ratio: 16 / 9; }
 .ring { position: absolute; width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 3px solid var(--ball); border-radius: 50%;
   box-shadow: 0 0 0 2px rgba(0,0,0,.5); pointer-events: none; display: none; }
+.hbox { position: absolute; border: 2px dashed #fff; border-radius: 6px; pointer-events: none; display: none; box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
 .info { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 10px 0 4px; font-size: 13.5px; }
 .who { font-weight: 650; color: var(--paddle); }
 .bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin-top: 6px; }
@@ -44,7 +45,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
 </header>
 <main>
   <section class="card">
-    <div class="stage"><video id="v" muted playsinline></video><div class="ring" id="ring"></div></div>
+    <div class="stage"><video id="v" muted playsinline></video><div class="ring" id="ring"></div><div class="hbox" id="hbox"></div></div>
     <div class="info"><span class="who" id="who"></span><span class="small" id="when"></span><span class="small" id="count"></span></div>
     <div class="bar"><div id="prog" style="width:0"></div></div>
     <div class="keys" id="keys"></div>
@@ -68,14 +69,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
       <dt>Overhead (O)</dt><dd>Smash hit from above the head.</dd>
       <dt>Groundstroke (G)</dt><dd>A normal medium-pace shot that is none of the above.</dd>
       <dt>Not a hit (N)</dt><dd>Nothing was hit here: a missed swing, the ball hitting the net, picking the ball up after the rally, a bounce. These teach the hit detector.</dd>
+      <dt>Wrong player / marker (W)</dt><dd>A real shot, but the dashed box is on the wrong player or the yellow ring is not on the ball.</dd>
       <dt>Unclear (U)</dt><dd>Can't tell, wrong player marked, or not a real hit - use it freely; unclear answers are not used for training.</dd>
     </dl>
-    <p class="small" style="margin-top:12px">The yellow ring marks the ball at the moment of contact. Volley = hit before the ball bounced (can be any shot type).</p>
+    <p class="small" style="margin-top:12px">The dashed box is the player the system thinks hit; the yellow ring marks the ball at the moment of contact. Volley = hit before the ball bounced (can be any shot type).</p>
   </aside>
 </main>
 <script>
 const $ = s => document.querySelector(s);
-const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"], ["not a hit", "N"]];
+const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"], ["not a hit", "N"], ["wrong player / marker", "W"]];
 const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, "0")}`;
 let Q, A = {answers: {}}, stem, i = 0, volley = false, slow = false, showGuess = false, saving = Promise.resolve();
 const v = $("#v");
@@ -107,7 +109,7 @@ function show() {
   $("#who").textContent = `Shot ${i + 1}: the ${it.side === "far" ? "FAR player (top of the screen)" : "NEAR player (bottom of the screen)"} hits`;
   $("#when").textContent = `at ${fmt(it.t)} in the video`;
   $("#guess").textContent = showGuess ? `model: ${it.pred} (${Math.round(100 * it.prob)}% sure)` : "";
-  $("#keys").innerHTML = SHOTS.map(([s, k]) => `<div class="k${prev && (prev.shot === s || (s === "unclear" && prev.unclear) || (s === "not a hit" && prev.not_hit)) ? " sel" : ""}" data-s="${s}"><b>${s[0].toUpperCase() + s.slice(1)}</b><kbd>${k}</kbd></div>`).join("");
+  $("#keys").innerHTML = SHOTS.map(([s, k]) => `<div class="k${prev && (prev.shot === s || (s === "unclear" && prev.unclear) || (s === "not a hit" && prev.not_hit) || (s === "wrong player / marker" && prev.marker_wrong)) ? " sel" : ""}" data-s="${s}"><b>${s[0].toUpperCase() + s.slice(1)}</b><kbd>${k}</kbd></div>`).join("");
   document.querySelectorAll(".k").forEach(b => b.onclick = () => answer(b.dataset.s));
   play();
 }
@@ -122,12 +124,16 @@ function play() {
     const ring = $("#ring"), near = Math.abs(v.currentTime - it.t) < 0.25 && it.img;
     ring.style.display = near ? "block" : "none";
     if (near) { const r = v.getBoundingClientRect(); ring.style.left = `${it.img[0] / Q.size[0] * r.width}px`; ring.style.top = `${it.img[1] / Q.size[1] * r.height}px`; }
+    const hb = $("#hbox"), showB = Math.abs(v.currentTime - it.t) < 0.6 && it.box;
+    hb.style.display = showB ? "block" : "none";
+    if (showB) { const r = v.getBoundingClientRect(), sx = r.width / Q.size[0], sy = r.height / Q.size[1], b = it.box;
+      Object.assign(hb.style, {left: `${b[0] * sx - 6}px`, top: `${b[1] * sy - 6}px`, width: `${(b[2] - b[0]) * sx + 12}px`, height: `${(b[3] - b[1]) * sy + 12}px`}); }
   };
 }
 function answer(s) {
   const it = Q.items[i];
-  const nh = s === "not a hit";
-  A.answers[it.frame] = {shot: (s === "unclear" || nh) ? null : s, unclear: s === "unclear", not_hit: nh, volley: nh ? false : volley,
+  const nh = s === "not a hit", wm = s === "wrong player / marker";
+  A.answers[it.frame] = {shot: (s === "unclear" || nh || wm) ? null : s, unclear: s === "unclear", not_hit: nh, marker_wrong: wm, volley: (nh || wm) ? false : volley,
                          rally: it.rally, t: it.t, reason: it.reason, model: it.pred, at: new Date().toISOString()};
   const mine = {[it.frame]: A.answers[it.frame]};
   // merge with the file on disk (it may have been edited elsewhere), then save

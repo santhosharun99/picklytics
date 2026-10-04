@@ -40,6 +40,7 @@ def main():
     model = joblib.load(MODEL_PATH)["model"]
     F = features(A, R["players"])
     img = {e["frame"]: e["img"] for e in R["events"] if e["kind"] == "hit"}
+    box = lambda f, pid: next((p["box"] for p in R["players"].get(str(f), []) if p.get("id") == pid), None)
     cands = []
     for s in A["shots"]:
         if s.get("shot_type") in ("serve", "return") or s.get("inferred") or s["frame"] not in F:
@@ -54,7 +55,7 @@ def main():
                (s.get("hitter_court") is not None and abs(s["hitter_court"][1] - 22) <= 9) or pred != "drive"
         cands.append({"frame": s["frame"], "t": round(s["frame"] / fps, 2), "rally": s["rally"], "side": s.get("side"),
                       "player": s.get("player"), "pred": pred, "prob": round(float(pr.max()), 2), "soft": bool(soft),
-                      "img": img.get(s["frame"])})
+                      "img": img.get(s["frame"]), "box": box(s["frame"], s.get("player"))})
     rng = random.Random(a.seed)
     picked, seen = [], set()
 
