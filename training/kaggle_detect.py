@@ -17,7 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 USER = "santhosharun"
 STAGE = ROOT / ".kaggle_stage"          # gitignored staging folders
 CODE_DS = f"{USER}/pickleball-code"
-MODELS = ["ball_detector.pt", "court_detector.pt"]
+MODELS = ["ball_detector.pt", "court_detector.pt", "paddle_detector.pt", "lifter.pt", "hit_clf.joblib", "bounce_clf.joblib",
+          "swing_clf.joblib", "shot_clf.joblib"]
 
 
 def kaggle(*args, check=True) -> str:
@@ -99,7 +100,7 @@ def kernel_id(stem: str) -> str:
     return f"{USER}/pb-detect-{slug_of(stem)}"
 
 
-def push(video: Path):
+def push(video: Path, players: int = 2):
     stem = stem_of(video)
     if not (ROOT / "configs" / "cameras" / f"{stem}.json").exists():
         print(f"note: no configs/cameras/{stem}.json - relying on the court model (fine for courts it detects)")
@@ -108,7 +109,7 @@ def push(video: Path):
     k = STAGE / f"kernel-{slug_of(stem)}"
     shutil.rmtree(k, ignore_errors=True)
     k.mkdir(parents=True)
-    (k / "detect_job.py").write_text((ROOT / "kaggle_jobs" / "detect_job.py").read_text().replace("__STEM__", stem))
+    (k / "detect_job.py").write_text((ROOT / "kaggle_jobs" / "detect_job.py").read_text().replace("__STEM__", stem).replace("__PLAYERS__", str(players)))
     kid = kernel_id(stem)
     (k / "kernel-metadata.json").write_text(json.dumps({
         "id": kid, "title": kid.split("/")[1], "code_file": "detect_job.py", "language": "python",
@@ -133,11 +134,19 @@ def fetch(video: Path, players: int, out: Path | None, names: str):
     if src is None:
         raise SystemExit("no detections in the job output yet - is the job complete? (status)")
     out.mkdir(parents=True, exist_ok=True)
-    shutil.move(str(src), out / "detections.jsonl")
-    meta = json.loads(next(tmp.rglob("meta.json")).read_text())
+    for f in src.parent.iterdir():          # detections + (if the Kaggle analysis worked) analysis outputs
+        shutil.move(str(f), out / f.name)
+    meta = json.loads((out / "meta.json").read_text())
     meta["video"] = str(video)
     (out / "meta.json").write_text(json.dumps(meta, indent=2))
-    print(f"detections -> {out} (Kaggle took {meta.get('kaggle_minutes')} min). Running the analysis ...")
+    if (out / "analysis.json").exists():
+        A = json.loads((out / "analysis.json").read_text())
+        A["meta"]["video"] = str(video)
+        (out / "analysis.json").write_text(json.dumps(A, separators=(",", ":")))
+        print(f"done on Kaggle: detection {meta.get('kaggle_minutes')} min + analysis {meta.get('analysis_minutes')} min -> {out}")
+        print(json.dumps(A["summary"], indent=1))
+        return
+    print(f"detections -> {out} (Kaggle took {meta.get('kaggle_minutes')} min). Running the analysis locally ...")
     from pickleball.analysis import run_analysis
     res = run_analysis(out, players, dict(kv.split("=", 1) for kv in names.split(",") if "=" in kv))
     print(json.dumps(res["summary"], indent=1))
@@ -153,7 +162,7 @@ def main():
     a = ap.parse_args()
     video = Path(a.video)
     if a.cmd == "push":
-        push(video)
+        push(video, a.players)
     elif a.cmd == "status":
         status(video)
     else:

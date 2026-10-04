@@ -4,12 +4,13 @@ Pushed by training/kaggle_detect.py, which fills in STEM and attaches two privat
   pickleball-code  (pickleball/ package, configs/cameras/, models: ball, court, yolo11m-pose)
   pbvid-<slug>     (the match video, <STEM>.mp4)
 The video is split in two halves, one per T4 GPU, and the results are merged into
-/kaggle/working/out/{detections.jsonl, meta.json}. Analysis (fast) runs locally after `fetch`.
+/kaggle/working/out/{detections.jsonl, meta.json}; then the full analysis runs here too (fetch only downloads).
 """
 import glob, json, os, subprocess, sys, time
 from pathlib import Path
 
 STEM = "__STEM__"
+PLAYERS = int("__PLAYERS__")   # 2 = singles, 4 = doubles (for the analysis step)
 T0 = time.time()
 log = lambda *a: print(f"[{(time.time() - T0) / 60:5.1f} min]", *a, flush=True)
 
@@ -70,11 +71,25 @@ with open(out / "detections.jsonl", "w") as fo:
         with open(work / f"part{g}" / "detections.jsonl") as fi:
             for line in fi:
                 fo.write(line)
-meta = {**metas[0], "first_frame": metas[0]["first_frame"], "last_frame": metas[1]["last_frame"], "video": f"{STEM}.mp4",
+meta = {**metas[0], "first_frame": metas[0]["first_frame"], "last_frame": metas[1]["last_frame"], "video": video,
         "kaggle_minutes": round((time.time() - T0) / 60, 1)}
 (out / "meta.json").write_text(json.dumps(meta, indent=2))
 for g in range(2):
     for f in (work / f"part{g}").iterdir():
         f.unlink()
     (work / f"part{g}").rmdir()
-log("done:", meta)
+log("detection done:", meta)
+
+# analysis on Kaggle too (hit/bounce models, paddle checks on the GPU, 3D paths, shot types); fetch then only downloads.
+# If it fails, the detections are still there and fetch runs the analysis locally.
+try:
+    sys.path.insert(0, str(code))
+    from pickleball.analysis import run_analysis
+    res = run_analysis(out, PLAYERS)
+    meta["analysis_minutes"] = round((time.time() - T0) / 60 - meta["kaggle_minutes"], 1)
+    (out / "meta.json").write_text(json.dumps(meta, indent=2))
+    log("analysis done:", res["summary"]["rallies"], "rallies,", res["summary"]["shots"], "shots")
+except Exception:
+    import traceback
+    traceback.print_exc()
+    log("analysis failed on Kaggle - fetch will run it locally")
