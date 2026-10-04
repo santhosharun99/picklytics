@@ -138,6 +138,9 @@ function show(name) {
       <div class="ins">${P.insights.map(i => `<div><span class="badge ${i.kind}">${i.kind}</span><span>${i.text}${i.low_sample ? ` <span class="small">small sample (${i.n})</span>` : ""}</span>${clipButtons(i.rallies)}</div>`).join("") || '<span class="empty">Not enough data.</span>'}</div>
     </section>
     <section class="grid">
+      <div class="card" style="grid-column: span 3"><h2>Win probability &amp; big points</h2><p class="why">Live chance of winning the match before each rally (side-out scoring model that learns each player's serve-rally win rate as the match goes; starts at about 50%). Dots = the most important rallies (where winning or losing the rally moved the match odds most, for equal players at that score); click to watch. "Big points" = the top quarter of rallies by importance.</p><div id="wp"></div></div>
+    </section>
+    <section class="grid">
       <div class="card"><h2>Shot mix</h2><p class="why">All shots this player hit, by type.</p><div id="mix"></div></div>
       <div class="card"><h2>Forehand vs backhand</h2><p class="why">Overall, and per shot type.</p><div id="strokes"></div></div>
       <div class="card"><h2>Third shot (when serving)</h2><p class="why">Choice and how often that rally was won.</p><div id="third"></div></div>
@@ -162,7 +165,7 @@ function show(name) {
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
-  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderRallies(name);
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderRallies(name);
   document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
 }
 
@@ -249,6 +252,29 @@ function renderEndings(P, col) {
     </div>
     ${Object.keys(ap.by_shot || {}).length ? `<h2 style="margin-top:14px">Which shots rush the opponent</h2>` + Object.entries(ap.by_shot).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.rushed_pct}%;background:${col}"></div></div><span style="text-align:right">${v.rushed_pct}% of ${v.n}</span></div>`).join("") : ""}` : '<span class="empty">No pressure data.</span>';
   $("#endings").innerHTML = rows.length ? `<table><tr><th></th><th>Last shot</th><th>Count</th><th></th></tr>${rows.map(([a, k, v, c]) => `<tr><td style="color:${c}">${a}</td><td>${k}</td><td>${v.count}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No rallies with a known winner where this player hit last.</span>';
+}
+function renderWP(P, name, col) {
+  const info = R.win_probability || {}, me = info.player === name;
+  const rs = R.rallies.filter(r => r.wp_before != null);
+  if (!rs.length) { $("#wp").innerHTML = '<span class="empty">No score data.</span>'; return; }
+  const val = r => 100 * (me ? r.wp_before : 1 - r.wp_before);
+  const W = 720, H = 190, L = 34, Rm = 10, T = 10, B = 24;
+  const X = i => L + (W - L - Rm) * i / Math.max(1, rs.length - 1), Y = v => T + (H - T - B) * (1 - v / 100);
+  const top = new Set([...rs].sort((a, b) => b.importance - a.importance).slice(0, 6).map(r => r.id));
+  let g = "";
+  rs.forEach((r, i) => { if (i && r.game !== rs[i - 1].game) g += `<line x1="${X(i - 0.5)}" y1="${T}" x2="${X(i - 0.5)}" y2="${H - B}" stroke="var(--text-muted)" stroke-dasharray="2 4"/><text x="${X(i - 0.5) + 4}" y="${T + 10}" font-size="11" fill="var(--text-muted)">Game ${r.game}</text>`; });
+  const path = rs.map((r, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(val(r)).toFixed(1)}`).join("");
+  const dots = rs.map((r, i) => top.has(r.id) ? `<circle cx="${X(i)}" cy="${Y(val(r))}" r="5" fill="${col}" stroke="var(--surface)" stroke-width="2" data-r="${r.id}" style="cursor:pointer"><title>Rally ${r.id} · game ${r.game} · ${r.score_before} (${r.server} serving) · winner ${r.winner || "?"}</title></circle>` : "").join("");
+  const yt = [0, 50, 100].map(v => `<text x="${L - 6}" y="${Y(v) + 4}" font-size="11" text-anchor="end" fill="var(--text-muted)">${v}%</text>`).join("");
+  const bp = P.big_points || {};
+  $("#wp").innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px" id="wpsvg">
+      <line x1="${L}" y1="${Y(50)}" x2="${W - Rm}" y2="${Y(50)}" stroke="var(--text-muted)" stroke-dasharray="3 3"/>${yt}${g}
+      <path d="${path}" fill="none" stroke="${col}" stroke-width="2"/>${dots}
+      <text x="${L}" y="${H - 6}" font-size="11" fill="var(--text-muted)">rallies in order →</text></svg>
+    ${bp.n_big ? `<div class="tiles" style="margin-top:10px">
+      <div class="tile"><div class="l">Big points won</div><div class="v">${bp.big_won_pct}%</div><div class="n">of ${bp.n_big} most important rallies${bp.n_big < 10 ? " · small sample" : ""} ${clipButtons(bp.big_rallies)}</div></div>
+      <div class="tile"><div class="l">Other rallies won</div><div class="v">${bp.rest_won_pct}%</div><div class="n">of ${bp.n_rest}</div></div></div>` : ""}`;
+  document.querySelectorAll("#wpsvg circle[data-r]").forEach(c => c.onclick = () => openClip(+c.dataset.r, [...top]));
 }
 function renderLength(P, col) {
   $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");

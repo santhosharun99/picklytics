@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
+from . import winprob
 from .depth import correct as correct_depth
 from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y, court_zone
 from .players import select_players
@@ -198,6 +199,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict]) -> dict:
     profile["running"] = running_profile(name, rallies)
     profile["placement"] = placement_profile(name, rallies)
     profile["pressure"] = pressure_profile(name, rallies)
+    profile["big_points"] = winprob.big_points(name, rallies)
     profile["insights"] = insights(profile, opponent)
     return profile
 
@@ -379,6 +381,15 @@ def speed_profile(name: str, rallies: list[dict]) -> dict:
     return out
 
 
+def fisher_p(k1: int, n1: int, k2: int, n2: int) -> float:
+    """Two-sided Fisher exact test: are k1/n1 and k2/n2 different rates?"""
+    from math import comb
+    K, N = k1 + k2, n1 + n2
+    pr = lambda k: comb(n1, k) * comb(n2, K - k) / comb(N, K)
+    p0 = pr(k1)
+    return min(1.0, sum(pr(k) for k in range(max(0, K - n2), min(n1, K) + 1) if pr(k) <= p0 * (1 + 1e-9)))
+
+
 def insights(p: dict, opponent: str) -> list[dict]:
     """Plain-language strengths / weaknesses with their sample size; small samples are flagged."""
     out = []
@@ -416,14 +427,24 @@ def insights(p: dict, opponent: str) -> list[dict]:
         add("strength" if better == "long" else "weakness",
             f"Wins {sh['value']}% of short rallies vs {lg['value']}% of long ones: better in {better} rallies.",
             sh["n"] + lg["n"], lg["rallies"] if better == "long" else sh["rallies"])
+    bp = p.get("big_points") or {}
+    if bp.get("n_big", 0) >= 10 and bp["big_won_pct"] is not None and bp["rest_won_pct"] is not None:
+        d = bp["big_won_pct"] - bp["rest_won_pct"]
+        k1, k2 = round(bp["big_won_pct"] * bp["n_big"] / 100), round(bp["rest_won_pct"] * bp["n_rest"] / 100)
+        if abs(d) >= 15 and fisher_p(k1, bp["n_big"], k2, bp["n_rest"]) < 0.1:  # only claim it when unlikely to be chance
+            add("strength" if d > 0 else "weakness",
+                f"{'Raises' if d > 0 else 'Drops'} their level on big points: wins {bp['big_won_pct']}% of the most important rallies "
+                f"vs {bp['rest_won_pct']}% of the rest ({bp['n_big']} big rallies).", bp["n_big"], bp["big_rallies"])
     pr = p.get("pressure") or {}
     fc, ap = pr.get("faced", {}), pr.get("applied", {})
     if fc.get("n_rushed", 0) >= 5 and fc.get("error_when_rushed_pct") is not None and fc.get("error_otherwise_pct") is not None:
         a, b = fc["error_when_rushed_pct"], fc["error_otherwise_pct"]
-        if a - b >= 10:
+        n_calm = fc["n"] - fc["n_rushed"]
+        sig = fisher_p(round(a * fc["n_rushed"] / 100), fc["n_rushed"], round(b * n_calm / 100), n_calm) < 0.1
+        if a - b >= 10 and sig:
             add("weakness", f"Breaks down under time pressure: {a}% of rushed shots end the rally as an error vs {b}% otherwise "
                             f"({fc['n_rushed']} rushed shots).", fc["n_rushed"], fc["rushed_rallies"])
-        elif a <= b:
+        elif a < b and sig:
             add("strength", f"Holds up under time pressure: errors on {a}% of rushed shots vs {b}% otherwise "
                             f"({fc['n_rushed']} rushed shots).", fc["n_rushed"], fc["rushed_rallies"])
     if ap.get("by_shot"):
@@ -550,6 +571,7 @@ def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: 
         "source": f"{len(rallies)} automatically detected rallies in {games} games (full match; server and point winner from tracking"
                   + (f"; scoreboard agrees on {agree}/{len(checked)}" if checked else "") + ")",
         "video": video_url,
+        "win_probability": winprob.annotate(rallies, a, b),  # adds wp_before / wp_after / importance per rally
         "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
         "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
     }
