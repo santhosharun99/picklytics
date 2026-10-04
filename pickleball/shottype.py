@@ -4,7 +4,8 @@ Features per shot: hitter / opponent depth, ball speed, net clearance, landing d
 shot number, previous shot, and body pose around contact. Trained on analyst-tagged shots
 (training/shot_type_cv.py --save -> models/shot_clf.joblib). Taxonomy follows the tags: drive, drop, dink,
 reset, groundstroke, lob, overhead (volley is a separate flag). Leave-one-rally-out CV on 100 tagged rally shots:
-83% vs 57% for the rules (drives 97%, resets 77%; drop / lob / overhead / groundstroke too few tags yet).
+83% vs 57% for the rules - BUT leave-one-MATCH-out (the honest test) gives 74% = always "drive", macro-F1 0.12
+(rules 0.16): soft shots are not learned yet. Needs varied tags from several matches (doubles).
 """
 from pathlib import Path
 
