@@ -249,6 +249,8 @@ function renderEndings(P, col) {
       <div class="tile"><div class="l">Typical top speed</div><div class="v">${rn.typical_peak_mph}<span style="font-size:14px"> mph</span></div><div class="n">per rally (median)</div></div>
       <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${clipButtons(rn.top_sprints.map(x => x.rally))}</div></div>
       <div class="tile"><div class="l">Time sprinting</div><div class="v">${rn.sprint_time_pct}%</div><div class="n">of rally time above 6 mph</div></div>
+      ${P.net && P.net.rallies ? `<div class="tile"><div class="l">Gets to the net</div><div class="v">${P.net.reached_pct}%</div><div class="n">of ${P.net.rallies} rallies · ${P.net.median_arrival_s ?? "–"} s after the serve (median)</div></div>
+      <div class="tile"><div class="l">First to the net</div><div class="v">${P.net.first_pct ?? "–"}%</div><div class="n">of ${P.net.n_contested} rallies where someone got there · won ${P.net.won_when_first_pct ?? "–"}% when first, ${P.net.won_when_opp_first_pct ?? "–"}% when the opponent was ${clipButtons(P.net.first_rallies)}</div></div>` : ""}
       <div class="tile"><div class="l">Movement per shot</div><div class="v">${rn.ft_per_shot ?? "–"}<span style="font-size:14px"> ft</span></div><div class="n">${rn.ft_per_min ?? "–"} ft per minute of rally</div></div>
     </div>` : '<span class="empty">No movement data.</span>';
   const pr = P.pressure || {}, fc = pr.faced || {}, ap = pr.applied || {};
