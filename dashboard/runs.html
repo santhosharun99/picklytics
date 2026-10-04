@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pickleball Analyzer</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f3ef; --surface-1: #fcfcfb; --surface-2: #f0efec; --border: #e2e1dc;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #85847f;
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+  --court: #256abf; --court-kitchen: #184f95; --court-line: #ffffff; --court-out: #3f6b4a;
+  --seq-0: #f0efec; --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
+  --accent-bg: #e9f1fc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text-primary);
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--surface-1); }
+header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+header .sub { color: var(--text-secondary); font-size: 13px; }
+select, button { font: inherit; color: inherit; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+main { max-width: 1400px; margin: 0 auto; padding: 20px 24px 60px; display: grid; gap: 20px; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
+.card h2 { font-size: 14px; margin: 0 0 12px; font-weight: 650; }
+.card h2 .hint { font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.tile .label { color: var(--text-secondary); font-size: 12px; }
+.tile .value { font-size: 26px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.row2 { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 20px; }
+.row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 1000px) { .row2, .row3 { grid-template-columns: 1fr; } }
+video { width: 100%; border-radius: 8px; background: #000; display: block; }
+.novideo { padding: 40px; text-align: center; color: var(--text-muted); background: var(--surface-2); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th { color: var(--text-secondary); font-weight: 500; font-size: 12px; position: sticky; top: 0; background: var(--surface-1); }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--surface-2); }
+tr.active { background: var(--accent-bg) !important; }
+.scroll { max-height: 320px; overflow: auto; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; color: var(--text-secondary); font-size: 12px; margin-bottom: 8px; }
+.players { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.pstats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 14px; }
+.pstats .label { color: var(--text-secondary); font-size: 12px; }
+.pstats .value { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.split { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; margin: 4px 0 2px; }
+.split div { height: 100%; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.chip { border-radius: 999px; padding: 3px 10px; font-size: 12px; }
+.chip.on { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+svg text { fill: var(--text-secondary); font-size: 11px; }
+.tooltip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 6px; padding: 6px 9px; font-size: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15); display: none; z-index: 10; max-width: 260px; }
+.muted { color: var(--text-muted); }
+.now { font-size: 13px; color: var(--text-secondary); margin-top: 8px; min-height: 20px; }
+</style>
+<link rel="stylesheet" href="theme.css?v=3">
+</head>
+<body>
+<header>
+  <div>
+    <h1 id="title">Pickleball Analyzer</h1>
+    <div class="sub" id="subtitle">Load a run to see the analysis</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <label class="muted" for="run">Match</label>
+    <select id="run"></select>
+  </div>
+</header>
+<main>
+  <section class="tiles" id="tiles"></section>
+
+  <section class="row2">
+    <div class="card">
+      <h2>Match video <span class="hint">annotated, main camera only</span></h2>
+      <div id="videoBox"></div>
+      <div class="now" id="now"></div>
+    </div>
+    <div class="card">
+      <h2>Live court</h2>
+      <div class="legend" id="liveLegend"></div>
+      <svg id="live" viewBox="0 0 280 520" style="width:100%;max-height:560px"></svg>
+    </div>
+  </section>
+
+  <section class="row2">
+    <div class="card">
+      <h2>Rallies <span class="hint">click to jump</span></h2>
+      <div class="scroll"><table id="rallies"></table></div>
+    </div>
+    <div class="card">
+      <h2>Shots in rally <span class="hint" id="rallyLabel"></span></h2>
+      <div class="scroll"><table id="shotlog"></table></div>
+    </div>
+  </section>
+
+  <section class="players" id="players"></section>
+
+  <section class="row3">
+    <div class="card">
+      <h2>Shot mix</h2>
+      <div class="legend" id="mixLegend"></div>
+      <div id="mix"></div>
+    </div>
+    <div class="card">
+      <h2>Shot placement <span class="hint">where each player's shots landed</span></h2>
+      <div class="chips" id="placementChips"></div>
+      <div class="legend" id="placementLegend"></div>
+      <svg id="placement" viewBox="0 0 280 520" style="width:100%"></svg>
+    </div>
+    <div class="card">
+      <h2>Rally length <span class="hint">shots per rally</span></h2>
+      <div id="lengths"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Court coverage <span class="hint">where each player stood during rallies, shown on their own half, net at top</span></h2>
+    <div class="players" id="heatmaps"></div>
+  </section>
+</main>
+<div class="tooltip" id="tip"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs = {}, parent) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+};
+const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
+const SHOT_ORDER = ["serve", "return", "third-shot drop", "third-shot drive", "third-shot groundstroke",
+  "dink", "drop", "drive", "volley", "reset", "lob", "overhead", "groundstroke"];
+
+// ---------- tooltip ----------
+const tip = $("#tip");
+function hover(node, html) {
+  node.addEventListener("mousemove", e => {
+    tip.innerHTML = typeof html === "function" ? html() : html;
+    tip.style.display = "block";
+    const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8);
+    tip.style.left = x + "px"; tip.style.top = (e.clientY + 14) + "px";
+  });
+  node.addEventListener("mouseleave", () => tip.style.display = "none");
+}
+
+// ---------- court drawing (x: 0..20 ft, y: 0..44 ft; far baseline at top) ----------
+const S = 10, PADX = 40, PADY = 40;
+const cx = x => PADX + x * S, cy = y => PADY + y * S;
+function drawCourt(svg, {half = false} = {}) {
+  svg.innerHTML = "";
+  const y0 = half ? 22 : 0, y1 = 44;
+  if (half) {
+    svg.setAttribute("viewBox", `${cx(-6) - 6} ${cy(22) - 16} ${32 * S + 12} ${34 * S + 22}`);
+    el("rect", {x: cx(-6) - 6, y: cy(22) - 16, width: 32 * S + 12, height: 34 * S + 22, fill: "var(--court-out)", rx: 8}, svg);
+  } else {
+    el("rect", {x: 0, y: cy(y0) - 40, width: 280, height: (y1 - y0) * S + 80, fill: "var(--court-out)", rx: 8}, svg);
+  }
+  el("rect", {x: cx(0), y: cy(y0), width: 20 * S, height: (y1 - y0) * S, fill: "var(--court)"}, svg);
+  const kTop = half ? 22 : 15;
+  el("rect", {x: cx(0), y: cy(kTop), width: 20 * S, height: (29 - kTop) * S, fill: "var(--court-kitchen)"}, svg);
+  const line = (x1, y1_, x2, y2, w = 2) => el("line", {x1: cx(x1), y1: cy(y1_), x2: cx(x2), y2: cy(y2),
+    stroke: "var(--court-line)", "stroke-width": w, "stroke-linecap": "round"}, svg);
+  line(0, y0, 0, 44); line(20, y0, 20, 44); line(0, 44, 20, 44);
+  if (!half) { line(0, 0, 20, 0); line(0, 15, 20, 15); line(10, 0, 10, 15); }
+  line(0, 29, 20, 29); line(10, 29, 10, 44);
+  el("line", {x1: cx(-1.5), y1: cy(22), x2: cx(21.5), y2: cy(22), stroke: "var(--court-line)", "stroke-width": 4, opacity: .9}, svg);
+  return svg;
+}
+
+// ---------- data ----------
+let A = null, RUN = null, playerColor = {}, currentRally = null;
+const color = pid => playerColor[pid] || "var(--text-muted)";
+const pname = pid => (A.players[pid] && A.players[pid].name) || pid || "?";
+
+async function loadRuns() {
+  let runs = [];
+  try { runs = await (await fetch("../outputs/runs.json", {cache: "no-store"})).json(); } catch {}
+  const sel = $("#run");
+  sel.innerHTML = runs.map(r => `<option value="${r.dir}">${r.label}</option>`).join("");
+  const want = new URLSearchParams(location.search).get("run");
+  if (want) sel.value = want;
+  sel.onchange = () => { history.replaceState(null, "", `?run=${encodeURIComponent(sel.value)}`); load(sel.value); };
+  if (sel.value) load(sel.value);
+  else $("#subtitle").textContent = "No runs yet: run analyze.py on a video first.";
+}
+
+async function load(dir) {
+  RUN = dir;
+  A = await (await fetch(`../outputs/${dir}/analysis.json`, {cache: "no-store"})).json();
+  const ids = Object.keys(A.players).sort();
+  playerColor = Object.fromEntries(ids.map((p, i) => [p, `var(--series-${(A.meta.n_players === 4 ? Math.floor(i / 2) : i) + 1})`]));
+  $("#title").textContent = ids.map(pname).join(" vs ");
+  $("#subtitle").textContent = `${A.meta.video.split("/").pop()} · ${A.meta.n_players === 2 ? "singles" : "doubles"}`;
+  renderTiles(); renderVideo(); renderRallies(); renderPlayers(); renderMix(); renderPlacement(); renderLengths(); renderHeatmaps();
+  const legend = ids.map(p => `<span><span class="swatch" style="background:${color(p)}"></span>${pname(p)}</span>`).join("");
+  $("#liveLegend").innerHTML = legend + `<span><span class="swatch" style="background:#ffd23f"></span>Bounce</span>`;
+  $("#mixLegend").innerHTML = legend; $("#placementLegend").innerHTML = legend;
+  drawLive(0);
+}
+
+function renderTiles() {
+  const s = A.summary;
+  const tiles = [["Rallies", s.rallies], ["Shots", s.shots], ["Avg shots / rally", s.avg_rally_shots],
+    ["Longest rally", `${s.longest_rally_shots} shots`], ["Analysed play", fmtTime(s.main_view_s)],
+    ["Ball found", `${s.ball_frames_pct}%`]];
+  $("#tiles").innerHTML = tiles.map(([l, v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join("");
+}
+
+// ---------- video + live court ----------
+let video = null;
+function renderVideo() {
+  $("#videoBox").innerHTML = `<video id="vid" controls preload="metadata" src="../outputs/${RUN}/annotated.mp4"></video>`;
+  video = $("#vid");
+  video.onerror = () => $("#videoBox").innerHTML = `<div class="novideo">No annotated video for this run (analysed with --no-render).</div>`;
+  video.ontimeupdate = () => drawLive(videoToMatch(video.currentTime));
+}
+// The annotated video contains only main-view frames, back to back: map its clock to match time.
+function videoToMatch(vt) {
+  let acc = 0;
+  for (const seg of A.segments) {
+    const len = seg.end_t - seg.start_t;
+    if (vt <= acc + len) return seg.start_t + (vt - acc);
+    acc += len;
+  }
+  return A.segments.length ? A.segments[A.segments.length - 1].end_t : vt;
+}
+function matchToVideo(t) {
+  let acc = 0;
+  for (const seg of A.segments) {
+    if (t <= seg.end_t) return acc + Math.max(0, t - seg.start_t);
+    acc += seg.end_t - seg.start_t;
+  }
+  return acc;
+}
+function seek(t) { if (video && video.readyState) { video.currentTime = matchToVideo(t); video.play(); } }
+
+function drawLive(t) {
+  const svg = drawCourt($("#live"));
+  // nearest position sample
+  const P = A.positions;
+  let lo = 0, hi = P.length - 1;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (P[m].t < t) lo = m + 1; else hi = m; }
+  const cur = P[lo];
+  for (const b of A.bounces) {
+    const age = t - b.t;
+    if (age >= 0 && age < 3) el("circle", {cx: cx(b.court[0]), cy: cy(b.court[1]), r: 5, fill: "#ffd23f",
+      opacity: 1 - age / 3.5, stroke: "var(--surface-1)", "stroke-width": 2}, svg);
+  }
+  if (cur && Math.abs(cur.t - t) < 0.5) {
+    for (const [pid, [x, y]] of Object.entries(cur.p)) {
+      el("circle", {cx: cx(x), cy: cy(y), r: 9, fill: color(pid), stroke: "var(--surface-1)", "stroke-width": 2}, svg);
+      const lab = el("text", {x: cx(x) + 12, y: cy(y) + 4, style: "fill:var(--court-line);font-weight:600"}, svg);
+      lab.textContent = pname(pid);
+    }
+  }
+  const rally = A.rallies.find(r => t >= r.start_t && t <= r.end_t);
+  const shot = [...A.shots].reverse().find(s => s.t <= t && t - s.t < 1.5);
+  $("#now").innerHTML = rally
+    ? `Rally ${rally.index} · ${shot ? `<b>${pname(shot.player)}</b> ${shot.shot_type}${shot.stroke ? ", " + shot.stroke : ""}${shot.volley ? ", volley" : ""}${shot.speed_mph ? ` · ${Math.round(shot.speed_mph)} mph` : ""}` : "in play"}`
+    : `<span class="muted">${fmtTime(t)} · between rallies</span>`;
+  if (rally && rally.index !== currentRally) showRally(rally.index, false);
+  document.querySelectorAll("#shotlog tbody tr").forEach(tr => tr.classList.toggle("active", shot && +tr.dataset.frame === shot.frame));
+}
+
+// ---------- rally + shot tables ----------
+function renderRallies() {
+  const rows = A.rallies.map(r => `<tr data-r="${r.index}"><td>${r.index}</td><td>${fmtTime(r.start_t)}</td>
+    <td>${r.shots}</td><td>${r.duration_s.toFixed(1)} s</td>
+    <td><span class="swatch" style="background:${color(r.server)}"></span>${pname(r.server)}</td>
+    <td><span class="swatch" style="background:${color(r.last_hitter)}"></span>${pname(r.last_hitter)}</td></tr>`).join("");
+  $("#rallies").innerHTML = `<thead><tr><th>#</th><th>Time</th><th>Shots</th><th>Duration</th><th>Server</th><th>Last shot by</th></tr></thead><tbody>${rows}</tbody>`;
+  $("#rallies").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => {
+    const r = A.rallies.find(x => x.index === +tr.dataset.r); showRally(r.index, true); seek(r.start_t);
+  });
+  if (A.rallies.length) showRally(A.rallies[0].index, false);
+}
+function showRally(i, scroll) {
+  currentRally = i;
+  document.querySelectorAll("#rallies tbody tr").forEach(tr => tr.classList.toggle("active", +tr.dataset.r === i));
+  const shots = A.shots.filter(s => s.rally === i);
+  $("#rallyLabel").textContent = `rally ${i}`;
+  $("#shotlog").innerHTML = `<thead><tr><th>#</th><th>Player</th><th>Shot</th><th>Stroke</th><th>Speed</th><th>From</th><th>Landed</th></tr></thead><tbody>` +
+    shots.map(s => `<tr data-frame="${s.frame}" data-t="${s.t}"><td>${s.index + 1}</td>
+      <td><span class="swatch" style="background:${color(s.player)}"></span>${pname(s.player)}</td>
+      <td>${s.shot_type}${s.volley ? " (volley)" : ""}</td><td>${s.stroke || "–"}</td>
+      <td>${s.speed_mph ? Math.round(s.speed_mph) + " mph" : "–"}</td><td>${s.hitter_zone || "–"}</td>
+      <td>${s.landing_zone ? s.landing_zone + (s.out ? " (out)" : "") : "–"}</td></tr>`).join("") + "</tbody>";
+  $("#shotlog").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => seek(+tr.dataset.t - 0.5));
+  if (scroll) $("#shotlog").parentElement.scrollTop = 0;
+}
+
+// ---------- players ----------
+function renderPlayers() {
+  $("#players").innerHTML = Object.entries(A.players).sort().map(([pid, p]) => {
+    const fh = p.strokes.forehand || 0, bh = p.strokes.backhand || 0, tot = fh + bh || 1;
+    const stat = (l, v) => `<div><div class="label">${l}</div><div class="value">${v ?? "–"}</div></div>`;
+    return `<div class="card"><h2><span class="swatch" style="background:${color(pid)}"></span>${p.name}
+      <span class="hint">${p.dominant_hand ? p.dominant_hand + "-handed (inferred)" : ""}</span></h2>
+      <div class="pstats">
+        ${stat("Shots", p.shots)}${stat("Avg shot", p.avg_shot_mph ? p.avg_shot_mph + " mph" : null)}${stat("Fastest shot", p.max_shot_mph ? p.max_shot_mph + " mph" : null)}
+        ${stat("Distance run", Math.round(p.distance_ft) + " ft")}${stat("Top speed", p.top_speed_mph + " mph")}${stat("Time in kitchen zone", p.kitchen_time_pct + "%")}
+        ${stat("Volleys", p.volleys)}${stat("Avg distance from net", p.avg_depth_from_net_ft != null ? p.avg_depth_from_net_ft + " ft" : null)}
+      </div>
+      <div style="margin-top:12px" class="label muted">Forehand ${fh} · Backhand ${bh}</div>
+      <div class="split"><div style="width:${100 * fh / tot}%;background:${color(pid)}"></div><div style="width:${100 * bh / tot}%;background:var(--border)"></div></div>
+    </div>`;
+  }).join("");
+}
+
+// ---------- shot mix: grouped horizontal bars ----------
+function renderMix() {
+  const ids = Object.keys(A.players).sort();
+  const types = SHOT_ORDER.filter(t => ids.some(p => A.players[p].shot_types[t]));
+  const max = Math.max(1, ...ids.flatMap(p => types.map(t => A.players[p].shot_types[t] || 0)));
+  const barH = 9, gap = 2, groupH = ids.length * (barH + gap) + 10, labelW = 118, W = 360;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${types.length * groupH + 4}`, style: "width:100%"});
+  types.forEach((t, gi) => {
+    const y0 = gi * groupH;
+    const lab = el("text", {x: 0, y: y0 + groupH / 2, "dominant-baseline": "middle"}, svg); lab.textContent = cap(t);
+    ids.forEach((p, i) => {
+      const v = A.players[p].shot_types[t] || 0, w = (W - labelW - 30) * v / max;
+      const y = y0 + i * (barH + gap);
+      if (v) el("rect", {x: labelW, y, width: Math.max(w, 2), height: barH, rx: 3, fill: color(p)}, svg);
+      const hit = el("rect", {x: labelW, y: y - 1, width: W - labelW, height: barH + 2, fill: "transparent"}, svg);
+      hover(hit, `<b>${pname(p)}</b> · ${cap(t)}: ${v}`);
+      if (v) { const n = el("text", {x: labelW + w + 5, y: y + barH / 2, "dominant-baseline": "middle"}, svg); n.textContent = v; }
+    });
+  });
+  $("#mix").innerHTML = ""; $("#mix").appendChild(svg);
+}
+
+// ---------- placement ----------
+let placementFilter = "all";
+function renderPlacement() {
+  const types = SHOT_ORDER.filter(t => A.shots.some(s => s.shot_type === t && s.landing_court));
+  $("#placementChips").innerHTML = ["all", ...types].map(t =>
+    `<button class="chip ${t === placementFilter ? "on" : ""}" data-t="${t}">${t === "all" ? "All shots" : cap(t)}</button>`).join("");
+  $("#placementChips").querySelectorAll("button").forEach(b => b.onclick = () => { placementFilter = b.dataset.t; renderPlacement(); });
+  const svg = drawCourt($("#placement"));
+  for (const s of A.shots) {
+    if (!s.landing_court || (placementFilter !== "all" && s.shot_type !== placementFilter)) continue;
+    const dot = el("circle", {cx: cx(s.landing_court[0]), cy: cy(s.landing_court[1]), r: 5, fill: color(s.player),
+      stroke: "var(--surface-1)", "stroke-width": 2}, svg);
+    hover(dot, `<b>${pname(s.player)}</b> · ${s.shot_type}${s.volley ? " (volley)" : ""}<br>Rally ${s.rally}, shot ${s.index + 1}${s.speed_mph ? ` · ${Math.round(s.speed_mph)} mph` : ""}${s.out ? "<br>Out" : ""}`);
+    dot.style.cursor = "pointer"; dot.onclick = () => seek(s.t - 0.5);
+  }
+}
+
+// ---------- rally length histogram ----------
+function renderLengths() {
+  const counts = {};
+  A.rallies.forEach(r => counts[r.shots] = (counts[r.shots] || 0) + 1);
+  const keys = Object.keys(counts).map(Number).sort((a, b) => a - b);
+  const W = 360, H = 200, pad = 26;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H + pad}`, style: "width:100%"});
+  if (!keys.length) { $("#lengths").innerHTML = `<div class="muted">No rallies</div>`; return; }
+  const lo = keys[0], hi = keys[keys.length - 1], n = hi - lo + 1, max = Math.max(...Object.values(counts));
+  const bw = Math.min(36, (W - 20) / n);
+  el("line", {x1: 10, y1: H, x2: W - 10, y2: H, stroke: "var(--border)"}, svg);
+  for (let k = lo; k <= hi; k++) {
+    const v = counts[k] || 0, h = (H - 20) * v / max, x = 10 + (k - lo) * bw;
+    if (v) el("path", {d: `M${x + 1},${H} v${-h + 4} q0,-4 4,-4 h${bw - 10} q4,0 4,4 v${h - 4} z`, fill: "var(--series-1)"}, svg);
+    const hit = el("rect", {x, y: 0, width: bw, height: H, fill: "transparent"}, svg);
+    hover(hit, `${k} shots: ${v} ${v === 1 ? "rally" : "rallies"}`);
+    if (n <= 20 || k % 5 === 0) { const t = el("text", {x: x + bw / 2, y: H + 16, "text-anchor": "middle"}, svg); t.textContent = k; }
+  }
+  $("#lengths").innerHTML = ""; $("#lengths").appendChild(svg);
+}
+
+// ---------- heatmaps (own half, net at top) ----------
+function renderHeatmaps() {
+  const box = $("#heatmaps"); box.innerHTML = "";
+  for (const [pid, p] of Object.entries(A.players).sort()) {
+    const {grid, cell_ft, origin} = p.heatmap;
+    const total = grid.flat().reduce((a, b) => a + b, 0) || 1;
+    const max = Math.max(...grid.flat()) || 1;
+    const wrap = document.createElement("div");
+    wrap.innerHTML = `<div style="margin-bottom:6px"><span class="swatch" style="background:${color(pid)}"></span><b>${p.name}</b></div>`;
+    const svg = drawCourt(el("svg", {style: "width:100%;max-width:320px"}), {half: true});
+    grid.forEach((row, gi) => row.forEach((v, gj) => {
+      if (!v) return;
+      const step = Math.min(6, 1 + Math.floor(6 * v / max));
+      const x = origin[0] + gj * cell_ft, y = origin[1] + gi * cell_ft;
+      const r = el("rect", {x: cx(x) + 1, y: cy(y) + 1, width: cell_ft * S - 2, height: cell_ft * S - 2, rx: 2,
+        fill: `var(--seq-${step})`, opacity: 0.92}, svg);
+      hover(r, `<b>${p.name}</b><br>${(100 * v / total).toFixed(1)}% of rally time<br>${(y - 22).toFixed(0)}–${(y - 22 + cell_ft).toFixed(0)} ft from net`);
+    }));
+    wrap.appendChild(svg);
+    box.appendChild(wrap);
+  }
+}
+
+loadRuns();
+</script>
+</body>
+</html>

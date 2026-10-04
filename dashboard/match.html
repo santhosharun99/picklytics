@@ -60,12 +60,14 @@ svg text { fill: var(--text-secondary); font-size: 11px; }
 .modal .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 button.plain { border: 1px solid var(--border); background: var(--surface-2); color: inherit; font: inherit; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 </style>
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="theme.css?v=3">
+<script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
+
 </head>
 <body>
 <header>
   <div><h1 id="title">Match analysis</h1><div class="sub" id="source"></div></div>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="tabs" id="tabs"></div><a class="tab" id="scoutLink" style="text-decoration:none;background:var(--ball);border-color:var(--ball);color:var(--paddle);font-weight:600">Scouting sheet →</a></div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="tabs" id="tabs"></div><a class="tab noembed" id="scoutLink" style="text-decoration:none;background:var(--ball);border-color:var(--ball);color:var(--paddle);font-weight:600">Scouting sheet →</a></div>
 </header>
 <main id="main"></main>
 <div class="modal" id="modal"><div class="box">
@@ -366,9 +368,9 @@ const ACC = {
   ins: "Each finding shows how many rallies it rests on. It is only called a strength or weakness when the difference is unlikely to be chance (Fisher test, p < 0.1); otherwise it stays a pattern.",
   wp: "A model, not a measurement: it uses the reconstructed score, so it inherits the server (98%) and winner (96%) accuracy. One misread server shifts the score by a point or two (US Open game 2 runs about 2 points ahead of the scoreboard).",
   strokeWhy: "Forehand / backhand side: 95% right (74 of 78 tagged shots). Forced vs chosen is an estimate from foot movement (positions about ±1 ft): a long stretch without a step counts as near the body.",
-  situ: "Positions about ±1 ft, so zone borders blur by that much. Shot types (tested on matches the model never saw, 211 tagged shots from 4 matches): drives 88% found, dinks 70%, lobs 40%, drops 30%, resets 5%, overheads not yet ("groundstroke" now counts as drive). Treat drop / reset labels as rough. Positions about ±1 ft. Direction and depth come from landing spots (about ±1.5 ft).",
+  situ: "Positions about ±1 ft, so zone borders blur by that much. Shot types (tested on matches the model never saw, 211 tagged shots from 4 matches): drives 88% found, dinks 70%, lobs 40%, drops 30%, resets 5%, overheads not yet ('groundstroke' now counts as drive). Treat drop / reset labels as rough. Positions about ±1 ft. Direction and depth come from landing spots (about ±1.5 ft).",
   moveList: "Positions about ±1 ft, 10 times a second, smoothed over 0.5 s; arrows are averages. Hit timing is exact to one video frame (0.03 s), so 'rushed' is reliable to that level.",
-  mix: "Shot types (tested on matches the model never saw): serves and returns nearly always right; drives 88%, dinks 70%, lobs 40% found; drops 30% and resets 5% - still weak; overheads not yet ("groundstroke" now counts as drive). Improves with every review queue. Hits found: 86-94%.",
+  mix: "Shot types (tested on matches the model never saw): serves and returns nearly always right; drives 88%, dinks 70%, lobs 40% found; drops 30% and resets 5% - still weak; overheads not yet ('groundstroke' now counts as drive). Improves with every review queue. Hits found: 86-94%.",
   strokes: "Forehand / backhand: 95% right (74 of 78 tagged shots).",
   third: "Third-shot type: drives are recognised (88%), drops only 30% on unseen matches, so the drive vs drop split is rough; rally winner 96%. Pace ±3-4 mph; net clearance from the 3D ball path; landing depth about ±1.5 ft.",
   speed: "Typical error ±3-4 mph. Only shots where two independent measurements (flight time and 3D path) agree within 20% are used; top speeds only when they agree closely.",

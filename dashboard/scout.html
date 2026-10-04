@@ -47,12 +47,14 @@ main { max-width: 1100px; margin: 0 auto; padding: 18px 24px 40px; display: grid
   .card { break-inside: avoid; }
 }
 </style>
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="theme.css?v=3">
+<script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
+
 </head>
 <body>
 <header>
   <div><h1 id="title">Scouting sheet</h1><div class="sub" id="sub"></div></div>
-  <div class="tabs noprint"><span id="tabs" class="tabs"></span><button class="tab" onclick="print()">Print</button><a class="tab" id="back">Full analysis</a></div>
+  <div class="tabs noprint"><span id="tabs" class="tabs"></span><button class="tab" onclick="print()">Print</button><a class="tab noembed" id="back">Full analysis</a></div>
 </header>
 <main>
   <section class="card"><h2>How to play them</h2><div class="plan" id="plan"></div></section>

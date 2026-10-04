@@ -571,10 +571,12 @@ def insights(p: dict, opponent: str) -> list[dict]:
     s = p["summary"]
     if s["won_on_serve_pct"]["value"] is not None and s["won_on_return_pct"]["value"] is not None:
         a, b = s["won_on_serve_pct"], s["won_on_return_pct"]
+        k1, k2 = round(a["value"] * a["n"] / 100), round(b["value"] * b["n"] / 100)
+        sig = fisher_p(k1, a["n"], k2, b["n"]) < 0.1
         if a["value"] - b["value"] >= 20:
-            add("strength", f"Much stronger when serving ({a['value']}% rallies won) than returning ({b['value']}%).", a["n"] + b["n"], a["rallies"])
+            add("strength" if sig else "pattern", f"Much stronger when serving ({a['value']}% rallies won) than returning ({b['value']}%).", a["n"] + b["n"], a["rallies"])
         elif b["value"] - a["value"] >= 20:
-            add("strength", f"Dangerous on return: wins {b['value']}% of return rallies vs {a['value']}% on serve.", a["n"] + b["n"], b["rallies"])
+            add("strength" if sig else "pattern", f"Dangerous on return: wins {b['value']}% of return rallies vs {a['value']}% on serve.", a["n"] + b["n"], b["rallies"])
     st = p["stroke"]
     tot = sum(st.values())
     if tot:
@@ -583,11 +585,11 @@ def insights(p: dict, opponent: str) -> list[dict]:
     errs = p["error_shots"]
     if errs:
         k, v = next(iter(errs.items()))
-        add("weakness", f"Most rallies lost on their own {k} ({v['count']}x).", v["count"], v["rallies"])
+        add("pattern", f"Most rallies lost on their own {k} ({v['count']}x).", v["count"], v["rallies"])  # descriptive, not tested
     fins = p["finishing_shots"]
     if fins:
         k, v = next(iter(fins.items()))
-        add("strength", f"Most rallies won with a {k} ({v['count']}x).", v["count"], v["rallies"])
+        add("pattern", f"Most rallies won with a {k} ({v['count']}x).", v["count"], v["rallies"])  # descriptive, not tested
     for k, v in p["third_shot"].items():
         if v["count"] >= 2:
             add("pattern", f"Third shot: {k} {v['count']}x, rallies won {v['won_pct']}%.", v["count"], v["rallies"])
@@ -595,7 +597,9 @@ def insights(p: dict, opponent: str) -> list[dict]:
     sh, lg = rl["short (<=3 shots)"], rl["long (7+)"]
     if sh["value"] is not None and lg["value"] is not None and abs(sh["value"] - lg["value"]) >= 25:
         better = "short" if sh["value"] > lg["value"] else "long"
-        add("strength" if better == "long" else "weakness",
+        k1, k2 = round(sh["value"] * sh["n"] / 100), round(lg["value"] * lg["n"] / 100)
+        sig = fisher_p(k1, sh["n"], k2, lg["n"]) < 0.1
+        add(("strength" if better == "long" else "weakness") if sig else "pattern",
             f"Wins {sh['value']}% of short rallies vs {lg['value']}% of long ones: better in {better} rallies.",
             sh["n"] + lg["n"], lg["rallies"] if better == "long" else sh["rallies"])
     bp = p.get("big_points") or {}
