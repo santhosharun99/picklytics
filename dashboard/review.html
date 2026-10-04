@@ -21,7 +21,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
 .who { font-weight: 650; color: var(--paddle); }
 .bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin-top: 6px; }
 .bar div { height: 100%; background: var(--series-1); }
-.keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
 .k { border: 1px solid var(--border); background: var(--surface-1); border-radius: 9px; padding: 9px 6px; cursor: pointer; text-align: center; }
 .k b { display: block; font-size: 15px; color: var(--paddle); }
 .k kbd { font: 600 11px ui-monospace, monospace; color: var(--text-muted); }
@@ -67,6 +67,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
       <dt>Lob (L)</dt><dd>High ball over the opponent's head.</dd>
       <dt>Overhead (O)</dt><dd>Smash hit from above the head.</dd>
       <dt>Groundstroke (G)</dt><dd>A normal medium-pace shot that is none of the above.</dd>
+      <dt>Not a hit (N)</dt><dd>Nothing was hit here: a missed swing, the ball hitting the net, picking the ball up after the rally, a bounce. These teach the hit detector.</dd>
       <dt>Unclear (U)</dt><dd>Can't tell, wrong player marked, or not a real hit - use it freely; unclear answers are not used for training.</dd>
     </dl>
     <p class="small" style="margin-top:12px">The yellow ring marks the ball at the moment of contact. Volley = hit before the ball bounced (can be any shot type).</p>
@@ -74,7 +75,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid
 </main>
 <script>
 const $ = s => document.querySelector(s);
-const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"]];
+const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"], ["not a hit", "N"]];
 const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, "0")}`;
 let Q, A = {answers: {}}, stem, i = 0, volley = false, slow = false, showGuess = false, saving = Promise.resolve();
 const v = $("#v");
@@ -106,7 +107,7 @@ function show() {
   $("#who").textContent = `Shot ${i + 1}: the ${it.side === "far" ? "FAR player (top of the screen)" : "NEAR player (bottom of the screen)"} hits`;
   $("#when").textContent = `at ${fmt(it.t)} in the video`;
   $("#guess").textContent = showGuess ? `model: ${it.pred} (${Math.round(100 * it.prob)}% sure)` : "";
-  $("#keys").innerHTML = SHOTS.map(([s, k]) => `<div class="k${prev && (prev.shot === s || (s === "unclear" && prev.unclear)) ? " sel" : ""}" data-s="${s}"><b>${s[0].toUpperCase() + s.slice(1)}</b><kbd>${k}</kbd></div>`).join("");
+  $("#keys").innerHTML = SHOTS.map(([s, k]) => `<div class="k${prev && (prev.shot === s || (s === "unclear" && prev.unclear) || (s === "not a hit" && prev.not_hit)) ? " sel" : ""}" data-s="${s}"><b>${s[0].toUpperCase() + s.slice(1)}</b><kbd>${k}</kbd></div>`).join("");
   document.querySelectorAll(".k").forEach(b => b.onclick = () => answer(b.dataset.s));
   play();
 }
@@ -125,10 +126,16 @@ function play() {
 }
 function answer(s) {
   const it = Q.items[i];
-  A.answers[it.frame] = {shot: s === "unclear" ? null : s, unclear: s === "unclear", volley, rally: it.rally, t: it.t,
-                         reason: it.reason, model: it.pred, at: new Date().toISOString()};
-  const body = JSON.stringify(A);
-  saving = saving.then(() => fetch(`/api/labels/${stem}.shots.json`, {method: "POST", headers: {"Content-Type": "application/json"}, body}));
+  const nh = s === "not a hit";
+  A.answers[it.frame] = {shot: (s === "unclear" || nh) ? null : s, unclear: s === "unclear", not_hit: nh, volley: nh ? false : volley,
+                         rally: it.rally, t: it.t, reason: it.reason, model: it.pred, at: new Date().toISOString()};
+  const mine = {[it.frame]: A.answers[it.frame]};
+  // merge with the file on disk (it may have been edited elsewhere), then save
+  saving = saving.then(async () => {
+    const disk = (await (await fetch(`/api/labels/${stem}.shots.json`, {cache: "no-store"})).json()) || {video: Q.video, answers: {}};
+    A = {...disk, answers: {...disk.answers, ...A.answers, ...mine}};
+    await fetch(`/api/labels/${stem}.shots.json`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(A)});
+  });
   i++; show();
 }
 document.addEventListener("keydown", e => {
