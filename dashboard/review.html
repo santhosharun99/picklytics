@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shot Review</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+header h1 { margin: 0; font-size: 19px; }
+select, button { font: inherit; color: inherit; }
+main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid; gap: 16px; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-width: 0; }
+.stage { position: relative; background: #000; border-radius: 8px; overflow: hidden; }
+.stage video { width: 100%; display: block; aspect-ratio: 16 / 9; }
+.ring { position: absolute; width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 3px solid var(--ball); border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.5); pointer-events: none; display: none; }
+.info { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 10px 0 4px; font-size: 13.5px; }
+.who { font-weight: 650; color: var(--paddle); }
+.bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+.bar div { height: 100%; background: var(--series-1); }
+.keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.k { border: 1px solid var(--border); background: var(--surface-1); border-radius: 9px; padding: 9px 6px; cursor: pointer; text-align: center; }
+.k b { display: block; font-size: 15px; color: var(--paddle); }
+.k kbd { font: 600 11px ui-monospace, monospace; color: var(--text-muted); }
+.k:hover { border-color: var(--court-green); }
+.k.sel { background: var(--paddle); color: #fff; } .k.sel b { color: var(--ball); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.tog { border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.tog.on { background: var(--ball); border-color: var(--ball); color: var(--paddle); font-weight: 600; }
+.defs dt { font-weight: 650; color: var(--paddle); margin-top: 8px; } .defs dd { margin: 1px 0 0; color: var(--text-secondary); font-size: 12.5px; }
+.small { font-size: 12px; color: var(--text-muted); }
+.guess { font-size: 12.5px; color: var(--text-secondary); }
+.done { text-align: center; padding: 40px 10px; font-size: 16px; }
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<header>
+  <div><h1>Shot review</h1><div class="small">Watch the clip, press the key for the shot the marked player hits. Answers save automatically.</div></div>
+  <div class="row" style="margin:0"><label class="small" for="vid">Match</label><select id="vid"></select><a class="tog" href="label.html" style="text-decoration:none">Labeller</a></div>
+</header>
+<main>
+  <section class="card">
+    <div class="stage"><video id="v" muted playsinline></video><div class="ring" id="ring"></div></div>
+    <div class="info"><span class="who" id="who"></span><span class="small" id="when"></span><span class="small" id="count"></span></div>
+    <div class="bar"><div id="prog" style="width:0"></div></div>
+    <div class="keys" id="keys"></div>
+    <div class="row">
+      <span class="tog" id="volley">Volley (no bounce) <kbd>V</kbd></span>
+      <span class="tog" id="slow">Slow motion <kbd>S</kbd></span>
+      <span class="tog" id="replay">Replay <kbd>Space</kbd></span>
+      <span class="tog" id="back">◀ Back <kbd>←</kbd></span>
+      <span class="tog" id="skip">Skip <kbd>→</kbd></span>
+      <span class="tog" id="showGuess">Show model's guess</span><span class="guess" id="guess"></span>
+    </div>
+  </section>
+  <aside class="card">
+    <h2 style="margin:0 0 4px;font-size:15px">What each shot means</h2>
+    <dl class="defs">
+      <dt>Drive (D)</dt><dd>Hit hard and fast, flat over the net, to attack or rush the opponent.</dd>
+      <dt>Drop (P)</dt><dd>Soft ball that falls into the kitchen, hit from the back or middle of the court.</dd>
+      <dt>Dink (K)</dt><dd>Soft ball into the kitchen, hit from the kitchen line (both teams usually at the net).</dd>
+      <dt>Reset (T)</dt><dd>Soft block of a fast incoming ball that takes the pace off, usually defensive.</dd>
+      <dt>Lob (L)</dt><dd>High ball over the opponent's head.</dd>
+      <dt>Overhead (O)</dt><dd>Smash hit from above the head.</dd>
+      <dt>Groundstroke (G)</dt><dd>A normal medium-pace shot that is none of the above.</dd>
+      <dt>Unclear (U)</dt><dd>Can't tell, wrong player marked, or not a real hit - use it freely; unclear answers are not used for training.</dd>
+    </dl>
+    <p class="small" style="margin-top:12px">The yellow ring marks the ball at the moment of contact. Volley = hit before the ball bounced (can be any shot type).</p>
+  </aside>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const SHOTS = [["drive", "D"], ["drop", "P"], ["dink", "K"], ["reset", "T"], ["lob", "L"], ["overhead", "O"], ["groundstroke", "G"], ["unclear", "U"]];
+const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, "0")}`;
+let Q, A = {answers: {}}, stem, i = 0, volley = false, slow = false, showGuess = false, saving = Promise.resolve();
+const v = $("#v");
+
+async function loadVideoList() {
+  const vids = await (await fetch("/api/videos")).json();
+  const withQ = [];
+  for (const f of vids) { const s = f.replace(/\.mp4$/, ""); const q = await (await fetch(`/api/labels/${s}.queue.json`)).json(); if (q) withQ.push(s); }
+  $("#vid").innerHTML = withQ.map(s => `<option>${s}</option>`).join("");
+  const want = new URLSearchParams(location.search).get("video");
+  if (want && withQ.includes(want)) $("#vid").value = want;
+  if (withQ.length) load($("#vid").value); else $("#who").textContent = "No review queue yet (training/build_review_queue.py).";
+}
+async function load(s) {
+  stem = s; history.replaceState(null, "", `?video=${s}`);
+  Q = await (await fetch(`/api/labels/${s}.queue.json`)).json();
+  A = (await (await fetch(`/api/labels/${s}.shots.json`)).json()) || {video: Q.video, answers: {}};
+  v.src = `../data/videos/${Q.video}`;
+  i = Q.items.findIndex(x => !A.answers[x.frame]); if (i < 0) i = Q.items.length;
+  show();
+}
+function show() {
+  const n = Q.items.length, answered = Q.items.filter(x => A.answers[x.frame]).length;
+  $("#count").textContent = `${answered} of ${n} answered`;
+  $("#prog").style.width = `${100 * answered / n}%`;
+  if (i >= n) { $("#who").textContent = "All done - thank you! The queue is finished."; v.pause(); $("#keys").innerHTML = ""; return; }
+  const it = Q.items[i], prev = A.answers[it.frame];
+  volley = prev ? !!prev.volley : false; $("#volley").classList.toggle("on", volley);
+  $("#who").textContent = `Shot ${i + 1}: the ${it.side === "far" ? "FAR player (top of the screen)" : "NEAR player (bottom of the screen)"} hits`;
+  $("#when").textContent = `at ${fmt(it.t)} in the video`;
+  $("#guess").textContent = showGuess ? `model: ${it.pred} (${Math.round(100 * it.prob)}% sure)` : "";
+  $("#keys").innerHTML = SHOTS.map(([s, k]) => `<div class="k${prev && (prev.shot === s || (s === "unclear" && prev.unclear)) ? " sel" : ""}" data-s="${s}"><b>${s[0].toUpperCase() + s.slice(1)}</b><kbd>${k}</kbd></div>`).join("");
+  document.querySelectorAll(".k").forEach(b => b.onclick = () => answer(b.dataset.s));
+  play();
+}
+function play() {
+  const it = Q.items[i]; if (!it) return;
+  const t0 = Math.max(0, it.t - 1.6), t1 = it.t + 1.2;
+  v.playbackRate = slow ? 0.4 : 0.8;
+  const go = () => { v.currentTime = t0; v.play().catch(() => { $("#when").textContent += " - press Space to play"; }); };
+  v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
+  v.ontimeupdate = () => {
+    if (v.currentTime > t1) v.currentTime = t0;            // loop the clip
+    const ring = $("#ring"), near = Math.abs(v.currentTime - it.t) < 0.25 && it.img;
+    ring.style.display = near ? "block" : "none";
+    if (near) { const r = v.getBoundingClientRect(); ring.style.left = `${it.img[0] / Q.size[0] * r.width}px`; ring.style.top = `${it.img[1] / Q.size[1] * r.height}px`; }
+  };
+}
+function answer(s) {
+  const it = Q.items[i];
+  A.answers[it.frame] = {shot: s === "unclear" ? null : s, unclear: s === "unclear", volley, rally: it.rally, t: it.t,
+                         reason: it.reason, model: it.pred, at: new Date().toISOString()};
+  const body = JSON.stringify(A);
+  saving = saving.then(() => fetch(`/api/labels/${stem}.shots.json`, {method: "POST", headers: {"Content-Type": "application/json"}, body}));
+  i++; show();
+}
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,select,textarea") || !Q) return;
+  const k = e.key.toLowerCase(), hit = SHOTS.find(([, key]) => key.toLowerCase() === k);
+  if (hit && !e.metaKey && !e.ctrlKey) { e.preventDefault(); answer(hit[0]); }
+  else if (k === "v") { volley = !volley; $("#volley").classList.toggle("on", volley); }
+  else if (k === "s") { slow = !slow; $("#slow").classList.toggle("on", slow); v.playbackRate = slow ? 0.4 : 0.8; }
+  else if (k === " ") { e.preventDefault(); play(); }
+  else if (k === "arrowleft") { i = Math.max(0, i - 1); show(); }
+  else if (k === "arrowright") { i = Math.min(Q.items.length, i + 1); show(); }
+});
+$("#volley").onclick = () => { volley = !volley; $("#volley").classList.toggle("on", volley); };
+$("#slow").onclick = () => { slow = !slow; $("#slow").classList.toggle("on", slow); v.playbackRate = slow ? 0.4 : 0.8; };
+$("#replay").onclick = play;
+$("#back").onclick = () => { i = Math.max(0, i - 1); show(); };
+$("#skip").onclick = () => { i = Math.min(Q.items.length, i + 1); show(); };
+$("#showGuess").onclick = () => { showGuess = !showGuess; $("#showGuess").classList.toggle("on", showGuess); show(); };
+$("#vid").onchange = () => load($("#vid").value);
+loadVideoList();
+</script>
+</body>
+</html>
