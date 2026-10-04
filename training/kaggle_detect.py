@@ -119,6 +119,64 @@ def push(video: Path, players: int = 2):
     print(f"started. check with: PYTHONPATH=. python3 training/kaggle_detect.py status {video}")
 
 
+def analyze(video: Path, players: int, out: Path | None):
+    """Analysis-only job for a match whose detections already exist locally (e.g. a long feed whose local
+    analysis is too slow): uploads detections (gzipped) + paddle checks done so far, reuses the video dataset."""
+    import gzip
+    stem = stem_of(video)
+    out = out or ROOT / "outputs" / stem
+    push_code()
+    vds = push_video(video, stem)
+    rds = f"{USER}/pbrun-{slug_of(stem)}"
+    d = STAGE / f"run-{slug_of(stem)}"
+    shutil.rmtree(d, ignore_errors=True)
+    d.mkdir(parents=True)
+    with open(out / "detections.jsonl", "rb") as fi, gzip.open(d / "detections.jsonl.gz", "wb", compresslevel=6) as fo:
+        shutil.copyfileobj(fi, fo)
+    for f in ("meta.json", "paddles.json"):
+        if (out / f).exists():
+            shutil.copy2(out / f, d / f)
+    (d / "dataset-metadata.json").write_text(json.dumps({"title": f"pbrun-{slug_of(stem)}"[:50], "id": rds,
+                                                           "licenses": [{"name": "other"}]}))
+    exists = "ready" in kaggle("datasets", "status", rds, check=False).lower()
+    print(("updating" if exists else "uploading"), rds, f"({(d / 'detections.jsonl.gz').stat().st_size / 1e6:.0f} MB)")
+    if exists:
+        kaggle("datasets", "version", "-p", str(d), "-m", "detections update")
+    else:
+        kaggle("datasets", "create", "-p", str(d))
+    wait_ready(rds, minutes=60)
+    k = STAGE / f"akernel-{slug_of(stem)}"
+    shutil.rmtree(k, ignore_errors=True)
+    k.mkdir(parents=True)
+    (k / "analyze_job.py").write_text((ROOT / "kaggle_jobs" / "analyze_job.py").read_text()
+                                      .replace("__STEM__", stem).replace("__PLAYERS__", str(players)))
+    kid = f"{USER}/pb-analyze-{slug_of(stem)}"
+    (k / "kernel-metadata.json").write_text(json.dumps({
+        "id": kid, "title": kid.split("/")[1], "code_file": "analyze_job.py", "language": "python",
+        "kernel_type": "script", "is_private": True, "enable_gpu": True, "enable_internet": True,
+        "dataset_sources": [CODE_DS, vds, rds], "machine_shape": "NvidiaTeslaT4"}))
+    print(kaggle("kernels", "push", "-p", str(k)))
+
+
+def fetch_analysis(video: Path, out: Path | None):
+    stem = stem_of(video)
+    out = out or ROOT / "outputs" / stem
+    tmp = STAGE / f"afetch-{slug_of(stem)}"
+    shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(parents=True)
+    print(kaggle("kernels", "output", f"{USER}/pb-analyze-{slug_of(stem)}", "-p", str(tmp)))
+    src = next(tmp.rglob("analysis.json"), None)
+    if src is None:
+        raise SystemExit("no analysis.json in the job output yet")
+    for f in src.parent.iterdir():
+        if f.name != "meta.json":
+            shutil.move(str(f), out / f.name)
+    A = json.loads((out / "analysis.json").read_text())
+    A["meta"]["video"] = str(video)
+    (out / "analysis.json").write_text(json.dumps(A, separators=(",", ":")))
+    print("analysis fetched ->", out, A["summary"]["rallies"], "rallies,", A["summary"]["shots"], "shots")
+
+
 def status(video: Path):
     print(kaggle("kernels", "status", kernel_id(stem_of(video)), check=False))
 
@@ -154,7 +212,7 @@ def fetch(video: Path, players: int, out: Path | None, names: str):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["push", "status", "fetch"])
+    ap.add_argument("cmd", choices=["push", "status", "fetch", "analyze", "analyze-status", "analyze-fetch"])
     ap.add_argument("video")
     ap.add_argument("--players", type=int, default=2, choices=[2, 4])
     ap.add_argument("--names", default="")
@@ -165,6 +223,12 @@ def main():
         push(video, a.players)
     elif a.cmd == "status":
         status(video)
+    elif a.cmd == "analyze":
+        analyze(video, a.players, Path(a.out) if a.out else None)
+    elif a.cmd == "analyze-status":
+        print(kaggle("kernels", "status", f"{USER}/pb-analyze-{slug_of(stem_of(video))}", check=False))
+    elif a.cmd == "analyze-fetch":
+        fetch_analysis(video, Path(a.out) if a.out else None)
     else:
         fetch(video, a.players, Path(a.out) if a.out else None, a.names)
 
