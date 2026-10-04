@@ -106,5 +106,5 @@ ShuttleNet stay Tier 3; injury/load, momentum and EWM-TOPSIS scores stay out.
 ## Built so far (2026-10-04)
 Foundation 1 (depth fix), replay filter, time pressure, movement efficiency, win probability + importance + big points,
 third-shot quality. Findings on our 2 matches: rushed shots -> more errors (22% vs 15%); third-shot drive -> server
-wins 61% vs 19% (p<0.001); per-player big-point / pressure differences not significant yet (p~0.3) -> shown as
+wins 61% vs 19% (p<0.001) [RETRACTED 2026-10-04: artifact of rule-based shot types]; per-player big-point / pressure differences not significant yet (p~0.3) -> shown as
 numbers only. Remaining Tier 1: kitchen-line control (first to the net), change-of-direction load.

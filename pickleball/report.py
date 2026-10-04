@@ -101,9 +101,8 @@ def _stat(value, n, rallies, note=None):
 
 def _third_quality(shots: list[dict], nxt: list[dict]) -> dict:
     """Quality of third shots: pace, low over the net (< 1.5 ft clearance), deep (>= 15 ft past the net), and how
-    often the opponent's 4th shot was rushed. Pooled over our two matches the third-shot drive wins the rally 61% vs
-    19% for other third shots (p < 0.001; same direction within every player); pace / depth / clearance trend the
-    right way but are not significant yet (n ~ 60)."""
+    often the opponent's 4th shot was rushed. Note: an earlier finding (third-shot drive wins 61% vs 19%) came from
+    the rule-based shot types and did not survive the learned shot types (87 of 89 third shots are drives)."""
     mph = [s["speed_mph"] for s in shots if s.get("speed_mph") and s.get("speed_conf") in ("high", "medium")]
     clr = [s["net_clear_ft"] for s in shots if s.get("net_clear_ft") is not None]
     dep = [(22 - s["land"][1]) if s["side"] == "near" else (s["land"][1] - 22) for s in shots if s.get("land")]
@@ -533,12 +532,14 @@ def placement_profile(name: str, rallies: list[dict]) -> dict:
 def speed_profile(name: str, rallies: list[dict]) -> dict:
     """Ball speed off the paddle by shot group, from shots with a trustworthy speed (high/medium confidence)."""
     groups = {"Serve": ("serve",), "Return": ("return",), "Drive": ("drive", "third-shot drive"),
-              "Third-shot drop": ("third-shot drop",), "Reset / drop": ("reset", "drop"), "Volley": ("volley",)}
+              "Third-shot drop": ("third-shot drop",), "Reset / drop": ("reset", "drop", "dink"), "Volley": ("volley",)}
     mine = [(r["id"], s) for r in rallies for s in r["shots"]
             if s["player"] == name and s.get("speed_mph") and s.get("speed_conf") in ("high", "medium")]
     out = {"groups": {}, "fastest": []}
     for label, types in groups.items():
-        v = [(rid, s["speed_mph"], s.get("speed_conf")) for rid, s in mine if s.get("shot") in types]
+        # volleys: the ball was hit before bouncing (a flag; learned shot types do not include "volley")
+        v = [(rid, s["speed_mph"], s.get("speed_conf")) for rid, s in mine
+             if ((s.get("volley") and s.get("shot") not in ("serve", "return")) if label == "Volley" else s.get("shot") in types)]
         if v:
             mph = [x for _, x, _ in v]
             sure = [x for _, x, c in v if c == "high"]  # top speeds only where both measurements agree

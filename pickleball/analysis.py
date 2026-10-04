@@ -224,6 +224,13 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     }
     _add_ball_speeds(result, ball, hit_ctx)
     _add_lifted_paths(out_dir, result, ball, hit_ctx)
+    from .shottype import apply as learned_shot_types  # needs speeds / landing spots / net clearance from above
+    n = learned_shot_types(result, players_by_frame)
+    if n:
+        result["summary"]["shot_types"] = dict(Counter(s["shot_type"] for s in result["shots"]).most_common())
+        for pid, st in result["players"].items():
+            st["shot_types"] = dict(Counter(s["shot_type"] for s in result["shots"] if s["player"] == pid).most_common())
+        print(f"shot types: learned model changed {n} of {len(result['shots'])}")
     (out_dir / "analysis.json").write_text(json.dumps(result, separators=(",", ":")))
     _save_intermediate(out_dir, ball, events, players_by_frame)
     return result
