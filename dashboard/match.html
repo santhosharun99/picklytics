@@ -154,7 +154,7 @@ function show(name) {
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
-  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); addTakeaways(P, name);
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); addTakeaways(P, name); addAccuracy();
   document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
 }
 
@@ -356,6 +356,38 @@ function addTakeaways(P, name) {
   if (mv.avg_depth_ft != null) put("#heat", `Plays on average ${mv.avg_depth_ft} ft from the net; at the kitchen line ${mv.kitchen_time_pct}% of rally time.`);
   const er = Object.entries(P.error_shots || {})[0], fi = Object.entries(P.finishing_shots || {})[0];
   if (er || fi) put("#endings", [fi ? `Wins most often with a ${fi[0]} (${fi[1].count}x)` : "", er ? `loses most often on a ${er[0]} (${er[1].count}x)` : ""].filter(Boolean).join("; ") + ".");
+}
+// Accuracy note under every metric. Numbers come from our validation runs (PROGRESS.md / docs/DESIGN.md):
+// analyst tags, referee point list (Las Vegas), broadcast scoreboard (US Open) and game-rule checks.
+// Update these when a model is retrained or re-validated.
+const ACC = {
+  tiles: "Rally winner from tracking + game rules: 96% right vs the referee's list (Las Vegas), 52 of 53 vs the scoreboard (US Open). Server 98%. Rallies found: 48 of 53 points (Las Vegas); broadcast replays are removed.",
+  ins: "Each finding shows how many rallies it rests on. It is only called a strength or weakness when the difference is unlikely to be chance (Fisher test, p < 0.1); otherwise it stays a pattern.",
+  wp: "A model, not a measurement: it uses the reconstructed score, so it inherits the server (98%) and winner (96%) accuracy. One misread server shifts the score by a point or two (US Open game 2 runs about 2 points ahead of the scoreboard).",
+  strokeWhy: "Forehand / backhand side: 95% right (74 of 78 tagged shots). Forced vs chosen is an estimate from foot movement (positions about ±1 ft): a long stretch without a step counts as near the body.",
+  situ: "Positions about ±1 ft, so zone borders blur by that much. Shot types: about 3 in 4 right (76 of 102 tagged shots); drops, resets and dinks are the most often confused. Direction and depth come from landing spots (about ±1.5 ft).",
+  moveList: "Positions about ±1 ft, 10 times a second, smoothed over 0.5 s; arrows are averages. Hit timing is exact to one video frame (0.03 s), so 'rushed' is reliable to that level.",
+  mix: "Shot types: about 3 in 4 right (76 of 102 tagged shots). Serves and returns are nearly always right; drops, resets and dinks are often called volleys or groundstrokes. Hits found: 86-94%.",
+  strokes: "Forehand / backhand: 95% right (74 of 78 tagged shots).",
+  third: "Shot type about 3 in 4 right; rally winner 96%. Pace ±3-4 mph; net clearance from the 3D ball path; landing depth about ±1.5 ft.",
+  speed: "Typical error ±3-4 mph. Only shots where two independent measurements (flight time and 3D path) agree within 20% are used; top speeds only when they agree closely.",
+  fastest: "Typical error ±3-4 mph; the ± after each speed is that shot's own uncertainty.",
+  placement: "Landing spots from the 3D ball path: returned serves land in the service box 93-95% of the time (they must), so spots are good to about 1-1.5 ft. Calls within that distance of a line are not reliable.",
+  running: "Player positions about ±1 ft after the far-end depth fix (checked with the kitchen rule: volleys measured inside the kitchen fell from 46% to 4%). Distances are not checked against GPS - compare the two players in the same match rather than across venues.",
+  pressure: "Built from hit timing (exact to 0.03 s) and positions (±1 ft). Checked as a whole: rushed shots end as the hitter's error 22% of the time vs 15% otherwise. 'Error' = last detected shot of a lost rally; about 1 in 10 final shots is missed.",
+  contacts: "Hitter position at contact about ±1 ft; 86-94% of hits are found.",
+  heat: "Positions about ±1 ft, sampled 10 times a second during rallies.",
+  endings: "Uses the last detected hit and the rally winner (96%). About 1 in 10 final shots is missed; then the shot before it is credited. Rally length counts detected hits (86-94% found), so a rally can show one shot fewer than it had.",
+  rallies: "Rallies found from tracking; replays removed by spotting repeated player movement.",
+};
+function addAccuracy() {
+  const note = t => `<p class="acc"><b>Accuracy</b> · ${t}</p>`;
+  for (const [id, t] of Object.entries(ACC)) {
+    if (id === "tiles") { const sec = document.querySelector("#main section.tiles"); if (sec) sec.insertAdjacentHTML("afterend", note(t)); continue; }
+    if (id === "ins") { const box = document.querySelector("#main .ins")?.closest(".card"); if (box) box.insertAdjacentHTML("beforeend", note(t)); continue; }
+    const box = $("#" + id)?.closest(".card");
+    if (box && !box.querySelector(`.acc[data-k="${id}"]`)) box.insertAdjacentHTML("beforeend", note(t).replace('<p class="acc"', `<p class="acc" data-k="${id}"`));
+  }
 }
 function renderLength(P, col) {
   $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");
