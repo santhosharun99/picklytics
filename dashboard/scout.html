@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scouting Sheet</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+header h1 { margin: 0; font-size: 21px; }
+header .sub { color: var(--text-secondary); font-size: 13px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { border: 1px solid var(--border); background: var(--surface-2); font: inherit; padding: 6px 14px; border-radius: 999px; cursor: pointer; color: inherit; text-decoration: none; }
+main { max-width: 1100px; margin: 0 auto; padding: 18px 24px 40px; display: grid; gap: 18px; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; min-width: 0; }
+.card h2 { margin: 0 0 10px; font-size: 15px; }
+.plan { display: grid; gap: 12px; counter-reset: k; }
+.pt { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.pt:last-child { border-bottom: 0; padding-bottom: 0; }
+.pt::before { counter-increment: k; content: counter(k); width: 26px; height: 26px; border-radius: 50%; background: var(--paddle); color: var(--ball);
+  font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.pt .h { font-weight: 650; color: var(--paddle); font-size: 14.5px; }
+.pt .t { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
+.pt .m { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.conf { font-size: 11px; font-weight: 600; border-radius: 999px; padding: 1px 8px; border: 1px solid; }
+.conf.solid { color: var(--series-1); border-color: var(--series-1); }
+.conf.indicative { color: var(--note); border-color: var(--note); }
+.conf.thin { color: var(--text-muted); border-color: var(--border); }
+.knums { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kn { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.kn .l { font-size: 12px; color: var(--text-secondary); }
+.kn .v { font-size: 22px; font-weight: 650; color: var(--paddle); font-variant-numeric: tabular-nums; }
+.kn .n { font-size: 11px; color: var(--text-muted); }
+.clip { border: 1px solid var(--border); background: var(--surface-1); font: inherit; font-size: 11px; border-radius: 6px; padding: 1px 7px; cursor: pointer; color: inherit; }
+.small { font-size: 12px; color: var(--text-muted); }
+.acc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 20; }
+.modal.on { display: flex; }
+.modal .box { background: #fff; border-radius: 12px; padding: 14px; width: min(960px, 94vw); }
+.modal video { width: 100%; border-radius: 8px; background: #000; }
+.modal .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+@media print {
+  html { background: #fff !important; } body { border: 0 !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
+  .noprint, .clip, .modal { display: none !important; } main { grid-template-columns: 1.6fr 1fr; padding: 8px 0; }
+  .card { break-inside: avoid; }
+}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<header>
+  <div><h1 id="title">Scouting sheet</h1><div class="sub" id="sub"></div></div>
+  <div class="tabs noprint"><span id="tabs" class="tabs"></span><button class="tab" onclick="print()">Print</button><a class="tab" id="back">Full analysis</a></div>
+</header>
+<main>
+  <section class="card"><h2>How to play them</h2><div class="plan" id="plan"></div></section>
+  <div style="display:grid;gap:18px;align-content:start">
+    <section class="card"><h2>Key numbers</h2><div class="knums" id="nums"></div></section>
+    <section class="card"><h2>How sure is this?</h2><p class="acc" id="acc"></p></section>
+  </div>
+</main>
+<div class="modal" id="modal"><div class="box">
+  <div class="row"><b id="clipTitle"></b><button class="tab" id="closeClip">Close</button></div>
+  <video id="clipVideo" controls></video>
+  <div class="row" style="margin-top:8px"><span class="small" id="clipInfo"></span><span><button class="tab" id="prevClip">◀</button> <button class="tab" id="nextClip">▶</button></span></div>
+</div></div>
+<script>
+const $ = s => document.querySelector(s);
+const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+const q = new URLSearchParams(location.search), file = q.get("report") || "boyer_devilliers_full";
+let R, byId = {}, clipSet = [], clipIdx = 0;
+
+// confidence label from sample size (the metric's own accuracy is listed under "How sure is this?")
+const conf = n => n >= 20 ? ["solid", `solid · ${n}`] : n >= 8 ? ["indicative", `indicative · ${n}`] : ["thin", `thin · ${n}`];
+const clips = ids => (ids || []).slice(0, 5).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(byId[id]?.start_t || 0)}</button>`).join("");
+const pct = (a, b) => b ? Math.round(100 * a / b) : null;
+
+function plan(name, P, opp, O) {
+  const out = [], add = (h, t, n, ids) => out.push({h, t, n, ids});
+  const T = P.tactics || {}, bh = (T.strokes || {}).backhand || {}, nb = Object.values(bh).reduce((a, b) => a + b, 0);
+  if (nb >= 8) {
+    const wide = pct(bh.pulled_wide || 0, nb), body = pct(bh.near_body || 0, nb);
+    if (wide >= 50) add("Stretch them to the backhand side",
+      `${wide}% of ${name}'s backhands came after being pulled wide - ${opp} was already finding that gap. ${body}% were hit with the ball near the body.`, nb, (T.stroke_rallies || {})["backhand:pulled_wide"]);
+    else add("Don't expect free points on the backhand",
+      `${name} sets up well: ${body}% of backhands were hit with the ball near the body, only ${wide}% after being pulled wide.`, nb, (T.stroke_rallies || {})["backhand:near_body"]);
+  }
+  const fc = (P.pressure || {}).faced || {}, ofc = (O.pressure || {}).faced || {};
+  if (fc.n) {
+    const worse = fc.error_when_rushed_pct != null && fc.error_otherwise_pct != null && fc.error_when_rushed_pct > fc.error_otherwise_pct;
+    add(fc.rushed_pct > (ofc.rushed_pct ?? 0) ? "Take time away from them" : "They take time away from you",
+      `${name} was rushed (under 0.3 s to spare) on ${fc.rushed_pct}% of shots vs ${ofc.rushed_pct ?? "–"}% for ${opp}.` +
+      (worse ? ` When rushed, ${fc.error_when_rushed_pct}% of their shots ended the rally as an error vs ${fc.error_otherwise_pct}% otherwise.` : ` Errors do not rise much when rushed (${fc.error_when_rushed_pct}% vs ${fc.error_otherwise_pct}%).`),
+      fc.n_rushed, fc.rushed_rallies);
+  }
+  const nt = P.net || {};
+  if (nt.n_contested >= 6 && nt.won_when_first_pct != null && nt.won_when_opp_first_pct != null) {
+    const d = nt.won_when_first_pct - nt.won_when_opp_first_pct;
+    add(d >= 15 ? "Beat them to the net" : "Net position matters less for them",
+      `${name} won ${nt.won_when_first_pct}% of rallies when first to the net (${nt.n_first}x) and ${nt.won_when_opp_first_pct}% when ${opp} got there first (${nt.n_opp_first}x). Reaches the net in ${nt.reached_pct}% of rallies.`,
+      nt.n_contested, nt.first_rallies);
+  } else if (nt.rallies) add("They stay back", `${name} reaches the net in only ${nt.reached_pct}% of rallies - expect long baseline exchanges.`, nt.rallies, []);
+  const th = Object.entries(P.third_shot || {}).sort((a, b) => b[1].count - a[1].count)[0];
+  if (th) {
+    const tot = Object.values(P.third_shot).reduce((a, v) => a + v.count, 0), [k, v] = th;
+    add(`When they serve, expect a ${k.replace("third-shot ", "")} third ball`,
+      `${v.count} of ${tot} third shots${v.mph ? `, median ${v.mph} mph` : ""}${v.low_pct != null ? `, ${v.low_pct}% low over the net` : ""}${v.deep_pct != null ? `, ${v.deep_pct}% deep` : ""}. ${name} won ${v.won_pct}% of those rallies.`,
+      v.count, v.rallies);
+  }
+  const resp = Object.entries(T.response || {}).filter(([, v]) => v.n >= 5 && v.rushed_pct != null).sort((a, b) => b[1].rushed_pct - a[1].rushed_pct)[0];
+  if (resp) add(`Their hardest ball to handle: your ${resp[0].toLowerCase()}`,
+    `Against ${opp}'s ${resp[0].toLowerCase()} ${name} moved ${resp[1].moved_ft} ft on average and was rushed on ${resp[1].rushed_pct}% (${resp[1].n} shots).`, resp[1].n, resp[1].rallies);
+  const sit = (T.situations || []).filter(x => x.n >= 5 && !["serve", "return"].includes((x.shots[0] || [])[0]))[0];
+  if (sit) {
+    const W = {net: "at the net", mid: "in mid-court", back: "at the back"};
+    add(`Their go-to pattern: ${sit.shots[0][0]} from ${W[sit.me]}`,
+      `With ${opp} ${W[sit.opp]}, ${name} played ${sit.shots[0][0]} ${pct(sit.shots[0][1], sit.n)}% of the time${sit.cross_pct != null ? `, ${sit.cross_pct}% cross-court` : ""}; won ${sit.won_pct}% of those rallies.`, sit.n, sit.rallies);
+  }
+  const s = P.summary || {};
+  if (s.won_on_serve_pct?.value != null) add("Serve vs return",
+    `${name} won ${s.won_on_serve_pct.value}% of rallies on serve (${s.won_on_serve_pct.n}) and ${s.won_on_return_pct.value}% on return (${s.won_on_return_pct.n}).`,
+    s.won_on_serve_pct.n + s.won_on_return_pct.n, []);
+  return out;
+}
+
+function show(name) {
+  const names = Object.keys(R.players), opp = names.find(n => n !== name), P = R.players[name], O = R.players[opp];
+  history.replaceState(null, "", `?report=${file}&player=${encodeURIComponent(name)}`);
+  $("#title").textContent = `Scouting sheet · ${name}`;
+  $("#sub").textContent = `From ${R.title} · ${R.source}`;
+  $("#tabs").innerHTML = names.map(n => `<button class="tab" style="${n === name ? "background:var(--paddle);color:#fff" : ""}" data-p="${n}">${n}</button>`).join("");
+  document.querySelectorAll("#tabs .tab").forEach(b => b.onclick = () => show(b.dataset.p));
+  $("#back").href = `match.html?report=${file}`;
+  $("#plan").innerHTML = plan(name, P, opp, O).map(p => { const [c, lab] = conf(p.n);
+    return `<div class="pt"><div><div class="h">${p.h}</div><div class="t">${p.t}</div><div class="m"><span class="conf ${c}">${lab}</span>${clips(p.ids)}</div></div></div>`; }).join("");
+  const s = P.summary, sp = (P.speed || {}).groups || {}, fc = (P.pressure || {}).faced || {}, rn = P.running || {}, nt = P.net || {};
+  const num = (l, v, n) => `<div class="kn"><div class="l">${l}</div><div class="v">${v ?? "–"}</div><div class="n">${n}</div></div>`;
+  $("#nums").innerHTML = num("Rallies won", s.rallies_won_pct.value + "%", `${s.rallies_won_pct.n} rallies`) +
+    num("Won on serve", s.won_on_serve_pct.value + "%", `${s.won_on_serve_pct.n} rallies`) +
+    num("Won on return", s.won_on_return_pct.value + "%", `${s.won_on_return_pct.n} rallies`) +
+    num("Drive pace", sp.Drive ? sp.Drive.avg + " mph" : null, sp.Drive ? `median of ${sp.Drive.n}` : "") +
+    num("Rushed on", fc.rushed_pct != null ? fc.rushed_pct + "%" : null, `of ${fc.n || 0} shots`) +
+    num("Gets to the net", nt.reached_pct != null ? nt.reached_pct + "%" : null, `of ${nt.rallies || 0} rallies`) +
+    num("Runs per rally", rn.dist_per_rally_ft != null ? rn.dist_per_rally_ft + " ft" : null, `top sprint ${rn.top_sprint_mph ?? "–"} mph`) +
+    num("Backhand share", P.stroke ? Math.round(100 * (P.stroke.backhand || 0) / ((P.stroke.backhand || 0) + (P.stroke.forehand || 0))) + "%" : null, "of shots");
+  $("#acc").innerHTML = `Labels: <b>solid</b> = 20+ examples, <b>indicative</b> = 8-19, <b>thin</b> = under 8 - treat thin points as things to watch for, not facts. ` +
+    `All from one match unless stated. Measured accuracy: rally winner 96%, server 98%, hits found 86-94%, forehand/backhand 95%, ` +
+    `shot types 83% (drives 97%; drops, dinks and lobs not yet reliable), player positions about ±1 ft, ball speed ±3-4 mph. ` +
+    `"Rushed" uses hit timing (exact to 0.03 s) and positions; "error" = the last detected shot of a lost rally (about 1 in 10 final shots is missed).`;
+  document.querySelectorAll(".clip").forEach(b => b.onclick = () => { clipSet = b.dataset.set.split(",").map(Number); clipIdx = Math.max(0, clipSet.indexOf(+b.dataset.r)); play(); $("#modal").classList.add("on"); });
+}
+function play() {
+  const r = byId[clipSet[clipIdx]], v = $("#clipVideo");
+  $("#clipTitle").textContent = `Rally at ${fmt(r.start_t)} · ${r.n_shots} shots${r.winner ? " · won by " + r.winner : ""}`;
+  $("#clipInfo").textContent = `${clipIdx + 1} of ${clipSet.length}`;
+  if (!v.src.endsWith(R.video)) v.src = "../" + R.video;
+  const go = () => { v.currentTime = Math.max(0, r.start_t - 1); v.play(); };
+  v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
+  v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
+}
+$("#closeClip").onclick = () => { $("#modal").classList.remove("on"); $("#clipVideo").pause(); };
+$("#prevClip").onclick = () => { clipIdx = (clipIdx - 1 + clipSet.length) % clipSet.length; play(); };
+$("#nextClip").onclick = () => { clipIdx = (clipIdx + 1) % clipSet.length; play(); };
+(async () => {
+  R = await (await fetch(`../outputs/reports/${file}.json`, {cache: "no-store"})).json();
+  R.rallies.forEach(r => byId[r.id] = r);
+  show(q.get("player") && R.players[q.get("player")] ? q.get("player") : Object.keys(R.players)[0]);
+})();
+</script>
+</body>
+</html>

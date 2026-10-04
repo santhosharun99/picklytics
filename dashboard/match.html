@@ -65,7 +65,7 @@ button.plain { border: 1px solid var(--border); background: var(--surface-2); co
 <body>
 <header>
   <div><h1 id="title">Match analysis</h1><div class="sub" id="source"></div></div>
-  <div class="tabs" id="tabs"></div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="tabs" id="tabs"></div><a class="tab" id="scoutLink" style="text-decoration:none;background:var(--ball);border-color:var(--ball);color:var(--paddle);font-weight:600">Scouting sheet →</a></div>
 </header>
 <main id="main"></main>
 <div class="modal" id="modal"><div class="box">
@@ -105,6 +105,7 @@ function tile(label, s, suffix = "") {
 
 function show(name) {
   current = name;
+  $("#scoutLink").href = `scout.html?report=${new URLSearchParams(location.search).get("report") || "boyer_devilliers"}&player=${encodeURIComponent(name)}`;
   document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.p === name));
   const P = R.players[name], idx = Object.keys(R.players).indexOf(name), col = `var(--series-${idx + 1})`;
   const s = P.summary;
