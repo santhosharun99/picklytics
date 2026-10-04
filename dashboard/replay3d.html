@@ -66,6 +66,7 @@
     <div class="bar">
       <span class="muted">View</span>
       <button data-cam="broadcast" class="on">Broadcast</button><button data-cam="side">Side</button><button data-cam="top">Top</button><button data-cam="low">Low behind</button>
+      <button id="wholePath" class="on" title="Show every shot of the rally at once">Whole rally path</button>
     </div>
   </div>
 </div>
@@ -131,7 +132,7 @@ const nearMesh = playerMesh(PCOL[0]), farMesh = playerMesh(PCOL[1]);
 scene.add(nearMesh, farMesh);
 
 // ball + trail + shadow
-const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 14), new THREE.MeshLambertMaterial({ color: 0xc6f432, emissive: 0x2a3a00 }));
+const ball = new THREE.Mesh(new THREE.SphereGeometry(0.45, 18, 14), new THREE.MeshLambertMaterial({ color: 0xc6f432, emissive: 0x2a3a00 }));
 scene.add(ball);
 const ballShadow = new THREE.Mesh(new THREE.CircleGeometry(0.3, 16), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
 ballShadow.rotation.x = -Math.PI / 2; scene.add(ballShadow);
@@ -150,7 +151,7 @@ function addLabel(pos, html, t0) { const el = document.createElement("div"); el.
 
 const CAMS = {
   broadcast: [[10, 30, 80], [10, 2, 30]],   // behind the near baseline, raised (like the TV camera)
-  side: [[-30, 14, 22], [10, 2, 22]],
+  side: [[-46, 22, 22], [10, 4, 22]],    // further back and higher so whole arcs stay in view
   top: [[10, 70, 22.01], [10, 0, 22]],
   low: [[10, 6, 58], [10, 3, 22]],
 };
@@ -188,8 +189,28 @@ function ballAt(t) {
   return [a[1] + u * (b[1] - a[1]), a[2] + u * (b[2] - a[2]), Math.max(0.15, a[3] + u * (b[3] - a[3])), a[4]];
 }
 
+// whole-rally path: every measured flight of the rally, faint, so all shots are visible at once
+let wholeLine = null, showWhole = true;
+function drawWholePath() {
+  if (wholeLine) { scene.remove(wholeLine); wholeLine.geometry.dispose(); wholeLine = null; }
+  if (!showWhole || !R.ball.length) return;
+  const pts = [];
+  for (let k = 0; k < R.ball.length; k++) {
+    const q = R.ball[k], prev = R.ball[k - 1];
+    if (prev && q[0] - prev[0] > 0.2) pts.push(null);       // gap: start a new piece
+    pts.push(P(q[1], q[2], q[3]));
+  }
+  const pos = [];
+  for (let k = 1; k < pts.length; k++) if (pts[k] && pts[k - 1]) pos.push(pts[k - 1].x, pts[k - 1].y, pts[k - 1].z, pts[k].x, pts[k].y, pts[k].z);
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  wholeLine = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xf4f4f0, transparent: true, opacity: 0.45 }));
+  scene.add(wholeLine);
+}
+document.getElementById("wholePath").onclick = e => { showWhole = !showWhole; e.target.classList.toggle("on", showWhole); drawWholePath(); };
+
 function loadRally(i) {
   R = D.rallies[i];
+  drawWholePath();
   markers.remove(...markers.children); clearLabels();
   // bounce rings
   R.bounces.forEach(b => {
