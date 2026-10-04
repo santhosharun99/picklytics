@@ -66,7 +66,7 @@ body:not(.bmode) .bounce-only { display: none; }
   <label>Player A <input class="name" id="nameA" value="Boyer"></label>
   <label>Player B <input class="name" id="nameB" value="Devilliers"></label>
   <label>FPS <input id="fps" value="29.97" style="width:60px"></label>
-  <label>Mode <select id="mode"><option value="hits">Hits only</option><option value="bounces">Bounces</option><option value="full">Full</option></select></label>
+  <label>Mode <select id="mode"><option value="hits">Hits only</option><option value="bounces">Bounces</option><option value="full">Full</option><option value="shots">Shot types</option></select></label>
   <button id="import" title="Load the system's draft labels to review">Import auto-labels</button>
   <a href="./" style="color:var(--text-secondary);font-size:13px">Dashboard</a>
   <span class="save" id="save">not saved yet</span>
@@ -255,7 +255,7 @@ function mark(kind, side) {
 }
 function setAttr(k, v) {
   if (!selected || selected.kind !== "hit") return flash("Select a hit first (mark one with 1 or 2).");
-  commit(() => { selected[k] = (k === "volley") ? !selected.volley : v; });
+  commit(() => { selected[k] = (k === "volley") ? !selected.volley : v; if (k === "shot") selected.shot_tagged = true; });
 }
 function flash(msg) { $("#status").innerHTML = `<span class="warn">${msg}</span>`; }
 
@@ -308,6 +308,7 @@ function render() {
     $("#events").querySelectorAll("select,input").forEach(inp => inp.onchange = () => commit(() => {
       const e = r.events[+inp.dataset.i];
       e[inp.dataset.k] = inp.type === "checkbox" ? inp.checked : (inp.value || null);
+      if (inp.dataset.k === "shot") e.shot_tagged = true;  // a person chose this shot type
     }));
     $("#outcome").innerHTML = `<span class="muted">Point won by</span>` +
       ["A", "B"].map(p => `<button data-w="${p}" class="${r.winner === p ? "primary" : ""}">${pname(p)}</button>`).join("") +
@@ -452,7 +453,7 @@ window.addEventListener("resize", drawOverlay);
 
 const bouncesChecked = r => r.mode === "hits+bounces" || (r.mode == null && r.events.some(e => e.kind === "bounce"));
 const MODE = () => $("#mode").value;
-const SIMPLE = () => MODE() !== "full";
+const SIMPLE = () => !["full", "shots"].includes(MODE());
 const BMODE = () => MODE() === "bounces";
 try {
   const m = localStorage.getItem("pb-label-mode"), old = localStorage.getItem("pb-label-simple");
@@ -476,6 +477,8 @@ $("#import").onclick = async () => {
       const clash = L.rallies.some(x => x.start <= r.end && (x.end ?? Infinity) >= r.start);
       if (clash) continue;
       r.id = Math.max(0, ...L.rallies.map(x => x.id)) + 1;
+      // shot-type mode: keep the system's hits but hide its shot types, so every type is chosen by a person
+      if (MODE() === "shots") r.events.forEach(e => { if (e.kind === "hit") { e.shot_auto = e.shot; e.shot = null; } });
       L.rallies.push(r); added++;
     }
     L.rallies.sort((a, b) => a.start - b.start);
