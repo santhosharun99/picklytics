@@ -274,9 +274,15 @@ def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
     K, t = cam.K, cam.tvec.ravel()
     meas = {f: v[:2] for f, v in ball.items() if not v[3]}
     out = {}
+    fps = A["meta"]["fps"]
     for r in A["rallies"]:
-        shots = sorted([s for s in A["shots"] if s["rally"] == r["index"] and not s.get("inferred")], key=lambda s: s["frame"])
-        for s0, s1 in zip(shots, shots[1:]):
+        # inferred hits (missed by the detector, deduced from the rules) count as flight boundaries too: the ball
+        # itself is usually well seen, and skipping them left whole serves / returns without a 3D path
+        shots = sorted([s for s in A["shots"] if s["rally"] == r["index"]], key=lambda s: s["frame"])
+        # the rally's last shot: from the last hit to the last time the ball is seen (into the net, out, a winner)
+        end_seen = [f for f in range(shots[-1]["frame"] + 1, int(r["end_t"] * fps) + int(fps)) if f in meas] if shots else []
+        tail = [{"frame": min(end_seen[-1], shots[-1]["frame"] + MAX_T - 1)}] if len(end_seen) >= 4 else []
+        for s0, s1 in zip(shots, shots[1:] + tail):
             f0, f1 = s0["frame"], s1["frame"]
             fr = [f for f in range(f0, f1 + 1) if f in meas]
             if len(fr) < 4 or f1 - f0 + 1 > MAX_T:
@@ -293,7 +299,8 @@ def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
                 i = c[0]
                 a = (22.0 - X[i, 1]) / (X[i + 1, 1] - X[i, 1] + 1e-9)
                 clear = float(X[i, 2] + a * (X[i + 1, 2] - X[i, 2]) - 2.9)
-            out[f0] = {"f0": f0, "f1": f1, "path": np.round(X, 2).tolist(),
+            rough = s0.get("inferred") or "rally" not in s1        # flight after a deduced hit, or the rally's last shot
+            out[f0] = {"f0": f0, "f1": f1, "path": np.round(X, 2).tolist(), "rough": bool(rough),
                        "land": [round(float(X[ib, 0]), 2), round(float(X[ib, 1]), 2)] if bounced else None,
                        "bounce_frame": f0 + ib if bounced else None, "net_clear_ft": round(clear, 2) if clear is not None else None}
     return out

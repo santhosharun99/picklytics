@@ -44,8 +44,8 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
     path, covered = [], set()
     for seg in lifted.values():
         if f0 <= seg["f0"] <= f1:
-            for k, x in enumerate(seg["path"]):
-                path.append([round((seg["f0"] + k) / fps, 3), *x, 1])
+            for k, x in enumerate(seg["path"]):   # rough flights (after a deduced hit / rally's last shot) drawn faded
+                path.append([round((seg["f0"] + k) / fps, 3), *x, 0 if seg.get("rough") else 1])
                 covered.add(seg["f0"] + k)
     for a in arcs_by.get(r["index"], []):
         if a["f0"] in covered or a["f1"] in covered:
