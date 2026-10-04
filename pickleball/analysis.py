@@ -115,6 +115,14 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     rallies = segment_rallies(events, main, fps)
     n_inferred = add_missed_serves(rallies, ball, players_by_frame, events, homs, fps)
     depth_model = _correct_depth(out_dir, rallies, events, players_by_frame)
+    replays = _find_replays(rallies, players_by_frame, fps)
+    if replays:
+        spans = [(r.start_frame, r.end_frame) for r in rallies if r.index in replays]
+        print("replays dropped (rally: copy of):", replays)
+        rallies = [r for r in rallies if r.index not in replays]
+        events = [e for e in events if not any(a <= e.frame <= b for a, b in spans)]
+        for k, r in enumerate(rallies):
+            r.index = k
     hand = infer_handedness(rallies)
     shots = [s for r in rallies for s in classify_rally(r, hand)]
 
@@ -219,6 +227,50 @@ def run_analysis(out_dir: Path, n_players: int = 2, names: dict[str, str] | None
     (out_dir / "analysis.json").write_text(json.dumps(result, separators=(",", ":")))
     _save_intermediate(out_dir, ball, events, players_by_frame)
     return result
+
+
+REPLAY_FT, REPLAY_MIN_S, REPLAY_LOOKBACK = 0.5, 3.0, 4
+
+
+def _find_replays(rallies, players_by_frame, fps) -> dict:
+    """Broadcast replays shown from (nearly) the main camera pass the camera checks and look like new rallies.
+    A replay repeats an earlier rally exactly: both players' court tracks match a recent rally to within
+    REPLAY_FT (median) for >= REPLAY_MIN_S at some time shift. Real rallies never do (US Open: replays 0.09 and
+    0.42 ft; closest distinct pair 0.8 ft over only 2 s; scoreboard confirms no point was played).
+    -> {replay rally index: original rally index}"""
+    step = max(1, int(round(fps / 10)))
+    ids = sorted({p["id"] for ps in players_by_frame.values() for p in ps if p.get("id")})
+
+    def track(r):
+        ks = range(r.start_frame // step, r.end_frame // step + 1)
+        T = np.full((len(ks), 2 * len(ids)), np.nan)
+        for i, k in enumerate(ks):
+            for p in players_by_frame.get(k * step, []):
+                if p.get("id") in ids:
+                    j = 2 * ids.index(p["id"])
+                    T[i, j:j + 2] = p["court"]
+        return T
+
+    tr = {r.index: track(r) for r in rallies}
+    need = int(REPLAY_MIN_S * 10)
+    out = {}
+    for i, r in enumerate(rallies):
+        A = tr[r.index]
+        for o in rallies[max(0, i - REPLAY_LOOKBACK):i]:
+            B = tr[o.index]
+            for off in range(-len(A) + need, len(B) - need + 1):  # A[k] vs B[k + off]
+                a0, b0 = max(0, -off), max(0, off)
+                n = min(len(A) - a0, len(B) - b0)
+                if n < need:
+                    continue
+                d = np.hypot(A[a0:a0 + n, 0::2] - B[b0:b0 + n, 0::2], A[a0:a0 + n, 1::2] - B[b0:b0 + n, 1::2]).mean(1)
+                d = d[~np.isnan(d)]
+                if len(d) >= need and np.median(d) < REPLAY_FT:
+                    out[r.index] = o.index
+                    break
+            if r.index in out:
+                break
+    return out
 
 
 def _correct_depth(out_dir, rallies, events, players_by_frame):
