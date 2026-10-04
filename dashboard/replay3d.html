@@ -8,8 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <style>
   :root { --bg:#f5f6f8; --card:#ffffff; --ink:#1c2230; --muted:#667085; --line:#e2e5ea; --accent:#2563eb; --in:#16a34a; --out:#dc2626; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#101319; --card:#191d25; --ink:#e8eaef; --muted:#98a1b2; --line:#2a303b; --accent:#5b8def; } }
-  :root[data-theme="dark"] { --bg:#101319; --card:#191d25; --ink:#e8eaef; --muted:#98a1b2; --line:#2a303b; --accent:#5b8def; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui, -apple-system, sans-serif; }
   header { display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line); }
@@ -20,11 +18,11 @@
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
   .card { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   video { width:100%; display:block; background:#000; aspect-ratio:16/9; }
-  #stage { position:relative; width:100%; aspect-ratio:16/10; background:#0b0f16; }
+  #stage { position:relative; width:100%; aspect-ratio:16/10; background:#f3f5f2; }
   #stage canvas { display:block; width:100%; height:100%; }
   .label { position:absolute; transform:translate(-50%,-120%); padding:2px 7px; border-radius:6px; font-size:12px;
            background:rgba(15,20,28,.82); color:#fff; white-space:nowrap; pointer-events:none; }
-  .label b { color:#ffd84d; font-weight:600; }
+  .label b { color:#c6f432; font-weight:600; }
   .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px; border-top:1px solid var(--line); }
   .muted { color:var(--muted); }
   #time { font-variant-numeric: tabular-nums; min-width:110px; }
@@ -32,11 +30,12 @@
   .info { padding:10px 12px; display:grid; gap:6px; }
   .shots { max-height:240px; overflow:auto; }
   .shot { display:grid; grid-template-columns: 52px 1fr auto; gap:8px; padding:4px 6px; border-radius:6px; cursor:pointer; }
-  .shot:hover { background:rgba(127,127,127,.12); } .shot.cur { background:rgba(37,99,235,.16); }
+  .shot:hover { background:rgba(127,127,127,.12); } .shot.cur { background:rgba(30,123,80,.14); }
   .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:5px; vertical-align:0; }
   .legend span { margin-right:12px; font-size:12.5px; }
   .note { font-size:12.5px; color:var(--muted); padding:0 16px 16px; }
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <header>
@@ -46,7 +45,7 @@
     <option value="fahey_yoshitomi">Fahey vs Yoshitomi (Las Vegas)</option>
   </select>
   <select id="rally" aria-label="Rally"></select>
-  <span class="legend muted"><span><span class="dot" style="background:#ffd84d"></span>ball</span><span><span class="dot" style="background:var(--in)"></span>bounce in</span><span><span class="dot" style="background:var(--out)"></span>bounce out</span><span>faded = uncertain</span></span>
+  <span class="legend muted"><span><span class="dot" style="background:#c6f432;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)"></span>ball</span><span><span class="dot" style="background:var(--in)"></span>bounce in</span><span><span class="dot" style="background:var(--out)"></span>bounce out</span><span>faded = uncertain</span></span>
 </header>
 <div class="grid">
   <div class="card">
@@ -75,7 +74,7 @@
 const $ = s => document.querySelector(s);
 const params = new URLSearchParams(location.search);
 let D = null, R = null, T = 0, playing = false, lastNow = 0;
-const PCOL = [0xf472b6, 0x60a5fa];
+const PCOL = [0x1c1d1e, 0xf4f4f0];  // paddle charcoal / white: readable on the green court
 
 // ---------- three.js scene (court feet: x across 0..20, y along 0..44, h up) ----------
 const stage = $("#stage");
@@ -83,7 +82,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 stage.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b0f16);
+scene.background = new THREE.Color(0xf3f5f2);
 const camera = new THREE.PerspectiveCamera(40, 16 / 10, 0.1, 500);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 2, 0);
@@ -95,9 +94,9 @@ function box(w, d, color, y = 0) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshLambertMaterial({ color }));
   m.rotation.x = -Math.PI / 2; m.position.y = y; return m;
 }
-scene.add(box(44, 70, 0x1f6b3a, -0.02));                      // surround
-const court = box(20, 44, 0x2563a8, 0); scene.add(court);      // court
-const kitchen = box(20, 14, 0x2f7d4f, 0.005); scene.add(kitchen); // kitchen zone (7 ft each side)
+scene.add(box(44, 70, 0x24553a, -0.02));                      // surround
+const court = box(20, 44, 0x3a7d52, 0); scene.add(court);      // court
+const kitchen = box(20, 14, 0x458a5d, 0.005); scene.add(kitchen); // kitchen zone (7 ft each side)
 function line(pts, color = 0xffffff) {
   const g = new THREE.BufferGeometry().setFromPoints(pts.map(p => P(...p)));
   return new THREE.Line(g, new THREE.LineBasicMaterial({ color }));
@@ -132,7 +131,7 @@ const nearMesh = playerMesh(PCOL[0]), farMesh = playerMesh(PCOL[1]);
 scene.add(nearMesh, farMesh);
 
 // ball + trail + shadow
-const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 14), new THREE.MeshLambertMaterial({ color: 0xffd84d, emissive: 0x332200 }));
+const ball = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 14), new THREE.MeshLambertMaterial({ color: 0xc6f432, emissive: 0x2a3a00 }));
 scene.add(ball);
 const ballShadow = new THREE.Mesh(new THREE.CircleGeometry(0.3, 16), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
 ballShadow.rotation.x = -Math.PI / 2; scene.add(ballShadow);
@@ -194,7 +193,7 @@ function loadRally(i) {
   markers.remove(...markers.children); clearLabels();
   // bounce rings
   R.bounces.forEach(b => {
-    const ring = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.6, 24), new THREE.MeshBasicMaterial({ color: b.in ? 0x16a34a : 0xdc2626, side: THREE.DoubleSide }));
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.6, 24), new THREE.MeshBasicMaterial({ color: b.in ? 0xc6f432 : 0xdc2626, side: THREE.DoubleSide }));
     ring.rotation.x = -Math.PI / 2; ring.position.copy(P(b.x, b.y, 0.04)); ring.userData.t = b.t; markers.add(ring);
   });
   // hit labels

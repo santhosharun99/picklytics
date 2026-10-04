@@ -13,24 +13,6 @@
   --court: #256abf; --court-kitchen: #184f95; --court-line: #ffffff; --court-out: #3f6b4a;
   --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
 }
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-    --series-1: #3987e5; --series-2: #d95926; --good: #199e70; --bad: #e66767; --note: #c98500;
-    --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
-    --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-  --series-1: #3987e5; --series-2: #d95926; --good: #199e70; --bad: #e66767; --note: #c98500;
-  --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
-  --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
-}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text-primary);
   font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -78,6 +60,7 @@ svg text { fill: var(--text-secondary); font-size: 11px; }
 .modal .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 button.plain { border: 1px solid var(--border); background: var(--surface-2); color: inherit; font: inherit; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <header>
@@ -97,7 +80,6 @@ const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (c
 const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
 let R, current, rallyById = {};
-try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
 
 async function init() {
   const file = new URLSearchParams(location.search).get("report") || "boyer_devilliers";
@@ -160,7 +142,7 @@ function show(name) {
     </section>
     <section class="grid">
       <div class="card"><h2>Where they hit from</h2><p class="why">Contact points, shown on their own half (net at top).</p><svg id="contacts" style="width:100%;max-width:340px"></svg></div>
-      <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (darker = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
+      <div class="card"><h2>Court coverage</h2><p class="why">Where they stood during rallies (brighter = more time).</p><svg id="heat" style="width:100%;max-width:340px"></svg></div>
       <div class="card"><h2>How rallies ended</h2><p class="why">When this player hit the last shot: won it (winner / forced error) or lost it (own error).</p><div id="endings"></div>
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
@@ -210,7 +192,7 @@ function halfCourt(svg) {
 }
 function renderContacts(P, col) {
   const svg = halfCourt($("#contacts"));
-  P.movement.contact_points.forEach(([x, d]) => el("circle", {cx: hx(x), cy: hy(d), r: 6, fill: col, stroke: "var(--surface-1)", "stroke-width": 2, opacity: .9}, svg));
+  P.movement.contact_points.forEach(([x, d]) => el("circle", {cx: hx(x), cy: hy(d), r: 6, fill: "var(--ball)", stroke: "var(--paddle)", "stroke-width": 1, opacity: .95}, svg));
 }
 function renderHeat(P) {
   const svg = halfCourt($("#heat"));
@@ -232,7 +214,7 @@ function renderEndings(P, col) {
   const half = (label, g) => {
     const W = 160, Hh = 176, sx = W / 26, sy = Hh / 28, ox = 3 * sx, oy = 2 * sy;   // 20x22 ft half + margins
     const X = x => ox + x * sx, Y = d => oy + d * sy;
-    const dots = g.points.map(([x, d, rid]) => `<circle cx="${X(x)}" cy="${Y(d)}" r="4" fill="${col}" fill-opacity="0.75" stroke="var(--surface-1, #fff)" stroke-width="1" style="cursor:pointer" data-r="${rid}"><title>${label}: rally ${rid}</title></circle>`).join("");
+    const dots = g.points.map(([x, d, rid]) => `<circle cx="${X(x)}" cy="${Y(d)}" r="4" fill="var(--ball)" fill-opacity="0.95" stroke="var(--paddle)" stroke-width="0.8" style="cursor:pointer" data-r="${rid}"><title>${label}: rally ${rid}</title></circle>`).join("");
     return `<div><div style="font-size:13px;margin-bottom:4px"><b>${label}</b> <span class="small" style="color:var(--text-muted)">${g.n} shots · ${g.deep_pct}% deep</span></div>
       <svg width="${W}" height="${Hh}" viewBox="0 0 ${W} ${Hh}" class="placement">
         <rect x="${X(0)}" y="${Y(0)}" width="${20 * sx}" height="${22 * sy}" fill="none" stroke="var(--text-muted)" />

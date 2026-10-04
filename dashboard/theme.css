@@ -1,0 +1,52 @@
+/* Shared look for every dashboard page: white pages framed like a court (green surround + white court line).
+   Palette from the brand photo: court green, paddle charcoal, ball lime, grip grey.
+   Player colours #1e7b50 / #8a9a12 pass the dataviz palette checks on white (lightness, chroma, colour-blind
+   separation, normal-vision separation, 3:1 contrast). The bright ball lime is too light for data on white,
+   so it is used only as an accent. Loaded after each page's own <style>, so these values win. */
+:root {
+  color-scheme: light;
+  --court-green: #2e6b45; --court-green-dark: #245a39; --paddle: #1c1d1e; --ball: #c6f432; --grip: #8a8d8f;
+  --bg: #ffffff; --surface-1: #ffffff; --surface-2: #f3f5f2; --border: #dfe4de;
+  --text-primary: #1c1d1e; --text-secondary: #4a4e51; --text-muted: #767b7f;
+  --series-1: #1e7b50; --series-2: #8a9a12; --series-3: #4a4e51; --series-4: #b45309;
+  --good: #1e7b50; --bad: #c0392b; --note: #a16207; --warn: #a16207; --bounce: #b45309;
+  --accent-bg: #eef6e6;
+  --court: #2e6b45; --court-kitchen: #285f3d; --court-line: #ffffff; --court-out: #3b7d54;
+  /* heatmaps are drawn ON the green court: more time = brighter, ending at ball lime */
+  --seq-0: #3a7550; --seq-1: #4f8650; --seq-2: #6a9c4c; --seq-3: #87b446; --seq-4: #a4cc3f; --seq-5: #bde03a; --seq-6: #d6f55a;
+  /* names used by replay3d.html */
+  --card: #ffffff; --ink: #1c1d1e; --muted: #767b7f; --line: #dfe4de; --accent: #1e7b50; --in: #c6f432; --out: #c0392b;
+}
+
+/* the frame: green surround, a white court line, a strip of green, then the white page */
+html { background: var(--court-green); min-height: 100%; }
+body {
+  margin: 14px !important; min-height: calc(100vh - 28px);
+  background: var(--bg) !important; color: var(--text-primary);
+  border: 5px solid #fff;
+  box-shadow: inset 0 0 0 7px var(--court-green);
+  padding: 7px;
+}
+@media (max-width: 600px) { body { margin: 6px !important; border-width: 3px; box-shadow: inset 0 0 0 4px var(--court-green); padding: 4px; } }
+
+/* header: white, with a court-green "kitchen line" underneath and a ball before the title */
+header { background: var(--surface-1) !important; border-bottom: 3px solid var(--court-green) !important; }
+header h1 { color: var(--paddle); letter-spacing: -.01em; }
+header h1::before { content: ""; display: inline-block; width: 13px; height: 13px; border-radius: 50%; margin-right: 9px;
+  vertical-align: -1px; background: var(--ball); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+
+/* tabs and buttons: paddle charcoal when active, lime ring on focus */
+.tab.on { background: var(--paddle) !important; color: #fff !important; border-color: var(--paddle) !important; }
+.tab:hover, .clip:hover, button.plain:hover { border-color: var(--court-green) !important; }
+button:focus-visible, select:focus-visible, .tab:focus-visible { outline: 2px solid var(--ball); outline-offset: 2px; }
+
+/* cards and tiles: white on white, separated by a light line; values in charcoal */
+.card, .tile { background: var(--surface-1); border-color: var(--border); }
+.card h2 { color: var(--paddle); }
+.tile .v { color: var(--paddle); }
+
+/* colour dots get a hairline so light colours (white player, lime ball) stay visible on white */
+.dot { box-shadow: inset 0 0 0 1px rgba(0,0,0,.22); }
+
+/* value labels next to bars need room for "100% of 34" */
+.bar { grid-template-columns: 120px 1fr 74px !important; }

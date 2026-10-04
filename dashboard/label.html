@@ -12,20 +12,6 @@
   --series-1: #2a78d6; --series-2: #eb6834; --accent-bg: #e9f1fc; --warn: #b25e00;
   --bounce: #eda100;
 }
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-    --series-1: #3987e5; --series-2: #d95926; --accent-bg: #16263b; --warn: #f0a24a; --bounce: #c98500;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-  --series-1: #3987e5; --series-2: #d95926; --accent-bg: #16263b; --warn: #f0a24a; --bounce: #c98500;
-}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text-primary);
   font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -71,6 +57,7 @@ body:not(.simple) .simple-only { display: none; }
 body.bmode .hits-only { display: none; }
 body:not(.bmode) .bounce-only { display: none; }
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <header>
@@ -463,8 +450,6 @@ document.addEventListener("keydown", e => {
 window.addEventListener("resize", drawOverlay);
 ["nameA", "nameB"].forEach(id => $("#" + id).onchange = () => { render(); save(); });
 
-// theme follows the dashboard's saved choice
-try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
 const bouncesChecked = r => r.mode === "hits+bounces" || (r.mode == null && r.events.some(e => e.kind === "bounce"));
 const MODE = () => $("#mode").value;
 const SIMPLE = () => MODE() !== "full";

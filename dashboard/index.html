@@ -14,26 +14,6 @@
   --seq-0: #f0efec; --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #6da7ec; --seq-4: #3987e5; --seq-5: #256abf; --seq-6: #184f95;
   --accent-bg: #e9f1fc;
 }
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
-    --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
-    --seq-0: #232321; --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
-    --accent-bg: #16263b;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
-  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8d8c85;
-  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
-  --court: #1c5cab; --court-kitchen: #104281; --court-line: #e8e8e8; --court-out: #26402d;
-  --seq-0: #232321; --seq-1: #0d366b; --seq-2: #104281; --seq-3: #184f95; --seq-4: #256abf; --seq-5: #3987e5; --seq-6: #86b6ef;
-  --accent-bg: #16263b;
-}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text-primary);
   font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -81,6 +61,7 @@ svg text { fill: var(--text-secondary); font-size: 11px; }
 .muted { color: var(--text-muted); }
 .now { font-size: 13px; color: var(--text-secondary); margin-top: 8px; min-height: 20px; }
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <header>
@@ -91,7 +72,6 @@ svg text { fill: var(--text-secondary); font-size: 11px; }
   <div style="display:flex;gap:8px;align-items:center">
     <label class="muted" for="run">Match</label>
     <select id="run"></select>
-    <button id="theme" title="Toggle light/dark">◐</button>
   </div>
 </header>
 <main>
@@ -161,14 +141,6 @@ const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStar
 const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
 const SHOT_ORDER = ["serve", "return", "third-shot drop", "third-shot drive", "third-shot groundstroke",
   "dink", "drop", "drive", "volley", "reset", "lob", "overhead", "groundstroke"];
-
-// ---------- theme ----------
-try { const t = localStorage.getItem("pb-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
-$("#theme").onclick = () => {
-  const dark = getComputedStyle(document.documentElement).colorScheme === "dark";
-  document.documentElement.dataset.theme = dark ? "light" : "dark";
-  try { localStorage.setItem("pb-theme", document.documentElement.dataset.theme); } catch {}
-};
 
 // ---------- tooltip ----------
 const tip = $("#tip");
