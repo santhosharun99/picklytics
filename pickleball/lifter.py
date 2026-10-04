@@ -346,7 +346,7 @@ def _end_net():
     return _END_NET
 
 
-def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0, end_model=False):
+def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=18.0, end_model=False):
     """A rally's last flight has no next hit, which the lifter never saw in training; after the ball goes out
     the tracker may also follow something else. Keep it only up to the first ground contact, and only if it fits
     the video (median <= max_px) and moves like a ball: steadily away from the hitter along the court, without
@@ -356,15 +356,22 @@ def _plausible_tail(X, K, R, t, fr, uv, f0, side, max_px=12.0, end_model=False):
         ground = np.where(X[:, 2] < 0.4)[0]
         if len(ground):
             X = X[:max(int(ground[0]) + 1, 4)]
+    # the ball turning back toward the hitter means someone hit it (a hit the detector missed): the "last shot"
+    # ends there - keep the flight up to the turn
+    away = -1 if side == "near" else 1
+    back = np.sign(np.diff(X[:, 1])) == -away
+    for i in range(len(back) - 3):
+        if back[i:i + 4].all():
+            X = X[:i + 1]
+            break
     keep = np.array(fr) - f0 < len(X)
-    if keep.sum() < 4:
+    if keep.sum() < 4 or len(X) < 5:
         return None
     rv, _ = cv2.Rodrigues(R)
     proj, _ = cv2.projectPoints((X[np.array(fr)[keep] - f0] * [1, 1, -1]).astype(np.float64), rv, t.astype(np.float64), K, None)
     if np.median(np.linalg.norm(proj.reshape(-1, 2) - uv[keep], axis=1)) > max_px:
         return None
-    dy = np.diff(X[:, 1])
-    away = -1 if side == "near" else 1                         # near player hits toward the far end (y down)
+    dy = np.diff(X[:, 1])                                      # near player hits toward the far end (y down)
     if np.mean(np.sign(dy) == away) < (0.7 if end_model else 0.9):   # a ball dying in the net drifts back a little
         return None
     dx = np.diff(X[:, 0])
@@ -390,7 +397,19 @@ def lift_match(A: dict, ball: dict, cam, model_path=None) -> dict:
         # itself is usually well seen, and skipping them left whole serves / returns without a 3D path
         shots = sorted([s for s in A["shots"] if s["rally"] == r["index"]], key=lambda s: s["frame"])
         # the rally's last shot: from the last hit to the last time the ball is seen (into the net, out, a winner)
-        end_seen = [f for f in range(shots[-1]["frame"] + 1, int(r["end_t"] * fps) + int(fps)) if f in meas] if shots else []
+        # after the point the "ball" seen is often something else (a rolling ball, the next ball in the server's hand):
+        # follow the track only while it is continuous (no jump > 90 px, no gap > 6 frames) and for at most 2 s
+        end_seen = []
+        if shots:
+            prev = shots[-1]["frame"]
+            for f in range(shots[-1]["frame"] + 1, shots[-1]["frame"] + int(2.0 * fps)):
+                if f not in meas:
+                    if f - prev > 6:
+                        break
+                    continue
+                if end_seen and np.hypot(*(np.asarray(meas[f]) - np.asarray(meas[end_seen[-1]]))) > 90 * (f - end_seen[-1]):
+                    break
+                end_seen.append(f); prev = f
         tail = [{"frame": min(end_seen[-1], shots[-1]["frame"] + MAX_T - 1)}] if len(end_seen) >= 4 else []
         for s0, s1 in zip(shots, shots[1:] + tail):
             f0, f1 = s0["frame"], s1["frame"]

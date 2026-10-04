@@ -42,8 +42,26 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
     f0, f1 = int(r["start_t"] * fps) - int(0.5 * fps), int(r["end_t"] * fps) + int(0.5 * fps)
     # ball path, frame by frame: the 3D lifter for every hit-to-hit shot, event-pinned arcs only where it has none
     path, covered = [], set()
+    rs = sorted([s for s in A["shots"] if s["rally"] == r["index"]], key=lambda s: s["frame"])
+    last_f = rs[-1]["frame"] if rs else None
+    hitter = pname.get(rs[-1]["player"], rs[-1]["player"]) if rs else None
+
+    def consistent(seg):
+        """A rally's last flight must agree with who won the rally (tracking + rules, 96%): a ball that went into
+        the net cannot be the winner's shot; a ball clearly landing in cannot be the loser's last shot."""
+        if seg["f0"] != last_f or not o.get("winner"):
+            return True
+        X = np.asarray(seg["path"])
+        crossed = (np.sign(X[:, 1] - 22) != np.sign(X[0, 1] - 22)).any()
+        into_net = (seg.get("net_clear_ft") is not None and seg["net_clear_ft"] < 0) or not crossed
+        land = seg.get("land")
+        landed_in = land is not None and 2 <= land[0] <= 18 and (2 <= land[1] <= 20 or 24 <= land[1] <= 42) \
+            and (land[1] < 22) == (X[0, 1] > 22)
+        won = o["winner"] == hitter
+        return not ((into_net and won) or (landed_in and not won))
+
     for seg in lifted.values():
-        if f0 <= seg["f0"] <= f1:
+        if f0 <= seg["f0"] <= f1 and consistent(seg):
             for k, x in enumerate(seg["path"]):   # rough flights (after a deduced hit / rally's last shot) drawn faded
                 path.append([round((seg["f0"] + k) / fps, 3), *x, 0 if seg.get("rough") else 1])
                 covered.add(seg["f0"] + k)
@@ -55,6 +73,7 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
         for f, x in zip(fr, X):
             path.append([round(f / fps, 3), *[round(float(v), 2) for v in x], int(a.get("confident", True))])
     path.sort(key=lambda p: p[0])
+    covered_f0 = {seg["f0"] for seg in lifted.values() if f0 <= seg["f0"] <= f1 and consistent(seg)}
     # hits with 3D speed (speed of the arc that starts at the hit)
     start_speed = {a["f0"]: a for a in arcs_by.get(r["index"], []) if a["kind0"] == "hit"}
     shots = sorted([s for s in A["shots"] if s["rally"] == r["index"]], key=lambda s: s["frame"])
@@ -64,7 +83,7 @@ for r in sorted(A["rallies"], key=lambda r: r["start_t"]):
         hits.append({"t": round(s["frame"] / fps, 3), "player": pname.get(s["player"], s["player"]), "side": s["side"],
                      "shot": s.get("shot_type"), "stroke": s.get("stroke"), "inferred": bool(s.get("inferred")),
                      "speed_mph": round(s["ball_mph"]) if s.get("ball_mph") and s.get("speed_conf") in ("high", "medium") else None,
-                     "net_clear_ft": round(s["net_clear_ft"], 1) if s.get("net_clear_ft") is not None else None,
+                     "net_clear_ft": round(s["net_clear_ft"], 1) if s.get("net_clear_ft") is not None and s["frame"] in covered_f0 else None,
                      "pos": s.get("hitter_court")})
     bounces = [{"t": round(b["frame"] / fps, 3), "x": round(b["court"][0], 2), "y": round(b["court"][1], 2),
                 "in": bool(-0.5 <= b["court"][0] <= 20.5 and -0.5 <= b["court"][1] <= 44.5)}
