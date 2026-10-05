@@ -85,6 +85,114 @@
    "video": "data/videos/PPA_Europe_Court_feed_1.mp4",
    "thumb": "thumbs/europe_feed_1.jpg",
    "check": "No referee log; the 237 'rallies' include a lot of pre-match practice (warm-up hitting)"
+  },
+  {
+   "id": "tnppl_2_WD",
+   "type": "doubles",
+   "title": "Joshika / Krithicka vs Swetha / Virina Reddy",
+   "players": [
+    "Kodai Tigers: Joshika / Krithicka",
+    "Rockfort Terminatrz: Swetha / Virina Reddy"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Women's doubles",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Kodai Tigers won 11-5 (match card)",
+   "run": "tnppl_2_WD",
+   "queue": "TNPPL_S2_KTvRTT_2_WD",
+   "video": "data/videos/TNPPL_S2_KTvRTT_2_WD.mp4",
+   "thumb": "thumbs/tnppl_2_WD.jpg",
+   "check": "46 rallies found; match card final score available for checking"
+  },
+  {
+   "id": "tnppl_3_MD",
+   "type": "doubles",
+   "title": "Rahul / Vishwajit vs Srijith / Shreenath",
+   "players": [
+    "Kodai Tigers: Rahul / Vishwajit",
+    "Rockfort Terminatrz: Srijith / Shreenath"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Kodai Tigers won 11-7 (match card)",
+   "run": "tnppl_3_MD",
+   "queue": "TNPPL_S2_KTvRTT_3_MD",
+   "video": "data/videos/TNPPL_S2_KTvRTT_3_MD.mp4",
+   "thumb": "thumbs/tnppl_3_MD.jpg",
+   "check": "39 rallies found; match card final score available for checking"
+  },
+  {
+   "id": "tnppl_4_XD",
+   "type": "doubles",
+   "title": "Vishwajit / Joshika vs Vimalraj / Swetha",
+   "players": [
+    "Kodai Tigers: Vishwajit / Joshika",
+    "Rockfort Terminatrz: Vimalraj / Swetha"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Mixed doubles",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Kodai Tigers won 11-9 (match card)",
+   "run": "tnppl_4_XD",
+   "queue": "TNPPL_S2_KTvRTT_4_XD",
+   "video": "data/videos/TNPPL_S2_KTvRTT_4_XD.mp4",
+   "thumb": "thumbs/tnppl_4_XD.jpg",
+   "check": "31 rallies found; match card final score available for checking"
+  },
+  {
+   "id": "tnppl_5_MD50",
+   "type": "doubles",
+   "title": "Suneel / Krishnakumar vs Himanshu / Sivashankar Sivan",
+   "players": [
+    "Kodai Tigers: Suneel / Krishnakumar",
+    "Rockfort Terminatrz: Himanshu / Sivashankar Sivan"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Men's 50+ doubles",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Kodai Tigers won 11-10 (match card)",
+   "run": "tnppl_5_MD50",
+   "queue": "TNPPL_S2_KTvRTT_5_MD50",
+   "video": "data/videos/TNPPL_S2_KTvRTT_5_MD50.mp4",
+   "thumb": "thumbs/tnppl_5_MD50.jpg",
+   "check": "25 rallies found; match card final score available for checking"
+  },
+  {
+   "id": "tnppl_6_MD",
+   "type": "doubles",
+   "title": "Sai / Rohit vs Vimalraj / Safwan",
+   "players": [
+    "Kodai Tigers: Sai / Rohit",
+    "Rockfort Terminatrz: Vimalraj / Safwan"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Rockfort Terminatrz won 5-11 (match card)",
+   "run": "tnppl_6_MD",
+   "queue": "TNPPL_S2_KTvRTT_6_MD",
+   "video": "data/videos/TNPPL_S2_KTvRTT_6_MD.mp4",
+   "thumb": "thumbs/tnppl_6_MD.jpg",
+   "check": "39 rallies found; match card final score available for checking"
+  },
+  {
+   "id": "tnppl_7_TeamDoubles",
+   "type": "doubles",
+   "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+   "players": [
+    "Kodai Tigers: Shravan / Sarveswar / Sarveswar / Suneel",
+    "Rockfort Terminatrz: Manish / Sanjay / Srijith / Sivasankar Shivan"
+   ],
+   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Team event - super doubles \u00b7 rotating doubles",
+   "venue": "Court 1 \u00b7 indoor",
+   "result": "Kodai Tigers won 25-18 (match card)",
+   "run": "tnppl_7_TeamDoubles",
+   "queue": "TNPPL_S2_KTvRTT_7_TeamDoubles",
+   "video": "data/videos/TNPPL_S2_KTvRTT_7_TeamDoubles.mp4",
+   "thumb": "thumbs/tnppl_7_TeamDoubles.jpg",
+   "check": "32 rallies found; match card final score available for checking"
   }
  ]
 }
