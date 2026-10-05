@@ -1,0 +1,65 @@
+{
+ "note": "TNPPL Season 2, Court 1 (indoor mall venue), fixed main camera. All four baseline corners by hand (the far half cannot be extrapolated from the near half), small line-snap refinement (75-78% line match). Same camera in all videos (corners agree within 6 px).",
+ "points": [
+  {
+   "court": [
+    0,
+    0
+   ],
+   "img": [
+    633.3,
+    317.8
+   ]
+  },
+  {
+   "court": [
+    20,
+    0
+   ],
+   "img": [
+    1270.9,
+    319.1
+   ]
+  },
+  {
+   "court": [
+    0,
+    44
+   ],
+   "img": [
+    37.7,
+    882.6
+   ]
+  },
+  {
+   "court": [
+    20,
+    44
+   ],
+   "img": [
+    1885.5,
+    885.8
+   ]
+  },
+  {
+   "court": [
+    0,
+    22
+   ],
+   "img": [
+    480.5,
+    462.6
+   ]
+  },
+  {
+   "court": [
+    20,
+    22
+   ],
+   "img": [
+    1428.7,
+    464.6
+   ]
+  }
+ ]
+}
