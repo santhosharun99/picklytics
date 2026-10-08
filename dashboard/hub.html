@@ -83,7 +83,7 @@ const ACC = Object.fromEntries(ACCURACY.map(a => [a.metric, a]));
 const accTag = m => { const a = ACC[m]; return a ? `<span class="lvl ${a.level}">${LEVELS[a.level][0]}</span> <span class="acc2">${a.range}</span>` : ""; };
 let M, T = null, R = null, A = null, cur = null, PIDS = new Set();
 const pslug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const plink = n => PIDS.has(pslug(n)) ? `<a class="plink" href="player.html?p=${pslug(n)}">${n}</a>` : n;
+const plink = (n, team) => { const id = [team && pslug(`${n} ${team}`), pslug(n)].find(x => x && PIDS.has(x)); return id ? `<a class="plink" href="player.html?p=${id}">${n}</a>` : n; };
 const TABS = [["overview", "Overview"], ["players", "Player analysis"], ["replay", "3D replay"], ["scout", "Scouting sheet"], ["rallies", "Rallies"], ["accuracy", "Accuracy"]];
 
 async function init() {
@@ -122,7 +122,7 @@ function renderHead() {
   const names = R ? Object.keys(R.players) : M.players;
   const crumb = `<nav class="crumb"><a href="./">Tournaments</a><span>›</span>${T ? `<a href="./?t=${T.id}">${T.name}</a><span>›</span>` : ""}<b>${M.title}</b></nav>`;
   $("#mhead").innerHTML = `${crumb}<div><div class="ev">${M.event} · ${M.round}</div><h1>${M.title}</h1>
-    <div class="meta">${names.map((n, i) => `<span class="dot" style="background:var(--series-${i + 1})"></span>${plink(n)}${R && R.teams && R.teams[n] ? ` <span class="roster">(${R.teams[n].map(plink).join(", ")})</span>` : ""}`).join(" &nbsp; ")} · ${M.venue}${R ? ` · score from tracking (${M.check})` : ` · ${M.check}`}</div></div>${right}`;
+    <div class="meta">${names.map((n, i) => `<span class="dot" style="background:var(--series-${i + 1})"></span>${plink(n)}${R && R.teams && R.teams[n] ? ` <span class="roster">(${R.teams[n].map(x => plink(x, n)).join(", ")})</span>` : ""}`).join(" &nbsp; ")} · ${M.venue}${R ? ` · score from tracking (${M.check})` : ` · ${M.check}`}</div></div>${right}`;
 }
 
 function show(t) {

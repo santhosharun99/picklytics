@@ -22,12 +22,16 @@ def slug(name: str) -> str:
 
 
 def _team_of(root: Path) -> dict:
-    cfg = root / "configs" / "tnppl_s2_kt_rtt.json"
-    if not cfg.exists():
-        return {}
-    C = json.loads(cfg.read_text())
-    names = {"KT": "Kodai Tigers", "RTT": "Rockfort Terminatrz"}
-    return {ALIASES.get(p, p): names.get(k, k) for k, ps in C.get("rosters", {}).items() for p in ps}
+    """{match id: {player: team}} from every TNPPL tie config (a name can play for different teams in different ties:
+    TNPPL has a Swetha and a Sanjay at Rockfort and at Twin Eagles - different people)."""
+    out = {}
+    for cfg in sorted((root / "configs").glob("tnppl_s2_*.json")):
+        C = json.loads(cfg.read_text())
+        names = C.get("team_names") or {"KT": "Kodai Tigers", "RTT": "Rockfort Terminatrz"}
+        squad = {ALIASES.get(p, p): names.get(k, k) for k, ps in C.get("rosters", {}).items() for p in ps}
+        for mid in C.get("matches", {}):
+            out[mid] = squad
+    return out
 
 
 def _shots_of(R: dict, name: str, doubles: bool):
@@ -68,25 +72,27 @@ def build(root: Path) -> dict:
             if not mine:
                 continue
             side = side_of.get(name)
+            team = side if doubles else (team_of.get(m["id"]) or {}).get(name)
+            key = (name, team)  # a player = name + team
             opp = next((x for x in sides if x != side), None)
             played = {r["id"] for r, _ in mine} if doubles else {r["id"] for r in R["rallies"]}
             won = sum(1 for r in R["rallies"] if r["id"] in played and r.get("winner") == side)
             decided = sum(1 for r in R["rallies"] if r["id"] in played and r.get("winner"))
             partner = [p for p in (R.get("teams") or {}).get(side, []) if ALIASES.get(p, p) != name] if doubles else []
             opponents = (R.get("teams") or {}).get(opp, []) if doubles else [opp]
-            matches[name].append({"id": m["id"], "title": m["title"], "round": m.get("round"), "type": m["type"],
+            matches[key].append({"id": m["id"], "title": m["title"], "round": m.get("round"), "type": m["type"],
                                   "tournament": T.get(m.get("tournament"), {}).get("name", m.get("event")),
                                   "team": side if doubles else None, "partner": partner, "opponents": opponents,
                                   "shots": len(mine), "rallies": len(played),
                                   "won_pct": round(100 * won / decided) if decided else None, "official": R.get("official")})
             for r, s in mine:
-                shots[name].append({**s, "_match": m["id"], "_rally": r["id"]})  # includes s['pl'] (placement record)
+                shots[key].append({**s, "_match": m["id"], "_rally": r["id"]})  # includes s['pl'] (placement record)
             if not doubles:
                 P = R["players"][name]
-                singles_prof[name].append((m["id"], P))
+                singles_prof[key].append((m["id"], P))
                 for i in P.get("insights", []):
                     if i["kind"] in ("strength", "weakness", "pattern"):
-                        insights[name].append({**i, "match": m["id"], "match_title": m["title"]})
+                        insights[key].append({**i, "match": m["id"], "match_title": m["title"]})
 
     def stats(ss):
         n = len(ss)
@@ -127,15 +133,18 @@ def build(root: Path) -> dict:
         }
 
     players = []
-    for name, ss in shots.items():
-        types = {m["id"]: m["type"] for m in matches[name]}
-        players.append({"id": slug(name), "name": name, "team": team_of.get(name),
-                        "tournaments": sorted({x["tournament"] for x in matches[name]}),
-                        "matches": matches[name], "stats": stats(ss),
+    dup = Counter(n for n, _ in shots)
+    for key, ss in shots.items():
+        name, team = key
+        types = {m["id"]: m["type"] for m in matches[key]}
+        pid = slug(name) if dup[name] == 1 or not team else slug(f"{name} {team}")
+        players.append({"id": pid, "name": name, "team": team,
+                        "tournaments": sorted({x["tournament"] for x in matches[key]}),
+                        "matches": matches[key], "stats": stats(ss),
                         "placement": {t: placement(name, [x for x in ss if types.get(x["_match"]) == t]) for t in ("singles", "doubles")
                                       if any(types.get(x["_match"]) == t for x in ss)},
-                        "singles": [_singles_extra(mid, P) for mid, P in singles_prof.get(name, [])],
-                        "insights": insights.get(name, [])})
+                        "singles": [_singles_extra(mid, P) for mid, P in singles_prof.get(key, [])],
+                        "insights": insights.get(key, [])})
     _describe(players)
     players.sort(key=lambda p: (-p["stats"]["shots"], p["name"]))
     return {"players": players, "n": len(players),
