@@ -65,8 +65,15 @@ tagged rallies:
   boundary 5, different 3 (of 35);
 - outgoing-flight status: 60 of 82 agree (73%); 15 of the 22 differences are bounces after the last tagged event of
   the rally (the tags stop there) -> 60 of 67 (90%) inside the tagged stretch.
-These are agreement with human labels on one venue. Unit tests check the rules; the physics-vs-detector agreement
-is model-to-model consistency, not accuracy. Other venues (TNPPL, Las Vegas, Europe) are not validated.
+TNPPL (indoor, low camera; Rahul vs Ramakrishnan, 15 rallies tagged 2026-10-09; end change after rally 8 fixed from
+tracking + the tagger; 10 flights where the bounce was not visible are flagged `next_bounce_unknown` and skipped;
+positions filled automatically carry `xy_src: auto ...` and are never used as truth):
+`PYTHONPATH=. python3 training/eval_placement.py tnppl_1_MS labels/TNPPL_S2_KTvRTT_1_MS.json`
+- observed landings: 32 of 36 found; distance median 1.01 ft, 80% within 2.64 ft; zone same 22, boundary 2,
+  different 8 (of 32) - clearly weaker than the US Open broadcast camera;
+- status: 43 of 54 agree (80%); 43 of 50 (86%) leaving out 4 bounces after the last tagged event.
+These are agreement with human labels on two venues. Unit tests check the rules; the physics-vs-detector agreement
+is model-to-model consistency, not accuracy. Las Vegas and Europe are not validated.
 
 ## Known limitations
 - Projected landing not implemented (needs a holdout test: hide the end of flights with known bounces, predict,

@@ -1,6 +1,6 @@
 """Placement events vs hand tags (US Open: 16 tagged rallies, 45 tagged bounces with positions).
 
-    PYTHONPATH=. python3 training/eval_placement.py
+    PYTHONPATH=. python3 training/eval_placement.py [run labels/<file>.json]   (default: US Open)
 Builds the shot events WITHOUT the human tags (automatic sources only) and compares, on shots inside the tagged
 rallies, with the human version: outgoing-flight status, observed-landing zone (same zone / boundary / different)
 and distance. Matching: same shot (analysis hit frame); a tagged bounce counts for the shot whose window holds it.
@@ -15,10 +15,12 @@ from pickleball import rally_end
 from pickleball.shot_events import build_run
 
 ROOT = Path(__file__).resolve().parents[1]
-run = ROOT / "outputs" / "full_match"
+import sys
+RUN, LAB = (sys.argv[1], sys.argv[2]) if len(sys.argv) > 2 else ("full_match", "labels/Mens_Singles_GOLD_2026_US_Open.json")
+run = ROOT / "outputs" / RUN
 A = json.loads((run / "analysis.json").read_text())
 dead = rally_end.dead_touches(A, run)
-L = json.loads((ROOT / "labels/Mens_Singles_GOLD_2026_US_Open.json").read_text())
+L = json.loads((ROOT / LAB).read_text())
 ranges = [(r["start"], r["end"]) for r in L["rallies"] if r.get("mode") == "hits+bounces" and r["end"] > r["start"]]
 live = {}
 for s in sorted(A["shots"], key=lambda s: s["frame"]):
@@ -26,7 +28,8 @@ for s in sorted(A["shots"], key=lambda s: s["frame"]):
         live.setdefault(s["rally"], []).append(s)
 H = build_run(run, A, live, use_human=True)
 M = build_run(run, A, live, use_human=False)
-tagged = [f for f in H if any(a <= f <= b for a, b in ranges)]
+unk = [(e["frame"]) for r in L["rallies"] for e in r["events"] if e.get("next_bounce_unknown")]
+tagged = [f for f in H if any(a <= f <= b for a, b in ranges) and not any(abs(f - u) <= 3 for u in unk)]  # skip flights the tagger could not judge
 print(f"{len(tagged)} shots inside {len(ranges)} tagged rallies")
 st = Counter((H[f]["status"], M[f]["status"]) for f in tagged)
 print("status (human-tag version -> automatic):")

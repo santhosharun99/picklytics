@@ -130,7 +130,7 @@ const bars = (obj, nobj) => Object.entries(obj).filter(([, p]) => p != null).map
     <div class="grid">
       <div class="card wide"><h2>Placement &amp; speed</h2><p class="why">Facts measured from the ball and player tracking, shot by shot, with how many shots each rests on. Singles and doubles are kept apart. "Intercepted" = the opponent hit the ball before it bounced (that is not where it landed). Speed = estimated launch speed off the paddle (not checked against radar).</p>
         ${factBlock || '<span class="empty">No placement data yet.</span>'}
-        <div class="note">Observed landings were checked against 45 hand-tagged bounces in one match (median 0.5 ft away, same zone 27 of 35); other venues are not validated. Unresolved shots are left out of landing and interception counts.</div></div>
+        <div class="note">Observed landings were checked against hand-tagged bounces: US Open median 0.5 ft away (same zone 27 of 35), TNPPL median 1.0 ft (same zone 22 of 32 - less reliable); other venues are not validated. Unresolved shots are left out of landing and interception counts.</div></div>
 
       <div class="card wide"><h2>From shot-type labels <span class="tag exp">secondary</span></h2><p class="why">Older summary built on the automatic shot-type labels and court positions, compared with the other players here (pros and TNPPL together - different levels).</p>
         <ul class="style">${styleItems || '<li><span class="t">Not enough shots yet.</span></li>'}</ul>

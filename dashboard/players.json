@@ -2416,41 +2416,87 @@
     "singles": {
      "n": 36,
      "status": {
-      "unresolved": 12,
-      "bounced": 19,
+      "unresolved": 11,
+      "bounced": 20,
       "intercepted": 4,
       "net": 1
      },
-     "landing_usable": 16,
-     "landing_observed": 19,
+     "landing_usable": 19,
+     "landing_observed": 20,
      "landing_zones": {
       "deep centre": 5,
-      "behind left": 1,
+      "deep left": 5,
       "behind centre": 1,
-      "kitchen right": 1,
-      "behind wide-right": 1,
-      "deep left": 2,
-      "deep right": 2,
+      "deep right": 3,
+      "behind right": 1,
       "midcourt left": 1,
-      "midcourt right": 2
+      "midcourt right": 2,
+      "kitchen right": 1
      },
      "interception_zones": {
-      "deep right": 1
+      "deep right": 1,
+      "kitchen centre": 1
      },
      "intercepted": 4,
      "speed_n": 23,
      "speed_median": 33,
      "facts": [
       {
-       "text": "Of 36 analysed shots: 19 bounced before the opponent's contact, 4 were intercepted, 1 ended at the net, 12 are unresolved.",
+       "text": "Of 36 analysed shots: 20 bounced before the opponent's contact, 4 were intercepted, 1 ended at the net, 11 are unresolved.",
        "n": 36,
        "small": false,
        "kind": "fact",
        "clips": []
       },
       {
-       "text": "Of 8 usable later-shot bounces, 2 landed deep centre.",
-       "n": 8,
+       "text": "Of 5 usable serve bounces, 3 landed deep left.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         2,
+         34.07
+        ],
+        [
+         "tnppl_1_MS",
+         8,
+         141.9
+        ],
+        [
+         "tnppl_1_MS",
+         12,
+         231.3
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable return bounces, 3 landed deep centre.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         4,
+         56.87
+        ],
+        [
+         "tnppl_1_MS",
+         5,
+         77.17
+        ],
+        [
+         "tnppl_1_MS",
+         13,
+         256.5
+        ]
+       ]
+      },
+      {
+       "text": "Of 6 usable later-shot bounces, 2 landed deep centre.",
+       "n": 6,
        "small": true,
        "kind": "fact",
        "clips": [
@@ -2474,23 +2520,8 @@
        "clips": [
         [
          "tnppl_1_MS",
-         2,
-         36.43
-        ],
-        [
-         "tnppl_1_MS",
-         4,
-         59.37
-        ],
-        [
-         "tnppl_1_MS",
-         4,
-         67.2
-        ],
-        [
-         "tnppl_1_MS",
-         16,
-         368.77
+         12,
+         233.77
         ]
        ]
       },
@@ -4534,37 +4565,35 @@
     "singles": {
      "n": 38,
      "status": {
-      "unresolved": 13,
-      "bounced": 24,
-      "intercepted": 1
+      "unresolved": 15,
+      "bounced": 21,
+      "intercepted": 2
      },
-     "landing_usable": 23,
-     "landing_observed": 24,
+     "landing_usable": 21,
+     "landing_observed": 21,
      "landing_zones": {
-      "midcourt centre": 1,
-      "deep left": 7,
-      "deep right": 6,
-      "deep centre": 2,
+      "deep centre": 4,
       "midcourt left": 2,
-      "kitchen left": 1,
-      "behind centre": 2,
-      "behind left": 1,
-      "behind right": 1
+      "deep right": 7,
+      "deep left": 7,
+      "midcourt right": 1
      },
-     "interception_zones": {},
-     "intercepted": 1,
+     "interception_zones": {
+      "behind left": 1
+     },
+     "intercepted": 2,
      "speed_n": 25,
      "speed_median": 39,
      "facts": [
       {
-       "text": "Of 38 analysed shots: 24 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 13 are unresolved.",
+       "text": "Of 38 analysed shots: 21 bounced before the opponent's contact, 2 were intercepted, 0 ended at the net, 15 are unresolved.",
        "n": 38,
        "small": false,
        "kind": "fact",
        "clips": []
       },
       {
-       "text": "Of 7 usable serve bounces, 2 landed deep centre.",
+       "text": "Of 7 usable serve bounces, 3 landed deep centre.",
        "n": 7,
        "small": true,
        "kind": "fact",
@@ -4578,11 +4607,16 @@
          "tnppl_1_MS",
          6,
          96.43
+        ],
+        [
+         "tnppl_1_MS",
+         14,
+         271.83
         ]
        ]
       },
       {
-       "text": "Of 5 usable third-shot bounces, 2 landed deep right.",
+       "text": "Of 5 usable third-shot bounces, 3 landed deep right.",
        "n": 5,
        "small": true,
        "kind": "fact",
@@ -4594,14 +4628,19 @@
         ],
         [
          "tnppl_1_MS",
+         13,
+         257.8
+        ],
+        [
+         "tnppl_1_MS",
          14,
          274.03
         ]
        ]
       },
       {
-       "text": "Of 7 usable later-shot bounces, 3 landed deep right.",
-       "n": 7,
+       "text": "Of 6 usable later-shot bounces, 3 landed deep right.",
+       "n": 6,
        "small": true,
        "kind": "fact",
        "clips": [
@@ -4623,11 +4662,16 @@
        ]
       },
       {
-       "text": "1 shots were intercepted by the opponent.",
-       "n": 1,
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
        "small": true,
        "kind": "fact",
        "clips": [
+        [
+         "tnppl_1_MS",
+         8,
+         145.93
+        ],
         [
          "tnppl_1_MS",
          17,

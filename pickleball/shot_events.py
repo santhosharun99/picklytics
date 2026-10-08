@@ -28,7 +28,8 @@ from .zones import NET_Y, locate
 MIN_OBS = 6                   # ball positions in the outgoing window for a speed estimate
 COVER_FRAC, COVER_GAP_S = 0.6, 0.2   # tracking dense enough to rule out a missed bounce
 MERGE_FRAMES = 4              # physics and detector bounce within this many frames = the same bounce
-LABELS = {"full_match": "labels/Mens_Singles_GOLD_2026_US_Open.json"}  # hand tags with bounce positions
+LABELS = {"full_match": "labels/Mens_Singles_GOLD_2026_US_Open.json",   # hand tags with bounce positions
+          "tnppl_1_MS": "labels/TNPPL_S2_KTvRTT_1_MS.json"}
 
 
 def _opp_half(y: float, hitter_near: bool) -> bool:
@@ -76,29 +77,36 @@ def _coverage(ball: dict, f0: int, f1: int, fps: float) -> tuple[bool, int]:
 
 
 def _human_bounces(run_dir: Path, A: dict):
-    """{rally index: [bounce events]} from hand tags (court position via the ground homography), plus the frame
-    ranges the tags cover (inside them the human tags are the complete bounce record)."""
+    """Human bounce events (court position via the ground homography), the frame ranges the tags cover (inside
+    them the human tags are the complete bounce record) and the flights the tagger could not judge (bounce not
+    visible: 'next_bounce_unknown' on the hit) as (from, to) frames. Positions filled in automatically
+    ('xy_src' auto ...) are NOT human and are skipped."""
     lf = LABELS.get(Path(run_dir).name)
     root = Path(run_dir).resolve().parents[1]
     if not lf or not (root / lf).exists():
-        return {}, []
+        return [], [], []
     from .camera3d import calibrate_from_run
     L = json.loads((root / lf).read_text())
     cam = calibrate_from_run(run_dir)
     Hinv = np.linalg.inv(cam.P[:, [0, 1, 3]])
     sw, sh = L.get("source_size", [A["meta"]["width"], A["meta"]["height"]])
     sx, sy = A["meta"]["width"] / sw, A["meta"]["height"] / sh
-    out, ranges = [], []
+    out, ranges, unknown = [], [], []
     for r in L["rallies"]:
         if r.get("mode") != "hits+bounces" or r["end"] <= r["start"]:
             continue
         ranges.append((int(r["start"]), int(r["end"])))
+        ev = sorted(r["events"], key=lambda e: e["frame"])
+        for i, e in enumerate(ev):
+            if e["kind"] == "hit" and e.get("next_bounce_unknown"):
+                nxt = next((x for x in ev[i + 1:] if x["kind"] == "hit"), None)
+                unknown.append((int(e["frame"]), int(nxt["frame"]) if nxt else int(e["frame"]) + 90))
         for e in r["events"]:
-            if e["kind"] == "bounce" and "xy" in e:
+            if e["kind"] == "bounce" and "xy" in e and not str(e.get("xy_src", "")).startswith("auto"):
                 v = Hinv @ np.array([e["xy"][0] * sx, e["xy"][1] * sy, 1.0])
                 out.append({"kind": "bounce", "frame": int(e["frame"]), "x": float(v[0] / v[2]), "y": float(v[1] / v[2]),
                             "src": "human tag", "sd": None, "human": True})
-    return out, ranges
+    return out, ranges, unknown
 
 
 def build_run(run_dir, A: dict, live_by_rally: dict, use_human: bool = True) -> dict:
@@ -110,8 +118,8 @@ def build_run(run_dir, A: dict, live_by_rally: dict, use_human: bool = True) -> 
     bf = rd / "ball_v3.json"
     main = {int(k): v for k, v in json.loads((rd / "ball_v3_main.json").read_text()).items()} if (rd / "ball_v3_main.json").exists() else {}
     ball = {int(k): v for k, v in json.loads(bf.read_text()).items() if v[2] >= 0.3 and main.get(int(k), 1.0) >= 0.6} if bf.exists() else {}
-    human, h_ranges = _human_bounces(rd, A) if use_human else ([], [])
-    in_tags = lambda f: any(a <= f <= b for a, b in h_ranges)
+    human, h_ranges, h_unknown = _human_bounces(rd, A) if use_human else ([], [], [])
+    in_tags = lambda f: any(a <= f <= b for a, b in h_ranges) and not any(a - 3 <= f <= a + 3 for a, b in h_unknown)
     det = [{"kind": "bounce", "frame": int(b["frame"]), "x": b["court"][0], "y": b["court"][1], "src": "bounce detector", "sd": None}
            for b in A.get("bounces", []) if b.get("court")]
     out = {}
