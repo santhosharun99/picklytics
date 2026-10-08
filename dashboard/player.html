@@ -23,6 +23,9 @@ body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, san
 .style li { display: flex; gap: 10px; align-items: baseline; padding: 9px 12px; background: var(--surface-2); border-radius: 8px; }
 .style li .t { flex: 1; color: var(--text-primary); }
 .style li .n { flex: none; font-size: 11.5px; color: var(--text-muted); white-space: nowrap; }
+.ptype { margin: 12px 0 8px; font-size: 13px; color: var(--text-secondary); }
+.ptype:first-of-type { margin-top: 4px; }
+.cl { color: var(--court-green); text-decoration: none; font-weight: 600; margin-left: 6px; white-space: nowrap; }
 .tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
 .tag.small { background: #fdf3e1; color: #8a5a00; } .tag.exp { border: 1px solid var(--text-muted); color: var(--text-muted); }
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
@@ -90,6 +93,8 @@ const bars = (obj, nobj) => Object.entries(obj).filter(([, p]) => p != null).map
   const S = p.stats, sg = p.singles;
   const won = p.matches.filter(m => m.won_pct != null);
   const avgWon = won.length ? Math.round(won.reduce((a, m) => a + m.won_pct * m.rallies, 0) / won.reduce((a, m) => a + m.rallies, 0)) : null;
+  const factBlock = Object.entries(p.placement || {}).map(([t, pl]) => `<h3 class="ptype">${t === "singles" ? "Singles" : "Doubles"} · ${pl.n} analysed shots</h3>
+    <ul class="style">${pl.facts.map(f => `<li><span class="t">${esc(f.text)}${f.small ? '<span class="tag small">small sample</span>' : ""}</span>${f.clips.length ? `<span class="n">${f.clips.slice(0, 3).map(c => `<a class="cl" href="hub.html?m=${c[0]}#rallies" title="rally ${c[1]}">▶ ${(p.matches.find(m => m.id === c[0]) || {title: c[0]}).title.split(" vs ")[0]} · r${c[1]}</a>`).join(" ")}</span>` : ""}</li>`).join("")}</ul>`).join("");
   const styleItems = p.style.map(l => `<li><span class="t">${esc(l.text)}${l.kind === "experimental" ? '<span class="tag exp">experimental</span>' : ""}${l.small ? '<span class="tag small">small sample</span>' : ""}</span><span class="n">${l.n} shots</span></li>`).join("");
 
   const matchRows = p.matches.map(m => `<div class="mrow"><div>
@@ -117,21 +122,23 @@ const bars = (obj, nobj) => Object.entries(obj).filter(([, p]) => p != null).map
       ${tile("Matches", p.matches.length, `${p.matches.filter(m => m.type === "singles").length} singles · ${p.matches.filter(m => m.type === "doubles").length} doubles`)}
       ${tile("Shots", S.shots, "hits credited to this player")}
       ${tile(p.matches.some(m => m.team) ? "Rallies won (team)" : "Rallies won", avgWon == null ? "–" : avgWon + "%", "of the rallies they played")}
-      ${tile("Drive speed", S.speed.drive == null ? "–" : `${Math.round(S.speed.drive)}<small> mph</small>`, `typical · ${S.speed_n.drive} drives`)}
+      ${(() => { const t = Object.entries(p.placement || {}).sort((a, b) => b[1].n - a[1].n)[0]; return tile("Est. speed (median)", t && t[1].speed_median != null ? `${t[1].speed_median}<small> mph</small>` : "–", t ? `${t[1].speed_n} measurable ${t[0]} shots` : ""); })()}
       ${tile("Forehand", S.forehand_pct == null ? "–" : S.forehand_pct + "%", `of ${S.stroke_n} strokes`)}
       ${tile("Volleys", S.volley_pct == null ? "–" : S.volley_pct + "%", `of ${S.rally_shots_n} rally shots`)}
     </div>
 
     <div class="grid">
-      <div class="card wide"><h2>How they play</h2><p class="why">A summary from all their shots, compared with the other players in this database (pros and TNPPL together - different levels, so read comparisons loosely).</p>
+      <div class="card wide"><h2>Placement &amp; speed</h2><p class="why">Facts measured from the ball and player tracking, shot by shot, with how many shots each rests on. Singles and doubles are kept apart. "Intercepted" = the opponent hit the ball before it bounced (that is not where it landed). Speed = estimated launch speed off the paddle (not checked against radar).</p>
+        ${factBlock || '<span class="empty">No placement data yet.</span>'}
+        <div class="note">Observed landings were checked against 45 hand-tagged bounces in one match (median 0.5 ft away, same zone 27 of 35); other venues are not validated. Unresolved shots are left out of landing and interception counts.</div></div>
+
+      <div class="card wide"><h2>From shot-type labels <span class="tag exp">secondary</span></h2><p class="why">Older summary built on the automatic shot-type labels and court positions, compared with the other players here (pros and TNPPL together - different levels).</p>
         <ul class="style">${styleItems || '<li><span class="t">Not enough shots yet.</span></li>'}</ul>
         <div class="note">Shot types are automatic (drives and dinks mostly right; drops and resets often missed), so "drive" vs "soft" shares are rough. ${esc(D.note)}</div></div>
 
       <div class="card"><h2>Shot mix</h2><p class="why">All typed shots (${S.typed}).</p>${bars(S.mix)}</div>
       <div class="card"><h2>Where they hit from</h2><p class="why">Position at contact (${S.zones_n} shots): kitchen = within 7 ft of the net, transition = 7-15 ft, baseline = deeper.</p>${bars(S.zones)}
         ${S.deep_n ? `<div class="note">Hits deep (back 15 ft of the other side) on <b>${S.deep_pct}%</b> of serves, returns and drives (${S.deep_n}).</div>` : ""}</div>
-      <div class="card"><h2>Ball speed</h2><p class="why">Typical speed off the paddle (±3-4 mph), trustworthy measurements only.</p>
-        ${speedRows ? `<table><tr><th>Shot</th><th>Typical</th><th>Shots</th></tr>${speedRows}</table>` : '<span class="empty">No measured speeds.</span>'}</div>
       <div class="card"><h2>Spin &amp; net clearance <span class="tag exp">experimental</span></h2><p class="why">From the 3D ball flight; not yet checked against hand labels.</p>
         ${S.spin.n ? `<div class="bar"><span>Topspin</span><div class="track"><div class="fill" style="width:${S.spin.topspin}%"></div></div><span>${S.spin.topspin}%</span></div>
           <div class="bar"><span>Slice</span><div class="track"><div class="fill" style="width:${S.spin.slice}%"></div></div><span>${S.spin.slice}%</span></div>

@@ -613,6 +613,14 @@ def _phys_fields(rec: dict | None) -> dict:
     return {"spin_g": rec.get("g_eff"), "phys_clear_ft": rec.get("net_clear_ft")}
 
 
+def _placement_events(run_dir, A: dict, shots_by: dict, dead: dict) -> dict:
+    """{shot frame: placement record} (pickleball/shot_events.py) for the live shots of every rally."""
+    from .shot_events import build_run
+    live = {ri: [s for s in sorted(v, key=lambda s: s["frame"]) if (s["rally"], s["index"]) not in dead]
+            for ri, v in shots_by.items()}
+    return build_run(run_dir, A, live)
+
+
 def spin_kind(g: float) -> str:
     return "topspin" if g >= TOPSPIN_G else ("slice" if g <= SLICE_G else "flat")
 
@@ -775,6 +783,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
     from .rally_end import MODEL as _RE_MODEL, dead_touches, endings as _endings
     dead = dead_touches(A, run_dir) if _RE_MODEL.exists() else {}  # ball handling: not shots (scoring unchanged)
     ends = _endings(A, run_dir, dead) if _RE_MODEL.exists() else {}
+    placement = _placement_events(run_dir, A, shots_by, dead)
     out = []
     for k, r in enumerate(rallies):
         shots = []
@@ -787,7 +796,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
                           "land": s.get("land_3d") or s.get("landing_court"),  # 3D lifter landing spot first
                           "speed_mph": s.get("ball_mph"), "speed_err": s.get("ball_mph_err"),
                           "speed_conf": s.get("speed_conf"), "net_clear_ft": s.get("net_clear_ft"),
-                          **_phys_fields(phys.get(s["frame"]))})
+                          **_phys_fields(phys.get(s["frame"])), "f": s["frame"], "pl": placement.get(s["frame"])})
         if not shots:
             continue
         for s, nxt in zip(shots, shots[1:]):
@@ -965,6 +974,7 @@ def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: l
     shots_by = defaultdict(list)
     for s in A["shots"]:
         shots_by[s["rally"]].append(s)
+    placement = _placement_events(run_dir, A, shots_by, dead)
     rallies = []
     for k, r in enumerate(rec):
         nk = r["near_kit"]
@@ -981,7 +991,7 @@ def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: l
                           "land": s.get("land_3d") or s.get("landing_court"), "speed_mph": s.get("ball_mph"),
                           "speed_err": s.get("ball_mph_err"), "speed_conf": s.get("speed_conf"),
                           "net_clear_ft": s.get("net_clear_ft"), "inferred": bool(s.get("inferred")),
-                          **_phys_fields(phys.get(s["frame"]))})
+                          **_phys_fields(phys.get(s["frame"])), "f": s["frame"], "pl": placement.get(s["frame"])})
         if not shots:
             continue
         for s, nxt in zip(shots, shots[1:]):

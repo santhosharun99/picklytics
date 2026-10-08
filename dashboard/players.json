@@ -89,6 +89,301 @@
     "deep_pct": 70,
     "deep_n": 87
    },
+   "placement": {
+    "singles": {
+     "n": 138,
+     "status": {
+      "unresolved": 26,
+      "bounced": 80,
+      "intercepted": 28,
+      "net": 4
+     },
+     "landing_usable": 77,
+     "landing_observed": 80,
+     "landing_zones": {
+      "deep left": 24,
+      "deep right": 23,
+      "midcourt left": 5,
+      "behind right": 1,
+      "midcourt centre": 1,
+      "deep wide-right": 1,
+      "behind left": 2,
+      "midcourt right": 9,
+      "kitchen right": 2,
+      "deep centre": 3,
+      "midcourt wide-right": 2,
+      "behind wide-right": 1,
+      "kitchen wide-left": 1,
+      "kitchen left": 1,
+      "kitchen centre": 1
+     },
+     "interception_zones": {
+      "kitchen right": 1,
+      "midcourt right": 3,
+      "kitchen left": 5,
+      "deep left": 2,
+      "midcourt centre": 1
+     },
+     "intercepted": 28,
+     "speed_n": 115,
+     "speed_median": 43,
+     "facts": [
+      {
+       "text": "Of 138 analysed shots: 80 bounced before the opponent's contact, 28 were intercepted, 4 ended at the net, 26 are unresolved.",
+       "n": 138,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 30 usable serve bounces, 13 landed deep left.",
+       "n": 30,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         1,
+         195.9
+        ],
+        [
+         "boyer_devilliers",
+         5,
+         267.53
+        ],
+        [
+         "boyer_devilliers",
+         7,
+         307.41
+        ],
+        [
+         "boyer_devilliers",
+         21,
+         619.79
+        ],
+        [
+         "boyer_devilliers",
+         23,
+         663.3
+        ],
+        [
+         "boyer_devilliers",
+         33,
+         883.95
+        ]
+       ]
+      },
+      {
+       "text": "Of 17 usable return bounces, 9 landed deep right.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         3,
+         231.23
+        ],
+        [
+         "boyer_devilliers",
+         6,
+         291.72
+        ],
+        [
+         "boyer_devilliers",
+         12,
+         405.97
+        ],
+        [
+         "boyer_devilliers",
+         17,
+         518.75
+        ],
+        [
+         "boyer_devilliers",
+         19,
+         568.2
+        ],
+        [
+         "boyer_devilliers",
+         24,
+         688.42
+        ]
+       ]
+      },
+      {
+       "text": "Of 9 usable third-shot bounces, 2 landed wide of the right sideline (midcourt) - estimated out.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         21,
+         622.19
+        ],
+        [
+         "boyer_devilliers",
+         50,
+         1282.85
+        ]
+       ]
+      },
+      {
+       "text": "Of 21 usable later-shot bounces, 6 landed deep left.",
+       "n": 21,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         10,
+         366.97
+        ],
+        [
+         "boyer_devilliers",
+         19,
+         571.7
+        ],
+        [
+         "boyer_devilliers",
+         19,
+         573.14
+        ],
+        [
+         "boyer_devilliers",
+         31,
+         846.75
+        ],
+        [
+         "boyer_devilliers",
+         46,
+         1192.16
+        ],
+        [
+         "boyer_devilliers",
+         57,
+         1506.57
+        ]
+       ]
+      },
+      {
+       "text": "28 shots were intercepted by the opponent; 6 of the 12 with a certain zone near the kitchen.",
+       "n": 28,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         2,
+         212.31
+        ],
+        [
+         "boyer_devilliers",
+         5,
+         271.74
+        ],
+        [
+         "boyer_devilliers",
+         20,
+         595.23
+        ],
+        [
+         "boyer_devilliers",
+         53,
+         1379.75
+        ],
+        [
+         "boyer_devilliers",
+         53,
+         1384.55
+        ],
+        [
+         "boyer_devilliers",
+         53,
+         1386.25
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 115 measurable shots: 43 mph (on 24 intercepted shots: 44 mph).",
+       "n": 115,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         10,
+         366.97
+        ],
+        [
+         "boyer_devilliers",
+         10,
+         365.1
+        ],
+        [
+         "boyer_devilliers",
+         2,
+         210.64
+        ],
+        [
+         "boyer_devilliers",
+         5,
+         270.04
+        ],
+        [
+         "boyer_devilliers",
+         1,
+         195.9
+        ],
+        [
+         "boyer_devilliers",
+         2,
+         214.25
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 57 of 138 shots with a certain origin; most often from behind the baseline (right) (23).",
+       "n": 138,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         0,
+         178.55
+        ],
+        [
+         "boyer_devilliers",
+         1,
+         195.9
+        ],
+        [
+         "boyer_devilliers",
+         2,
+         210.64
+        ],
+        [
+         "boyer_devilliers",
+         2,
+         214.25
+        ],
+        [
+         "boyer_devilliers",
+         3,
+         231.23
+        ],
+        [
+         "boyer_devilliers",
+         5,
+         267.53
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [
     {
      "match": "boyer_devilliers",
@@ -259,37 +554,37 @@
      "text": "Mostly a back-court player: 84% of contacts from the baseline area.",
      "n": 138,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 87% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 82,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 18% of rally shots are volleys.",
      "n": 82,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 61% of strokes are forehands.",
      "n": 132,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 42 mph - one of the hardest hitters of the 23 players here.",
      "n": 54,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Serves at about 50 mph.",
      "n": 27,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 33% of drives (experimental spin reading).",
@@ -307,7 +602,7 @@
      "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
      "n": 87,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -397,6 +692,293 @@
     },
     "deep_pct": 82,
     "deep_n": 125
+   },
+   "placement": {
+    "singles": {
+     "n": 134,
+     "status": {
+      "bounced": 122,
+      "unresolved": 9,
+      "net": 1,
+      "intercepted": 2
+     },
+     "landing_usable": 111,
+     "landing_observed": 122,
+     "landing_zones": {
+      "midcourt right": 11,
+      "deep centre": 15,
+      "deep right": 31,
+      "deep left": 27,
+      "midcourt left": 4,
+      "deep wide-right": 1,
+      "kitchen right": 4,
+      "deep wide-left": 6,
+      "midcourt centre": 3,
+      "behind left": 4,
+      "behind wide-left": 1,
+      "kitchen left": 1,
+      "behind right": 3
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 107,
+     "speed_median": 44,
+     "facts": [
+      {
+       "text": "Of 134 analysed shots: 122 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 9 are unresolved.",
+       "n": 134,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 24 usable serve bounces, 12 landed deep left.",
+       "n": 24,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         3,
+         49.05
+        ],
+        [
+         "fahey_yoshitomi",
+         5,
+         109.08
+        ],
+        [
+         "fahey_yoshitomi",
+         16,
+         596.6
+        ],
+        [
+         "fahey_yoshitomi",
+         22,
+         733.53
+        ],
+        [
+         "fahey_yoshitomi",
+         27,
+         905.6
+        ],
+        [
+         "fahey_yoshitomi",
+         29,
+         1027.26
+        ]
+       ]
+      },
+      {
+       "text": "Of 14 usable return bounces, 6 landed deep right.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         7,
+         154.12
+        ],
+        [
+         "fahey_yoshitomi",
+         20,
+         688.42
+        ],
+        [
+         "fahey_yoshitomi",
+         23,
+         825.49
+        ],
+        [
+         "fahey_yoshitomi",
+         28,
+         923.49
+        ],
+        [
+         "fahey_yoshitomi",
+         32,
+         1068.5
+        ],
+        [
+         "fahey_yoshitomi",
+         37,
+         1180.71
+        ]
+       ]
+      },
+      {
+       "text": "Of 26 usable third-shot bounces, 7 landed deep right.",
+       "n": 26,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         6,
+         135.44
+        ],
+        [
+         "fahey_yoshitomi",
+         12,
+         286.35
+        ],
+        [
+         "fahey_yoshitomi",
+         39,
+         1227.56
+        ],
+        [
+         "fahey_yoshitomi",
+         40,
+         1252.22
+        ],
+        [
+         "fahey_yoshitomi",
+         42,
+         1315.11
+        ],
+        [
+         "fahey_yoshitomi",
+         43,
+         1340.67
+        ]
+       ]
+      },
+      {
+       "text": "Of 47 usable later-shot bounces, 11 landed deep right.",
+       "n": 47,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         2,
+         27.96
+        ],
+        [
+         "fahey_yoshitomi",
+         2,
+         30.53
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         84.12
+        ],
+        [
+         "fahey_yoshitomi",
+         10,
+         223.29
+        ],
+        [
+         "fahey_yoshitomi",
+         11,
+         254.59
+        ],
+        [
+         "fahey_yoshitomi",
+         16,
+         603.84
+        ]
+       ]
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         26,
+         886.55
+        ],
+        [
+         "fahey_yoshitomi",
+         26,
+         888.32
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 107 measurable shots: 44 mph.",
+       "n": 107,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         25,
+         864.26
+        ],
+        [
+         "fahey_yoshitomi",
+         27,
+         908.11
+        ],
+        [
+         "fahey_yoshitomi",
+         25,
+         861.86
+        ],
+        [
+         "fahey_yoshitomi",
+         24,
+         847.18
+        ],
+        [
+         "fahey_yoshitomi",
+         46,
+         1397.3
+        ],
+        [
+         "fahey_yoshitomi",
+         47,
+         1488.32
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 89 of 134 shots with a certain origin; most often from behind the baseline (left) (33).",
+       "n": 134,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         2,
+         27.96
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         81.61
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         84.12
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         86.59
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         91.42
+        ],
+        [
+         "fahey_yoshitomi",
+         9,
+         195.6
+        ]
+       ]
+      }
+     ]
+    }
    },
    "singles": [
     {
@@ -550,37 +1132,37 @@
      "text": "Mostly a back-court player: 92% of contacts from the baseline area.",
      "n": 134,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 95% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 94,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 18% of rally shots are volleys.",
      "n": 94,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 62% of strokes are forehands.",
      "n": 134,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 43 mph - one of the hardest hitters of the 23 players here.",
      "n": 77,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Serves at about 49 mph.",
      "n": 28,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 16% of drives (experimental spin reading).",
@@ -592,7 +1174,7 @@
      "text": "Hits deep (back 15 ft) on 82% of serves, returns and drives.",
      "n": 125,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -688,6 +1270,288 @@
     },
     "deep_pct": 55,
     "deep_n": 71
+   },
+   "placement": {
+    "singles": {
+     "n": 128,
+     "status": {
+      "unresolved": 29,
+      "bounced": 81,
+      "intercepted": 14,
+      "net": 4
+     },
+     "landing_usable": 75,
+     "landing_observed": 81,
+     "landing_zones": {
+      "deep left": 20,
+      "midcourt right": 17,
+      "deep centre": 7,
+      "midcourt centre": 8,
+      "deep right": 13,
+      "kitchen right": 2,
+      "midcourt wide-right": 3,
+      "midcourt left": 5
+     },
+     "interception_zones": {
+      "midcourt centre": 1,
+      "kitchen right": 2,
+      "kitchen left": 2,
+      "deep wide-right": 1
+     },
+     "intercepted": 14,
+     "speed_n": 101,
+     "speed_median": 35,
+     "facts": [
+      {
+       "text": "Of 128 analysed shots: 81 bounced before the opponent's contact, 14 were intercepted, 4 ended at the net, 29 are unresolved.",
+       "n": 128,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 20 usable serve bounces, 7 landed deep left.",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         11,
+         386.85
+        ],
+        [
+         "boyer_devilliers",
+         19,
+         567.17
+        ],
+        [
+         "boyer_devilliers",
+         22,
+         647.71
+        ],
+        [
+         "boyer_devilliers",
+         24,
+         687.42
+        ],
+        [
+         "boyer_devilliers",
+         36,
+         958.56
+        ],
+        [
+         "boyer_devilliers",
+         39,
+         1034.67
+        ]
+       ]
+      },
+      {
+       "text": "Of 25 usable return bounces, 7 landed deep right.",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         5,
+         268.47
+        ],
+        [
+         "boyer_devilliers",
+         8,
+         325.86
+        ],
+        [
+         "boyer_devilliers",
+         23,
+         664.3
+        ],
+        [
+         "boyer_devilliers",
+         33,
+         884.95
+        ],
+        [
+         "boyer_devilliers",
+         35,
+         936.47
+        ],
+        [
+         "boyer_devilliers",
+         42,
+         1099.93
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 3 landed midcourt right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         11,
+         389.12
+        ],
+        [
+         "boyer_devilliers",
+         16,
+         500.5
+        ],
+        [
+         "boyer_devilliers",
+         48,
+         1235.83
+        ]
+       ]
+      },
+      {
+       "text": "Of 25 usable later-shot bounces, 8 landed deep left.",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         4,
+         250.78
+        ],
+        [
+         "boyer_devilliers",
+         8,
+         328.03
+        ],
+        [
+         "boyer_devilliers",
+         17,
+         524.06
+        ],
+        [
+         "boyer_devilliers",
+         23,
+         666.17
+        ],
+        [
+         "boyer_devilliers",
+         33,
+         886.82
+        ],
+        [
+         "boyer_devilliers",
+         44,
+         1149.08
+        ]
+       ]
+      },
+      {
+       "text": "14 shots were intercepted by the opponent; 4 of the 6 with a certain zone near the kitchen.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         19,
+         569.47
+        ],
+        [
+         "boyer_devilliers",
+         34,
+         910.21
+        ],
+        [
+         "boyer_devilliers",
+         36,
+         960.86
+        ],
+        [
+         "boyer_devilliers",
+         45,
+         1168.57
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 101 measurable shots: 35 mph (on 13 intercepted shots: 40 mph).",
+       "n": 101,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         30,
+         822.29
+        ],
+        [
+         "boyer_devilliers",
+         58,
+         1556.99
+        ],
+        [
+         "boyer_devilliers",
+         43,
+         1125.06
+        ],
+        [
+         "boyer_devilliers",
+         19,
+         572.47
+        ],
+        [
+         "boyer_devilliers",
+         31,
+         842.51
+        ],
+        [
+         "boyer_devilliers",
+         46,
+         1193.06
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 65 of 128 shots with a certain origin; most often from behind the baseline (left) (26).",
+       "n": 128,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "boyer_devilliers",
+         2,
+         209.21
+        ],
+        [
+         "boyer_devilliers",
+         4,
+         248.78
+        ],
+        [
+         "boyer_devilliers",
+         8,
+         325.86
+        ],
+        [
+         "boyer_devilliers",
+         10,
+         363.5
+        ],
+        [
+         "boyer_devilliers",
+         12,
+         407.27
+        ],
+        [
+         "boyer_devilliers",
+         16,
+         500.5
+        ]
+       ]
+      }
+     ]
+    }
    },
    "singles": [
     {
@@ -831,37 +1695,37 @@
      "text": "Mixes court positions: 72% of contacts from the back, 26% from mid-court, 2% at the kitchen.",
      "n": 128,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 54%, dinks / drops / resets 39% of rally shots.",
      "n": 70,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 70,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (57% forehand).",
      "n": 126,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 34 mph.",
      "n": 29,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Serves at about 43 mph.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 12% of drives (experimental spin reading).",
@@ -879,7 +1743,7 @@
      "text": "Hits deep (back 15 ft) on 55% of serves, returns and drives.",
      "n": 71,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -973,6 +1837,284 @@
     },
     "deep_pct": 73,
     "deep_n": 101
+   },
+   "placement": {
+    "singles": {
+     "n": 125,
+     "status": {
+      "unresolved": 18,
+      "bounced": 95,
+      "intercepted": 6,
+      "net": 6
+     },
+     "landing_usable": 88,
+     "landing_observed": 95,
+     "landing_zones": {
+      "deep right": 28,
+      "kitchen centre": 3,
+      "deep centre": 13,
+      "behind right": 4,
+      "midcourt left": 4,
+      "midcourt centre": 4,
+      "deep left": 15,
+      "midcourt right": 12,
+      "behind left": 3,
+      "behind centre": 1,
+      "kitchen right": 1
+     },
+     "interception_zones": {
+      "kitchen centre": 1,
+      "midcourt centre": 1
+     },
+     "intercepted": 6,
+     "speed_n": 104,
+     "speed_median": 41,
+     "facts": [
+      {
+       "text": "Of 125 analysed shots: 95 bounced before the opponent's contact, 6 were intercepted, 6 ended at the net, 18 are unresolved.",
+       "n": 125,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 14 usable serve bounces, 8 landed deep right.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         2,
+         24.16
+        ],
+        [
+         "fahey_yoshitomi",
+         11,
+         248.41
+        ],
+        [
+         "fahey_yoshitomi",
+         17,
+         624.86
+        ],
+        [
+         "fahey_yoshitomi",
+         20,
+         687.42
+        ],
+        [
+         "fahey_yoshitomi",
+         26,
+         883.12
+        ],
+        [
+         "fahey_yoshitomi",
+         28,
+         922.52
+        ]
+       ]
+      },
+      {
+       "text": "Of 28 usable return bounces, 8 landed deep centre.",
+       "n": 28,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         3,
+         49.98
+        ],
+        [
+         "fahey_yoshitomi",
+         18,
+         646.61
+        ],
+        [
+         "fahey_yoshitomi",
+         34,
+         1110.68
+        ],
+        [
+         "fahey_yoshitomi",
+         39,
+         1226.22
+        ],
+        [
+         "fahey_yoshitomi",
+         40,
+         1250.95
+        ],
+        [
+         "fahey_yoshitomi",
+         42,
+         1313.65
+        ]
+       ]
+      },
+      {
+       "text": "Of 12 usable third-shot bounces, 5 landed deep right.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         1,
+         13.61
+        ],
+        [
+         "fahey_yoshitomi",
+         2,
+         26.69
+        ],
+        [
+         "fahey_yoshitomi",
+         17,
+         627.13
+        ],
+        [
+         "fahey_yoshitomi",
+         23,
+         826.86
+        ],
+        [
+         "fahey_yoshitomi",
+         25,
+         863.23
+        ]
+       ]
+      },
+      {
+       "text": "Of 34 usable later-shot bounces, 12 landed deep right.",
+       "n": 34,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         2,
+         29.2
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         85.29
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         90.22
+        ],
+        [
+         "fahey_yoshitomi",
+         9,
+         199.13
+        ],
+        [
+         "fahey_yoshitomi",
+         11,
+         253.35
+        ],
+        [
+         "fahey_yoshitomi",
+         11,
+         258.36
+        ]
+       ]
+      },
+      {
+       "text": "6 shots were intercepted by the opponent.",
+       "n": 6,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         10,
+         224.29
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 104 measurable shots: 41 mph (on 6 intercepted shots: 35 mph).",
+       "n": 104,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         43,
+         1339.37
+        ],
+        [
+         "fahey_yoshitomi",
+         2,
+         31.73
+        ],
+        [
+         "fahey_yoshitomi",
+         44,
+         1358.09
+        ],
+        [
+         "fahey_yoshitomi",
+         47,
+         1489.45
+        ],
+        [
+         "fahey_yoshitomi",
+         11,
+         253.35
+        ],
+        [
+         "fahey_yoshitomi",
+         16,
+         605.24
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 94 of 125 shots with a certain origin; most often from behind the baseline (left) (35).",
+       "n": 125,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "fahey_yoshitomi",
+         2,
+         29.2
+        ],
+        [
+         "fahey_yoshitomi",
+         3,
+         52.52
+        ],
+        [
+         "fahey_yoshitomi",
+         4,
+         85.29
+        ],
+        [
+         "fahey_yoshitomi",
+         6,
+         136.44
+        ],
+        [
+         "fahey_yoshitomi",
+         7,
+         155.22
+        ],
+        [
+         "fahey_yoshitomi",
+         9,
+         194.46
+        ]
+       ]
+      }
+     ]
+    }
    },
    "singles": [
     {
@@ -1112,37 +2254,37 @@
      "text": "Mostly a back-court player: 95% of contacts from the baseline area.",
      "n": 125,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 79,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 11% of rally shots are volleys.",
      "n": 79,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 58% of strokes are forehands.",
      "n": 124,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 39 mph - one of the hardest hitters of the 23 players here.",
      "n": 58,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Serves at about 45 mph.",
      "n": 7,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 19% of drives (experimental spin reading).",
@@ -1154,7 +2296,7 @@
      "text": "Hits deep (back 15 ft) on 73% of serves, returns and drives.",
      "n": 101,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -1269,6 +2411,289 @@
     },
     "deep_pct": 52,
     "deep_n": 27
+   },
+   "placement": {
+    "singles": {
+     "n": 36,
+     "status": {
+      "unresolved": 12,
+      "bounced": 19,
+      "intercepted": 4,
+      "net": 1
+     },
+     "landing_usable": 16,
+     "landing_observed": 19,
+     "landing_zones": {
+      "deep centre": 5,
+      "behind left": 1,
+      "behind centre": 1,
+      "kitchen right": 1,
+      "behind wide-right": 1,
+      "deep left": 2,
+      "deep right": 2,
+      "midcourt left": 1,
+      "midcourt right": 2
+     },
+     "interception_zones": {
+      "deep right": 1
+     },
+     "intercepted": 4,
+     "speed_n": 23,
+     "speed_median": 33,
+     "facts": [
+      {
+       "text": "Of 36 analysed shots: 19 bounced before the opponent's contact, 4 were intercepted, 1 ended at the net, 12 are unresolved.",
+       "n": 36,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 8 usable later-shot bounces, 2 landed deep centre.",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         1,
+         18.9
+        ],
+        [
+         "tnppl_1_MS",
+         17,
+         395.47
+        ]
+       ]
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         2,
+         36.43
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         59.37
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         67.2
+        ],
+        [
+         "tnppl_1_MS",
+         16,
+         368.77
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 23 measurable shots: 33 mph.",
+       "n": 23,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         2,
+         38.0
+        ],
+        [
+         "tnppl_1_MS",
+         11,
+         215.63
+        ],
+        [
+         "tnppl_1_MS",
+         2,
+         36.43
+        ],
+        [
+         "tnppl_1_MS",
+         6,
+         97.37
+        ],
+        [
+         "tnppl_1_MS",
+         5,
+         79.63
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         56.87
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 19 of 36 shots with a certain origin; most often from behind the baseline (right) (9).",
+       "n": 36,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         2,
+         36.43
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         67.2
+        ],
+        [
+         "tnppl_1_MS",
+         8,
+         144.33
+        ],
+        [
+         "tnppl_1_MS",
+         8,
+         146.77
+        ],
+        [
+         "tnppl_1_MS",
+         11,
+         215.63
+        ],
+        [
+         "tnppl_1_MS",
+         13,
+         256.5
+        ]
+       ]
+      }
+     ]
+    },
+    "doubles": {
+     "n": 35,
+     "status": {
+      "bounced": 12,
+      "unresolved": 16,
+      "intercepted": 5,
+      "net": 2
+     },
+     "landing_usable": 6,
+     "landing_observed": 12,
+     "landing_zones": {
+      "midcourt right": 1,
+      "kitchen right": 2,
+      "behind left": 1,
+      "deep centre": 1,
+      "deep right": 1
+     },
+     "interception_zones": {
+      "kitchen right": 1
+     },
+     "intercepted": 5,
+     "speed_n": 23,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 35 analysed shots: 12 bounced before the opponent's contact, 5 were intercepted, 2 ended at the net, 16 are unresolved.",
+       "n": 35,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "5 shots were intercepted by the opponent.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         29,
+         864.27
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 23 measurable shots: 28 mph (on 5 intercepted shots: 46 mph).",
+       "n": 23,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         4,
+         152.43
+        ],
+        [
+         "tnppl_3_MD",
+         8,
+         223.87
+        ],
+        [
+         "tnppl_3_MD",
+         30,
+         898.77
+        ],
+        [
+         "tnppl_3_MD",
+         17,
+         396.07
+        ],
+        [
+         "tnppl_3_MD",
+         19,
+         432.97
+        ],
+        [
+         "tnppl_3_MD",
+         29,
+         864.27
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 12 of 35 shots with a certain origin; most often from midcourt centre (7).",
+       "n": 35,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         5,
+         173.57
+        ],
+        [
+         "tnppl_3_MD",
+         6,
+         195.9
+        ],
+        [
+         "tnppl_3_MD",
+         8,
+         220.63
+        ],
+        [
+         "tnppl_3_MD",
+         19,
+         429.87
+        ],
+        [
+         "tnppl_3_MD",
+         19,
+         436.23
+        ],
+        [
+         "tnppl_3_MD",
+         22,
+         630.83
+        ]
+       ]
+      }
+     ]
+    }
    },
    "singles": [
     {
@@ -1400,31 +2825,31 @@
      "text": "Mixes court positions: 58% of contacts from the back, 41% from mid-court, 1% at the kitchen.",
      "n": 71,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 54%, dinks / drops / resets 38% of rally shots.",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 8% of rally shots.",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (46% forehand).",
      "n": 67,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 35 mph - one of the hardest hitters of the 23 players here.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 14% of drives (experimental spin reading).",
@@ -1442,7 +2867,7 @@
      "text": "Hits deep (back 15 ft) on 52% of serves, returns and drives.",
      "n": 27,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -1557,6 +2982,178 @@
     "deep_pct": 50,
     "deep_n": 24
    },
+   "placement": {
+    "doubles": {
+     "n": 63,
+     "status": {
+      "unresolved": 30,
+      "bounced": 20,
+      "net": 4,
+      "intercepted": 9
+     },
+     "landing_usable": 16,
+     "landing_observed": 20,
+     "landing_zones": {
+      "behind left": 2,
+      "midcourt left": 2,
+      "midcourt wide-right": 1,
+      "deep left": 3,
+      "deep centre": 1,
+      "midcourt wide-left": 1,
+      "behind centre": 1,
+      "midcourt centre": 2,
+      "deep wide-right": 1,
+      "midcourt right": 2
+     },
+     "interception_zones": {
+      "midcourt right": 1
+     },
+     "intercepted": 9,
+     "speed_n": 48,
+     "speed_median": 32,
+     "facts": [
+      {
+       "text": "Of 63 analysed shots: 20 bounced before the opponent's contact, 9 were intercepted, 4 ended at the net, 30 are unresolved.",
+       "n": 63,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable return bounces, 2 landed past the baseline (left) - estimated out.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_4_XD",
+         2,
+         122.43
+        ],
+        [
+         "tnppl_6_MD",
+         8,
+         193.8
+        ]
+       ]
+      },
+      {
+       "text": "9 shots were intercepted by the opponent.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_4_XD",
+         5,
+         178.73
+        ],
+        [
+         "tnppl_4_XD",
+         5,
+         179.93
+        ],
+        [
+         "tnppl_4_XD",
+         9,
+         279.37
+        ],
+        [
+         "tnppl_4_XD",
+         12,
+         349.2
+        ],
+        [
+         "tnppl_4_XD",
+         13,
+         369.73
+        ],
+        [
+         "tnppl_6_MD",
+         3,
+         69.7
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 48 measurable shots: 32 mph (on 9 intercepted shots: 32 mph).",
+       "n": 48,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         4,
+         87.33
+        ],
+        [
+         "tnppl_4_XD",
+         13,
+         369.73
+        ],
+        [
+         "tnppl_4_XD",
+         5,
+         178.73
+        ],
+        [
+         "tnppl_4_XD",
+         25,
+         773.43
+        ],
+        [
+         "tnppl_6_MD",
+         26,
+         546.9
+        ],
+        [
+         "tnppl_4_XD",
+         9,
+         277.93
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 14 of 63 shots with a certain origin; most often from midcourt centre (12).",
+       "n": 63,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_4_XD",
+         5,
+         179.93
+        ],
+        [
+         "tnppl_4_XD",
+         6,
+         195.3
+        ],
+        [
+         "tnppl_4_XD",
+         8,
+         258.67
+        ],
+        [
+         "tnppl_4_XD",
+         15,
+         412.13
+        ],
+        [
+         "tnppl_4_XD",
+         20,
+         702.6
+        ],
+        [
+         "tnppl_4_XD",
+         23,
+         746.87
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -1564,31 +3161,31 @@
      "text": "Plays forward: 57% of contacts are inside the baseline area (transition or kitchen).",
      "n": 63,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 51%, dinks / drops / resets 36% of rally shots.",
      "n": 45,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 13% of rally shots.",
      "n": 45,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 71% of strokes are forehands.",
      "n": 63,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 32 mph.",
      "n": 17,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 19% of drives (experimental spin reading).",
@@ -1606,7 +3203,7 @@
      "text": "Hits deep (back 15 ft) on 50% of serves, returns and drives.",
      "n": 24,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -1723,6 +3320,166 @@
     "deep_pct": 44,
     "deep_n": 16
    },
+   "placement": {
+    "doubles": {
+     "n": 55,
+     "status": {
+      "unresolved": 17,
+      "bounced": 29,
+      "intercepted": 4,
+      "net": 5
+     },
+     "landing_usable": 19,
+     "landing_observed": 29,
+     "landing_zones": {
+      "kitchen centre": 3,
+      "deep left": 2,
+      "midcourt left": 2,
+      "deep wide-left": 1,
+      "behind centre": 3,
+      "midcourt centre": 1,
+      "kitchen right": 2,
+      "deep centre": 3,
+      "deep right": 1,
+      "midcourt right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 4,
+     "speed_n": 37,
+     "speed_median": 29,
+     "facts": [
+      {
+       "text": "Of 55 analysed shots: 29 bounced before the opponent's contact, 4 were intercepted, 5 ended at the net, 17 are unresolved.",
+       "n": 55,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 2 landed past the baseline (centre) - estimated out.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         14,
+         293.73
+        ],
+        [
+         "tnppl_2_WD",
+         21,
+         445.37
+        ]
+       ]
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         2,
+         56.87
+        ],
+        [
+         "tnppl_2_WD",
+         10,
+         182.47
+        ],
+        [
+         "tnppl_2_WD",
+         18,
+         410.67
+        ],
+        [
+         "tnppl_2_WD",
+         23,
+         601.3
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 37 measurable shots: 29 mph.",
+       "n": 37,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         1,
+         42.47
+        ],
+        [
+         "tnppl_2_WD",
+         13,
+         264.2
+        ],
+        [
+         "tnppl_2_WD",
+         7,
+         136.77
+        ],
+        [
+         "tnppl_2_WD",
+         35,
+         889.7
+        ],
+        [
+         "tnppl_4_XD",
+         12,
+         339.3
+        ],
+        [
+         "tnppl_2_WD",
+         21,
+         445.37
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 10 of 55 shots with a certain origin; most often from midcourt centre (10).",
+       "n": 55,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         5,
+         108.07
+        ],
+        [
+         "tnppl_2_WD",
+         13,
+         262.67
+        ],
+        [
+         "tnppl_2_WD",
+         13,
+         264.2
+        ],
+        [
+         "tnppl_2_WD",
+         14,
+         297.43
+        ],
+        [
+         "tnppl_2_WD",
+         20,
+         431.5
+        ],
+        [
+         "tnppl_2_WD",
+         23,
+         602.2
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -1730,25 +3487,25 @@
      "text": "Plays forward: 71% of contacts are inside the baseline area (transition or kitchen).",
      "n": 55,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 55% of rally shots - among the most of the 23 players here.",
      "n": 42,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (56% forehand).",
      "n": 55,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 26 mph - on the softer side of the 23 players here.",
      "n": 11,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 0% of drives (experimental spin reading).",
@@ -1766,7 +3523,7 @@
      "text": "Hits deep (back 15 ft) on 44% of serves, returns and drives.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -1881,6 +3638,165 @@
     "deep_pct": 50,
     "deep_n": 16
    },
+   "placement": {
+    "doubles": {
+     "n": 50,
+     "status": {
+      "intercepted": 5,
+      "unresolved": 21,
+      "bounced": 21,
+      "net": 3
+     },
+     "landing_usable": 16,
+     "landing_observed": 21,
+     "landing_zones": {
+      "midcourt centre": 4,
+      "deep left": 3,
+      "midcourt left": 5,
+      "deep centre": 2,
+      "midcourt right": 1,
+      "kitchen centre": 1
+     },
+     "interception_zones": {
+      "kitchen centre": 2,
+      "midcourt centre": 1
+     },
+     "intercepted": 5,
+     "speed_n": 36,
+     "speed_median": 22,
+     "facts": [
+      {
+       "text": "Of 50 analysed shots: 21 bounced before the opponent's contact, 5 were intercepted, 3 ended at the net, 21 are unresolved.",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 8 usable later-shot bounces, 4 landed midcourt centre.",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         5,
+         175.87
+        ],
+        [
+         "tnppl_3_MD",
+         26,
+         697.33
+        ],
+        [
+         "tnppl_3_MD",
+         26,
+         699.57
+        ],
+        [
+         "tnppl_3_MD",
+         36,
+         1034.73
+        ]
+       ]
+      },
+      {
+       "text": "5 shots were intercepted by the opponent; 2 of the 3 with a certain zone near the kitchen.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         31,
+         916.57
+        ],
+        [
+         "tnppl_4_XD",
+         5,
+         177.83
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 36 measurable shots: 22 mph (on 5 intercepted shots: 22 mph).",
+       "n": 36,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         34,
+         970.17
+        ],
+        [
+         "tnppl_4_XD",
+         22,
+         729.17
+        ],
+        [
+         "tnppl_3_MD",
+         21,
+         519.67
+        ],
+        [
+         "tnppl_4_XD",
+         27,
+         825.07
+        ],
+        [
+         "tnppl_3_MD",
+         5,
+         175.87
+        ],
+        [
+         "tnppl_4_XD",
+         3,
+         137.53
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 13 of 50 shots with a certain origin; most often from midcourt centre (11).",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         1,
+         99.97
+        ],
+        [
+         "tnppl_3_MD",
+         1,
+         100.83
+        ],
+        [
+         "tnppl_3_MD",
+         5,
+         175.87
+        ],
+        [
+         "tnppl_3_MD",
+         14,
+         349.2
+        ],
+        [
+         "tnppl_3_MD",
+         24,
+         670.63
+        ],
+        [
+         "tnppl_3_MD",
+         31,
+         916.57
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -1888,31 +3804,31 @@
      "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
      "n": 50,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 65% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 37,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 8% of rally shots.",
      "n": 37,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 58% of strokes are forehands.",
      "n": 50,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 32 mph.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 22% of drives (experimental spin reading).",
@@ -1924,7 +3840,7 @@
      "text": "Hits deep (back 15 ft) on 50% of serves, returns and drives.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2037,6 +3953,157 @@
     "deep_pct": 70,
     "deep_n": 20
    },
+   "placement": {
+    "doubles": {
+     "n": 48,
+     "status": {
+      "bounced": 13,
+      "intercepted": 10,
+      "unresolved": 21,
+      "net": 4
+     },
+     "landing_usable": 11,
+     "landing_observed": 13,
+     "landing_zones": {
+      "kitchen centre": 1,
+      "deep centre": 2,
+      "deep left": 1,
+      "deep right": 4,
+      "kitchen left": 1,
+      "midcourt centre": 1,
+      "kitchen right": 1
+     },
+     "interception_zones": {
+      "midcourt centre": 2
+     },
+     "intercepted": 10,
+     "speed_n": 36,
+     "speed_median": 36,
+     "facts": [
+      {
+       "text": "Of 48 analysed shots: 13 bounced before the opponent's contact, 10 were intercepted, 4 ended at the net, 21 are unresolved.",
+       "n": 48,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "10 shots were intercepted by the opponent.",
+       "n": 10,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         2,
+         56.4
+        ],
+        [
+         "tnppl_2_WD",
+         7,
+         135.63
+        ],
+        [
+         "tnppl_2_WD",
+         8,
+         153.17
+        ],
+        [
+         "tnppl_2_WD",
+         23,
+         600.57
+        ],
+        [
+         "tnppl_2_WD",
+         23,
+         601.7
+        ],
+        [
+         "tnppl_2_WD",
+         28,
+         748.3
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 36 measurable shots: 36 mph (on 9 intercepted shots: 30 mph).",
+       "n": 36,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_4_XD",
+         12,
+         347.77
+        ],
+        [
+         "tnppl_2_WD",
+         41,
+         977.13
+        ],
+        [
+         "tnppl_2_WD",
+         2,
+         56.4
+        ],
+        [
+         "tnppl_2_WD",
+         24,
+         613.37
+        ],
+        [
+         "tnppl_4_XD",
+         1,
+         102.2
+        ],
+        [
+         "tnppl_4_XD",
+         12,
+         346.7
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 19 of 48 shots with a certain origin; most often from behind the baseline (centre) (9).",
+       "n": 48,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         2,
+         56.4
+        ],
+        [
+         "tnppl_2_WD",
+         2,
+         57.77
+        ],
+        [
+         "tnppl_2_WD",
+         13,
+         258.73
+        ],
+        [
+         "tnppl_2_WD",
+         25,
+         646.53
+        ],
+        [
+         "tnppl_2_WD",
+         30,
+         789.43
+        ],
+        [
+         "tnppl_2_WD",
+         30,
+         791.2
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -2044,37 +4111,37 @@
      "text": "Mixes court positions: 54% of contacts from the back, 44% from mid-court, 2% at the kitchen.",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 59%, dinks / drops / resets 29% of rally shots.",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 12% of rally shots.",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 41% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 67% of strokes are forehands.",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 38 mph - one of the hardest hitters of the 23 players here.",
      "n": 18,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 20% of drives (experimental spin reading).",
@@ -2086,7 +4153,7 @@
      "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2180,6 +4247,153 @@
     "deep_pct": 42,
     "deep_n": 12
    },
+   "placement": {
+    "doubles": {
+     "n": 48,
+     "status": {
+      "unresolved": 15,
+      "bounced": 25,
+      "intercepted": 7,
+      "net": 1
+     },
+     "landing_usable": 18,
+     "landing_observed": 25,
+     "landing_zones": {
+      "deep centre": 1,
+      "midcourt centre": 3,
+      "midcourt left": 3,
+      "behind centre": 4,
+      "deep wide-left": 1,
+      "deep right": 2,
+      "kitchen centre": 1,
+      "midcourt wide-right": 1,
+      "behind left": 1,
+      "kitchen right": 1
+     },
+     "interception_zones": {
+      "kitchen centre": 1
+     },
+     "intercepted": 7,
+     "speed_n": 32,
+     "speed_median": 31,
+     "facts": [
+      {
+       "text": "Of 48 analysed shots: 25 bounced before the opponent's contact, 7 were intercepted, 1 ended at the net, 15 are unresolved.",
+       "n": 48,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 11 usable later-shot bounces, 2 landed midcourt left.",
+       "n": 11,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         5,
+         110.43
+        ],
+        [
+         "tnppl_6_MD",
+         18,
+         426.1
+        ]
+       ]
+      },
+      {
+       "text": "7 shots were intercepted by the opponent.",
+       "n": 7,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         8,
+         195.23
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 32 measurable shots: 31 mph (on 7 intercepted shots: 39 mph).",
+       "n": 32,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         24,
+         507.83
+        ],
+        [
+         "tnppl_6_MD",
+         13,
+         302.8
+        ],
+        [
+         "tnppl_6_MD",
+         17,
+         399.6
+        ],
+        [
+         "tnppl_6_MD",
+         27,
+         569.13
+        ],
+        [
+         "tnppl_6_MD",
+         34,
+         811.53
+        ],
+        [
+         "tnppl_6_MD",
+         36,
+         844.53
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 12 of 48 shots with a certain origin; most often from midcourt centre (10).",
+       "n": 48,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         1,
+         15.13
+        ],
+        [
+         "tnppl_6_MD",
+         4,
+         85.47
+        ],
+        [
+         "tnppl_6_MD",
+         4,
+         88.43
+        ],
+        [
+         "tnppl_6_MD",
+         7,
+         137.27
+        ],
+        [
+         "tnppl_6_MD",
+         10,
+         224.07
+        ],
+        [
+         "tnppl_6_MD",
+         17,
+         404.4
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -2187,31 +4401,31 @@
      "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 48% of rally shots - among the most of the 23 players here.",
      "n": 42,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 45% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 42,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 65% of strokes are forehands.",
      "n": 48,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 33 mph.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 6% of drives (experimental spin reading).",
@@ -2229,7 +4443,7 @@
      "text": "Hits deep (back 15 ft) on 42% of serves, returns and drives.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2315,6 +4529,190 @@
     },
     "deep_pct": 69,
     "deep_n": 26
+   },
+   "placement": {
+    "singles": {
+     "n": 38,
+     "status": {
+      "unresolved": 13,
+      "bounced": 24,
+      "intercepted": 1
+     },
+     "landing_usable": 23,
+     "landing_observed": 24,
+     "landing_zones": {
+      "midcourt centre": 1,
+      "deep left": 7,
+      "deep right": 6,
+      "deep centre": 2,
+      "midcourt left": 2,
+      "kitchen left": 1,
+      "behind centre": 2,
+      "behind left": 1,
+      "behind right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 25,
+     "speed_median": 39,
+     "facts": [
+      {
+       "text": "Of 38 analysed shots: 24 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 13 are unresolved.",
+       "n": 38,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 7 usable serve bounces, 2 landed deep centre.",
+       "n": 7,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         4,
+         55.93
+        ],
+        [
+         "tnppl_1_MS",
+         6,
+         96.43
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 2 landed deep right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         4,
+         58.27
+        ],
+        [
+         "tnppl_1_MS",
+         14,
+         274.03
+        ]
+       ]
+      },
+      {
+       "text": "Of 7 usable later-shot bounces, 3 landed deep right.",
+       "n": 7,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         2,
+         37.2
+        ],
+        [
+         "tnppl_1_MS",
+         16,
+         367.67
+        ],
+        [
+         "tnppl_1_MS",
+         16,
+         369.93
+        ]
+       ]
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         17,
+         394.83
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 25 measurable shots: 39 mph.",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         14,
+         271.83
+        ],
+        [
+         "tnppl_1_MS",
+         17,
+         392.7
+        ],
+        [
+         "tnppl_1_MS",
+         2,
+         35.33
+        ],
+        [
+         "tnppl_1_MS",
+         5,
+         78.67
+        ],
+        [
+         "tnppl_1_MS",
+         8,
+         145.93
+        ],
+        [
+         "tnppl_1_MS",
+         16,
+         365.23
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 22 of 38 shots with a certain origin; most often from behind the baseline (left) (9).",
+       "n": 38,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_1_MS",
+         1,
+         9.4
+        ],
+        [
+         "tnppl_1_MS",
+         1,
+         12.5
+        ],
+        [
+         "tnppl_1_MS",
+         1,
+         18.1
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         58.27
+        ],
+        [
+         "tnppl_1_MS",
+         4,
+         68.17
+        ],
+        [
+         "tnppl_1_MS",
+         7,
+         115.93
+        ]
+       ]
+      }
+     ]
+    }
    },
    "singles": [
     {
@@ -2443,25 +4841,25 @@
      "text": "Mostly a back-court player: 89% of contacts from the baseline area.",
      "n": 38,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 100% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 26,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 62% of strokes are forehands.",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 49 mph - one of the hardest hitters of the 23 players here.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 37% of drives (experimental spin reading).",
@@ -2473,7 +4871,7 @@
      "text": "Hits deep (back 15 ft) on 69% of serves, returns and drives.",
      "n": 26,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2593,6 +4991,130 @@
     "deep_pct": 70,
     "deep_n": 10
    },
+   "placement": {
+    "doubles": {
+     "n": 37,
+     "status": {
+      "bounced": 10,
+      "intercepted": 6,
+      "net": 4,
+      "unresolved": 17
+     },
+     "landing_usable": 5,
+     "landing_observed": 10,
+     "landing_zones": {
+      "deep right": 2,
+      "midcourt right": 1,
+      "behind left": 1,
+      "kitchen left": 1
+     },
+     "interception_zones": {
+      "midcourt centre": 1,
+      "kitchen centre": 1
+     },
+     "intercepted": 6,
+     "speed_n": 29,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 37 analysed shots: 10 bounced before the opponent's contact, 6 were intercepted, 4 ended at the net, 17 are unresolved.",
+       "n": 37,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "6 shots were intercepted by the opponent.",
+       "n": 6,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         6,
+         149.07
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 29 measurable shots: 28 mph (on 6 intercepted shots: 26 mph).",
+       "n": 29,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         25,
+         783.93
+        ],
+        [
+         "tnppl_5_MD50",
+         23,
+         765.83
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         28,
+         863.57
+        ],
+        [
+         "tnppl_5_MD50",
+         10,
+         205.3
+        ],
+        [
+         "tnppl_5_MD50",
+         7,
+         158.83
+        ],
+        [
+         "tnppl_5_MD50",
+         14,
+         398.6
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 14 of 37 shots with a certain origin; most often from deep centre (6).",
+       "n": 37,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         2,
+         50.37
+        ],
+        [
+         "tnppl_5_MD50",
+         3,
+         77.53
+        ],
+        [
+         "tnppl_5_MD50",
+         6,
+         150.33
+        ],
+        [
+         "tnppl_5_MD50",
+         13,
+         349.6
+        ],
+        [
+         "tnppl_5_MD50",
+         21,
+         695.67
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         31,
+         931.07
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -2600,31 +5122,31 @@
      "text": "Mixes court positions: 54% of contacts from the back, 41% from mid-court, 5% at the kitchen.",
      "n": 37,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 52% of rally shots - among the most of the 23 players here.",
      "n": 31,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 10% of rally shots.",
      "n": 31,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (51% forehand).",
      "n": 37,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 37 mph - one of the hardest hitters of the 23 players here.",
      "n": 7,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 50% of drives (experimental spin reading).",
@@ -2636,7 +5158,7 @@
      "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
      "n": 10,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2754,6 +5276,142 @@
     "deep_pct": 62,
     "deep_n": 8
    },
+   "placement": {
+    "doubles": {
+     "n": 34,
+     "status": {
+      "unresolved": 18,
+      "intercepted": 4,
+      "bounced": 11,
+      "net": 1
+     },
+     "landing_usable": 8,
+     "landing_observed": 11,
+     "landing_zones": {
+      "kitchen centre": 2,
+      "deep left": 3,
+      "behind centre": 2,
+      "kitchen right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 4,
+     "speed_n": 29,
+     "speed_median": 30,
+     "facts": [
+      {
+       "text": "Of 34 analysed shots: 11 bounced before the opponent's contact, 4 were intercepted, 1 ended at the net, 18 are unresolved.",
+       "n": 34,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         1,
+         100.47
+        ],
+        [
+         "tnppl_3_MD",
+         21,
+         520.1
+        ],
+        [
+         "tnppl_3_MD",
+         24,
+         669.87
+        ],
+        [
+         "tnppl_3_MD",
+         28,
+         852.2
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 29 measurable shots: 30 mph.",
+       "n": 29,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         26,
+         698.4
+        ],
+        [
+         "tnppl_3_MD",
+         21,
+         520.1
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         10,
+         269.67
+        ],
+        [
+         "tnppl_3_MD",
+         13,
+         332.77
+        ],
+        [
+         "tnppl_3_MD",
+         8,
+         221.77
+        ],
+        [
+         "tnppl_3_MD",
+         24,
+         669.87
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 10 of 34 shots with a certain origin; most often from behind the baseline (centre) (7).",
+       "n": 34,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         6,
+         195.3
+        ],
+        [
+         "tnppl_3_MD",
+         12,
+         322.2
+        ],
+        [
+         "tnppl_3_MD",
+         12,
+         324.6
+        ],
+        [
+         "tnppl_3_MD",
+         13,
+         332.77
+        ],
+        [
+         "tnppl_3_MD",
+         24,
+         669.87
+        ],
+        [
+         "tnppl_3_MD",
+         32,
+         932.23
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -2761,31 +5419,31 @@
      "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 52% of rally shots - among the most of the 23 players here.",
      "n": 27,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 44% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 27,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 65% of strokes are forehands.",
      "n": 34,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 29 mph - on the softer side of the 23 players here.",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 18% of drives (experimental spin reading).",
@@ -2797,7 +5455,7 @@
      "text": "Hits deep (back 15 ft) on 62% of serves, returns and drives.",
      "n": 8,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -2891,6 +5549,158 @@
     "deep_pct": 56,
     "deep_n": 9
    },
+   "placement": {
+    "doubles": {
+     "n": 25,
+     "status": {
+      "unresolved": 7,
+      "bounced": 15,
+      "intercepted": 3
+     },
+     "landing_usable": 13,
+     "landing_observed": 15,
+     "landing_zones": {
+      "midcourt centre": 1,
+      "deep centre": 3,
+      "deep right": 1,
+      "kitchen right": 2,
+      "behind centre": 2,
+      "behind left": 1,
+      "kitchen centre": 1,
+      "behind right": 2
+     },
+     "interception_zones": {},
+     "intercepted": 3,
+     "speed_n": 21,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 25 analysed shots: 15 bounced before the opponent's contact, 3 were intercepted, 0 ended at the net, 7 are unresolved.",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 6 usable later-shot bounces, 2 landed deep centre.",
+       "n": 6,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         3,
+         72.37
+        ],
+        [
+         "tnppl_5_MD50",
+         14,
+         399.07
+        ]
+       ]
+      },
+      {
+       "text": "3 shots were intercepted by the opponent.",
+       "n": 3,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         6,
+         150.0
+        ],
+        [
+         "tnppl_5_MD50",
+         18,
+         566.23
+        ],
+        [
+         "tnppl_5_MD50",
+         25,
+         815.2
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 21 measurable shots: 28 mph.",
+       "n": 21,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         12,
+         279.33
+        ],
+        [
+         "tnppl_5_MD50",
+         14,
+         395.2
+        ],
+        [
+         "tnppl_5_MD50",
+         1,
+         31.03
+        ],
+        [
+         "tnppl_5_MD50",
+         9,
+         191.67
+        ],
+        [
+         "tnppl_5_MD50",
+         24,
+         792.13
+        ],
+        [
+         "tnppl_5_MD50",
+         25,
+         815.2
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 4 of 25 shots with a certain origin; most often from midcourt centre (9).",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         3,
+         68.97
+        ],
+        [
+         "tnppl_5_MD50",
+         3,
+         72.37
+        ],
+        [
+         "tnppl_5_MD50",
+         6,
+         146.13
+        ],
+        [
+         "tnppl_5_MD50",
+         6,
+         148.0
+        ],
+        [
+         "tnppl_5_MD50",
+         9,
+         191.67
+        ],
+        [
+         "tnppl_5_MD50",
+         10,
+         205.7
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -2898,31 +5708,31 @@
      "text": "Plays forward: 72% of contacts are inside the baseline area (transition or kitchen).",
      "n": 25,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 80% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 55% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (52% forehand).",
      "n": 25,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 30 mph.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 14% of drives (experimental spin reading).",
@@ -2934,7 +5744,7 @@
      "text": "Hits deep (back 15 ft) on 56% of serves, returns and drives.",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3026,6 +5836,135 @@
     "deep_pct": 73,
     "deep_n": 11
    },
+   "placement": {
+    "doubles": {
+     "n": 25,
+     "status": {
+      "bounced": 13,
+      "unresolved": 9,
+      "intercepted": 2,
+      "net": 1
+     },
+     "landing_usable": 10,
+     "landing_observed": 13,
+     "landing_zones": {
+      "deep centre": 3,
+      "behind wide-left": 1,
+      "deep right": 2,
+      "deep left": 1,
+      "behind right": 1,
+      "behind left": 1,
+      "midcourt left": 1
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 17,
+     "speed_median": 31,
+     "facts": [
+      {
+       "text": "Of 25 analysed shots: 13 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 9 are unresolved.",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         8,
+         152.37
+        ],
+        [
+         "tnppl_2_WD",
+         10,
+         188.13
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 17 measurable shots: 31 mph.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         22,
+         458.4
+        ],
+        [
+         "tnppl_2_WD",
+         23,
+         599.47
+        ],
+        [
+         "tnppl_2_WD",
+         44,
+         1048.43
+        ],
+        [
+         "tnppl_2_WD",
+         30,
+         788.67
+        ],
+        [
+         "tnppl_2_WD",
+         28,
+         747.7
+        ],
+        [
+         "tnppl_2_WD",
+         2,
+         54.63
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 12 of 25 shots with a certain origin; most often from behind the baseline (right) (6).",
+       "n": 25,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         2,
+         54.63
+        ],
+        [
+         "tnppl_2_WD",
+         2,
+         58.23
+        ],
+        [
+         "tnppl_2_WD",
+         4,
+         86.27
+        ],
+        [
+         "tnppl_2_WD",
+         22,
+         458.4
+        ],
+        [
+         "tnppl_2_WD",
+         24,
+         614.4
+        ],
+        [
+         "tnppl_2_WD",
+         44,
+         1048.43
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3033,31 +5972,31 @@
      "text": "Plays forward: 64% of contacts are inside the baseline area (transition or kitchen).",
      "n": 25,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 21,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 29% of rally shots are volleys.",
      "n": 21,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (44% forehand).",
      "n": 25,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 25 mph - on the softer side of the 23 players here.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 27% of drives (experimental spin reading).",
@@ -3069,7 +6008,7 @@
      "text": "Hits deep (back 15 ft) on 73% of serves, returns and drives.",
      "n": 11,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3163,6 +6102,158 @@
     "deep_pct": 60,
     "deep_n": 10
    },
+   "placement": {
+    "doubles": {
+     "n": 24,
+     "status": {
+      "bounced": 10,
+      "unresolved": 10,
+      "intercepted": 3,
+      "net": 1
+     },
+     "landing_usable": 8,
+     "landing_observed": 10,
+     "landing_zones": {
+      "midcourt right": 1,
+      "deep centre": 1,
+      "deep left": 3,
+      "deep right": 1,
+      "midcourt centre": 2
+     },
+     "interception_zones": {
+      "kitchen centre": 2
+     },
+     "intercepted": 3,
+     "speed_n": 16,
+     "speed_median": 24,
+     "facts": [
+      {
+       "text": "Of 24 analysed shots: 10 bounced before the opponent's contact, 3 were intercepted, 1 ended at the net, 10 are unresolved.",
+       "n": 24,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable return bounces, 3 landed deep left.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         14,
+         328.47
+        ],
+        [
+         "tnppl_6_MD",
+         33,
+         797.6
+        ],
+        [
+         "tnppl_6_MD",
+         34,
+         810.43
+        ]
+       ]
+      },
+      {
+       "text": "3 shots were intercepted by the opponent.",
+       "n": 3,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         4,
+         84.47
+        ],
+        [
+         "tnppl_6_MD",
+         5,
+         109.9
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 16 measurable shots: 24 mph.",
+       "n": 16,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         17,
+         406.1
+        ],
+        [
+         "tnppl_6_MD",
+         34,
+         810.43
+        ],
+        [
+         "tnppl_6_MD",
+         13,
+         296.3
+        ],
+        [
+         "tnppl_6_MD",
+         25,
+         529.27
+        ],
+        [
+         "tnppl_6_MD",
+         5,
+         109.9
+        ],
+        [
+         "tnppl_6_MD",
+         32,
+         740.83
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 11 of 24 shots with a certain origin; most often from behind the baseline (centre) (7).",
+       "n": 24,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         3,
+         67.2
+        ],
+        [
+         "tnppl_6_MD",
+         4,
+         83.03
+        ],
+        [
+         "tnppl_6_MD",
+         4,
+         84.47
+        ],
+        [
+         "tnppl_6_MD",
+         16,
+         389.9
+        ],
+        [
+         "tnppl_6_MD",
+         17,
+         400.37
+        ],
+        [
+         "tnppl_6_MD",
+         24,
+         507.53
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3170,37 +6261,37 @@
      "text": "Mixes court positions: 58% of contacts from the back, 42% from mid-court, 0% at the kitchen.",
      "n": 24,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 47%, dinks / drops / resets 37% of rally shots.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 16% of rally shots.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (50% forehand).",
      "n": 24,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 30 mph - on the softer side of the 23 players here.",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Hits deep (back 15 ft) on 60% of serves, returns and drives.",
      "n": 10,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3290,6 +6381,99 @@
     "deep_pct": 20,
     "deep_n": 5
    },
+   "placement": {
+    "doubles": {
+     "n": 21,
+     "status": {
+      "bounced": 11,
+      "unresolved": 8,
+      "net": 2
+     },
+     "landing_usable": 7,
+     "landing_observed": 11,
+     "landing_zones": {
+      "midcourt centre": 3,
+      "kitchen wide-right": 1,
+      "behind centre": 1,
+      "deep wide-left": 1,
+      "midcourt right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 13,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 21 analysed shots: 11 bounced before the opponent's contact, 0 were intercepted, 2 ended at the net, 8 are unresolved.",
+       "n": 21,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Median estimated speed on 13 measurable shots: 28 mph.",
+       "n": 13,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         20,
+         432.13
+        ],
+        [
+         "tnppl_2_WD",
+         10,
+         188.77
+        ],
+        [
+         "tnppl_2_WD",
+         18,
+         411.33
+        ],
+        [
+         "tnppl_2_WD",
+         45,
+         1072.8
+        ],
+        [
+         "tnppl_2_WD",
+         40,
+         968.47
+        ],
+        [
+         "tnppl_2_WD",
+         43,
+         1011.03
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 6 of 21 shots with a certain origin; most often from midcourt left (3).",
+       "n": 21,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_2_WD",
+         5,
+         102.2
+        ],
+        [
+         "tnppl_2_WD",
+         40,
+         968.47
+        ],
+        [
+         "tnppl_2_WD",
+         43,
+         1011.03
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3297,31 +6481,31 @@
      "text": "Mixes court positions: 48% of contacts from the back, 52% from mid-court, 0% at the kitchen.",
      "n": 21,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 23 players here.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 13% of rally shots.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 71% of strokes are backhands.",
      "n": 21,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3418,6 +6602,120 @@
     "deep_pct": 17,
     "deep_n": 6
    },
+   "placement": {
+    "doubles": {
+     "n": 20,
+     "status": {
+      "unresolved": 7,
+      "bounced": 10,
+      "intercepted": 2,
+      "net": 1
+     },
+     "landing_usable": 9,
+     "landing_observed": 10,
+     "landing_zones": {
+      "deep left": 1,
+      "kitchen right": 1,
+      "deep centre": 1,
+      "midcourt left": 1,
+      "kitchen centre": 1,
+      "behind right": 2,
+      "behind left": 2
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 17,
+     "speed_median": 27,
+     "facts": [
+      {
+       "text": "Of 20 analysed shots: 10 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 7 are unresolved.",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         16,
+         481.53
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         23,
+         696.47
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 17 measurable shots: 27 mph.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         7,
+         147.93
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         24,
+         764.87
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         24,
+         767.0
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         14,
+         422.17
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         3,
+         61.67
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         4,
+         80.2
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 5 of 20 shots with a certain origin; most often from kitchen left (3).",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         2,
+         42.63
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         6,
+         132.6
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         18,
+         523.1
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3425,25 +6723,25 @@
      "text": "Plays forward: 75% of contacts are inside the baseline area (transition or kitchen).",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 62% of rally shots - among the most of the 23 players here.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 75% of strokes are forehands.",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft shots cross about 0.8 ft above the net (experimental).",
@@ -3541,6 +6839,123 @@
     "deep_pct": 64,
     "deep_n": 11
    },
+   "placement": {
+    "doubles": {
+     "n": 20,
+     "status": {
+      "unresolved": 11,
+      "bounced": 8,
+      "intercepted": 1
+     },
+     "landing_usable": 8,
+     "landing_observed": 8,
+     "landing_zones": {
+      "midcourt left": 2,
+      "deep centre": 2,
+      "deep right": 1,
+      "deep left": 1,
+      "behind right": 1,
+      "behind centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 13,
+     "speed_median": 29,
+     "facts": [
+      {
+       "text": "Of 20 analysed shots: 8 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 11 are unresolved.",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         38,
+         1064.17
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 13 measurable shots: 29 mph.",
+       "n": 13,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         33,
+         952.4
+        ],
+        [
+         "tnppl_3_MD",
+         33,
+         949.73
+        ],
+        [
+         "tnppl_3_MD",
+         3,
+         137.2
+        ],
+        [
+         "tnppl_3_MD",
+         26,
+         696.7
+        ],
+        [
+         "tnppl_3_MD",
+         6,
+         193.77
+        ],
+        [
+         "tnppl_3_MD",
+         38,
+         1064.17
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 6 of 20 shots with a certain origin; most often from midcourt right (5).",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_3_MD",
+         3,
+         137.2
+        ],
+        [
+         "tnppl_3_MD",
+         8,
+         225.7
+        ],
+        [
+         "tnppl_3_MD",
+         26,
+         701.13
+        ],
+        [
+         "tnppl_3_MD",
+         27,
+         775.9
+        ],
+        [
+         "tnppl_3_MD",
+         28,
+         850.43
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3548,43 +6963,43 @@
      "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 43%, dinks / drops / resets 36% of rally shots.",
      "n": 14,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 21% of rally shots.",
      "n": 14,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 14,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Even forehand / backhand split (55% forehand).",
      "n": 20,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 28 mph - on the softer side of the 23 players here.",
      "n": 6,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Hits deep (back 15 ft) on 64% of serves, returns and drives.",
      "n": 11,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3679,6 +7094,114 @@
     "deep_pct": 22,
     "deep_n": 9
    },
+   "placement": {
+    "doubles": {
+     "n": 19,
+     "status": {
+      "bounced": 11,
+      "unresolved": 8
+     },
+     "landing_usable": 9,
+     "landing_observed": 11,
+     "landing_zones": {
+      "deep centre": 1,
+      "behind centre": 1,
+      "midcourt left": 2,
+      "kitchen left": 2,
+      "midcourt centre": 1,
+      "kitchen right": 2
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 13,
+     "speed_median": 27,
+     "facts": [
+      {
+       "text": "Of 19 analysed shots: 11 bounced before the opponent's contact, 0 were intercepted, 0 ended at the net, 8 are unresolved.",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Median estimated speed on 13 measurable shots: 27 mph.",
+       "n": 13,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         15,
+         467.37
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         17,
+         507.2
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         8,
+         169.23
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         23,
+         697.0
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         29,
+         902.4
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         24,
+         764.13
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 4 of 19 shots with a certain origin; most often from midcourt centre (6).",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         2,
+         40.07
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         15,
+         467.37
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         16,
+         485.43
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         17,
+         504.0
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         17,
+         507.2
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         19,
+         548.43
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3686,31 +7209,31 @@
      "text": "Plays forward: 63% of contacts are inside the baseline area (transition or kitchen).",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 23 players here.",
      "n": 13,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 31% of rally shots are volleys.",
      "n": 13,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 63% of strokes are backhands.",
      "n": 19,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 29 mph - on the softer side of the 23 players here.",
      "n": 7,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Topspin on 0% of drives (experimental spin reading).",
@@ -3722,7 +7245,7 @@
      "text": "Hits deep (back 15 ft) on 22% of serves, returns and drives.",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3836,6 +7359,117 @@
     "deep_pct": 80,
     "deep_n": 5
    },
+   "placement": {
+    "doubles": {
+     "n": 18,
+     "status": {
+      "bounced": 7,
+      "unresolved": 9,
+      "intercepted": 2
+     },
+     "landing_usable": 5,
+     "landing_observed": 7,
+     "landing_zones": {
+      "kitchen right": 1,
+      "deep centre": 1,
+      "behind right": 1,
+      "deep left": 1,
+      "midcourt centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 12,
+     "speed_median": 21,
+     "facts": [
+      {
+       "text": "Of 18 analysed shots: 7 bounced before the opponent's contact, 2 were intercepted, 0 ended at the net, 9 are unresolved.",
+       "n": 18,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         16,
+         476.07
+        ],
+        [
+         "tnppl_5_MD50",
+         23,
+         764.43
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 12 measurable shots: 21 mph.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         9,
+         193.83
+        ],
+        [
+         "tnppl_5_MD50",
+         13,
+         347.33
+        ],
+        [
+         "tnppl_5_MD50",
+         16,
+         476.07
+        ],
+        [
+         "tnppl_5_MD50",
+         23,
+         764.43
+        ],
+        [
+         "tnppl_5_MD50",
+         3,
+         75.53
+        ],
+        [
+         "tnppl_5_MD50",
+         10,
+         208.93
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 4 of 18 shots with a certain origin; most often from kitchen right (3).",
+       "n": 18,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         3,
+         75.53
+        ],
+        [
+         "tnppl_5_MD50",
+         10,
+         208.93
+        ],
+        [
+         "tnppl_5_MD50",
+         23,
+         764.43
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3843,25 +7477,25 @@
      "text": "Plays forward: 89% of contacts are inside the baseline area (transition or kitchen).",
      "n": 18,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 75% of rally shots - among the most of the 23 players here.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 67% of strokes are backhands.",
      "n": 18,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -3956,6 +7590,120 @@
     "deep_pct": 25,
     "deep_n": 8
    },
+   "placement": {
+    "doubles": {
+     "n": 17,
+     "status": {
+      "intercepted": 2,
+      "bounced": 10,
+      "net": 1,
+      "unresolved": 4
+     },
+     "landing_usable": 8,
+     "landing_observed": 10,
+     "landing_zones": {
+      "behind centre": 1,
+      "deep right": 1,
+      "midcourt centre": 1,
+      "deep centre": 1,
+      "kitchen left": 2,
+      "behind right": 1,
+      "deep left": 1
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 14,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 17 analysed shots: 10 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 4 are unresolved.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         1,
+         7.13
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         14,
+         424.47
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 14 measurable shots: 28 mph.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         5,
+         111.83
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         28,
+         859.37
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         1,
+         7.13
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         7,
+         148.87
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         27,
+         842.7
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         16,
+         480.83
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 2 of 17 shots with a certain origin; most often from kitchen centre (3).",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         5,
+         111.83
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         16,
+         477.07
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         28,
+         861.27
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -3963,43 +7711,43 @@
      "text": "Plays forward: 59% of contacts are inside the baseline area (transition or kitchen).",
      "n": 17,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Balanced shot choice: drives 40%, dinks / drops / resets 40% of rally shots.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 20% of rally shots.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 20% of rally shots are volleys.",
      "n": 15,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the forehand: 76% of strokes are forehands.",
      "n": 17,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Drives at about 23 mph - on the softer side of the 23 players here.",
      "n": 5,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Hits deep (back 15 ft) on 25% of serves, returns and drives.",
      "n": 8,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -4093,6 +7841,113 @@
     "deep_pct": 75,
     "deep_n": 4
    },
+   "placement": {
+    "doubles": {
+     "n": 16,
+     "status": {
+      "unresolved": 7,
+      "bounced": 8,
+      "intercepted": 1
+     },
+     "landing_usable": 5,
+     "landing_observed": 8,
+     "landing_zones": {
+      "midcourt centre": 2,
+      "behind left": 1,
+      "kitchen centre": 1,
+      "deep centre": 1
+     },
+     "interception_zones": {
+      "midcourt centre": 1
+     },
+     "intercepted": 1,
+     "speed_n": 13,
+     "speed_median": 25,
+     "facts": [
+      {
+       "text": "Of 16 analysed shots: 8 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 7 are unresolved.",
+       "n": 16,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         26,
+         553.53
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 13 measurable shots: 25 mph.",
+       "n": 13,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         21,
+         466.5
+        ],
+        [
+         "tnppl_6_MD",
+         9,
+         207.7
+        ],
+        [
+         "tnppl_6_MD",
+         37,
+         873.87
+        ],
+        [
+         "tnppl_6_MD",
+         8,
+         197.43
+        ],
+        [
+         "tnppl_6_MD",
+         7,
+         141.47
+        ],
+        [
+         "tnppl_6_MD",
+         35,
+         826.23
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 5 of 16 shots with a certain origin; most often from deep centre (3).",
+       "n": 16,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_6_MD",
+         2,
+         39.5
+        ],
+        [
+         "tnppl_6_MD",
+         7,
+         141.47
+        ],
+        [
+         "tnppl_6_MD",
+         21,
+         466.5
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -4100,25 +7955,25 @@
      "text": "Mixes court positions: 62% of contacts from the back, 38% from mid-court, 0% at the kitchen.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 23 players here.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
      "n": 12,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 69% of strokes are backhands.",
      "n": 16,
      "small": false,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -4206,6 +8061,96 @@
     "deep_pct": 100,
     "deep_n": 3
    },
+   "placement": {
+    "doubles": {
+     "n": 10,
+     "status": {
+      "unresolved": 10
+     },
+     "landing_usable": 0,
+     "landing_observed": 0,
+     "landing_zones": {},
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 9,
+     "speed_median": 31,
+     "facts": [
+      {
+       "text": "Of 10 analysed shots: 0 bounced before the opponent's contact, 0 were intercepted, 0 ended at the net, 10 are unresolved.",
+       "n": 10,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Median estimated speed on 9 measurable shots: 31 mph.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         16,
+         476.5
+        ],
+        [
+         "tnppl_5_MD50",
+         1,
+         33.67
+        ],
+        [
+         "tnppl_5_MD50",
+         17,
+         489.0
+        ],
+        [
+         "tnppl_5_MD50",
+         16,
+         472.27
+        ],
+        [
+         "tnppl_5_MD50",
+         3,
+         80.43
+        ],
+        [
+         "tnppl_5_MD50",
+         9,
+         191.17
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 3 of 10 shots with a certain origin; most often from midcourt centre (4).",
+       "n": 10,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_5_MD50",
+         9,
+         191.17
+        ],
+        [
+         "tnppl_5_MD50",
+         16,
+         476.5
+        ],
+        [
+         "tnppl_5_MD50",
+         21,
+         699.63
+        ],
+        [
+         "tnppl_5_MD50",
+         23,
+         762.87
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -4213,25 +8158,25 @@
      "text": "Plays forward: 60% of contacts are inside the baseline area (transition or kitchen).",
      "n": 10,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 57% of rally shots - among the most of the 23 players here.",
      "n": 7,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 71% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 7,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 70% of strokes are backhands.",
      "n": 10,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   },
@@ -4326,6 +8271,53 @@
     "deep_pct": 50,
     "deep_n": 2
    },
+   "placement": {
+    "doubles": {
+     "n": 9,
+     "status": {
+      "net": 1,
+      "bounced": 4,
+      "unresolved": 4
+     },
+     "landing_usable": 3,
+     "landing_observed": 4,
+     "landing_zones": {
+      "midcourt centre": 2,
+      "kitchen centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 4,
+     "speed_median": 20,
+     "facts": [
+      {
+       "text": "Of 9 analysed shots: 4 bounced before the opponent's contact, 0 were intercepted, 1 ended at the net, 4 are unresolved.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Hits from behind the baseline on 1 of 9 shots with a certain origin; most often from midcourt centre (2).",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_7_TeamDoubles",
+         1,
+         8.1
+        ],
+        [
+         "tnppl_7_TeamDoubles",
+         12,
+         299.2
+        ]
+       ]
+      }
+     ]
+    }
+   },
    "singles": [],
    "insights": [],
    "style": [
@@ -4333,31 +8325,31 @@
      "text": "Plays forward: 78% of contacts are inside the baseline area (transition or kitchen).",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Soft-game player: dinks, drops and resets are 67% of rally shots - among the most of the 23 players here.",
      "n": 6,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Uses the lob: 17% of rally shots.",
      "n": 6,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Takes the ball early: volleys 67% of rally shots (out of the air) - one of the highest of the 23 players here.",
      "n": 6,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     },
     {
      "text": "Leans on the backhand: 67% of strokes are backhands.",
      "n": 9,
      "small": true,
-     "kind": "style"
+     "kind": "label"
     }
    ]
   }

@@ -55,12 +55,12 @@ function render() {
     && (tour === "all" || p.tournaments.includes(tour)));
   $("#count").textContent = `${ps.length} player${ps.length === 1 ? "" : "s"}`;
   $("#list").innerHTML = ps.map(p => {
-    const S = p.stats, lines = p.style.filter(l => !l.small && l.kind === "style").slice(0, 2);
+    const S = p.stats, pt = Object.values(p.placement || {}), lines = pt.flatMap(x => x.facts).filter(f => !f.small).slice(1, 3);
     return `<a class="pcard" href="player.html?p=${p.id}">
       <div class="top"><span class="av">${initials(p.name)}</span><div><h3>${esc(p.name)}</h3>
         <div class="who">${esc(p.team || p.tournaments.join(" · "))}</div></div></div>
       <div class="nums"><span><b>${p.matches.length}</b> match${p.matches.length === 1 ? "" : "es"}</span><span><b>${S.shots}</b> shots</span>
-        ${S.speed.drive != null && S.speed_n.drive >= 5 ? `<span>drives <b>${Math.round(S.speed.drive)}</b> mph</span>` : ""}</div>
+        ${(() => { const t = pt.slice().sort((a, b) => b.n - a.n)[0]; return t && t.speed_median != null && t.speed_n >= 5 ? `<span>est. speed <b>${t.speed_median}</b> mph</span>` : ""; })()}</div>
       ${lines.length ? `<ul>${lines.map(l => `<li>${esc(l.text)}</li>`).join("")}</ul>` : ""}
       <span class="go">View player →</span></a>`;
   }).join("") || '<div class="empty">No player matches that search.</div>';

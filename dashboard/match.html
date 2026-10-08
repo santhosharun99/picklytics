@@ -50,6 +50,21 @@ main { max-width: 1300px; margin: 0 auto; padding: 20px 24px 60px; display: grid
 .exp { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border: 1px solid var(--text-muted); border-radius: 3px; padding: 1px 5px; vertical-align: middle; margin-left: 6px; }
 .badge.strength { color: var(--good); } .badge.weakness { color: var(--bad); } .badge.pattern { color: var(--series-1); }
 .small { color: var(--note); font-size: 11px; white-space: nowrap; }
+.plfilters { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 4px 0 12px; font-size: 12.5px; color: var(--text-secondary); }
+.plfilters label { display: flex; align-items: center; gap: 6px; }
+.plfilters select { font: inherit; font-size: 12.5px; border: 1px solid var(--border); border-radius: 8px; padding: 3px 6px; background: var(--surface-1); color: inherit; }
+.plcov { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 13px; line-height: 1.55; }
+.plcov b { color: var(--paddle); }
+.plmaps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px; margin-top: 14px; }
+.plmap h3 { margin: 0; font-size: 13.5px; color: var(--paddle); }
+.plmap .sub { font-size: 11.5px; color: var(--text-muted); margin: 2px 0 6px; min-height: 2.6em; }
+.plmap svg { width: 100%; max-width: 300px; display: block; }
+.plmap svg .pt { cursor: pointer; }
+.plmap .top { font-size: 12px; margin-top: 6px; display: grid; gap: 4px; }
+.plmap .top div { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.plgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 18px; margin-top: 16px; }
+.plgrid h3 { margin: 0 0 6px; font-size: 13.5px; color: var(--paddle); }
+.plnote { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; }
 .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; color: var(--text-muted); font-size: 11.5px; margin: -2px 0 8px 128px; }
 .meta .clips { margin-left: 0; }
 .tile .clips { margin-top: 4px; }
@@ -117,7 +132,7 @@ function momentButtons(list) {  // [{rally, t, mph}] -> buttons that jump to tha
   if (!list || !list.length) return "";
   const set = list.map(x => x.rally).join(",");
   const ts = list.every(x => x.t != null) ? `data-ts="${list.map(x => x.t).join(",")}"` : "";
-  return `<span class="clips">${list.map(x => `<button class="clip" data-r="${x.rally}" data-set="${set}" ${ts} title="${x.mph} mph">▶ ${fmt(x.t ?? rallyById[x.rally]?.start_t ?? 0)}</button>`).join("")}</span>`;
+  return `<span class="clips">${list.map((x, i) => `<button class="clip" data-r="${x.rally}" data-i="${i}" data-set="${set}" ${ts}${x.mph ? ` title="${x.mph} mph"` : ""}>▶ ${fmt(x.t ?? rallyById[x.rally]?.start_t ?? 0)}</button>`).join("")}</span>`;
 }
 
 function tile(label, s, suffix = "") {
@@ -139,6 +154,13 @@ function show(name) {
       <div class="tile"><div class="l">Avg distance from net</div><div class="v">${P.movement.avg_depth_ft ?? "–"}<span style="font-size:14px"> ft</span></div><div class="n">during rallies</div></div>
       <div class="tile"><div class="l">Time at kitchen line</div><div class="v">${P.movement.kitchen_time_pct ?? "–"}%</div><div class="n">within 9 ft of the net</div></div>
     </section>
+    <section class="card" id="plsec"><h2>Placement &amp; speed</h2>
+      <p class="why">Measured from the ball and player tracking, shot by shot. Every location is seen from the hitter, looking over the net (left = the hitter's left). <b>Observed landing</b> = the shot's first bounce; <b>interception</b> = where the opponent hit it before it bounced (that is not a landing); <b>projected landing</b> = where an intercepted ball would have landed (not available yet). Zones: kitchen 0-7 ft from the net, midcourt 7-14.5 ft, deep 14.5-22 ft; left / centre / right thirds.</p>
+      <div class="plfilters" id="plf"></div>
+      <div class="plcov" id="plcov"></div>
+      <div class="plmaps" id="plmaps"></div>
+      <div class="plgrid"><div id="plspeed"></div><div id="plpairs"></div></div>
+    </section>
     <section class="card"><h2>Strengths, weaknesses and patterns</h2><p class="why">Plain-language findings for this match. Click ▶ to watch the rallies behind each one.</p>
       <div class="ins">${P.insights.map(i => `<div><span class="badge ${i.kind}">${i.kind}</span><span>${i.text}${i.low_sample ? ` <span class="small">small sample (${i.n})</span>` : ""}</span>${clipButtons(i.rallies)}</div>`).join("") || '<span class="empty">Not enough data.</span>'}</div>
     </section>
@@ -158,14 +180,7 @@ function show(name) {
       <div class="card"><h2>Third shot (when serving)</h2><p class="why">Choice, how often that rally was won, and its quality: median pace, share crossing under 1.5 ft above the net, share landing deep (15+ ft past the net), share where the opponent&#39;s reply was rushed.</p><div id="third"></div></div>
     </section>
     <section class="grid">
-      <div class="card" style="grid-column: span 2"><h2>Ball speed</h2><p class="why">Speed off the paddle, measured from flight time and distance and cross-checked with the 3D flight path (typical error ±3–4 mph). Only shots with a trustworthy speed are counted.</p><div id="speed"></div></div>
-      <div class="card"><h2>Fastest shots</h2><p class="why">Click ▶ to watch.</p><div id="fastest"></div></div>
-    </section>
-    <section class="grid">
       <div class="card" style="grid-column: span 3"><h2>Spin &amp; net clearance <span class="exp">experimental</span></h2><p class="why">From the ball&#39;s 3D flight. Topspin makes the ball dip faster than gravity alone, slice (backspin) makes it float. Net clearance = how high above the net tape the ball crossed. Only shots whose 3D flight is physically believable are counted.</p><div id="spin"></div></div>
-    </section>
-    <section class="grid">
-      <div class="card" style="grid-column: span 3"><h2>Shot placement</h2><p class="why">Where this player's shots landed on the other side (net at the top, seen from the hitter). Dots = landing spots; click a dot to watch. "Deep" = past the kitchen, in the back 15 ft. In/out calls are not reliable yet, so they are not shown.</p><div id="placement" style="display:flex;flex-wrap:wrap;gap:18px"></div></div>
     </section>
     <section class="grid">
       <div class="card" style="grid-column: span 3"><h2>Movement</h2><p class="why">How much and how fast this player moved during rallies (feet positions, smoothed over 0.5 s; top speeds must be held for 0.5 s).</p><div id="running"></div></div>
@@ -180,8 +195,8 @@ function show(name) {
         <h2 style="margin-top:14px">By rally length</h2><div id="length"></div></div>
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
-  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); addTakeaways(P, name); addAccuracy();
-  document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number), b.dataset.ts ? b.dataset.ts.split(",").map(Number) : null));
+  renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); renderPlacement(name); addTakeaways(P, name); addAccuracy();
+  document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number), b.dataset.ts ? b.dataset.ts.split(",").map(Number) : null, b.dataset.i != null ? +b.dataset.i : null));
 }
 
 function bars(target, entries, col, max) {
@@ -251,8 +266,8 @@ function renderEndings(P, col) {
   const rows = [...f.map(([k, v]) => ["Won with", k, v, "var(--good)"]), ...e.map(([k, v]) => ["Lost on own", k, v, "var(--bad)"])];
   const sp = P.speed || { groups: {}, fastest: [] };
   const sg = Object.entries(sp.groups);
-  $("#speed").innerHTML = sg.length ? `<table><tr><th>Shot</th><th>Typical</th><th>Top</th><th>Shots</th><th></th></tr>${sg.map(([k, v]) => `<tr><td>${k}</td><td><b>${v.avg}</b> mph</td><td>${v.max ?? "–"}${v.max ? " mph" : ""}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No measured speeds.</span>';
-  $("#fastest").innerHTML = sp.fastest.length ? `<table>${sp.fastest.map(f => `<tr><td><b>${f.mph}</b> mph${f.err ? ` <span class="small">±${f.err}</span>` : ""}</td><td>${cap(f.shot || "shot")}</td><td>${clipButtons([f.rally])}</td></tr>`).join("")}</table>` : '<span class="empty">–</span>';
+  if ($("#speed")) $("#speed").innerHTML = sg.length ? `<table><tr><th>Shot</th><th>Typical</th><th>Top</th><th>Shots</th><th></th></tr>${sg.map(([k, v]) => `<tr><td>${k}</td><td><b>${v.avg}</b> mph</td><td>${v.max ?? "–"}${v.max ? " mph" : ""}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No measured speeds.</span>';
+  if ($("#fastest")) $("#fastest").innerHTML = sp.fastest.length ? `<table>${sp.fastest.map(f => `<tr><td><b>${f.mph}</b> mph${f.err ? ` <span class="small">±${f.err}</span>` : ""}</td><td>${cap(f.shot || "shot")}</td><td>${clipButtons([f.rally])}</td></tr>`).join("")}</table>` : '<span class="empty">–</span>';
   renderSpin(P);
   const pl = P.placement || {};
   const half = (label, g) => {
@@ -267,7 +282,7 @@ function renderEndings(P, col) {
         <line x1="${X(-2)}" y1="${Y(0)}" x2="${X(22)}" y2="${Y(0)}" stroke="var(--text-primary)" stroke-width="2"/>
         ${dots}</svg></div>`;
   };
-  $("#placement").innerHTML = Object.keys(pl).length ? Object.entries(pl).map(([k, g]) => half(k, g)).join("") : '<span class="empty">No landing spots.</span>';
+  if ($("#placement")) $("#placement").innerHTML = Object.keys(pl).length ? Object.entries(pl).map(([k, g]) => half(k, g)).join("") : '<span class="empty">No landing spots.</span>';
   document.querySelectorAll("svg.placement circle").forEach(c => c.onclick = () => openClip(+c.dataset.r, [+c.dataset.r]));
   const rn = P.running || {};
   $("#running").innerHTML = rn.rallies ? `<div class="tiles" style="margin:0">
@@ -388,6 +403,7 @@ function addTakeaways(P, name) {
 // analyst tags, referee point list (Las Vegas), broadcast scoreboard (US Open) and game-rule checks.
 // Update these when a model is retrained or re-validated.
 const ACC = {
+  plsec: "Observed landings vs 45 hand-tagged bounces (US Open, 15 rallies): the automatic system found 35 of 36 tagged landings, median 0.5 ft away (80% within 1.2 ft); same zone 27 of 35, boundary 5, different zone 3. Outgoing-flight status (bounced / intercepted / net / unresolved) agrees with the tags on 60 of 67 shots inside the tagged stretch. Only one match has bounce tags - other venues are not validated. An interception needs a volley flag AND dense ball tracking through the flight; otherwise the shot stays unresolved. Speed: one definition (physics launch speed off the paddle); not checked against radar.",
   tiles: "Rally winner from tracking + game rules: 96% right vs the referee's list (Las Vegas), 52 of 53 vs the scoreboard (US Open). Server 98%. Rallies found: 48 of 53 points (Las Vegas); broadcast replays are removed.",
   ins: "Each finding shows how many rallies it rests on. It is only called a strength or weakness when the difference is unlikely to be chance (Fisher test, p < 0.1); otherwise it stays a pattern.",
   wp: "A model, not a measurement: it uses the reconstructed score, so it inherits the server (98%) and winner (96%) accuracy. One misread server shifts the score by a point or two (US Open game 2 runs about 2 points ahead of the scoreboard).",
@@ -397,10 +413,7 @@ const ACC = {
   mix: "Shot types (tested on matches the model never saw): serves and returns nearly always right; drives 83%, dinks 78%, lobs 42% found; drops 19% and resets 4% - still weak; overheads not yet ('groundstroke' now counts as drive). Improves with every review queue. Hits found: 86-94%.",
   strokes: "Forehand / backhand: 95% right (74 of 78 tagged shots).",
   third: "Third-shot type: drives are recognised (83%), drops only 19% on unseen matches, so the drive vs drop split is rough; rally winner 96%. Pace ±3-4 mph; net clearance from the 3D ball path; landing depth about ±1.5 ft.",
-  speed: "Typical error ±3-4 mph. Only shots where two independent measurements (flight time and 3D path) agree within 20% are used; top speeds only when they agree closely.",
-  fastest: "Typical error ±3-4 mph; the ± after each speed is that shot's own uncertainty.",
   spin: "EXPERIMENTAL - not yet checked against hand-labelled spin. The 3D flight model with spin fits 94% of ball positions (vs 72% without), and serves come out as topspin as expected; the topspin / flat / slice cut-offs are first guesses. About 1 in 5 shots has no believable 3D flight and is left out. Net clearance comes from the same flight and is not checked against hand labels either.",
-  placement: "Landing spots from the 3D ball path: returned serves land in the service box 93-95% of the time (they must), so spots are good to about 1-1.5 ft. Calls within that distance of a line are not reliable.",
   running: "Player positions about ±1 ft after the far-end depth fix (checked with the kitchen rule: volleys measured inside the kitchen fell from 46% to 4%). Distances are not checked against GPS - compare the two players in the same match rather than across venues. Doubles: each partner is followed separately and the team shows their average distance and the faster sprint. Jumps no one can run (camera cuts, the tracker switching people) are cut out. Sprint clips start 2 s before the sprint.",
   pressure: "Built from hit timing (exact to 0.03 s) and positions (±1 ft). Checked as a whole: rushed shots end as the hitter's error 22% of the time vs 15% otherwise. 'Error' = last detected shot of a lost rally; about 1 in 10 final shots is missed.",
   contacts: "Hitter position at contact about ±1 ft; 86-94% of hits are found.",
@@ -422,6 +435,84 @@ function renderSpin(P) {
   const row = (k, v) => `<tr><td>${k}</td><td>${v.topspin}%</td><td>${v.flat}%</td><td>${v.slice}%</td><td>${v.clear_ft != null ? `<b>${v.clear_ft}</b> ft` : "–"}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`;
   $("#spin").innerHTML = sp.overall ? `<table><tr><th>Shot</th><th>Topspin</th><th>Flat</th><th>Slice</th><th>Net clearance (typical)</th><th>Shots</th><th></th></tr>${g.map(([k, v]) => row(k, v)).join("")}${row("<b>All shots</b>", sp.overall)}</table>` : '<span class="empty">No 3D flights for this match yet.</span>';
 }
+// ---------- Placement & speed (per-shot records from pickleball/shot_events.py; docs/PLACEMENT.md) ----------
+const PLF = { role: "all", stroke: "all", incoming: "all", status: "all", quality: "all" };
+const PLOPT = {
+  role: [["all", "All shots"], ["serve", "Serve"], ["return", "Return"], ["third", "Third shot"], ["later", "Later shots"]],
+  stroke: [["all", "Both sides"], ["forehand", "Forehand"], ["backhand", "Backhand"]],
+  incoming: [["all", "Any incoming"], ["after bounce", "After a bounce"], ["volley", "Volley (out of the air)"], ["serve", "Serve (no incoming)"]],
+  status: [["all", "Any outcome"], ["bounced", "Bounced first"], ["intercepted", "Intercepted"], ["net", "Net"], ["unresolved", "Unresolved"]],
+  quality: [["all", "Any landing evidence"], ["human-reviewed", "Human-reviewed"], ["two automatic sources agree", "Two automatic sources agree"], ["one automatic source", "One automatic source"]],
+};
+const PLLAB = { role: "Rally role", stroke: "Stroke", incoming: "Incoming ball", status: "Outgoing flight", quality: "Landing evidence" };
+const zcount = (arr, f) => arr.reduce((m, x) => { const k = f(x); if (k) m[k] = (m[k] || 0) + 1; return m; }, {});
+const median = a => { if (!a.length) return null; const b = [...a].sort((x, y) => x - y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+function plMap(title, sub, pts, ownHalf, color) {
+  // half court seen from the hitter: own half = net at the top; opponent half = net at the bottom. u: 0 = hitter's left.
+  const s = 9, mx = 3, top = 6, DM = ownHalf ? 29 : 26, W = (20 + 2 * mx) * s, Hh = DM * s + 2 * top;  // DM: depth shown (own half: room behind the baseline)
+  const X = u => (Math.max(-mx, Math.min(20 + mx, u)) + mx) * s;
+  const Y = d => ownHalf ? top + Math.min(DM, d) * s : top + (DM - Math.min(DM, d)) * s;
+  const cnt = zcount(pts, p => p.zone !== "boundary" ? p.zone : null), max = Math.max(1, ...Object.values(cnt));
+  const bands = [["kitchen", 0, 7], ["midcourt", 7, 14.5], ["deep", 14.5, 22], ...(ownHalf ? [["behind", 22, DM]] : [])], wid = [["left", 0, 20 / 3], ["centre", 20 / 3, 40 / 3], ["right", 40 / 3, 20]];
+  let cells = "";
+  for (const [dn, d0, d1] of bands) for (const [wn, u0, u1] of wid) {
+    const z = `${dn} ${wn}`, n = cnt[z] || 0, y0 = Math.min(Y(d0), Y(d1)), h = Math.abs(Y(d1) - Y(d0));
+    cells += `<rect x="${X(u0)}" y="${y0}" width="${X(u1) - X(u0)}" height="${h}" fill="${color}" fill-opacity="${(0.06 + 0.5 * n / max).toFixed(2)}" stroke="var(--court-line)" stroke-width="1.5"${dn === "behind" ? ' stroke-dasharray="3 3"' : ""}><title>${z}: ${n}</title></rect>
+      ${n ? `<text x="${(X(u0) + X(u1)) / 2}" y="${y0 + h / 2 + 4}" text-anchor="middle" style="fill:var(--paddle);font-size:12px;font-weight:700">${n}</text>` : ""}`;
+  }
+  const net = `<line x1="${X(-mx)}" y1="${Y(0)}" x2="${X(20 + mx)}" y2="${Y(0)}" stroke="var(--paddle)" stroke-width="3"/><text x="${X(10)}" y="${Y(0) + (ownHalf ? -2 : 11)}" text-anchor="middle" style="fill:var(--text-muted);font-size:9px">net</text>`;
+  const dots = pts.map(p => `<circle class="pt" cx="${X(p.u)}" cy="${Y(p.d)}" r="3.4" fill="${p.zone === "boundary" ? "#fff" : color}" stroke="var(--paddle)" stroke-width="0.8" data-r="${p.rid}" data-t="${p.t}"><title>${p.zone}${p.zone === "boundary" ? " (" + p.cands.join(" / ") + ")" : ""} · rally ${p.rid}</title></circle>`).join("");
+  const tops = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([z, n]) => {
+    const own = pts.filter(p => p.zone === z);
+    return `<div><span><b>${n}</b> ${z}</span>${momentButtons(own.slice(0, 6).map(p => ({ rally: p.rid, t: p.t, mph: "" })))}</div>`;
+  }).join("");
+  return `<div class="plmap"><h3>${title}</h3><div class="sub">${sub}</div>
+    <svg viewBox="0 0 ${W} ${Hh}"><rect x="0" y="0" width="${W}" height="${Hh}" fill="var(--surface-2)" rx="6"/>${cells}${net}${dots}</svg>
+    <div class="top">${tops || '<span class="empty">None.</span>'}</div></div>`;
+}
+function renderPlacement(name) {
+  if (!$("#plsec")) return;
+  $("#plf").innerHTML = Object.entries(PLOPT).map(([k, opts]) => `<label>${PLLAB[k]} <select data-k="${k}">${opts.map(([v, l]) => `<option value="${v}"${PLF[k] === v ? " selected" : ""}>${l}</option>`).join("")}</select></label>`).join("");
+  document.querySelectorAll("#plf select").forEach(el => el.onchange = () => { PLF[el.dataset.k] = el.value; renderPlacement(name); });
+  const all = R.rallies.flatMap(r => r.shots.filter(s => s.player === name && s.pl && !s.inferred).map(s => ({ ...s, rid: r.id })));
+  const S = all.filter(s => (PLF.role === "all" || s.pl.role === PLF.role) && (PLF.stroke === "all" || s.stroke === PLF.stroke)
+    && (PLF.incoming === "all" || s.pl.incoming === PLF.incoming) && (PLF.status === "all" || s.pl.status === PLF.status)
+    && (PLF.quality === "all" || (s.pl.landing && s.pl.landing.quality === PLF.quality)));
+  const st = zcount(S, s => s.pl.status), n = S.length;
+  const bounced = S.filter(s => s.pl.status === "bounced"), inter = S.filter(s => s.pl.status === "intercepted");
+  const land = bounced.filter(s => s.pl.landing && s.pl.landing.state === "observed");
+  const landZ = land.filter(s => s.pl.landing.zone !== "boundary"), landOut = land.filter(s => !s.pl.landing.inside);
+  const ic = inter.filter(s => s.pl.interception && s.pl.interception.state === "observed"), icProxy = ic.filter(s => /proxy/.test(s.pl.interception.evidence));
+  const orig = S.filter(s => s.pl.origin), origProxy = orig.filter(s => /proxy/.test(s.pl.origin.evidence));
+  const sv = S.filter(s => s.pl.speed && s.pl.speed.mph != null);
+  const topLand = Object.entries(zcount(landZ, s => s.pl.landing.zone)).sort((a, b) => b[1] - a[1])[0];
+  $("#plcov").innerHTML = n ? `<b>${n}</b> analysed shots: <b>${st.bounced || 0}</b> bounced before the opponent's contact, <b>${st.intercepted || 0}</b> were intercepted, <b>${st.net || 0}</b> ended at the net, <b>${st.unresolved || 0}</b> are unresolved.<br>
+    <b>${land.length}</b> of the ${bounced.length} bounced shots have a usable landing location (${land.length - landZ.length} on a zone boundary, ${landOut.length} estimated outside the court)${topLand ? `; <b>${topLand[1]}</b> of those landed <b>${topLand[0]}</b>` : ""}.
+    ${inter.length ? `<b>${ic.length}</b> of the ${inter.length} intercepted shots have an interception location (${icProxy.length} from the opponent's feet as a proxy).` : ""}
+    Speed measured on <b>${sv.length}</b> of ${n} shots.
+    <div class="plnote">The landing map covers only shots that bounced before the opponent touched them - it is not the placement of all shots, because some were intercepted. Interceptions are shown separately and never count as landings.</div>` : '<span class="empty">No shots match these filters.</span>';
+  const P_ = (arr, key, extra = s => ({})) => arr.map(s => ({ u: s.pl[key].u, d: s.pl[key].d, zone: s.pl[key].zone, cands: s.pl[key].candidates || [], rid: s.rid, t: s.t, ...extra(s) }));
+  $("#plmaps").innerHTML = [
+    plMap("Hit from (origin)", `${orig.length} shots${origProxy.length ? ` · ${origProxy.length} from the player's feet (proxy), the rest the ball at contact` : " · ball at contact"} · own half, net at the top; dashed = behind the baseline`, P_(orig, "origin"), true, "var(--series-1)"),
+    plMap("Observed first bounce", `${land.length} of ${bounced.length} bounced shots · opponent's half, net at the bottom · hollow = on a zone boundary`, P_(land, "landing"), false, "var(--series-2)"),
+    plMap("Interception location", `${ic.length} of ${inter.length} intercepted shots · where the opponent hit the ball before it bounced (not a landing)`, P_(ic, "interception"), false, "var(--series-4)"),
+  ].join("") + `<div class="plmap"><h3>Projected landing</h3><div class="sub">Where intercepted shots would have landed.</div><div class="empty" style="padding:8px 0">Not available yet: no projection model has been validated. Speed alone does not tell where a ball would land, so nothing is guessed here.</div></div>`;
+  document.querySelectorAll("#plmaps .pt").forEach(c => c.onclick = () => openClip(+c.dataset.r, [+c.dataset.r], [+c.dataset.t]));
+  setTimeout(() => document.querySelectorAll("#plsec .clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number), b.dataset.ts ? b.dataset.ts.split(",").map(Number) : null, b.dataset.i != null ? +b.dataset.i : null)), 0);
+  const row = (label, arr) => { const m = median(arr.map(s => s.pl.speed.mph)); return m == null ? "" : `<tr><td>${label}</td><td><b>${Math.round(m)}</b> mph</td><td>${arr.length}</td><td>${momentButtons(arr.slice().sort((a, b) => b.pl.speed.mph - a.pl.speed.mph).slice(0, 4).map(s => ({ rally: s.rid, t: s.t, mph: s.pl.speed.mph })))}</td></tr>`; };
+  const byRole = [["Serve", "serve"], ["Return", "return"], ["Third shot", "third"], ["Later shots", "later"]].map(([l, k]) => row(l, sv.filter(s => s.pl.role === k))).join("");
+  const byDepth = ["kitchen", "midcourt", "deep", "behind"].map(dn => row(`Hit from ${dn === "behind" ? "behind the baseline" : dn}`, sv.filter(s => s.pl.origin && s.pl.origin.zone.startsWith(dn)))).join("");
+  const byStatus = [["Bounced first", "bounced"], ["Intercepted", "intercepted"]].map(([l, k]) => row(l, sv.filter(s => s.pl.status === k))).join("");
+  $("#plspeed").innerHTML = `<h3>Estimated speed</h3><div class="plnote" style="margin:0 0 6px">Estimated launch speed off the paddle from the 3D fit of the outgoing flight (before any opponent contact). ${sv.length} of ${n} shots have a usable speed; not checked against radar.</div>
+    ${sv.length ? `<table><tr><th>Shots</th><th>Median</th><th>n</th><th></th></tr>${row("All", sv)}${byRole}${byDepth}${byStatus}</table>` : '<span class="empty">No usable speeds.</span>'}`;
+  const pairs = (arr, key) => Object.entries(zcount(arr.filter(s => s.pl.origin && s.pl.origin.zone !== "boundary" && s.pl[key].zone !== "boundary"), s => `${s.pl.origin.zone} → ${s.pl[key].zone}`))
+    .sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, c]) => { const sh = arr.filter(s => s.pl.origin && `${s.pl.origin.zone} → ${s.pl[key].zone}` === k); return `<tr><td>${k}</td><td>${c}</td><td>${momentButtons(sh.slice(0, 4).map(s => ({ rally: s.rid, t: s.t, mph: "" })))}</td></tr>`; }).join("");
+  const pl1 = pairs(land, "landing"), pl2 = pairs(ic, "interception");
+  $("#plpairs").innerHTML = `<h3>From where to where</h3><div class="plnote" style="margin:0 0 6px">Most common origin → outcome patterns (both zones certain).</div>
+    ${pl1 ? `<table><tr><th>Origin → observed bounce</th><th>Shots</th><th></th></tr>${pl1}</table>` : ""}
+    ${pl2 ? `<table style="margin-top:10px"><tr><th>Origin → interception</th><th>Shots</th><th></th></tr>${pl2}</table>` : ""}
+    ${!pl1 && !pl2 ? '<span class="empty">Not enough shots with both zones certain.</span>' : ""}`;
+}
 function renderLength(P, col) {
   $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="meta"><span>won of ${v.n}</span>${clipButtons(v.rallies)}</div>`).join("");
 }
@@ -435,8 +526,8 @@ function renderRallies(name) {
 
 // ---- clip player ----
 let clipSet = [], clipIdx = 0, clipTimes = null;  // clipTimes: a moment per clip (sprints), else whole rallies
-function openClip(id, set, times = null) {
-  clipSet = set; clipIdx = Math.max(0, set.indexOf(id)); clipTimes = times;
+function openClip(id, set, times = null, idx = null) {
+  clipSet = set; clipIdx = idx != null ? idx : Math.max(0, set.indexOf(id)); clipTimes = times;
   playClip(); $("#modal").classList.add("on");
 }
 function playClip() {

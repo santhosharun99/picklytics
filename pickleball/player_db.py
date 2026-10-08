@@ -80,7 +80,7 @@ def build(root: Path) -> dict:
                                   "shots": len(mine), "rallies": len(played),
                                   "won_pct": round(100 * won / decided) if decided else None, "official": R.get("official")})
             for r, s in mine:
-                shots[name].append({**s, "_match": m["id"], "_rally": r["id"]})
+                shots[name].append({**s, "_match": m["id"], "_rally": r["id"]})  # includes s['pl'] (placement record)
             if not doubles:
                 P = R["players"][name]
                 singles_prof[name].append((m["id"], P))
@@ -128,9 +128,12 @@ def build(root: Path) -> dict:
 
     players = []
     for name, ss in shots.items():
+        types = {m["id"]: m["type"] for m in matches[name]}
         players.append({"id": slug(name), "name": name, "team": team_of.get(name),
                         "tournaments": sorted({x["tournament"] for x in matches[name]}),
                         "matches": matches[name], "stats": stats(ss),
+                        "placement": {t: placement(name, [x for x in ss if types.get(x["_match"]) == t]) for t in ("singles", "doubles")
+                                      if any(types.get(x["_match"]) == t for x in ss)},
                         "singles": [_singles_extra(mid, P) for mid, P in singles_prof.get(name, [])],
                         "insights": insights.get(name, [])})
     _describe(players)
@@ -138,6 +141,63 @@ def build(root: Path) -> dict:
     return {"players": players, "n": len(players),
             "note": "Doubles shots are credited to the named hitter (identity ~98% right). Shot types, spin and net "
                     "clearance carry the same accuracy notes as the match reports; spin is experimental."}
+
+
+ROLE_NAME = {"serve": "serve", "return": "return", "third": "third-shot", "later": "later-shot"}
+
+
+def _zone_words(z: str, landing: bool = False) -> str:
+    """Zone name for a sentence; outside zones say so (an estimate, not a line call)."""
+    depth, width = z.split(" ", 1)
+    if depth == "behind":
+        return f"past the baseline ({width}) - estimated out" if landing else f"behind the baseline ({width})"
+    if width.startswith("wide"):
+        return f"wide of the {width.split('-')[1]} sideline ({depth}) - estimated out" if landing else f"wide of the court ({depth})"
+    return z
+
+
+def placement(name: str, ss: list) -> dict:
+    """Placement & speed facts from the per-shot records (pickleball/shot_events.py), with denominators; one match
+    type at a time (singles and doubles are never pooled). Clips: (match, rally, t) per fact."""
+    pl = [s for s in ss if s.get("pl") and not s.get("inferred")]
+    st = Counter(s["pl"]["status"] for s in pl)
+    land = [s for s in pl if s["pl"]["status"] == "bounced" and (s["pl"].get("landing") or {}).get("state") == "observed"]
+    landz = [s for s in land if s["pl"]["landing"]["zone"] != "boundary"]
+    inter = [s for s in pl if s["pl"]["status"] == "intercepted"]
+    icz = [s for s in inter if (s["pl"].get("interception") or {}).get("state") == "observed" and s["pl"]["interception"]["zone"] != "boundary"]
+    org = [s for s in pl if s["pl"].get("origin") and s["pl"]["origin"]["zone"] != "boundary"]
+    sv = [s for s in pl if (s["pl"].get("speed") or {}).get("mph") is not None]
+    clip = lambda xs: [[x["_match"], x["_rally"], x.get("t")] for x in xs[:6]]
+    facts = []
+    def fact(text, n, xs):
+        facts.append({"text": text, "n": n, "small": n < MIN_SHOTS, "kind": "fact", "clips": clip(xs)})
+    if pl:
+        fact(f"Of {len(pl)} analysed shots: {st.get('bounced', 0)} bounced before the opponent's contact, {st.get('intercepted', 0)} were "
+             f"intercepted, {st.get('net', 0)} ended at the net, {st.get('unresolved', 0)} are unresolved.", len(pl), [])
+    for role in ("serve", "return", "third", "later"):
+        rz = [s for s in landz if s["pl"]["role"] == role]
+        if len(rz) >= 5:
+            z, c = Counter(s["pl"]["landing"]["zone"] for s in rz).most_common(1)[0]
+            if c >= 2:
+                fact(f"Of {len(rz)} usable {ROLE_NAME[role]} bounces, {c} landed {_zone_words(z, True)}.", len(rz), [s for s in rz if s["pl"]["landing"]["zone"] == z])
+    kz = [s for s in icz if s["pl"]["interception"]["zone"].startswith("kitchen")]
+    if inter:
+        fact(f"{len(inter)} shots were intercepted by the opponent" + (f"; {len(kz)} of the {len(icz)} with a certain zone near the kitchen." if len(icz) >= 3 else "."),
+             len(inter), kz or inter)
+    if len(sv) >= 5:
+        sv_i = [s for s in sv if s["pl"]["status"] == "intercepted"]
+        fact(f"Median estimated speed on {len(sv)} measurable shots: {np.median([s['pl']['speed']['mph'] for s in sv]):.0f} mph"
+             + (f" (on {len(sv_i)} intercepted shots: {np.median([s['pl']['speed']['mph'] for s in sv_i]):.0f} mph)." if len(sv_i) >= 5 else "."),
+             len(sv), sorted(sv, key=lambda s: -s["pl"]["speed"]["mph"]))
+    if len(org) >= 5:
+        bh = [s for s in org if s["pl"]["origin"]["zone"].startswith("behind")]
+        z, c = Counter(s["pl"]["origin"]["zone"] for s in org).most_common(1)[0]
+        fact(f"Hits from behind the baseline on {len(bh)} of {len(org)} shots with a certain origin; most often from {_zone_words(z)} ({c}).", len(org), [s for s in org if s["pl"]["origin"]["zone"] == z])
+    return {"n": len(pl), "status": dict(st), "landing_usable": len(landz), "landing_observed": len(land),
+            "landing_zones": dict(Counter(s["pl"]["landing"]["zone"] for s in landz)),
+            "interception_zones": dict(Counter(s["pl"]["interception"]["zone"] for s in icz)), "intercepted": len(inter),
+            "speed_n": len(sv), "speed_median": round(float(np.median([s["pl"]["speed"]["mph"] for s in sv]))) if sv else None,
+            "facts": facts}
 
 
 def _singles_extra(mid: str, P: dict) -> dict:
@@ -171,7 +231,7 @@ def _describe(players):
     G = len(big)  # comparison group: players with enough shots (pros and TNPPL together - different levels)
     for p in players:
         S, out = p["stats"], []
-        def add(text, n, kind="style"):
+        def add(text, n, kind="label"):  # from automatic shot-type labels / older measures: secondary
             out.append({"text": text, "n": n, "small": n < MIN_SHOTS, "kind": kind})
         z = S["zones"]
         if S["zones_n"]:
