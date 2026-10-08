@@ -1,0 +1,245 @@
+{
+ "note": "TNPPL Season 2, Salem Super Smashers (SSS) vs Twin Eagles Hosur (TEH), Court 1 (same fixed camera as KT vs RTT). Overlay row 0 = SSS, row 1 = TEH. Videos tnppl/s-t/tnppl s-t-<n>.mov = overlay 'MATCH <n>' (checked 2026-10-08). Match card: TNPA post (players, categories, final scores). Note: TEH's Swetha is not RTT's Swetha.",
+ "rosters": {
+  "SSS": [
+   "Aparajitha",
+   "Dakshanasree",
+   "Dhakshin",
+   "Eshwar",
+   "Kevin",
+   "Ranvir Ranjit",
+   "Rishi Raghavendra",
+   "Sai",
+   "Sai Darshan",
+   "Senthilkumar",
+   "Shaunak",
+   "Vishal"
+  ],
+  "TEH": [
+   "Aashritha",
+   "Gowtham",
+   "Kannan",
+   "Parasuraman",
+   "Ramesh",
+   "S. Arun",
+   "Sandeep",
+   "Sanjay",
+   "Swetha",
+   "Vasudevan",
+   "Vishnu"
+  ]
+ },
+ "team_names": {
+  "SSS": "Salem Super Smashers",
+  "TEH": "Twin Eagles Hosur"
+ },
+ "matches": {
+  "tnppl_st_1_MS": {
+   "type": "singles",
+   "teams": [
+    "Rishi Raghavendra",
+    "Kannan"
+   ],
+   "rosters": [
+    [
+     "Rishi Raghavendra"
+    ],
+    [
+     "Kannan"
+    ]
+   ],
+   "singles_overlay": true,
+   "rules": {
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1,
+    "ends_from_kit": true
+   },
+   "official": "Kannan (Twin Eagles Hosur) won 11-7 (match card)",
+   "names_note": "P1/P2 -> names to be set from the first analysed serve / kit"
+  },
+  "tnppl_st_2_WD": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Aparajitha",
+     "Dakshanasree"
+    ],
+    [
+     "Swetha",
+     "Aashritha"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Salem Super Smashers won 11-9 (match card)"
+  },
+  "tnppl_st_3_MD": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Rishi Raghavendra",
+     "Eshwar"
+    ],
+    [
+     "Gowtham",
+     "Vishnu"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Salem Super Smashers won 11-5 (match card)"
+  },
+  "tnppl_st_4_XD": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Vishal",
+     "Aparajitha"
+    ],
+    [
+     "Sanjay",
+     "Swetha"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Twin Eagles Hosur won 11-3 (match card)"
+  },
+  "tnppl_st_5_MD50": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Ranvir Ranjit",
+     "Senthilkumar"
+    ],
+    [
+     "Ramesh",
+     "Vasudevan"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Twin Eagles Hosur won 11-3 (match card)"
+  },
+  "tnppl_st_6_MD": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Dhakshin",
+     "Vishal"
+    ],
+    [
+     "Sanjay",
+     "Sandeep"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Salem Super Smashers won 11-7 (match card)"
+  },
+  "tnppl_st_7_TeamDoubles": {
+   "type": "doubles",
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Sai Darshan",
+     "Sai",
+     "Eshwar",
+     "Senthilkumar"
+    ],
+    [
+     "Kannan",
+     "S. Arun",
+     "Gowtham",
+     "Ramesh"
+    ]
+   ],
+   "rules": {
+    "scoring": "rally",
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Twin Eagles Hosur won 25-24 (match card)"
+  },
+  "tnppl_st_8_TeamSingles": {
+   "type": "singles",
+   "names": {
+    "P1": "Salem Super Smashers",
+    "P2": "Twin Eagles Hosur"
+   },
+   "teams": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "rosters": [
+    [
+     "Kevin",
+     "Dakshanasree",
+     "Shaunak",
+     "Ranvir Ranjit",
+     "Sai Darshan"
+    ],
+    [
+     "Sandeep",
+     "Aashritha",
+     "Vishnu",
+     "Vasudevan",
+     "Parasuraman"
+    ]
+   ],
+   "rules": {
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1,
+    "scoring": "rally",
+    "ends_from_kit": true
+   },
+   "official": "Salem Super Smashers won 25-23 (match card)"
+  }
+ }
+}

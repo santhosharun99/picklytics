@@ -1,0 +1,45 @@
+{
+ "note": "TNPPL Season 2 Court 1 (same camera as KTvRTT): KTvRTT_1_MS calibration refined on this video's lines (best line match 0.78, corners moved up to 1 px).",
+ "points": [
+  {
+   "court": [
+    0.0,
+    0.0
+   ],
+   "img": [
+    633.4,
+    317.7
+   ]
+  },
+  {
+   "court": [
+    20.0,
+    0.0
+   ],
+   "img": [
+    1270.9,
+    319.0
+   ]
+  },
+  {
+   "court": [
+    0.0,
+    44.0
+   ],
+   "img": [
+    38.7,
+    882.4
+   ]
+  },
+  {
+   "court": [
+    20.0,
+    44.0
+   ],
+   "img": [
+    1885.5,
+    886.2
+   ]
+  }
+ ]
+}
