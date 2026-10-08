@@ -101,6 +101,13 @@ function clipButtons(ids) {
   return `<span class="clips">${ids.slice(0, 8).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(rallyById[id]?.start_t || 0)}</button>`).join("")}${ids.length > 8 ? `<span class="small">+${ids.length - 8}</span>` : ""}</span>`;
 }
 
+function momentButtons(list) {  // [{rally, t, mph}] -> buttons that jump to that moment (2 s before)
+  if (!list || !list.length) return "";
+  const set = list.map(x => x.rally).join(",");
+  const ts = list.every(x => x.t != null) ? `data-ts="${list.map(x => x.t).join(",")}"` : "";
+  return `<span class="clips">${list.map(x => `<button class="clip" data-r="${x.rally}" data-set="${set}" ${ts} title="${x.mph} mph">▶ ${fmt(x.t ?? rallyById[x.rally]?.start_t ?? 0)}</button>`).join("")}</span>`;
+}
+
 function tile(label, s, suffix = "") {
   const v = s.value == null ? "–" : s.value + suffix;
   return `<div class="tile"><div class="l">${label}</div><div class="v">${v}</div><div class="n">${s.n} ${s.n === 1 ? "rally" : "rallies"}${s.n < 5 ? " · small sample" : ""}</div></div>`;
@@ -162,7 +169,7 @@ function show(name) {
     </section>
     <section class="card"><h2>Rallies</h2><p class="why">Every rally in the analysis. Click to watch.</p><div id="rallies"></div></section>`;
   renderMix(P, col); renderStrokes(P, col); renderThird(P, col); renderContacts(P, col); renderHeat(P); renderEndings(P, col); renderLength(P, col); renderWP(P, name, col); renderTactics(P, col); renderRallies(name); addTakeaways(P, name); addAccuracy();
-  document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number)));
+  document.querySelectorAll(".clip").forEach(b => b.onclick = () => openClip(+b.dataset.r, b.dataset.set.split(",").map(Number), b.dataset.ts ? b.dataset.ts.split(",").map(Number) : null));
 }
 
 function bars(target, entries, col, max) {
@@ -254,7 +261,7 @@ function renderEndings(P, col) {
   $("#running").innerHTML = rn.rallies ? `<div class="tiles" style="margin:0">
       <div class="tile"><div class="l">Distance per rally</div><div class="v">${rn.dist_per_rally_ft}<span style="font-size:14px"> ft</span></div><div class="n">${rn.total_dist_ft} ft in ${rn.rallies} rallies</div></div>
       <div class="tile"><div class="l">Typical top speed</div><div class="v">${rn.typical_peak_mph}<span style="font-size:14px"> mph</span></div><div class="n">per rally (median)</div></div>
-      <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${clipButtons(rn.top_sprints.map(x => x.rally))}</div></div>
+      <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${momentButtons(rn.top_sprints)}</div></div>
       <div class="tile"><div class="l">Time sprinting</div><div class="v">${rn.sprint_time_pct}%</div><div class="n">of rally time above 6 mph</div></div>
       ${P.net && P.net.rallies ? `<div class="tile"><div class="l">Gets to the net</div><div class="v">${P.net.reached_pct}%</div><div class="n">of ${P.net.rallies} rallies · ${P.net.median_arrival_s ?? "–"} s after the serve (median)</div></div>
       <div class="tile"><div class="l">First to the net</div><div class="v">${P.net.first_pct ?? "–"}%</div><div class="n">of ${P.net.n_contested} rallies where someone got there · won ${P.net.won_when_first_pct ?? "–"}% when first, ${P.net.won_when_opp_first_pct ?? "–"}% when the opponent was ${clipButtons(P.net.first_rallies)}</div></div>` : ""}
@@ -382,7 +389,7 @@ const ACC = {
   fastest: "Typical error ±3-4 mph; the ± after each speed is that shot's own uncertainty.",
   spin: "EXPERIMENTAL - not yet checked against hand-labelled spin. The 3D flight model with spin fits 94% of ball positions (vs 72% without), and serves come out as topspin as expected; the topspin / flat / slice cut-offs are first guesses. About 1 in 5 shots has no believable 3D flight and is left out. Net clearance comes from the same flight and is not checked against hand labels either.",
   placement: "Landing spots from the 3D ball path: returned serves land in the service box 93-95% of the time (they must), so spots are good to about 1-1.5 ft. Calls within that distance of a line are not reliable.",
-  running: "Player positions about ±1 ft after the far-end depth fix (checked with the kitchen rule: volleys measured inside the kitchen fell from 46% to 4%). Distances are not checked against GPS - compare the two players in the same match rather than across venues.",
+  running: "Player positions about ±1 ft after the far-end depth fix (checked with the kitchen rule: volleys measured inside the kitchen fell from 46% to 4%). Distances are not checked against GPS - compare the two players in the same match rather than across venues. Doubles: each partner is followed separately and the team shows their average distance and the faster sprint. Jumps no one can run (camera cuts, the tracker switching people) are cut out. Sprint clips start 2 s before the sprint.",
   pressure: "Built from hit timing (exact to 0.03 s) and positions (±1 ft). Checked as a whole: rushed shots end as the hitter's error 22% of the time vs 15% otherwise. 'Error' = last detected shot of a lost rally; about 1 in 10 final shots is missed.",
   contacts: "Hitter position at contact about ±1 ft; 86-94% of hits are found.",
   heat: "Positions about ±1 ft, sampled 10 times a second during rallies.",
@@ -415,9 +422,9 @@ function renderRallies(name) {
 }
 
 // ---- clip player ----
-let clipSet = [], clipIdx = 0;
-function openClip(id, set) {
-  clipSet = set; clipIdx = Math.max(0, set.indexOf(id));
+let clipSet = [], clipIdx = 0, clipTimes = null;  // clipTimes: a moment per clip (sprints), else whole rallies
+function openClip(id, set, times = null) {
+  clipSet = set; clipIdx = Math.max(0, set.indexOf(id)); clipTimes = times;
   playClip(); $("#modal").classList.add("on");
 }
 function playClip() {
@@ -425,7 +432,10 @@ function playClip() {
   $("#clipTitle").textContent = `Rally at ${fmt(r.start_t)} · ${r.n_shots} shots${r.winner ? " · won by " + r.winner : ""}`;
   $("#clipInfo").textContent = `${clipIdx + 1} of ${clipSet.length}`;
   if (!v.src.endsWith(R.video)) v.src = "../" + R.video;
-  const go = () => { v.currentTime = Math.max(0, r.start_t - 1); v.play(); };
+  const mt = clipTimes ? clipTimes[clipIdx] : null;
+  const at = mt != null ? mt - 2 : r.start_t - 1;  // a moment (e.g. a sprint): start 2 s before it
+  if (mt != null) $("#clipTitle").textContent += ` · watch from ${fmt(mt - 2)}`;
+  const go = () => { v.currentTime = Math.max(0, at); v.play(); };
   v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
   v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
 }

@@ -224,20 +224,35 @@ def player_profile(name: str, opponent: str, rallies: list[dict], hands: dict | 
     return profile
 
 
-def _rally_running(track, win=5, max_gap=0.35, glitch_mph=20.0, sprint_mph=6.0):
+def _rally_running(track, win=5, max_gap=0.35, glitch_mph=15.0, sprint_mph=6.0):
     """Distance / speeds for one player in one rally from [t, x, y] samples (~10 Hz). Feet positions are
     noisy, so positions are averaged over `win` samples (0.5 s) inside continuous stretches; steps faster
-    than a human can run (identity / detection glitches) are dropped."""
+    than a human can run (identity / detection glitches) are dropped. glitch 15 mph (was 20): fast movement in
+    pickleball tops out around 10-13 mph; TNPPL team singles showed 14-16 mph 'sprints' nobody ran.
+    Doubles: track = {"a": [...], "b": [...]} (one per partner, see _split_partners) -> per partner, combined."""
+    if isinstance(track, dict):
+        parts = [x for x in (_rally_running(t, win, max_gap, glitch_mph, sprint_mph) for t in track.values()) if x]
+        if not parts:
+            return None
+        best = max(parts, key=lambda x: x["peak_mph"])
+        dur = sum(x["dur_s"] for x in parts)
+        return {"dist_ft": float(np.mean([x["dist_ft"] for x in parts])), "peak_mph": best["peak_mph"],
+                "peak_t": best["peak_t"], "avg_mph": float(np.mean([x["avg_mph"] for x in parts])),
+                "fast_s": sum(x["fast_s"] for x in parts), "dur_s": dur}
     if len(track) < win + 2:
         return None
     T = np.array(track, float)
     runs, cur = [], [T[0]]
     for a, b in zip(T, T[1:]):
-        if b[0] - a[0] > max_gap:
+        # break on time gaps AND on raw jumps faster than a human (camera cut, tracker swapping people): smoothed,
+        # a jump looks like a 0.5 s 'sprint' (TNPPL 8: 14.3 mph from a broadcast cut while the player stood still)
+        # raw positions jitter ~1 ft, so the raw test is 2x the smoothed limit (> ~4 ft between 0.1 s samples)
+        jump = np.hypot(b[1] - a[1], b[2] - a[2]) / max(b[0] - a[0], 1e-3) * 0.6818 > 2 * glitch_mph
+        if b[0] - a[0] > max_gap or jump:
             runs.append(np.array(cur)); cur = []
         cur.append(b)
     runs.append(np.array(cur))
-    dist, speeds, dur, fast = 0.0, [], 0.0, 0.0
+    dist, speeds, times, dur, fast = 0.0, [], [], 0.0, 0.0
     k = np.ones(win) / win
     for run in runs:
         if len(run) < win + 2:
@@ -251,21 +266,48 @@ def _rally_running(track, win=5, max_gap=0.35, glitch_mph=20.0, sprint_mph=6.0):
         ok = v <= glitch_mph
         dist += float(step[ok].sum())
         speeds += v[ok].tolist()
+        times += ts[1:][ok].tolist()
         dur += float(dt[ok].sum())
         fast += float(dt[ok & (v >= sprint_mph)].sum())
     if not speeds:
         return None
     sp = np.array(speeds)
     # top speed must be held: highest speed sustained for 0.5 s (5 consecutive steps)
-    held = max((sp[i:i + 5].min() for i in range(len(sp) - 4)), default=float(np.median(sp)))
-    return {"dist_ft": dist, "peak_mph": float(held), "avg_mph": float(dist / max(dur, 1e-3) * 0.6818),
-            "fast_s": fast, "dur_s": dur}
+    windows = [(sp[i:i + 5].min(), times[i]) for i in range(len(sp) - 4)]
+    held, t_peak = max(windows) if windows else (float(np.median(sp)), times[int(np.argmax(sp))])
+    return {"dist_ft": dist, "peak_mph": float(held), "peak_t": float(t_peak),
+            "avg_mph": float(dist / max(dur, 1e-3) * 0.6818), "fast_s": fast, "dur_s": dur}
+
+
+def _split_partners(samples):
+    """Doubles: per-frame positions of a team's two players ([t, x, y] rows, two per time when both are seen) ->
+    {"a": track, "b": track}: each position goes to the partner whose last spot is nearest. Mixing both
+    partners into one track read as 18-20 mph 'sprints' (the track jumping between two people)."""
+    by_t = defaultdict(list)
+    for t, x, y in samples:
+        by_t[t].append((x, y))
+    last, out = [None, None], {"a": [], "b": []}
+    for t in sorted(by_t):
+        pts = by_t[t][:2]
+        if len(pts) == 2:
+            d = lambda i, p: 0.0 if last[i] is None else float(np.hypot(p[0] - last[i][0], p[1] - last[i][1]))
+            order = pts if d(0, pts[0]) + d(1, pts[1]) <= d(0, pts[1]) + d(1, pts[0]) else pts[::-1]
+        else:
+            p = pts[0]
+            near = 0 if last[1] is None or (last[0] is not None and
+                                            np.hypot(p[0] - last[0][0], p[1] - last[0][1]) <= np.hypot(p[0] - last[1][0], p[1] - last[1][1])) else 1
+            order = [p, None] if near == 0 else [None, p]
+        for i, p in enumerate(order):
+            if p is not None:
+                last[i] = p
+                out["ab"[i]].append([t, p[0], p[1]])
+    return out
 
 
 def running_profile(name: str, rallies: list[dict]) -> dict:
     """How much and how fast a player moves during rallies (from the timed court tracks)."""
     per = [(r["id"], x) for r in rallies
-           if (x := _rally_running(r.get("movement_t", {}).get(name, []))) is not None]
+           if (x := _rally_running(r.get("movement_p", {}).get(name) or r.get("movement_t", {}).get(name, []))) is not None]
     if not per:
         return {}
     d = [x["dist_ft"] for _, x in per]
@@ -284,7 +326,7 @@ def running_profile(name: str, rallies: list[dict]) -> dict:
             "typical_peak_mph": round(float(np.median(pk)), 1),
             "top_sprint_mph": round(float(max(pk)), 1),
             "sprint_time_pct": round(100 * sum(x["fast_s"] for _, x in per) / max(sum(x["dur_s"] for _, x in per), 1e-3)),
-            "top_sprints": [{"rally": rid, "mph": round(x["peak_mph"], 1)} for rid, x in top]}
+            "top_sprints": [{"rally": rid, "mph": round(x["peak_mph"], 1), "t": round(x["peak_t"], 1)} for rid, x in top]}
 
 
 REACT_S, RUN_FT_S, RUSHED_S = 0.25, 12.0, 0.3  # reaction time, movement speed, "rushed" below this spare time
@@ -692,7 +734,7 @@ def build_report(labels_path: Path, run_dirs: list[Path], video: str, out_path: 
         "source": f"{len(rallies)} analyst-reviewed rallies ({sum(r['detail'] for r in rallies)} with full shot detail)",
         "video": video,
         "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
-        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
+        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t", "movement_p")} for r in rallies],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=1))
@@ -845,7 +887,7 @@ def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: 
         "names": names,
         "win_probability": winprob.annotate(rallies, a, b),  # adds wp_before / wp_after / importance per rally
         "players": {a: player_profile(a, b, rallies, hands), b: player_profile(b, a, rallies, hands)},
-        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
+        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t", "movement_p")} for r in rallies],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=1))
@@ -950,6 +992,7 @@ def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: l
                 for xy in xys:
                     move[side_team[side]].append([round(v, 1) for v in xy])
                     move_t[side_team[side]].append([round(f / fps, 2), round(xy[0], 2), round(xy[1], 2)])
+        move_p = {team: _split_partners(v) for team, v in move_t.items()}  # one track per partner (running stats)
         sb = {"server": None, "winner": None, "agrees": None, "score": None, "server_name": None, "serve_no": None}
         if truth:
             t = truth[k]
@@ -965,7 +1008,7 @@ def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: l
                         "server_player": shots[0]["hitter"] if not shots[0]["inferred"] else None,
                         "ending": ends.get(r["index"]), "game": r.get("game"), "score_before": r.get("score_before"), "how": r.get("how"),
                         "serve_cue": r.get("serve_cue"), "scoreboard": sb, "shots": shots, "n_shots": len(shots),
-                        "movement": dict(move), "movement_t": dict(move_t), "detail": True})
+                        "movement": dict(move), "movement_t": dict(move_t), "movement_p": move_p, "detail": True})
     a, b = teams
     all_shots = [s for r in rallies for s in r["shots"]]
     names = [n for n in dict.fromkeys(s["hitter"] for s in all_shots if s["hitter"])]
@@ -981,7 +1024,7 @@ def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: l
         "win_probability": None,  # winprob.py models singles side-out games only
         "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
         "individuals": {n: individual_profile(n, all_shots) for n in names},
-        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
+        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t", "movement_p")} for r in rallies],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=1))
