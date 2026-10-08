@@ -26,7 +26,16 @@ header .sub { color: var(--text-secondary); font-size: 13px; }
 .tab.on { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 main { max-width: 1300px; margin: 0 auto; padding: 20px 24px 60px; display: grid; gap: 18px; }
-.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+@media (max-width: 640px) {
+  main { padding: 14px 10px 40px; gap: 14px; }
+  .card { overflow-x: auto; padding: 14px 12px; }
+  .card[style*="span"] { grid-column: auto !important; }
+  .meta { margin-left: 0; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ins div { flex-wrap: wrap; }
+  header { padding: 12px 14px; }
+}
 .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
 .card h2 { margin: 0 0 4px; font-size: 14px; }
 .card .why { color: var(--text-muted); font-size: 12px; margin: 0 0 12px; }
@@ -41,6 +50,9 @@ main { max-width: 1300px; margin: 0 auto; padding: 20px 24px 60px; display: grid
 .exp { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border: 1px solid var(--text-muted); border-radius: 3px; padding: 1px 5px; vertical-align: middle; margin-left: 6px; }
 .badge.strength { color: var(--good); } .badge.weakness { color: var(--bad); } .badge.pattern { color: var(--series-1); }
 .small { color: var(--note); font-size: 11px; white-space: nowrap; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; color: var(--text-muted); font-size: 11.5px; margin: -2px 0 8px 128px; }
+.meta .clips { margin-left: 0; }
+.tile .clips { margin-top: 4px; }
 .clips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
 .clip { border: 1px solid var(--border); background: var(--surface-1); color: inherit; font: inherit; font-size: 11px;
   border-radius: 6px; padding: 1px 7px; cursor: pointer; }
@@ -96,9 +108,9 @@ async function init() {
   show(names[0]);
 }
 
-function clipButtons(ids) {
+function clipButtons(ids, max = innerWidth < 640 ? 4 : 8) {  // the "+n" button-free rest still plays via next / previous
   if (!ids || !ids.length) return "";
-  return `<span class="clips">${ids.slice(0, 8).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(rallyById[id]?.start_t || 0)}</button>`).join("")}${ids.length > 8 ? `<span class="small">+${ids.length - 8}</span>` : ""}</span>`;
+  return `<span class="clips">${ids.slice(0, max).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(rallyById[id]?.start_t || 0)}</button>`).join("")}${ids.length > max ? `<span class="small">+${ids.length - max}</span>` : ""}</span>`;
 }
 
 function momentButtons(list) {  // [{rally, t, mph}] -> buttons that jump to that moment (2 s before)
@@ -195,7 +207,7 @@ function thirdQ(v) {
 }
 function renderThird(P, col) {
   const e = Object.entries(P.third_shot);
-  $("#third").innerHTML = e.length ? e.map(([k, v]) => `<div class="bar"><span>${cap(k)}</span><div class="track"><div class="fill" style="width:${v.won_pct ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.won_pct ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">${v.count}×${thirdQ(v)} ${clipButtons(v.rallies)}</div>`).join("") : '<span class="empty">No tagged third shots for this player.</span>';
+  $("#third").innerHTML = e.length ? e.map(([k, v]) => `<div class="bar"><span>${cap(k)}</span><div class="track"><div class="fill" style="width:${v.won_pct ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.won_pct ?? "–"}%</span></div><div class="meta"><span>${v.count}×${thirdQ(v)}</span>${clipButtons(v.rallies)}</div>`).join("") : '<span class="empty">No tagged third shots for this player.</span>';
 }
 // own half: x 0..20 (from their right), depth 0 (net) .. 22 (baseline), plus 12 ft behind and 6 ft wide
 const S = 10, OX = 60, OY = 20;
@@ -264,7 +276,7 @@ function renderEndings(P, col) {
       <div class="tile"><div class="l">Fastest sprint</div><div class="v">${rn.top_sprint_mph}<span style="font-size:14px"> mph</span></div><div class="n">${momentButtons(rn.top_sprints)}</div></div>
       <div class="tile"><div class="l">Time sprinting</div><div class="v">${rn.sprint_time_pct}%</div><div class="n">of rally time above 6 mph</div></div>
       ${P.net && P.net.rallies ? `<div class="tile"><div class="l">Gets to the net</div><div class="v">${P.net.reached_pct}%</div><div class="n">of ${P.net.rallies} rallies · ${P.net.median_arrival_s ?? "–"} s after the serve (median)</div></div>
-      <div class="tile"><div class="l">First to the net</div><div class="v">${P.net.first_pct ?? "–"}%</div><div class="n">of ${P.net.n_contested} rallies where someone got there · won ${P.net.won_when_first_pct ?? "–"}% when first, ${P.net.won_when_opp_first_pct ?? "–"}% when the opponent was ${clipButtons(P.net.first_rallies)}</div></div>` : ""}
+      <div class="tile"><div class="l">First to the net</div><div class="v">${P.net.first_pct ?? "–"}%</div><div class="n">of ${P.net.n_contested} rallies where someone got there · won ${P.net.won_when_first_pct ?? "–"}% when first, ${P.net.won_when_opp_first_pct ?? "–"}% when the opponent was ${clipButtons(P.net.first_rallies, 3)}</div></div>` : ""}
       <div class="tile"><div class="l">Movement per shot</div><div class="v">${rn.ft_per_shot ?? "–"}<span style="font-size:14px"> ft</span></div><div class="n">${rn.ft_per_min ?? "–"} ft per minute of rally</div></div>
     </div>` : '<span class="empty">No movement data.</span>';
   const pr = P.pressure || {}, fc = pr.faced || {}, ap = pr.applied || {};
@@ -411,7 +423,7 @@ function renderSpin(P) {
   $("#spin").innerHTML = sp.overall ? `<table><tr><th>Shot</th><th>Topspin</th><th>Flat</th><th>Slice</th><th>Net clearance (typical)</th><th>Shots</th><th></th></tr>${g.map(([k, v]) => row(k, v)).join("")}${row("<b>All shots</b>", sp.overall)}</table>` : '<span class="empty">No 3D flights for this match yet.</span>';
 }
 function renderLength(P, col) {
-  $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");
+  $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="meta"><span>won of ${v.n}</span>${clipButtons(v.rallies)}</div>`).join("");
 }
 function renderRallies(name) {
   $("#rallies").innerHTML = `<table><tr><th>Time</th><th>Server</th><th>Shots</th><th>Sequence</th><th>Won by</th><th></th></tr>${R.rallies.map(r => `

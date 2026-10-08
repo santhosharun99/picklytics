@@ -14,8 +14,9 @@ body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, san
 .mhead .ev { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
 .mhead h1 { margin: 2px 0 4px; font-size: 25px; letter-spacing: -.02em; color: var(--paddle); }
 .mhead .meta { color: var(--text-secondary); font-size: 13.5px; }
-.games { display: flex; gap: 8px; align-items: center; }
-.game { border: 1px solid var(--border); border-radius: 10px; padding: 6px 12px; text-align: center; min-width: 74px; background: var(--surface-1); }
+.games { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.game { border: 1px solid var(--border); border-radius: 10px; padding: 7px 14px; text-align: center; min-width: 74px; min-height: 58px;
+  background: var(--surface-1); display: flex; flex-direction: column; justify-content: center; gap: 2px; }
 .game .g { font-size: 11px; color: var(--text-muted); }
 .game .s { font-size: 19px; font-weight: 700; color: var(--paddle); font-variant-numeric: tabular-nums; }
 .sec { display: none; padding-top: 18px; }
@@ -32,7 +33,12 @@ body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, san
 .kpi .l { font-size: 12px; color: var(--text-secondary); } .kpi .v { font-size: 22px; font-weight: 700; color: var(--paddle); font-variant-numeric: tabular-nums; }
 .kpi .n { font-size: 11px; color: var(--text-muted); }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: 0; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 18px; margin-top: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 18px; margin-top: 18px; }
+@media (max-width: 640px) {
+  .card { overflow-x: auto; padding: 14px 12px; }
+  .mhead h1 { font-size: 21px; }
+  .item { flex-wrap: wrap; }
+}
 .list { display: grid; gap: 6px; }
 .item { display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; background: var(--surface-2); border-radius: 8px; font-size: 13px; }
 .item .k { font-size: 11px; font-weight: 700; text-transform: uppercase; min-width: 74px; }
