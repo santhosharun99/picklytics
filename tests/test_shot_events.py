@@ -47,3 +47,14 @@ def test_last_shot_nothing_observed_is_unresolved():
 
 def test_far_side_hitter_opponent_half_is_near():
     assert resolve("later", False, [b(30, 35.0)], True, False, True)[0] == "bounced"
+
+
+def test_net_cord_then_opponent_bounce_is_bounced_with_flag():
+    evs = [{"kind": "net", "frame": 12, "x": 10.0, "y": 22.0, "src": "physics fit"}, b(20, 18.0)]
+    status, bounce, _ = resolve("later", NEAR, evs, True, False, True)
+    assert status == "bounced" and bounce["net_cord"] and bounce["frame"] == 20
+
+
+def test_net_then_own_half_bounce_stays_net():
+    evs = [{"kind": "net", "frame": 12, "x": 10.0, "y": 22.0, "src": "physics fit"}, b(20, 25.0)]
+    assert resolve("later", NEAR, evs, True, False, True)[0] == "net"

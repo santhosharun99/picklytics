@@ -31,7 +31,7 @@ observed after the next contact belongs to the shot. Post-point ball handling is
 - **intercepted**: the opponent hit it before any bounce - only when the next contact is flagged a volley AND the
   ball was tracked densely through the flight (>= 60% of frames, no gap > 0.2 s) so a bounce could have been seen,
   AND the rules allow it (serve and return must bounce).
-- **net**: a physics 'net' junction comes first; no extrapolation through the net.
+- **net**: a physics 'net' junction comes first and no bounce follows on the opponent's half; no extrapolation through the net. A net touch followed by an opponent-half bounce is a **net cord**: bounced (flag `net_cord`), the bounce is the landing. Taggers mark only the bounce after a net cord.
 - **unresolved**: everything else (missed bounce, sparse tracking, a bounce on the hitter's own half without a net
   event, rally ended with nothing observed). Never forced into net / in / out. The weak ending classifier is not used.
 

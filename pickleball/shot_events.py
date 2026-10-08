@@ -7,7 +7,9 @@ nothing observed after that next contact belongs to shot k. Status of the outgoi
   intercepted   the opponent hit it before any bounce - ONLY when evidence supports that no bounce was missed:
                 the next contact is flagged a volley AND the ball was tracked densely enough through the window to
                 see a bounce, AND the rules allow it (serve and return must bounce: two-bounce rule);
-  net           a net event (physics 'net' junction) comes first - no extrapolation through the net;
+  net           a net event (physics 'net' junction) comes first and the ball does not bounce on the opponent's
+                half afterwards - no extrapolation through the net. A net touch FOLLOWED by an opponent-half bounce is
+                a net cord: status bounced, flagged net_cord (the bounce is the observed landing);
   unresolved    anything else (missed bounce, sparse tracking, rally ended with nothing observed, a bounce on the
                 hitter's own half without a confirmed net event).
 Locations are kept apart (docs/PLACEMENT.md): origin (ball at contact from the 3D fit, else the hitter's feet as a
@@ -45,6 +47,9 @@ def resolve(role: str, hitter_near: bool, events: list[dict], has_next: bool, ne
     first = evs[0] if evs else None
     if first is not None:
         if first["kind"] == "net":
+            after = next((e for e in evs[1:] if e["kind"] == "bounce"), None)
+            if after is not None and _opp_half(after["y"], hitter_near):  # net cord: clipped the tape and carried over
+                return "bounced", {**after, "net_cord": True}, ["ball touched the net, then bounced on the opponent's half (net cord)"]
             return "net", None, ["net event before any bounce or contact"]
         if _opp_half(first["y"], hitter_near):
             return "bounced", first, [f"first bounce observed ({first['src']})"]
@@ -155,7 +160,8 @@ def build_run(run_dir, A: dict, live_by_rally: dict, use_human: bool = True) -> 
                 ox, oy, oev, osd = s["hitter_court"][0], s["hitter_court"][1], "hitter's feet (player-position proxy)", None
             else:
                 ox = oy = None
-            rec = {"role": role, "incoming": "serve" if k == 0 else ("volley" if s.get("volley") else "after bounce"),
+            rec = {"role": role, "net_cord": bool(bounce and bounce.get("net_cord")),
+                   "incoming": "serve" if k == 0 else ("volley" if s.get("volley") else "after bounce"),
                    "incoming_src": "automatic volley flag", "status": status, "status_why": why,
                    "end_frame": int(bounce["frame"]) if bounce else (int(nxt["frame"]) if nxt else None),
                    "origin": None, "landing": None, "interception": None, "projected": None, "speed": None}
