@@ -8,6 +8,9 @@
 * { box-sizing: border-box; }
 body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 .mhead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-end; }
+.crumb { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: -4px; }
+.crumb a { color: var(--court-green); text-decoration: none; font-weight: 600; } .crumb a:hover { text-decoration: underline; }
+.crumb b { color: var(--text-secondary); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .mhead .ev { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
 .mhead h1 { margin: 2px 0 4px; font-size: 25px; letter-spacing: -.02em; color: var(--paddle); }
 .mhead .meta { color: var(--text-secondary); font-size: 13.5px; }
@@ -44,7 +47,7 @@ table.rl tr:hover td { background: var(--surface-2); }
 .acc-note { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; }
 .notice { border: 1px dashed var(--border); border-radius: 12px; padding: 18px; color: var(--text-secondary); background: var(--surface-2); }
 </style>
-<link rel="stylesheet" href="theme.css?v=3">
+<link rel="stylesheet" href="theme.css?v=4">
 <script src="accuracy.js"></script>
 </head>
 <body>
@@ -69,12 +72,13 @@ const q = new URLSearchParams(location.search);
 const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 const ACC = Object.fromEntries(ACCURACY.map(a => [a.metric, a]));
 const accTag = m => { const a = ACC[m]; return a ? `<span class="lvl ${a.level}">${LEVELS[a.level][0]}</span> <span class="acc2">${a.range}</span>` : ""; };
-let M, R = null, A = null, cur = null;
+let M, T = null, R = null, A = null, cur = null;
 const TABS = [["overview", "Overview"], ["players", "Player analysis"], ["replay", "3D replay"], ["scout", "Scouting sheet"], ["rallies", "Rallies"], ["accuracy", "Accuracy"]];
 
 async function init() {
-  const all = (await (await fetch("matches.json", {cache: "no-store"})).json()).matches;
+  const J = await (await fetch("matches.json", {cache: "no-store"})).json(), all = J.matches;
   M = all.find(m => m.id === q.get("m"));
+  if (M) T = (J.tournaments || []).find(t => t.id === M.tournament);
   if (!M) { // site-wide accuracy page
     $("#navacc").classList.add("on");
     $("#mhead").innerHTML = `<div class="pagehead"><h1>How accurate is each number?</h1><p>What every metric on this site is worth, and how we know.</p></div>`;
@@ -84,16 +88,16 @@ async function init() {
   if (M.report) R = await (await fetch(`../outputs/reports/${M.report}.json`, {cache: "no-store"})).json();
   else if (M.run) try { A = await (await fetch(`../outputs/${M.run}/analysis.json`, {cache: "no-store"})).json(); } catch {}
   renderHead();
-  const avail = t => R || ["overview", "accuracy"].includes(t);
+  const avail = t => (R || ["overview", "accuracy"].includes(t)) && !(t === "replay" && !M.replay);
   $("#tabs").innerHTML = TABS.map(([k, l]) => `<a href="#${k}" data-t="${k}" class="${avail(k) ? "" : "off"}">${l}</a>`).join("");
   window.addEventListener("hashchange", () => show(location.hash.slice(1)));
   show(location.hash.slice(1) || q.get("tab") || "overview");
 }
 
-function games() {   // reconstructed game scores from the rally list: points = rallies won on own serve
-  const g = {};
+function games() {   // reconstructed game scores from the rally list: points = rallies won on own serve (rally scoring: every rally)
+  const g = {}, rally = R.rules && R.rules.scoring === "rally";
   for (const r of R.rallies) if (r.game && r.winner) {
-    g[r.game] = g[r.game] || {}; if (r.server === r.winner) g[r.game][r.winner] = (g[r.game][r.winner] || 0) + 1;
+    g[r.game] = g[r.game] || {}; if (rally || r.server === r.winner) g[r.game][r.winner] = (g[r.game][r.winner] || 0) + 1;
   }
   return g;
 }
@@ -101,10 +105,11 @@ function renderHead() {
   let right = "";
   if (R) {
     const names = Object.keys(R.players), g = games();
-    right = `<div class="games">${Object.entries(g).map(([k, v]) => `<div class="game"><div class="g">Game ${k}</div><div class="s">${v[names[0]] || 0}-${v[names[1]] || 0}</div></div>`).join("")}</div>`;
+    right = `<div class="games">${Object.entries(g).map(([k, v]) => `<div class="game"><div class="g">${R.official ? "Tracked · " : ""}Game ${k}</div><div class="s">${v[names[0]] || 0}-${v[names[1]] || 0}</div></div>`).join("")}${R.official ? `<div class="game"><div class="g">Official result</div><div class="s" style="font-size:14px">${R.official}</div></div>` : ""}</div>`;
   } else if (M.result) right = `<div class="game"><div class="g">Result (referee)</div><div class="s" style="font-size:15px">${M.result}</div></div>`;
   const names = R ? Object.keys(R.players) : M.players;
-  $("#mhead").innerHTML = `<div><div class="ev">${M.event} · ${M.round}</div><h1>${M.title}</h1>
+  const crumb = `<nav class="crumb"><a href="./">Tournaments</a><span>›</span>${T ? `<a href="./?t=${T.id}">${T.name}</a><span>›</span>` : ""}<b>${M.title}</b></nav>`;
+  $("#mhead").innerHTML = `${crumb}<div><div class="ev">${M.event} · ${M.round}</div><h1>${M.title}</h1>
     <div class="meta">${names.map((n, i) => `<span class="dot" style="background:var(--series-${i + 1})"></span>${n}`).join(" &nbsp; ")} · ${M.venue}${R ? ` · score from tracking (${M.check})` : ` · ${M.check}`}</div></div>${right}`;
 }
 
@@ -128,6 +133,7 @@ function show(t) {
 // ---------------- overview (singles) ----------------
 function renderOverview() {
   const names = Object.keys(R.players), [a, b] = names, P = R.players;
+  const RW = R.type === "doubles" ? "Rally winner (doubles)" : "Rally winner";
   const shots = R.rallies.reduce((s, r) => s + r.n_shots, 0), lens = R.rallies.map(r => r.n_shots);
   const kpi = (l, v, n) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="n">${n}</div></div>`;
   const row = (label, f, metric, better = "high", unit = "") => {
@@ -147,13 +153,13 @@ function renderOverview() {
       <div class="card"><h2>Match at a glance</h2><p class="why">From tracking the whole broadcast.</p>
         <div class="kpis">${kpi("Rallies", R.rallies.length, "points analysed")}${kpi("Shots", shots, "hits detected")}
           ${kpi("Average rally", (shots / R.rallies.length).toFixed(1), "shots per rally")}${kpi("Longest rally", Math.max(...lens), "shots")}</div>
-        <p class="acc-note">${accTag("Rallies found")} rallies found · ${accTag("Hits detected")} hits found</p></div>
-    </div>
+        <p class="acc-note">${accTag("Rallies found")} rallies found · ${accTag("Hits detected")} hits found</p>${overlayNote()}</div>
+    </div>${rotationsCard()}${individualsCard()}
     <div class="card" style="margin-top:18px"><h2>Head to head</h2><p class="why">The better value in each row is highlighted. The right column says how far each number can be trusted.</p>
       <table class="h2h"><tr><th>Metric</th><th class="c"><span class="dot" style="background:var(--series-1)"></span>${a}</th><th class="c"><span class="dot" style="background:var(--series-2)"></span>${b}</th><th>Accuracy</th></tr>
-        ${row("Rallies won", p => p.summary.rallies_won_pct.value, "Rally winner", "high", "%")}
-        ${row("Won when serving", p => p.summary.won_on_serve_pct.value, "Rally winner", "high", "%")}
-        ${row("Won when returning", p => p.summary.won_on_return_pct.value, "Rally winner", "high", "%")}
+        ${row("Rallies won", p => p.summary.rallies_won_pct.value, RW, "high", "%")}
+        ${row("Won when serving", p => p.summary.won_on_serve_pct.value, RW, "high", "%")}
+        ${row("Won when returning", p => p.summary.won_on_return_pct.value, RW, "high", "%")}
         ${row("Drive pace (median)", p => g(p, "speed", "groups", "Drive", "avg"), "Ball speed", "high", " mph")}
         ${row("Serve pace (median)", p => g(p, "speed", "groups", "Serve", "avg"), "Ball speed", "high", " mph")}
         ${row("Rushed on (under 0.3 s to spare)", p => g(p, "pressure", "faced", "rushed_pct"), "Time pressure (time to spare)", "low", "%")}
@@ -221,11 +227,51 @@ async function renderDoubles() {
       ${st.sort((x, y) => y[1] - x[1]).map(([k, v]) => `<div style="display:grid;grid-template-columns:160px 1fr 70px;gap:10px;align-items:center;margin:5px 0;font-size:13px"><span>${k}</span><div style="background:var(--surface-2);height:10px;border-radius:5px;overflow:hidden"><div style="width:${100 * v / tot}%;height:100%;background:var(--series-1)"></div></div><span style="text-align:right">${Math.round(100 * v / tot)}%</span></div>`).join("")}</div>` : ""}`;
 }
 
+// ---------------- broadcast score-overlay cross-check (TNPPL) ----------------
+const hasOv = () => R.rallies.some(r => r.scoreboard && r.scoreboard.score);
+function ovStats() {
+  const c = R.rallies.map(r => [r, r.scoreboard || {}]);
+  const sv = c.filter(([, b]) => b.server), wn = c.filter(([, b]) => b.winner);
+  return {sv: sv.filter(([r, b]) => r.server === b.server).length, nsv: sv.length, wn: wn.filter(([r, b]) => r.winner === b.winner).length, nwn: wn.length};
+}
+function overlayNote() {
+  if (!hasOv()) return "";
+  const s = ovStats();
+  return `<p class="acc-note">Checked against the broadcast score overlay: server right on ${s.sv} of ${s.nsv} rallies, winner on ${s.wn} of ${s.nwn} (rallies where the overlay settles it).${R.replays_dropped && R.replays_dropped.length ? ` ${R.replays_dropped.length} broadcast replay${R.replays_dropped.length > 1 ? "s" : ""} left out.` : ""}</p>`;
+}
+function ovCell(r) {
+  const b = r.scoreboard || {};
+  if (!b.score) return `<span style="color:var(--text-muted)">–</span>`;
+  const bad = (b.winner && b.winner !== r.winner) || (b.server && b.server !== r.server);
+  const what = `${b.score.join("-")}${b.server ? ` · ${b.server} serving` : ""}${b.winner ? ` · won by ${b.winner}` : ""}`;
+  return b.winner || b.server ? `<span title="${what}" style="color:${bad ? "var(--bad)" : "var(--good)"}">${bad ? "✗" : "✓"} ${b.score.join("-")}</span>` : `<span title="${what}">${b.score.join("-")}</span>`;
+}
+function individualsCard() {
+  if (R.type !== "doubles") return "";
+  const ind = R.individuals || {}, names = Object.keys(ind);
+  const teamOf = n => Object.entries(R.teams || {}).find(([, ns]) => ns.includes(n))?.[0] || "";
+  if (!names.length) return `<div class="card" style="margin-top:18px"><h2>Players</h2><p class="why">Team numbers above. Partners wear the same kit, so per-player numbers need each player named once: <a href="identify.html?run=${M.run}">name the players →</a></p></div>`;
+  const top = m => Object.entries(m || {}).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k, v]) => `${k} ${v}`).join(", ");
+  const bh = st => { const n = (st.forehand || 0) + (st.backhand || 0); return n ? Math.round(100 * (st.backhand || 0) / n) + "%" : "–"; };
+  return `<div class="card" style="margin-top:18px"><h2>Players</h2><p class="why">Shots by the player who hit them (players named once, then followed by the system). ${accTag("Player identity (doubles)")}</p>
+    <table class="h2h"><tr><th>Player</th><th>Team</th><th class="c">Shots</th><th>Most used</th><th class="c">Backhand</th><th class="c">Volleys</th><th class="c">Median pace</th></tr>
+    ${names.sort((x, y) => teamOf(x).localeCompare(teamOf(y))).map(n => { const p = ind[n]; return `<tr><td><b>${n}</b></td><td>${teamOf(n)}</td><td style="text-align:center">${p.shots}</td><td>${top(p.shot_mix)}</td><td style="text-align:center">${bh(p.stroke)}</td><td style="text-align:center">${p.volleys}</td><td style="text-align:center">${p.median_mph ?? "–"}${p.median_mph ? " mph" : ""}</td></tr>`; }).join("")}
+    </table></div>`;
+}
+function rotationsCard() {
+  if (!R.rotations) return "";
+  const [t0, t1] = R.overlay_teams || Object.keys(R.players);
+  return `<div class="card" style="margin-top:18px"><h2>Matchups</h2><p class="why">Players rotate every 5 points in a fixed order, so the score says who was on court for every point. Points from the broadcast score overlay (all ${R.rotations.reduce((x, r) => x + r.points[0] + r.points[1], 0)} points, including any our tracking missed).</p>
+    <table class="h2h"><tr><th>Turn</th><th class="c">${t0}</th><th class="c">${t1}</th><th class="c">Points</th></tr>
+    ${R.rotations.map(r => `<tr><td>${r.slot}</td><td class="v${r.points[0] > r.points[1] ? " win" : ""}" style="text-align:center">${r.players[0]}</td><td class="v${r.points[1] > r.points[0] ? " win" : ""}" style="text-align:center">${r.players[1]}</td><td style="text-align:center">${r.points[0]}-${r.points[1]}</td></tr>`).join("")}
+    </table></div>`;
+}
+
 // ---------------- rallies ----------------
 function renderRallies() {
-  $("#s-rallies").innerHTML = `<div class="card"><h2>All rallies</h2><p class="why">Every point found in the video, with the score before it (server's score first). Click ▶ to watch on the Overview player. ${accTag("Rally winner")}</p>
-    <div style="max-height:70vh;overflow:auto"><table class="rl"><tr><th>#</th><th>Game</th><th>Score</th><th>Server</th><th>Winner</th><th>Shots</th><th>Length</th><th>Last shot</th><th></th></tr>
-    ${R.rallies.map((r, i) => { const l = r.shots[r.shots.length - 1] || {}; return `<tr><td>${i + 1}</td><td>${r.game ?? "–"}</td><td>${r.score_before ?? "–"}</td><td>${r.server ?? "?"}</td><td><b>${r.winner ?? "?"}</b></td><td>${r.n_shots}</td><td>${(r.end_t - r.start_t).toFixed(1)} s</td><td>${l.player ? `${l.player.split(" ").pop()}: ${l.shot || "hit"}` : ""}</td><td><button class="playbtn" data-r="${r.id}">▶ ${fmt(r.start_t)}</button></td></tr>`; }).join("")}
+  $("#s-rallies").innerHTML = `<div class="card"><h2>All rallies</h2><p class="why">Every point found in the video, with the score before it (server's score first). Click ▶ to watch on the Overview player. ${accTag(R.type === "doubles" ? "Rally winner (doubles)" : "Rally winner")}</p>
+    <div style="max-height:70vh;overflow:auto"><table class="rl"><tr><th>#</th><th>Game</th><th>Score</th><th>Server</th><th>Winner</th><th title="How the point ended - from the rally-end model (confidence in brackets)">Ended</th>${hasOv() ? "<th>Overlay</th>" : ""}<th>Shots</th><th>Length</th><th>Last shot</th><th></th></tr>
+    ${R.rallies.map((r, i) => { const l = r.shots[r.shots.length - 1] || {}; return `<tr><td>${i + 1}</td><td>${r.game ?? "–"}</td><td>${r.score_before ?? "–"}</td><td>${r.server ?? "?"}</td><td><b>${r.winner ?? "?"}</b></td><td>${r.ending ? `${{net: "net", out: "out", in: "in, not returned"}[r.ending.type] || r.ending.type} <span style="color:var(--text-muted)">(${Math.round(100 * r.ending.p)}%)</span>` : "–"}</td>${hasOv() ? `<td>${ovCell(r)}</td>` : ""}<td>${r.n_shots}</td><td>${(r.end_t - r.start_t).toFixed(1)} s</td><td>${l.player ? `${l.player.split(" ").pop()}: ${l.shot || "hit"}` : ""}</td><td><button class="playbtn" data-r="${r.id}">▶ ${fmt(r.start_t)}</button></td></tr>`; }).join("")}
     </table></div></div>`;
   document.querySelectorAll("#s-rallies .playbtn").forEach(b => b.onclick = () => { show("overview"); location.hash = "overview"; setTimeout(() => playRally(+b.dataset.r), 300); });
 }

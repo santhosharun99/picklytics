@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rally Endings</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1000px; margin: 0 auto; padding: 16px 20px 30px; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+video { width: 100%; display: block; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; }
+.ask { font-size: 22px; font-weight: 700; color: var(--paddle); margin: 14px 0 4px; }
+.hint { color: var(--text-secondary); margin-bottom: 10px; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.b { border: 2px solid var(--border); background: var(--surface-1); border-radius: 10px; padding: 12px 18px; cursor: pointer; font-size: 16px; font-weight: 600; }
+.b:hover { border-color: var(--paddle); } .b.main { background: var(--paddle); color: #fff; border-color: var(--paddle); }
+.b kbd { font: 600 12px ui-monospace, monospace; opacity: .7; margin-left: 6px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+.small { font-size: 12.5px; color: var(--text-muted); }
+.steps { display: flex; gap: 6px; } .steps span { padding: 3px 10px; border-radius: 999px; background: var(--surface-2); font-size: 12.5px; }
+.steps span.on { background: var(--ball); color: var(--paddle); font-weight: 700; } .steps span.done { background: var(--good); color: #fff; }
+.tools { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.t { border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px; padding: 5px 12px; cursor: pointer; font-size: 13px; }
+.t.on { background: var(--ball); color: var(--paddle); font-weight: 600; }
+.bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin-top: 12px; } .bar div { height: 100%; background: var(--series-1); }
+</style>
+<link rel="stylesheet" href="theme.css?v=4">
+</head>
+<body>
+<main>
+  <div class="top"><div><b style="font-size:19px">How did the point end?</b> <span class="small">- teaches the system where a point really ends</span></div><div class="small" id="count"></div></div>
+  <div class="card">
+    <video id="v" muted playsinline></video>
+    <div class="steps"><span id="s1">1 Serve</span><span id="s2">2 Point over</span><span id="s3">3 How</span></div>
+    <div class="ask" id="ask"></div>
+    <div class="hint" id="hint"></div>
+    <div class="btns" id="btns"></div>
+    <div class="tools">
+      <span class="t" id="again">↺ Watch again <kbd>R</kbd></span>
+      <span class="t" id="slow">Slow motion <kbd>S</kbd></span>
+      <span class="t" id="redo">Start this rally over</span>
+      <span class="t" id="prev">◀ Previous rally</span>
+      <span class="t" id="skip">Skip this rally ▶</span>
+    </div>
+    <div class="bar"><div id="prog" style="width:0"></div></div>
+  </div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const LAG = 0.25;  // reaction time, taken off key presses
+let Q, ANS, i = 0, step = 0, cur = {}, slow = false;
+const STEPS = [
+  {ask: "Press SPACE when the serve is hit", hint: "The clip plays in a loop. If the clip has no serve (it starts mid-point, or it is only players picking up / passing the ball), use a button.",
+   btns: [["space", "Serve is hit now", "Space"], ["noserve", "No serve in this clip", "0"], ["norally", "No point here - only ball handling", "X"]]},
+  {ask: "Press SPACE when the point is over", hint: "The moment the ball goes into the net, lands out, or bounces and is not returned. Picking the ball up or passing it after that does not count.",
+   btns: [["space", "Point is over now", "Space"]]},
+  {ask: "How did it end?", hint: "",
+   btns: [["net", "Into the net", "N"], ["out", "Landed out", "O"], ["in", "Landed in, not returned", "I"], ["unclear", "Not sure", "U"]]},
+];
+
+async function init() {
+  Q = (await (await fetch("/api/labels/endings.queue.json", {cache: "no-store"})).json()).items;
+  ANS = (await (await fetch("/api/labels/endings.json", {cache: "no-store"})).json()) || {answers: {}};
+  i = Q.findIndex(it => !ANS.answers[it.id]); if (i < 0) i = 0;
+  $("#again").onclick = play;
+  $("#slow").onclick = () => { slow = !slow; $("#slow").classList.toggle("on", slow); $("#v").playbackRate = slow ? 0.4 : 1; };
+  $("#redo").onclick = () => { cur = {}; step = 0; render(); play(); };
+  $("#prev").onclick = () => load(i - 1);
+  $("#skip").onclick = () => load(i + 1);
+  $("#v").addEventListener("timeupdate", () => { const v = $("#v"); if (v.currentTime > Q[i].t1) v.currentTime = Q[i].t0; });
+  document.addEventListener("keydown", e => {
+    const k = e.key === " " ? "Space" : e.key.toUpperCase();
+    if (k === "Space") e.preventDefault();
+    if (k === "R") return play();
+    if (k === "S") return $("#slow").click();
+    const b = STEPS[step].btns.find(x => x[2].toUpperCase() === k);
+    if (b) act(b[0]);
+  });
+  load(i);
+}
+function load(k) {
+  i = Math.max(0, Math.min(Q.length - 1, k)); cur = {}; step = 0;
+  const it = Q[i], v = $("#v");
+  if (!v.src.endsWith(it.video.replace(/ /g, "%20"))) v.src = "../" + it.video;
+  v.playbackRate = slow ? 0.4 : 1;
+  v.onloadedmetadata = play; if (v.readyState >= 1) play();
+  const done = Object.keys(ANS.answers).length;
+  $("#count").textContent = `rally ${i + 1} of ${Q.length} · ${done} done`;
+  $("#prog").style.width = `${100 * done / Q.length}%`;
+  render();
+}
+function play() { const v = $("#v"); v.currentTime = Q[i].t0; v.play().catch(() => {}); }
+function render() {
+  const s = STEPS[step];
+  $("#ask").textContent = s.ask; $("#hint").textContent = s.hint;
+  $("#btns").innerHTML = s.btns.map(([v, l, k], n) => `<span class="b${n === 0 ? " main" : ""}" data-v="${v}">${l}<kbd>${k}</kbd></span>`).join("");
+  $("#btns").querySelectorAll(".b").forEach(b => b.onclick = () => act(b.dataset.v));
+  ["s1", "s2", "s3"].forEach((id, n) => { $("#" + id).className = n < step ? "done" : n === step ? "on" : ""; });
+}
+function act(v) {
+  const t = Math.round(($("#v").currentTime - LAG * (slow ? 0.4 : 1)) * 100) / 100;
+  if (step === 0) {
+    if (v === "norally") return save({no_rally: true});
+    cur.serve_t = v === "space" ? t : null; step = 1;
+  } else if (step === 1) { cur.end_t = t; step = 2; $("#v").pause(); }
+  else return save({ending: v});
+  render();
+}
+async function save(extra) {
+  const it = Q[i];
+  ANS.answers[it.id] = {...cur, ...extra, run: it.run, rally: it.rally, slow, at: new Date().toISOString()};
+  await fetch("/api/labels/endings.json", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(ANS)});
+  load(i + 1);
+}
+init();
+</script>
+</body>
+</html>

@@ -9,13 +9,14 @@
     "Devilliers"
    ],
    "event": "US Open 2026",
-   "round": "Men's Singles \u00b7 Gold medal match",
-   "venue": "Naples, FL \u00b7 Championship court",
+   "round": "Men's Singles · Gold medal match",
+   "venue": "Naples, FL · Championship court",
    "report": "boyer_devilliers_full",
    "replay": "boyer_devilliers",
    "video": "data/videos/Mens_Singles_GOLD_2026_US_Open.mp4",
    "thumb": "thumbs/boyer_devilliers.jpg",
-   "check": "Scoreboard cross-check: 52 of 53 rallies agree"
+   "check": "Scoreboard cross-check: 52 of 53 rallies agree",
+   "tournament": "us_open_2026"
   },
   {
    "id": "fahey_yoshitomi",
@@ -26,13 +27,14 @@
     "Aiko Yoshitomi"
    ],
    "event": "PPA Rate Las Vegas Open 2026",
-   "round": "Women's Singles \u00b7 Round of 16",
-   "venue": "Las Vegas \u00b7 Championship court",
+   "round": "Women's Singles · Round of 16",
+   "venue": "Las Vegas · Championship court",
    "report": "fahey_yoshitomi_lv",
    "replay": "fahey_yoshitomi",
    "video": "data/videos/Fahey_Yoshitomi_LV2026.mp4",
    "thumb": "thumbs/fahey_yoshitomi.jpg",
-   "check": "Referee log: rally winner 96% right, 48 of 53 points found"
+   "check": "Referee log: rally winner 96% right, 48 of 53 points found",
+   "tournament": "ppa_lv_2026"
   },
   {
    "id": "waters_johns",
@@ -43,14 +45,15 @@
     "T. Black / G. Tardio"
    ],
    "event": "PPA Rate Las Vegas Open 2026",
-   "round": "Mixed Doubles \u00b7 Semifinal",
-   "venue": "Las Vegas \u00b7 Championship court",
+   "round": "Mixed Doubles · Semifinal",
+   "venue": "Las Vegas · Championship court",
    "result": "Waters / Johns won 11-6, 11-4",
    "run": "lv_waters_johns",
    "queue": "Waters_Johns_Black_Tardio_LV2026",
    "video": "data/videos/Waters_Johns_Black_Tardio_LV2026.mp4",
    "thumb": "thumbs/waters_johns.jpg",
-   "check": "72 of 85 referee rallies found (the rest shown only from a side camera)"
+   "check": "72 of 85 referee rallies found (the rest shown only from a side camera)",
+   "tournament": "ppa_lv_2026"
   },
   {
    "id": "bright_patriquin",
@@ -61,30 +64,52 @@
     "K. Fahey / F. Staksrud"
    ],
    "event": "PPA Rate Las Vegas Open 2026",
-   "round": "Mixed Doubles \u00b7 Quarterfinal",
-   "venue": "Las Vegas \u00b7 Championship court",
+   "round": "Mixed Doubles · Quarterfinal",
+   "venue": "Las Vegas · Championship court",
    "result": "Bright / Patriquin won 10-12, 11-6, 11-9",
    "run": "lv_bright_patriquin",
    "queue": "Bright_Patriquin_Fahey_Staksrud_LV2026",
    "video": "data/videos/Bright_Patriquin_Fahey_Staksrud_LV2026.mp4",
    "thumb": "thumbs/bright_patriquin.jpg",
-   "check": "126 of 139 referee rallies found (the rest shown only from a side camera)"
+   "check": "126 of 139 referee rallies found (the rest shown only from a side camera)",
+   "tournament": "ppa_lv_2026"
   },
   {
    "id": "europe_feed_1",
    "type": "doubles",
-   "title": "PPA Tour Europe \u00b7 outer-court feed",
+   "title": "PPA Tour Europe · outer-court feed",
    "players": [
     "several teams"
    ],
    "event": "PPA Tour Europe 2026",
-   "round": "Doubles \u00b7 about 3 matches (full-day court feed)",
-   "venue": "Outer court \u00b7 fixed camera",
+   "round": "Doubles · about 3 matches (full-day court feed)",
+   "venue": "Outer court · fixed camera",
    "run": "europe_feed_1",
    "queue": "PPA_Europe_Court_feed_1",
    "video": "data/videos/PPA_Europe_Court_feed_1.mp4",
    "thumb": "thumbs/europe_feed_1.jpg",
-   "check": "No referee log; the 237 'rallies' include a lot of pre-match practice (warm-up hitting)"
+   "check": "No referee log; the 237 'rallies' include a lot of pre-match practice (warm-up hitting)",
+   "tournament": "ppa_europe_2026"
+  },
+  {
+   "id": "tnppl_1_MS",
+   "type": "singles",
+   "title": "Rahul vs Ramakrishnan",
+   "players": [
+    "Rahul",
+    "Ramakrishnan"
+   ],
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Men's singles (open) · match 1 of the tie",
+   "venue": "Court 1 · indoor",
+   "result": "Ramakrishnan won 11-0 (match card)",
+   "report": "tnppl_1_MS",
+   "replay": "tnppl_1_MS",
+   "video": "data/videos/TNPPL_S2_KTvRTT_1_MS.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "check": "Score overlay: winner right on 5 of 8 checked rallies (small sample; overlay shown from 0-4)",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_2_WD",
@@ -94,15 +119,18 @@
     "Kodai Tigers: Joshika / Krithicka",
     "Rockfort Terminatrz: Swetha / Virina Reddy"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
    "round": "Women's doubles",
-   "venue": "Court 1 \u00b7 indoor",
+   "venue": "Court 1 · indoor",
    "result": "Kodai Tigers won 11-5 (match card)",
    "run": "tnppl_2_WD",
    "queue": "TNPPL_S2_KTvRTT_2_WD",
    "video": "data/videos/TNPPL_S2_KTvRTT_2_WD.mp4",
    "thumb": "thumbs/tnppl_2_WD.jpg",
-   "check": "46 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 32 of 38, rally winner on 23 of 38",
+   "report": "tnppl_2_WD",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_3_MD",
@@ -112,15 +140,18 @@
     "Kodai Tigers: Rahul / Vishwajit",
     "Rockfort Terminatrz: Srijith / Shreenath"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
    "round": "Men's doubles (open)",
-   "venue": "Court 1 \u00b7 indoor",
+   "venue": "Court 1 · indoor",
    "result": "Kodai Tigers won 11-7 (match card)",
    "run": "tnppl_3_MD",
    "queue": "TNPPL_S2_KTvRTT_3_MD",
    "video": "data/videos/TNPPL_S2_KTvRTT_3_MD.mp4",
    "thumb": "thumbs/tnppl_3_MD.jpg",
-   "check": "39 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 30 of 35, rally winner on 17 of 35",
+   "report": "tnppl_3_MD",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_4_XD",
@@ -130,15 +161,18 @@
     "Kodai Tigers: Vishwajit / Joshika",
     "Rockfort Terminatrz: Vimalraj / Swetha"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
    "round": "Mixed doubles",
-   "venue": "Court 1 \u00b7 indoor",
+   "venue": "Court 1 · indoor",
    "result": "Kodai Tigers won 11-9 (match card)",
    "run": "tnppl_4_XD",
    "queue": "TNPPL_S2_KTvRTT_4_XD",
    "video": "data/videos/TNPPL_S2_KTvRTT_4_XD.mp4",
    "thumb": "thumbs/tnppl_4_XD.jpg",
-   "check": "31 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 24 of 27, rally winner on 21 of 27",
+   "report": "tnppl_4_XD",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_5_MD50",
@@ -148,15 +182,18 @@
     "Kodai Tigers: Suneel / Krishnakumar",
     "Rockfort Terminatrz: Himanshu / Sivashankar Sivan"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
    "round": "Men's 50+ doubles",
-   "venue": "Court 1 \u00b7 indoor",
+   "venue": "Court 1 · indoor",
    "result": "Kodai Tigers won 11-10 (match card)",
    "run": "tnppl_5_MD50",
    "queue": "TNPPL_S2_KTvRTT_5_MD50",
    "video": "data/videos/TNPPL_S2_KTvRTT_5_MD50.mp4",
    "thumb": "thumbs/tnppl_5_MD50.jpg",
-   "check": "25 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 22 of 23, rally winner on 16 of 23",
+   "report": "tnppl_5_MD50",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_6_MD",
@@ -166,15 +203,18 @@
     "Kodai Tigers: Sai / Rohit",
     "Rockfort Terminatrz: Vimalraj / Safwan"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
    "round": "Men's doubles (open)",
-   "venue": "Court 1 \u00b7 indoor",
+   "venue": "Court 1 · indoor",
    "result": "Rockfort Terminatrz won 5-11 (match card)",
    "run": "tnppl_6_MD",
    "queue": "TNPPL_S2_KTvRTT_6_MD",
    "video": "data/videos/TNPPL_S2_KTvRTT_6_MD.mp4",
    "thumb": "thumbs/tnppl_6_MD.jpg",
-   "check": "39 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 30 of 33, rally winner on 24 of 33",
+   "report": "tnppl_6_MD",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
   },
   {
    "id": "tnppl_7_TeamDoubles",
@@ -184,15 +224,72 @@
     "Kodai Tigers: Shravan / Sarveswar / Sarveswar / Suneel",
     "Rockfort Terminatrz: Manish / Sanjay / Srijith / Sivasankar Shivan"
    ],
-   "event": "TNPPL Season 2 \u00b7 Kodai Tigers vs Rockfort Terminatrz Trichy",
-   "round": "Team event - super doubles \u00b7 rotating doubles",
-   "venue": "Court 1 \u00b7 indoor",
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Team event - super doubles · rotating doubles",
+   "venue": "Court 1 · indoor",
    "result": "Kodai Tigers won 25-18 (match card)",
    "run": "tnppl_7_TeamDoubles",
    "queue": "TNPPL_S2_KTvRTT_7_TeamDoubles",
    "video": "data/videos/TNPPL_S2_KTvRTT_7_TeamDoubles.mp4",
    "thumb": "thumbs/tnppl_7_TeamDoubles.jpg",
-   "check": "32 rallies found; match card final score available for checking"
+   "check": "Score overlay: serving team right on 20 of 28, rally winner on 15 of 27",
+   "report": "tnppl_7_TeamDoubles",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
+  },
+  {
+   "id": "tnppl_8_TeamSingles",
+   "type": "singles",
+   "title": "Kodai Tigers vs Rockfort Terminatrz (super singles)",
+   "players": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "event": "TNPPL Season 2 · Kodai Tigers vs Rockfort Terminatrz Trichy",
+   "round": "Team event - super singles · rotating singles, rally scoring to 25",
+   "venue": "Court 1 · indoor",
+   "result": "Rockfort Terminatrz won 25-10 (match card)",
+   "report": "tnppl_8_TeamSingles",
+   "replay": "tnppl_8_TeamSingles",
+   "video": "data/videos/TNPPL_S2_KTvRTT_8_TeamSingles.mp4",
+   "thumb": "thumbs/tnppl_8_TeamSingles.jpg",
+   "check": "Score overlay: winner right on 13 of 14, server on 21 of 26 checked rallies; 26 of 35 points found",
+   "tournament": "tnppl_s2",
+   "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
+  }
+ ],
+ "tournaments": [
+  {
+   "id": "tnppl_s2",
+   "name": "TNPPL Season 2",
+   "full": "Tamil Nadu Pickleball Premier League · Season 2",
+   "where": "Chennai, India · indoor",
+   "tour": "Team league",
+   "thumb": "thumbs/tnppl_1_MS.jpg"
+  },
+  {
+   "id": "us_open_2026",
+   "name": "US Open 2026",
+   "full": "Franklin US Open Pickleball Championships",
+   "where": "Naples, FL",
+   "tour": "Major",
+   "thumb": "thumbs/boyer_devilliers.jpg"
+  },
+  {
+   "id": "ppa_lv_2026",
+   "name": "PPA Las Vegas Open 2026",
+   "full": "PPA Rate Las Vegas Open",
+   "where": "Las Vegas, NV",
+   "tour": "PPA Tour",
+   "thumb": "thumbs/fahey_yoshitomi.jpg"
+  },
+  {
+   "id": "ppa_europe_2026",
+   "name": "PPA Tour Europe 2026",
+   "full": "PPA Tour Europe",
+   "where": "Outer court · fixed camera",
+   "tour": "PPA Tour",
+   "thumb": "thumbs/europe_feed_1.jpg"
   }
  ]
 }

@@ -89,6 +89,13 @@ section.tiles + .acc { margin: -6px 2px 0; border-top: 0; padding-top: 0; }
 .topnav nav a:hover { background: rgba(255,255,255,.08); color: #fff; }
 .topnav nav a.on { background: var(--ball); color: var(--paddle); font-weight: 600; }
 .wrap { max-width: 1240px; margin: 0 auto; padding: 22px 24px 48px; }
+@media (max-width: 640px) {
+  .topnav { padding: 10px 12px; gap: 8px; }
+  .topnav .brand small { display: none; }
+  .topnav nav { flex-wrap: nowrap; overflow-x: auto; width: 100%; scrollbar-width: none; }
+  .topnav nav a { flex: none; padding: 5px 11px; }
+  .wrap { padding: 16px 12px 36px; }
+}
 .pagehead h1 { margin: 0; font-size: 26px; letter-spacing: -.02em; color: var(--paddle); }
 .pagehead p { margin: 6px 0 0; color: var(--text-secondary); max-width: 760px; }
 .mcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; margin-top: 20px; }

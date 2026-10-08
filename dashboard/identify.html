@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name the Players</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+header h1 { margin: 0; font-size: 19px; }
+select, button { font: inherit; color: inherit; }
+main { max-width: 1200px; margin: 0 auto; padding: 14px 20px 30px; display: grid; gap: 16px; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-width: 0; }
+.stage { position: relative; background: #000; border-radius: 8px; overflow: hidden; }
+.stage video { width: 100%; display: block; aspect-ratio: 16 / 9; }
+.pbox { position: absolute; border: 2px solid #fff; border-radius: 5px; cursor: pointer; box-shadow: 0 0 0 1px rgba(0,0,0,.6); }
+.pbox:hover { border-color: var(--ball); }
+.pbox.named { border-color: var(--ball); }
+.pbox span { position: absolute; left: -2px; top: -22px; background: var(--ball); color: var(--paddle); font: 600 11.5px/1 sans-serif; padding: 4px 6px; border-radius: 4px; white-space: nowrap; }
+.chooser { position: absolute; z-index: 5; background: var(--surface-1); border: 1px solid var(--border); border-radius: 9px; padding: 8px; box-shadow: 0 6px 24px rgba(0,0,0,.3); min-width: 170px; display: none; }
+.chooser .tm { font-size: 11px; color: var(--text-muted); margin: 6px 2px 2px; text-transform: uppercase; letter-spacing: .04em; }
+.chooser button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 5px 8px; border-radius: 6px; cursor: pointer; }
+.chooser button:hover { background: var(--surface-2); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.tog { border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.tog.on { background: var(--ball); border-color: var(--ball); color: var(--paddle); font-weight: 600; }
+.small { font-size: 12px; color: var(--text-muted); }
+.who { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; }
+.chip.ok { background: var(--ball); border-color: var(--ball); color: var(--paddle); font-weight: 600; }
+.q { display: grid; grid-template-columns: 72px 1fr; gap: 10px; align-items: center; border-top: 1px solid var(--border); padding: 9px 0; }
+.q img { width: 72px; height: 120px; object-fit: contain; border-radius: 6px; background: #000; }
+.q .btns { display: flex; gap: 6px; margin-top: 5px; }
+.q button { border: 1px solid var(--border); background: var(--surface-2); border-radius: 7px; padding: 3px 12px; cursor: pointer; }
+.q button.sel { background: var(--paddle); color: #fff; }
+pre { background: var(--surface-2); padding: 8px 10px; border-radius: 7px; font-size: 12px; overflow-x: auto; }
+</style>
+<link rel="stylesheet" href="theme.css?v=4">
+</head>
+<body>
+<header>
+  <div><h1>Name the players</h1><div class="small">Click each player once and pick their name. Partners wear the same kit, so the system needs one example of each player; it follows them from there.</div></div>
+  <div class="row" style="margin:0"><label class="small" for="run">Match</label><select id="run"></select><a class="tog" href="index.html" style="text-decoration:none">Matches</a></div>
+</header>
+<main>
+  <section class="card">
+    <div class="stage" id="stage"><video id="v" muted playsinline preload="auto"></video><div class="chooser" id="chooser"></div></div>
+    <div class="row">
+      <span class="tog" id="prev">◀ Previous frame</span><span class="tog" id="next">Next frame ▶</span>
+      <span class="small" id="pos"></span><span class="small" id="saved"></span>
+    </div>
+    <div class="who" id="who"></div>
+    <p class="small" id="help"></p>
+  </section>
+  <aside class="card">
+    <h2 style="margin:0 0 4px;font-size:15px">Is this the right player?</h2>
+    <p class="small">After you name the players, the system names every other appearance. The ones it is least sure about are listed here - a yes / no fixes them for good.</p>
+    <div id="queue"><p class="small">Nothing to confirm yet.</p></div>
+  </aside>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const q = new URLSearchParams(location.search);
+let M, F, L, idx = 0, roster = [];
+
+function parseRoster(m) {   // "Kodai Tigers: Joshika / Krithicka" -> {team, names}
+  return m.players.map((p, i) => {
+    const [team, names] = p.includes(":") ? p.split(":").map(s => s.trim()) : [`Team ${i + 1}`, p];
+    return {team, names: [...new Set(names.split("/").map(s => s.trim()).filter(Boolean))]};
+  });
+}
+
+async function init() {
+  const all = (await (await fetch("matches.json", {cache: "no-store"})).json()).matches.filter(m => m.type === "doubles" && m.run);
+  $("#run").innerHTML = all.map(m => `<option value="${m.run}">${m.title}</option>`).join("");
+  const want = q.get("run") || all[0].run;
+  $("#run").value = want;
+  $("#run").onchange = e => { location.search = "?run=" + e.target.value; };
+  M = all.find(m => m.run === want);
+  roster = parseRoster(M);
+  try { F = await (await fetch(`../outputs/${want}/identity_frames.json`, {cache: "no-store"})).json(); } catch { F = null; }
+  if (!F || !F.frames.length) {
+    $("#help").innerHTML = `This match is not prepared yet. Run:<pre>PYTHONPATH=. python3 training/identify.py ${want}</pre>`;
+    return;
+  }
+  L = (await (await fetch(`/api/labels/${F.label}.identity.json`, {cache: "no-store"})).json()) || {video: F.video, marks: [], answers: []};
+  $("#v").src = "../" + F.video;
+  $("#v").addEventListener("seeked", draw);
+  $("#v").addEventListener("loadedmetadata", () => go(0));
+  window.addEventListener("resize", draw);
+  $("#prev").onclick = () => go(idx - 1);
+  $("#next").onclick = () => go(idx + 1);
+  document.addEventListener("click", e => { if (!e.target.closest(".chooser") && !e.target.closest(".pbox")) $("#chooser").style.display = "none"; });
+  renderWho();
+  loadQueue();
+}
+
+function go(i) {
+  idx = Math.max(0, Math.min(F.frames.length - 1, i));
+  $("#pos").textContent = `frame ${idx + 1} of ${F.frames.length} · ${fmt(F.frames[idx].t)}`;
+  $("#v").currentTime = F.frames[idx].t;
+}
+const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+const markOf = (fr, b) => L.marks.find(m => m.frame === fr.frame && m.tracklet === b.tracklet);
+
+function draw() {
+  const st = $("#stage"), v = $("#v");
+  st.querySelectorAll(".pbox").forEach(e => e.remove());
+  const fr = F.frames[idx], sx = v.clientWidth / (v.videoWidth || 1920), sy = v.clientHeight / (v.videoHeight || 1080);
+  for (const b of fr.boxes) {
+    const [x1, y1, x2, y2] = b.box, m = markOf(fr, b);
+    const d = document.createElement("div");
+    d.className = "pbox" + (m ? " named" : "");
+    Object.assign(d.style, {left: x1 * sx + "px", top: y1 * sy + "px", width: (x2 - x1) * sx + "px", height: (y2 - y1) * sy + "px"});
+    if (m) d.innerHTML = `<span>${m.name}</span>`;
+    d.onclick = e => { e.stopPropagation(); choose(b, x2 * sx + 6, y1 * sy); };
+    st.appendChild(d);
+  }
+  $("#help").textContent = "Click a box, then the player's name. Use Next frame to find players you have not named yet (and newcomers in rotating team events).";
+}
+
+function choose(b, x, y) {
+  const c = $("#chooser"), fr = F.frames[idx];
+  c.innerHTML = roster.map(r => `<div class="tm">${r.team}</div>` + r.names.map(n => `<button data-n="${n}" data-t="${r.team}">${n}</button>`).join("")).join("")
+    + (markOf(fr, b) ? `<div class="tm"></div><button data-n="">Remove name</button>` : "");
+  Object.assign(c.style, {display: "block", left: Math.min(x, $("#stage").clientWidth - 180) + "px", top: Math.max(4, y) + "px"});
+  c.querySelectorAll("button").forEach(btn => btn.onclick = async () => {
+    L.marks = L.marks.filter(m => !(m.frame === fr.frame && m.tracklet === b.tracklet));
+    if (btn.dataset.n) L.marks.push({t: fr.t, frame: fr.frame, tracklet: b.tracklet, box: b.box, side: b.side, name: btn.dataset.n, team: btn.dataset.t});
+    c.style.display = "none";
+    await save(); draw(); renderWho();
+  });
+}
+
+function renderWho() {
+  const named = new Set(L.marks.map(m => m.name));
+  $("#who").innerHTML = roster.flatMap(r => r.names.map(n => `<span class="chip${named.has(n) ? " ok" : ""}">${n}</span>`)).join("")
+    + `<span class="small" style="align-self:center">${[...named].length} of ${roster.reduce((a, r) => a + r.names.length, 0)} named${[...named].length ? ` - then run <code>PYTHONPATH=. python3 training/identify.py ${M.run}</code>` : ""}</span>`;
+}
+
+async function save() {
+  await fetch(`/api/labels/${F.label}.identity.json`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(L)});
+  $("#saved").textContent = "saved";
+  setTimeout(() => $("#saved").textContent = "", 1500);
+}
+
+async function loadQueue() {
+  let I = null;
+  try { I = await (await fetch(`../outputs/${M.run}/identity.json`, {cache: "no-store"})).json(); } catch {}
+  if (!I || !I.queue.length) return;
+  const ans = tid => L.answers.find(a => a.tracklet === tid);
+  $("#queue").innerHTML = I.queue.map(x => { const a = ans(x.tracklet);
+    return `<div class="q"><img src="../outputs/${M.run}/${x.thumb}" alt="player at ${fmt(x.t)}"><div><div>Is this <b>${x.name}</b>?</div><div class="small">${fmt(x.t)} · ${x.side || ""}</div>
+      <div class="btns"><button data-t="${x.tracklet}" data-n="${x.name}" data-y="1" class="${a && a.yes ? "sel" : ""}">Yes</button><button data-t="${x.tracklet}" data-n="${x.name}" data-y="0" class="${a && !a.yes ? "sel" : ""}">No</button></div></div></div>`; }).join("");
+  $("#queue").querySelectorAll("button").forEach(b => b.onclick = async () => {
+    const tid = +b.dataset.t;
+    L.answers = L.answers.filter(a => a.tracklet !== tid);
+    L.answers.push({tracklet: tid, name: b.dataset.n, yes: b.dataset.y === "1"});
+    b.parentElement.querySelectorAll("button").forEach(x => x.classList.toggle("sel", x === b));
+    await save();
+  });
+}
+init();
+</script>
+</body>
+</html>

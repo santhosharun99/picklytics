@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball Ground Truth</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1320px; margin: 0 auto; padding: 12px 16px 24px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.stage { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; cursor: crosshair; }
+.stage img { width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+.mk { position: absolute; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); }
+.prop { width: 34px; height: 34px; border: 3px solid #22e06b; box-shadow: 0 0 0 1px #000; }
+.cand { width: 10px; height: 10px; background: #ffd400; border: 1px solid #000; }
+.trail { width: 8px; height: 8px; background: #ff4fd8; border: 1px solid #000; opacity: .8; }
+.loupe { position: absolute; width: 180px; height: 180px; border: 3px solid #fff; border-radius: 50%; pointer-events: none; display: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,.6); background-repeat: no-repeat; }
+.loupe::after { content: ""; position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px; border: 2px solid #ff3b3b; border-radius: 50%; }
+.ask { font-size: 20px; font-weight: 700; color: var(--paddle); margin: 10px 0 2px; }
+.btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.b { border: 2px solid var(--border); background: var(--surface-1); border-radius: 10px; padding: 10px 16px; cursor: pointer; font-weight: 600; }
+.b.main { background: var(--paddle); color: #fff; border-color: var(--paddle); } .b kbd { opacity: .7; font: 600 12px ui-monospace, monospace; margin-left: 6px; }
+.small { font-size: 12.5px; color: var(--text-muted); }
+.bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin-top: 10px; } .bar div { height: 100%; background: var(--series-1); }
+</style>
+<link rel="stylesheet" href="theme.css?v=4">
+</head>
+<body>
+<main>
+  <div class="top"><div><b style="font-size:19px">Where is the ball?</b> <span class="small">- ground truth to measure the ball tracker</span></div><div class="small" id="count"></div></div>
+  <div class="stage" id="stage"><img id="img" alt="video frame"><div class="loupe" id="loupe"></div></div>
+  <div class="ask" id="ask">Is the green circle on the match ball?</div>
+  <div class="small">Green circle = what the system thinks. Yellow dots = other things the detector saw. Pink = the ball in your last answers.</div>
+  <div class="btns">
+    <span class="b main" id="yes">Yes, green is right <kbd>Space</kbd></span>
+    <span class="b">Wrong or missing → <b>click the ball</b> (use the magnifier)</span>
+    <span class="b" id="none">No ball visible <kbd>X</kbd></span>
+    <span class="b" id="back">◀ Back <kbd>←</kbd></span>
+  </div>
+  <div class="small" style="margin-top:8px">"No ball visible" = hidden behind a player or the net, or out of the picture. A spare ball or a ball in someone's hand between points is NOT the match ball - only mark the ball in play.</div>
+  <div class="bar"><div id="prog" style="width:0"></div></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+let Q, ci = 0, fi = 0, LAB = {};
+async function init() {
+  Q = (await (await fetch("/api/labels/balltruth/queue.json", {cache: "no-store"})).json());
+  if (!Q) { Q = await (await fetch("../labels/balltruth/queue.json", {cache: "no-store"})).json(); }
+  Q = Q.clips;
+  for (const c of Q) LAB[c.clip] = (await (await fetch(`/api/labels/balltruth_${c.clip}.json`, {cache: "no-store"})).json()) || {clip: c.clip, frames: {}};
+  // resume at the first unlabelled frame
+  outer: for (ci = 0; ci < Q.length; ci++) for (fi = 0; fi < Q[ci].frames.length; fi++) if (!LAB[Q[ci].clip].frames[Q[ci].frames[fi].frame]) break outer;
+  if (ci >= Q.length) { ci = Q.length - 1; fi = Q[ci].frames.length - 1; }
+  $("#yes").onclick = yes; $("#none").onclick = () => answer({none: true}); $("#back").onclick = back;
+  document.addEventListener("keydown", e => {
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); yes(); }
+    else if (e.key.toUpperCase() === "X") answer({none: true});
+    else if (e.key === "ArrowLeft") back();
+  });
+  const st = $("#stage");
+  st.addEventListener("mousemove", loupe); st.addEventListener("mouseleave", () => $("#loupe").style.display = "none");
+  st.addEventListener("click", e => { const p = toImg(e); answer({x: p[0], y: p[1]}); });
+  show();
+}
+const cur = () => Q[ci].frames[fi];
+function toImg(e) { const r = $("#img").getBoundingClientRect(), [W, H] = Q[ci].size; return [Math.round((e.clientX - r.left) / r.width * W * 10) / 10, Math.round((e.clientY - r.top) / r.height * H * 10) / 10]; }
+function mk(cls, x, y) { const r = $("#img").getBoundingClientRect(), [W, H] = Q[ci].size, d = document.createElement("div"); d.className = "mk " + cls; d.style.left = x / W * r.width + "px"; d.style.top = y / H * r.height + "px"; $("#stage").appendChild(d); }
+function show() {
+  const c = Q[ci], f = cur();
+  $("#img").src = `../data/balltruth/${c.clip}/${f.frame}.jpg`;
+  $("#img").onload = () => {
+    document.querySelectorAll("#stage .mk").forEach(e => e.remove());
+    for (const k of [3, 2, 1]) { const p = c.frames[fi - k]; const a = p && LAB[c.clip].frames[p.frame]; if (a && a.x != null) mk("trail", a.x, a.y); }
+    for (const cd of f.cands) mk("cand", cd[0], cd[1]);
+    if (f.proposal) mk("prop", f.proposal[0], f.proposal[1]);
+    $("#loupe").style.backgroundImage = `url(${$("#img").src})`;
+  };
+  $("#ask").textContent = f.proposal ? "Is the green circle on the match ball?" : "No green circle - click the ball, or press X if it is not visible";
+  $("#yes").style.display = f.proposal ? "" : "none";
+  const done = Object.values(LAB).reduce((s, l) => s + Object.keys(l.frames).length, 0), tot = Q.reduce((s, c) => s + c.frames.length, 0);
+  $("#count").textContent = `clip ${ci + 1} of ${Q.length} · frame ${fi + 1} of ${c.frames.length} · ${done} of ${tot} done`;
+  $("#prog").style.width = `${100 * done / tot}%`;
+}
+function loupe(e) {
+  const r = $("#img").getBoundingClientRect(), L = $("#loupe"), Z = 4;
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  L.style.display = "block"; L.style.left = (x - 90) + "px"; L.style.top = (y - 200) + "px";
+  L.style.backgroundSize = `${r.width * Z}px ${r.height * Z}px`;
+  L.style.backgroundPosition = `${-(x * Z - 90)}px ${-(y * Z - 90)}px`;
+}
+function yes() { const f = cur(); if (f.proposal) answer({x: f.proposal[0], y: f.proposal[1], confirmed: true}); }
+let saving = null;
+async function answer(a) {
+  const c = Q[ci];
+  LAB[c.clip].frames[cur().frame] = a;
+  const body = JSON.stringify(LAB[c.clip]);
+  saving = fetch(`/api/labels/balltruth_${c.clip}.json`, {method: "POST", headers: {"Content-Type": "application/json"}, body});
+  if (fi + 1 < c.frames.length) fi++; else if (ci + 1 < Q.length) { ci++; fi = 0; }
+  show();
+}
+function back() { if (fi > 0) fi--; else if (ci > 0) { ci--; fi = Q[ci].frames.length - 1; } show(); }
+init();
+</script>
+</body>
+</html>

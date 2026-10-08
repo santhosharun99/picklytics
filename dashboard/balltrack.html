@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball Tracking: Old vs New</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1320px; margin: 0 auto; padding: 14px 16px 30px; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+.small { font-size: 12.5px; color: var(--text-muted); }
+.grid { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(260px, 1fr); gap: 16px; margin-top: 10px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-width: 0; }
+.stage { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
+.stage img { width: 100%; height: 100%; display: block; }
+.mk { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
+.gt { width: 26px; height: 26px; border: 3px solid #1db954; }
+.nw { width: 40px; height: 40px; border: 3px solid #2d7dff; }
+.od { width: 22px; height: 22px; } .od::before, .od::after { content: ""; position: absolute; left: 50%; top: 50%; width: 26px; height: 4px; background: #ff2d2d; transform: translate(-50%, -50%) rotate(45deg); }
+.od::after { transform: translate(-50%, -50%) rotate(-45deg); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.t { border: 1px solid var(--border); background: var(--surface-2); border-radius: 999px; padding: 5px 12px; cursor: pointer; user-select: none; }
+.t.on { background: var(--paddle); color: #fff; }
+.leg span { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 5px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.sel { background: var(--surface-2); } tr { cursor: pointer; }
+.good { color: var(--good); font-weight: 700; } .bad { color: var(--bad); font-weight: 700; }
+.verdict { font-size: 15px; margin-top: 6px; }
+</style>
+<link rel="stylesheet" href="theme.css?v=4">
+</head>
+<body>
+<main>
+  <h1>Ball tracking: old system vs new model</h1>
+  <div class="small">12 random rally clips that neither system was trained on (3 from matches never used at all). Green = the real ball, as you clicked it. A system is "right" on a frame if it is within 8 px of your click (or says "no ball" when there is none).</div>
+  <div class="grid">
+    <section class="card">
+      <div class="stage" id="stage"><img id="img" alt="test frame"></div>
+      <div class="row leg"><span><i class="mk gt" style="position:static;transform:none;display:inline-block;width:16px;height:16px"></i>Real ball (you)</span>
+        <span><i style="display:inline-block;width:18px;height:18px;border:3px solid #2d7dff;border-radius:50%"></i>New model</span>
+        <span style="color:#ff2d2d">✕ Old system</span></div>
+      <div class="row">
+        <span class="t" id="play">▶ Play</span><span class="t" id="prev">◀ frame</span><span class="t" id="next">frame ▶</span>
+        <span class="t" id="slow">Slow</span>
+        <label class="small"><input type="checkbox" id="showOld" checked> old</label>
+        <label class="small"><input type="checkbox" id="showNew" checked> new</label>
+        <label class="small"><input type="checkbox" id="onlyDiff"> only frames where old is wrong and new is right</label>
+      </div>
+      <div class="verdict" id="verdict"></div>
+      <div class="small" id="pos"></div>
+    </section>
+    <aside class="card">
+      <b>Right on how many frames (8 px)</b>
+      <table id="tbl"></table>
+      <div class="small" style="margin-top:8px">Full numbers, 4 px and 8 px, with confidence intervals: docs/RESULTS.md</div>
+    </aside>
+  </div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+let Q, NEW, T = {}, ci = 0, fi = 0, timer = null, slow = false, list = [];
+const PX = 8, THR = 0.2;
+const near = (p, g) => p && g && g.x != null && Math.hypot(p[0] - g.x, p[1] - g.y) <= PX;
+function right(p, g) { return g.x == null ? !p : near(p, g); }
+async function init() {
+  Q = (await (await fetch("../labels/balltruth/queue.json", {cache: "no-store"})).json()).clips;
+  NEW = await (await fetch("../outputs/balltrack/pred_v3.json", {cache: "no-store"})).json();
+  for (const c of Q) T[c.clip] = ((await (await fetch(`/api/labels/balltruth_${c.clip}.json`, {cache: "no-store"})).json()) || {frames: {}}).frames;
+  table(); pick(0);
+  $("#play").onclick = () => timer ? stop() : start();
+  $("#prev").onclick = () => { stop(); step(-1); }; $("#next").onclick = () => { stop(); step(1); };
+  $("#slow").onclick = () => { slow = !slow; $("#slow").classList.toggle("on", slow); if (timer) { stop(); start(); } };
+  ["#showOld", "#showNew"].forEach(s => $(s).onchange = draw);
+  $("#onlyDiff").onchange = () => { build(); fi = 0; draw(); };
+  window.addEventListener("resize", draw);
+}
+const newAt = (c, f) => { const v = NEW[c][f]; return v && v[2] >= THR ? v : null; };
+function stats(c) {
+  let o = 0, n = 0, k = 0;
+  for (const fr of c.frames) { const g = T[c.clip][fr.frame]; if (!g) continue; k++; o += right(fr.proposal, g); n += right(newAt(c.clip, fr.frame), g); }
+  return [o, n, k];
+}
+function table() {
+  let O = 0, N = 0, K = 0;
+  const rows = Q.map((c, i) => { const [o, n, k] = stats(c); O += o; N += n; K += k;
+    return `<tr data-i="${i}"><td>${c.clip.replace(/_r\d+$/, "").replace("full_match", "US Open").replace("lv_", "Las Vegas ").replace("europe_feed_1", "PPA Europe")}${c.note ? " *" : ""}</td><td class="n">${Math.round(100 * o / k)}%</td><td class="n ${n > o ? "good" : n < o ? "bad" : ""}">${Math.round(100 * n / k)}%</td></tr>`; });
+  $("#tbl").innerHTML = `<tr><th>Clip</th><th class="n">Old</th><th class="n">New</th></tr>${rows.join("")}<tr><th>All ${K} frames</th><th class="n">${Math.round(100 * O / K)}%</th><th class="n good">${Math.round(100 * N / K)}%</th></tr>`;
+  $("#tbl").querySelectorAll("tr[data-i]").forEach(r => r.onclick = () => pick(+r.dataset.i));
+}
+function build() {
+  const c = Q[ci];
+  list = c.frames.filter(fr => { if (!$("#onlyDiff").checked) return true; const g = T[c.clip][fr.frame]; return g && !right(fr.proposal, g) && right(newAt(c.clip, fr.frame), g); });
+}
+function pick(i) { ci = i; fi = 0; build(); document.querySelectorAll("#tbl tr").forEach(r => r.classList.toggle("sel", +r.dataset.i === i)); draw(); }
+function step(d) { if (!list.length) return; fi = (fi + d + list.length) % list.length; draw(); }
+function start() { $("#play").textContent = "⏸ Pause"; timer = setInterval(() => step(1), slow ? 400 : 120); }
+function stop() { clearInterval(timer); timer = null; $("#play").textContent = "▶ Play"; }
+function draw() {
+  const c = Q[ci], fr = list[fi];
+  if (!fr) { $("#verdict").textContent = "No such frames in this clip."; return; }
+  const img = $("#img");
+  img.onload = () => {
+    document.querySelectorAll("#stage .mk").forEach(e => e.remove());
+    const r = img.getBoundingClientRect(), [W, H] = c.size, put = (cls, p) => { if (!p) return; const d = document.createElement("i"); d.className = "mk " + cls; d.style.left = p[0] / W * r.width + "px"; d.style.top = p[1] / H * r.height + "px"; $("#stage").appendChild(d); };
+    const g = T[c.clip][fr.frame];
+    if (g && g.x != null) put("gt", [g.x, g.y]);
+    if ($("#showNew").checked) put("nw", newAt(c.clip, fr.frame));
+    if ($("#showOld").checked) put("od", fr.proposal);
+  };
+  img.src = `../data/balltruth/${c.clip}/${fr.frame}.jpg`;
+  const g = T[c.clip][fr.frame] || {}, o = right(fr.proposal, g), n = right(newAt(c.clip, fr.frame), g);
+  $("#verdict").innerHTML = g.x == null ? `No ball visible here · old: <span class="${o ? "good" : "bad"}">${o ? "right" : "claims a ball"}</span> · new: <span class="${n ? "good" : "bad"}">${n ? "right" : "claims a ball"}</span>`
+    : `Old system: <span class="${o ? "good" : "bad"}">${o ? "on the ball" : "wrong / missing"}</span> · New model: <span class="${n ? "good" : "bad"}">${n ? "on the ball" : "wrong / missing"}</span>`;
+  $("#pos").textContent = `frame ${fi + 1} of ${list.length}`;
+}
+init();
+</script>
+</body>
+</html>
