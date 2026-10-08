@@ -213,9 +213,10 @@ function playRally(id) {
   if (cur !== "overview") { location.hash = "overview"; }
   const r = R.rallies.find(x => x.id === id), v = $("#vid");
   if (!r || !v) return;
-  const go = () => { v.currentTime = Math.max(0, r.start_t - 1); v.play().catch(() => {}); };
+  const OFF = R.video_offset || 0;  // per-match video cut from a longer feed: report times are feed times
+  const go = () => { v.currentTime = Math.max(0, r.start_t - 1 - OFF); v.play().catch(() => {}); };
   v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
-  v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
+  v.ontimeupdate = () => { if (v.currentTime > r.end_t - OFF + 1.5) v.pause(); };
   $("#nowplay").innerHTML = `Playing: game ${r.game} · ${r.score_before} · ${r.server} serving · ${r.n_shots} shots · won by <b>${r.winner || "?"}</b>`;
   v.scrollIntoView({behavior: "smooth", block: "center"});
 }

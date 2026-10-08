@@ -158,9 +158,10 @@ function play() {
   $("#clipTitle").textContent = `Rally at ${fmt(r.start_t)} · ${r.n_shots} shots${r.winner ? " · won by " + r.winner : ""}`;
   $("#clipInfo").textContent = `${clipIdx + 1} of ${clipSet.length}`;
   if (!v.src.endsWith(R.video)) v.src = "../" + R.video;
-  const go = () => { v.currentTime = Math.max(0, r.start_t - 1); v.play(); };
+  const OFF = R.video_offset || 0;  // per-match video cut from a longer feed: report times are feed times
+  const go = () => { v.currentTime = Math.max(0, r.start_t - 1 - OFF); v.play(); };
   v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
-  v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
+  v.ontimeupdate = () => { if (v.currentTime > r.end_t - OFF + 1.5) v.pause(); };
 }
 $("#closeClip").onclick = () => { $("#modal").classList.remove("on"); $("#clipVideo").pause(); };
 $("#prevClip").onclick = () => { clipIdx = (clipIdx - 1 + clipSet.length) % clipSet.length; play(); };

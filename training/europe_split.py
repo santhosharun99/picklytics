@@ -33,9 +33,33 @@ def overlay_state(img):
     yel = (hsv[..., 0] > 20) & (hsv[..., 0] < 35) & (hsv[..., 1] > 150) & (hsv[..., 2] > 180)
     blu = (hsv[..., 0] > 90) & (hsv[..., 0] < 110) & (hsv[..., 1] > 60) & (hsv[..., 2] > 180)
     score = int(yel[:, 450:500].sum()) > 1000
-    r0, r1 = int(blu[15:55, 250:360].sum()), int(blu[60:105, 250:360].sum())
-    row = 0 if r0 > 50 and r0 > 3 * r1 else (1 if r1 > 50 and r1 > 3 * r0 else None)
-    return score, row
+    # the dot sits right after the team names: x ~260-360 for short names, up to ~430 for long ones; a wide strip
+    # can catch other blue for some names -> read narrow and wide, keep a decisive answer, drop conflicts
+    def read(x0, x1):
+        r0, r1 = int(blu[15:55, x0:x1].sum()), int(blu[60:105, x0:x1].sum())
+        return 0 if r0 > 50 and r0 > 3 * r1 else (1 if r1 > 50 and r1 > 3 * r0 else None)
+    rows = {x for x in (read(250, 360), read(250, 445), read(360, 445)) if x is not None}
+    return score, (rows.pop() if len(rows) == 1 else None)
+
+
+def overlay_full(img):
+    """(score shown, serving row 0/1/None, serve dots 1/2/None, game 1-3/None) - finished games are score columns
+    left of the yellow box: x 419-435 = game 1 done, x 369-385 = game 2 done (only checked once the first exists:
+    in game 1 long team names reach x ~400)."""
+    score, row = overlay_state(img)
+    if not score:
+        return score, row, None, None
+    hsv = cv2.cvtColor(img[ROI], cv2.COLOR_BGR2HSV)
+    digit = ((hsv[..., 1] < 60) & (hsv[..., 2] > 200)) | ((hsv[..., 0] > 20) & (hsv[..., 0] < 35) & (hsv[..., 1] > 150) & (hsv[..., 2] > 180))
+    colA, colB = int(digit[10:105, 419:436].sum()) > 20, int(digit[10:105, 369:386].sum()) > 20
+    game = 1 + int(colA) + int(colA and colB)
+    dots = None
+    if row is not None:
+        blu = (hsv[..., 0] > 90) & (hsv[..., 0] < 110) & (hsv[..., 1] > 60) & (hsv[..., 2] > 180)
+        band = blu[(15, 60)[row]:(55, 105)[row], 250:445].any(0)
+        dots = int(np.sum(band[1:] & ~band[:-1]) + band[0]) or None  # separate blobs along x
+        dots = dots if dots in (1, 2) else None
+    return score, row, dots, game
 
 
 def main():

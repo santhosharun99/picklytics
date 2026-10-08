@@ -447,9 +447,10 @@ function playClip() {
   const mt = clipTimes ? clipTimes[clipIdx] : null;
   const at = mt != null ? mt - 2 : r.start_t - 1;  // a moment (e.g. a sprint): start 2 s before it
   if (mt != null) $("#clipTitle").textContent += ` · watch from ${fmt(mt - 2)}`;
-  const go = () => { v.currentTime = Math.max(0, at); v.play(); };
+  const OFF = R.video_offset || 0;  // per-match video cut from a longer feed: report times are feed times
+  const go = () => { v.currentTime = Math.max(0, at - OFF); v.play(); };
   v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
-  v.ontimeupdate = () => { if (v.currentTime > r.end_t + 1.5) v.pause(); };
+  v.ontimeupdate = () => { if (v.currentTime > r.end_t - OFF + 1.5) v.pause(); };
 }
 $("#closeClip").onclick = () => { $("#modal").classList.remove("on"); $("#clipVideo").pause(); };
 $("#prevClip").onclick = () => { clipIdx = (clipIdx - 1 + clipSet.length) % clipSet.length; playClip(); };
