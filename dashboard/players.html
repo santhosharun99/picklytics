@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Players · Pickleball Analyzer</title>
+<style>
+* { box-sizing: border-box; }
+body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.bar2 { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 18px 0 16px; }
+.search { flex: 1 1 240px; max-width: 360px; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; font: inherit; background: var(--surface-1); color: inherit; }
+.search:focus { outline: 2px solid var(--ball); outline-offset: 1px; }
+.chips { margin: 0; }
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.pcard { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 16px;
+  background: var(--surface-1); text-decoration: none; color: inherit; transition: box-shadow .15s, border-color .15s; }
+.pcard:hover { border-color: var(--court-green); box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+.pcard .top { display: flex; align-items: center; gap: 12px; }
+.av { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--paddle); color: var(--ball); font-weight: 700; font-size: 15px;
+  display: inline-flex; align-items: center; justify-content: center; letter-spacing: .02em; }
+.pcard h3 { margin: 0; font-size: 16px; color: var(--paddle); line-height: 1.25; }
+.pcard .who { font-size: 12.5px; color: var(--text-muted); }
+.pcard .nums { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.pcard .nums b { color: var(--paddle); }
+.pcard ul { margin: 4px 0 0; padding-left: 16px; color: var(--text-secondary); font-size: 12.5px; display: grid; gap: 2px; }
+.pcard .go { margin-top: auto; padding-top: 6px; font-size: 13px; font-weight: 600; color: var(--court-green); }
+.count { color: var(--text-muted); font-size: 13px; }
+</style>
+<link rel="stylesheet" href="theme.css?v=4">
+</head>
+<body>
+<div class="topnav">
+  <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
+  <nav><a href="./">Matches</a><a href="players.html" class="on">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
+</div>
+<div class="wrap">
+  <div class="pagehead"><h1>Players</h1>
+    <p>Every named player, built from all their matches: how they play, their numbers, and links to each match.</p></div>
+  <div class="bar2">
+    <input class="search" id="q" type="search" placeholder="Search a player" aria-label="Search a player">
+    <div class="chips" id="tf"></div>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="pgrid" id="list"></div>
+</div>
+<div class="sitefoot">Doubles shots are credited to the named hitter (players are named once per match; ~98% right). TNPPL team singles rotates unnamed players, so it is not in player profiles.</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const initials = n => n.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+let D, tour = "all";
+function render() {
+  const q = $("#q").value.trim().toLowerCase();
+  const ps = D.players.filter(p => (!q || p.name.toLowerCase().includes(q) || (p.team || "").toLowerCase().includes(q))
+    && (tour === "all" || p.tournaments.includes(tour)));
+  $("#count").textContent = `${ps.length} player${ps.length === 1 ? "" : "s"}`;
+  $("#list").innerHTML = ps.map(p => {
+    const S = p.stats, lines = p.style.filter(l => !l.small && l.kind === "style").slice(0, 2);
+    return `<a class="pcard" href="player.html?p=${p.id}">
+      <div class="top"><span class="av">${initials(p.name)}</span><div><h3>${esc(p.name)}</h3>
+        <div class="who">${esc(p.team || p.tournaments.join(" · "))}</div></div></div>
+      <div class="nums"><span><b>${p.matches.length}</b> match${p.matches.length === 1 ? "" : "es"}</span><span><b>${S.shots}</b> shots</span>
+        ${S.speed.drive != null && S.speed_n.drive >= 5 ? `<span>drives <b>${Math.round(S.speed.drive)}</b> mph</span>` : ""}</div>
+      ${lines.length ? `<ul>${lines.map(l => `<li>${esc(l.text)}</li>`).join("")}</ul>` : ""}
+      <span class="go">View player →</span></a>`;
+  }).join("") || '<div class="empty">No player matches that search.</div>';
+}
+(async () => {
+  D = await (await fetch("players.json", { cache: "no-store" })).json();
+  const tours = [...new Set(D.players.flatMap(p => p.tournaments))];
+  $("#tf").innerHTML = ["all", ...tours].map(t => `<button class="chip${t === tour ? " on" : ""}" data-t="${esc(t)}">${t === "all" ? "All" : esc(t)}</button>`).join("");
+  document.querySelectorAll("#tf .chip").forEach(b => b.onclick = () => {
+    tour = b.dataset.t; document.querySelectorAll("#tf .chip").forEach(x => x.classList.toggle("on", x === b)); render();
+  });
+  $("#q").oninput = render;
+  render();
+})();
+</script>
+</body>
+</html>

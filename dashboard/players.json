@@ -1,0 +1,4367 @@
+{
+ "players": [
+  {
+   "id": "boyer",
+   "name": "Boyer",
+   "team": null,
+   "tournaments": [
+    "US Open 2026"
+   ],
+   "matches": [
+    {
+     "id": "boyer_devilliers",
+     "title": "Boyer vs Devilliers",
+     "round": "Men's Singles · Gold medal match",
+     "type": "singles",
+     "tournament": "US Open 2026",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Devilliers"
+     ],
+     "shots": 138,
+     "rallies": 59,
+     "won_pct": 64,
+     "official": null
+    }
+   ],
+   "stats": {
+    "shots": 138,
+    "typed": 138,
+    "mix": {
+     "drive": 28,
+     "serve": 25,
+     "third-shot drive": 24,
+     "return": 15,
+     "reset": 4,
+     "drop": 2,
+     "dink": 2
+    },
+    "mix_n": {
+     "drive": 38,
+     "serve": 35,
+     "third-shot drive": 33,
+     "return": 21,
+     "reset": 5,
+     "drop": 3,
+     "dink": 3
+    },
+    "forehand_pct": 61,
+    "stroke_n": 132,
+    "zones": {
+     "baseline": 84,
+     "transition": 14,
+     "kitchen": 1
+    },
+    "zones_n": 138,
+    "volley_pct": 18,
+    "rally_shots_n": 82,
+    "drive_pct": 87,
+    "soft_pct": 13,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 50.3,
+     "return": 44.2,
+     "drive": 42.0,
+     "soft": 29.7,
+     "all": 44.5
+    },
+    "speed_n": {
+     "serve": 27,
+     "return": 16,
+     "drive": 54,
+     "soft": 9,
+     "all": 106
+    },
+    "spin": {
+     "n": 115,
+     "topspin": 43,
+     "slice": 9,
+     "drive_topspin": 33,
+     "drive_n": 60
+    },
+    "clear": {
+     "soft": 0.4,
+     "soft_n": 7,
+     "drive": 0.6,
+     "drive_n": 42
+    },
+    "deep_pct": 70,
+    "deep_n": 87
+   },
+   "singles": [
+    {
+     "match": "boyer_devilliers",
+     "won_pct": 64,
+     "won_on_serve_pct": 59,
+     "won_on_return_pct": 73,
+     "dist_per_rally_ft": 28,
+     "top_sprint_mph": 12.6,
+     "net_reached_pct": 20,
+     "first_to_net_pct": 33,
+     "rushed_pct": 21,
+     "error_when_rushed_pct": 29,
+     "error_otherwise_pct": 14,
+     "rushes_opp_pct": 36
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 39% of shots (52/132).",
+     "n": 132,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own third-shot drive (backhand) (5x).",
+     "n": 5,
+     "rallies": [
+      21,
+      30,
+      35,
+      50,
+      56
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a drive (forehand) (7x).",
+     "n": 7,
+     "rallies": [
+      0,
+      17,
+      26,
+      33,
+      41,
+      44,
+      45
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 32x, rallies won 53%.",
+     "n": 32,
+     "rallies": [
+      2,
+      5,
+      8,
+      10,
+      13,
+      15,
+      18,
+      20,
+      21,
+      23,
+      27,
+      28,
+      30,
+      33,
+      34,
+      35,
+      37,
+      38,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      49,
+      50,
+      52,
+      53,
+      54,
+      55,
+      56,
+      58
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 2x, rallies won 100%.",
+     "n": 2,
+     "rallies": [
+      4,
+      26
+     ],
+     "low_sample": true,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 36% of shots; most with the third-shot drive (76% of 21).",
+     "n": 105,
+     "rallies": [
+      2,
+      3,
+      4,
+      5,
+      8,
+      10,
+      13,
+      17,
+      19,
+      20,
+      23,
+      27,
+      28,
+      29,
+      33,
+      37,
+      38,
+      44,
+      46,
+      49,
+      51,
+      52,
+      53,
+      57
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 1.8050000000000002 s after returning.",
+     "n": 14,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 19.9 ft from the net; 8% of rally time at the kitchen.",
+     "n": 138,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 84% of contacts from the baseline area.",
+     "n": 138,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 87% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 82,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 18% of rally shots are volleys.",
+     "n": 82,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 61% of strokes are forehands.",
+     "n": 132,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 42 mph - one of the hardest hitters of the 23 players here.",
+     "n": 54,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Serves at about 50 mph.",
+     "n": 27,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 33% of drives (experimental spin reading).",
+     "n": 60,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 0.4 ft above the net (experimental).",
+     "n": 7,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
+     "n": 87,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "kate-fahey",
+   "name": "Kate Fahey",
+   "team": null,
+   "tournaments": [
+    "PPA Las Vegas Open 2026"
+   ],
+   "matches": [
+    {
+     "id": "fahey_yoshitomi",
+     "title": "Kate Fahey vs Aiko Yoshitomi",
+     "round": "Women's Singles · Round of 16",
+     "type": "singles",
+     "tournament": "PPA Las Vegas Open 2026",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Aiko Yoshitomi"
+     ],
+     "shots": 134,
+     "rallies": 48,
+     "won_pct": 69,
+     "official": null
+    }
+   ],
+   "stats": {
+    "shots": 134,
+    "typed": 134,
+    "mix": {
+     "drive": 46,
+     "serve": 22,
+     "third-shot drive": 21,
+     "return": 7,
+     "drop": 2,
+     "lob": 1
+    },
+    "mix_n": {
+     "drive": 61,
+     "serve": 30,
+     "third-shot drive": 28,
+     "return": 10,
+     "drop": 3,
+     "lob": 2
+    },
+    "forehand_pct": 62,
+    "stroke_n": 134,
+    "zones": {
+     "baseline": 92,
+     "transition": 8,
+     "kitchen": 0
+    },
+    "zones_n": 134,
+    "volley_pct": 18,
+    "rally_shots_n": 94,
+    "drive_pct": 95,
+    "soft_pct": 3,
+    "lob_pct": 2,
+    "speed": {
+     "serve": 49.0,
+     "return": 41.6,
+     "drive": 43.0,
+     "soft": 23.5,
+     "all": 44.5
+    },
+    "speed_n": {
+     "serve": 28,
+     "return": 10,
+     "drive": 77,
+     "soft": 1,
+     "all": 118
+    },
+    "spin": {
+     "n": 107,
+     "topspin": 26,
+     "slice": 7,
+     "drive_topspin": 16,
+     "drive_n": 82
+    },
+    "clear": {
+     "soft": 0.7,
+     "soft_n": 1,
+     "drive": 0.9,
+     "drive_n": 69
+    },
+    "deep_pct": 82,
+    "deep_n": 125
+   },
+   "singles": [
+    {
+     "match": "fahey_yoshitomi",
+     "won_pct": 69,
+     "won_on_serve_pct": 62,
+     "won_on_return_pct": 81,
+     "dist_per_rally_ft": 30,
+     "top_sprint_mph": 9.2,
+     "net_reached_pct": 10,
+     "first_to_net_pct": 40,
+     "rushed_pct": 15,
+     "error_when_rushed_pct": 7,
+     "error_otherwise_pct": 13,
+     "rushes_opp_pct": 19
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 38% of shots (51/134).",
+     "n": 134,
+     "rallies": [],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (backhand) (5x).",
+     "n": 5,
+     "rallies": [
+      1,
+      10,
+      16,
+      19,
+      36
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a drive (forehand) (3x).",
+     "n": 3,
+     "rallies": [
+      11,
+      34,
+      46
+     ],
+     "low_sample": true,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 27x, rallies won 63%.",
+     "n": 27,
+     "rallies": [
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      12,
+      14,
+      15,
+      18,
+      21,
+      22,
+      24,
+      27,
+      29,
+      31,
+      34,
+      36,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      45,
+      46,
+      47
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 2x, rallies won 0%.",
+     "n": 2,
+     "rallies": [
+      16,
+      19
+     ],
+     "low_sample": true,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 19% of shots; most with the third-shot drive (30% of 20).",
+     "n": 109,
+     "rallies": [
+      3,
+      4,
+      10,
+      11,
+      16,
+      20,
+      21,
+      22,
+      34,
+      38,
+      39,
+      41,
+      42,
+      46,
+      47
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 4.67 s after returning.",
+     "n": 1,
+     "rallies": [],
+     "low_sample": true,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 23.0 ft from the net; 2% of rally time at the kitchen.",
+     "n": 134,
+     "rallies": [],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 92% of contacts from the baseline area.",
+     "n": 134,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 95% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 94,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 18% of rally shots are volleys.",
+     "n": 94,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 62% of strokes are forehands.",
+     "n": 134,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 43 mph - one of the hardest hitters of the 23 players here.",
+     "n": 77,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Serves at about 49 mph.",
+     "n": 28,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 16% of drives (experimental spin reading).",
+     "n": 82,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 82% of serves, returns and drives.",
+     "n": 125,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "devilliers",
+   "name": "Devilliers",
+   "team": null,
+   "tournaments": [
+    "US Open 2026"
+   ],
+   "matches": [
+    {
+     "id": "boyer_devilliers",
+     "title": "Boyer vs Devilliers",
+     "round": "Men's Singles · Gold medal match",
+     "type": "singles",
+     "tournament": "US Open 2026",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Boyer"
+     ],
+     "shots": 128,
+     "rallies": 59,
+     "won_pct": 36,
+     "official": null
+    }
+   ],
+   "stats": {
+    "shots": 128,
+    "typed": 128,
+    "mix": {
+     "return": 29,
+     "reset": 17,
+     "serve": 16,
+     "drive": 16,
+     "third-shot drive": 13,
+     "drop": 3,
+     "lob": 2,
+     "overhead": 2,
+     "dink": 1
+    },
+    "mix_n": {
+     "return": 37,
+     "reset": 22,
+     "serve": 21,
+     "drive": 21,
+     "third-shot drive": 17,
+     "drop": 4,
+     "lob": 3,
+     "overhead": 2,
+     "dink": 1
+    },
+    "forehand_pct": 57,
+    "stroke_n": 126,
+    "zones": {
+     "baseline": 72,
+     "transition": 26,
+     "kitchen": 2
+    },
+    "zones_n": 128,
+    "volley_pct": 47,
+    "rally_shots_n": 70,
+    "drive_pct": 54,
+    "soft_pct": 39,
+    "lob_pct": 4,
+    "speed": {
+     "serve": 43.1,
+     "return": 38.6,
+     "drive": 34.5,
+     "soft": 25.2,
+     "all": 36.0
+    },
+    "speed_n": {
+     "serve": 19,
+     "return": 29,
+     "drive": 29,
+     "soft": 24,
+     "all": 104
+    },
+    "spin": {
+     "n": 101,
+     "topspin": 25,
+     "slice": 7,
+     "drive_topspin": 12,
+     "drive_n": 32
+    },
+    "clear": {
+     "soft": 1.2,
+     "soft_n": 18,
+     "drive": 1.2,
+     "drive_n": 22
+    },
+    "deep_pct": 55,
+    "deep_n": 71
+   },
+   "singles": [
+    {
+     "match": "boyer_devilliers",
+     "won_pct": 36,
+     "won_on_serve_pct": 27,
+     "won_on_return_pct": 41,
+     "dist_per_rally_ft": 29,
+     "top_sprint_mph": 12.6,
+     "net_reached_pct": 44,
+     "first_to_net_pct": 67,
+     "rushed_pct": 36,
+     "error_when_rushed_pct": 29,
+     "error_otherwise_pct": 19,
+     "rushes_opp_pct": 21
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 43% of shots (54/126).",
+     "n": 126,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (6x).",
+     "n": 6,
+     "rallies": [
+      19,
+      37,
+      43,
+      46,
+      49,
+      54
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a reset (forehand) (1x).",
+     "n": 1,
+     "rallies": [
+      5
+     ],
+     "low_sample": true,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 17x, rallies won 29%.",
+     "n": 17,
+     "rallies": [
+      6,
+      9,
+      11,
+      12,
+      16,
+      17,
+      19,
+      24,
+      25,
+      29,
+      31,
+      32,
+      36,
+      39,
+      48,
+      51,
+      57
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: lob 2x, rallies won 0%.",
+     "n": 2,
+     "rallies": [
+      0,
+      3
+     ],
+     "low_sample": true,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 21% of shots; most with the third-shot drive (73% of 11).",
+     "n": 99,
+     "rallies": [
+      2,
+      5,
+      8,
+      11,
+      17,
+      19,
+      24,
+      27,
+      32,
+      36,
+      38,
+      39,
+      44,
+      45,
+      53,
+      57
+     ],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 1.87 s after returning.",
+     "n": 25,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 19.6 ft from the net; 18% of rally time at the kitchen.",
+     "n": 128,
+     "rallies": [],
+     "low_sample": false,
+     "match": "boyer_devilliers",
+     "match_title": "Boyer vs Devilliers"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mixes court positions: 72% of contacts from the back, 26% from mid-court, 2% at the kitchen.",
+     "n": 128,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 54%, dinks / drops / resets 39% of rally shots.",
+     "n": 70,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 70,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (57% forehand).",
+     "n": 126,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 34 mph.",
+     "n": 29,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Serves at about 43 mph.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 12% of drives (experimental spin reading).",
+     "n": 32,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 1.2 ft above the net (experimental).",
+     "n": 18,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 55% of serves, returns and drives.",
+     "n": 71,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "aiko-yoshitomi",
+   "name": "Aiko Yoshitomi",
+   "team": null,
+   "tournaments": [
+    "PPA Las Vegas Open 2026"
+   ],
+   "matches": [
+    {
+     "id": "fahey_yoshitomi",
+     "title": "Kate Fahey vs Aiko Yoshitomi",
+     "round": "Women's Singles · Round of 16",
+     "type": "singles",
+     "tournament": "PPA Las Vegas Open 2026",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Kate Fahey"
+     ],
+     "shots": 125,
+     "rallies": 48,
+     "won_pct": 31,
+     "official": null
+    }
+   ],
+   "stats": {
+    "shots": 125,
+    "typed": 125,
+    "mix": {
+     "drive": 50,
+     "return": 30,
+     "serve": 7,
+     "third-shot drive": 7,
+     "drop": 2,
+     "lob": 2,
+     "reset": 1,
+     "overhead": 1
+    },
+    "mix_n": {
+     "drive": 63,
+     "return": 37,
+     "serve": 9,
+     "third-shot drive": 9,
+     "drop": 3,
+     "lob": 2,
+     "reset": 1,
+     "overhead": 1
+    },
+    "forehand_pct": 58,
+    "stroke_n": 124,
+    "zones": {
+     "baseline": 95,
+     "transition": 5,
+     "kitchen": 0
+    },
+    "zones_n": 125,
+    "volley_pct": 11,
+    "rally_shots_n": 79,
+    "drive_pct": 91,
+    "soft_pct": 5,
+    "lob_pct": 3,
+    "speed": {
+     "serve": 44.8,
+     "return": 42.5,
+     "drive": 39.2,
+     "soft": 38.6,
+     "all": 40.6
+    },
+    "speed_n": {
+     "serve": 7,
+     "return": 29,
+     "drive": 58,
+     "soft": 3,
+     "all": 100
+    },
+    "spin": {
+     "n": 104,
+     "topspin": 26,
+     "slice": 18,
+     "drive_topspin": 19,
+     "drive_n": 64
+    },
+    "clear": {
+     "soft": 0.6,
+     "soft_n": 2,
+     "drive": 1.5,
+     "drive_n": 43
+    },
+    "deep_pct": 73,
+    "deep_n": 101
+   },
+   "singles": [
+    {
+     "match": "fahey_yoshitomi",
+     "won_pct": 31,
+     "won_on_serve_pct": 19,
+     "won_on_return_pct": 38,
+     "dist_per_rally_ft": 25,
+     "top_sprint_mph": 11.2,
+     "net_reached_pct": 15,
+     "first_to_net_pct": 60,
+     "rushed_pct": 19,
+     "error_when_rushed_pct": 29,
+     "error_otherwise_pct": 18,
+     "rushes_opp_pct": 15
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 42% of shots (52/124).",
+     "n": 124,
+     "rallies": [],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (backhand) (9x).",
+     "n": 9,
+     "rallies": [
+      2,
+      4,
+      5,
+      17,
+      23,
+      26,
+      28,
+      37,
+      47
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a drive (backhand) (2x).",
+     "n": 2,
+     "rallies": [
+      6,
+      43
+     ],
+     "low_sample": true,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 9x, rallies won 33%.",
+     "n": 9,
+     "rallies": [
+      1,
+      2,
+      7,
+      23,
+      25,
+      30,
+      32,
+      33,
+      44
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 7x, rallies won 0%.",
+     "n": 7,
+     "rallies": [
+      9,
+      11,
+      17,
+      20,
+      26,
+      28,
+      37
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 15% of shots; most with the drive (27% of 49).",
+     "n": 100,
+     "rallies": [
+      3,
+      4,
+      9,
+      10,
+      15,
+      21,
+      25,
+      26,
+      38,
+      40,
+      42
+     ],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 3.67 s after returning.",
+     "n": 7,
+     "rallies": [],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 25.0 ft from the net; 3% of rally time at the kitchen.",
+     "n": 125,
+     "rallies": [],
+     "low_sample": false,
+     "match": "fahey_yoshitomi",
+     "match_title": "Kate Fahey vs Aiko Yoshitomi"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 95% of contacts from the baseline area.",
+     "n": 125,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 79,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 11% of rally shots are volleys.",
+     "n": 79,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 58% of strokes are forehands.",
+     "n": 124,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 39 mph - one of the hardest hitters of the 23 players here.",
+     "n": 58,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Serves at about 45 mph.",
+     "n": 7,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 19% of drives (experimental spin reading).",
+     "n": 64,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 73% of serves, returns and drives.",
+     "n": 101,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "rahul",
+   "name": "Rahul",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_1_MS",
+     "title": "Rahul vs Ramakrishnan",
+     "round": "Men's singles (open) · match 1 of the tie",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Ramakrishnan"
+     ],
+     "shots": 36,
+     "rallies": 16,
+     "won_pct": 44,
+     "official": "Ramakrishnan won 11-0 (match card)"
+    },
+    {
+     "id": "tnppl_3_MD",
+     "title": "Rahul / Vishwajit vs Srijith / Shreenath",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Vishwajit"
+     ],
+     "opponents": [
+      "Srijith",
+      "Shreenath"
+     ],
+     "shots": 35,
+     "rallies": 22,
+     "won_pct": 55,
+     "official": "Kodai Tigers won 11-7 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 71,
+    "typed": 71,
+    "mix": {
+     "drive": 30,
+     "return": 23,
+     "dink": 20,
+     "serve": 10,
+     "third-shot drive": 7,
+     "lob": 6,
+     "drop": 3,
+     "reset": 1,
+     "third-shot drop": 1
+    },
+    "mix_n": {
+     "drive": 21,
+     "return": 16,
+     "dink": 14,
+     "serve": 7,
+     "third-shot drive": 5,
+     "lob": 4,
+     "drop": 2,
+     "reset": 1,
+     "third-shot drop": 1
+    },
+    "forehand_pct": 46,
+    "stroke_n": 67,
+    "zones": {
+     "baseline": 58,
+     "transition": 41,
+     "kitchen": 1
+    },
+    "zones_n": 71,
+    "volley_pct": 33,
+    "rally_shots_n": 48,
+    "drive_pct": 54,
+    "soft_pct": 38,
+    "lob_pct": 8,
+    "speed": {
+     "serve": 41.0,
+     "return": 37.1,
+     "drive": 34.9,
+     "soft": 15.9,
+     "all": 32.5
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 4,
+     "drive": 19,
+     "soft": 13,
+     "all": 42
+    },
+    "spin": {
+     "n": 47,
+     "topspin": 13,
+     "slice": 40,
+     "drive_topspin": 14,
+     "drive_n": 22
+    },
+    "clear": {
+     "soft": 1.8,
+     "soft_n": 6,
+     "drive": 1.9,
+     "drive_n": 11
+    },
+    "deep_pct": 52,
+    "deep_n": 27
+   },
+   "singles": [
+    {
+     "match": "tnppl_1_MS",
+     "won_pct": 44,
+     "won_on_serve_pct": 62,
+     "won_on_return_pct": 25,
+     "dist_per_rally_ft": 25,
+     "top_sprint_mph": 9.8,
+     "net_reached_pct": 27,
+     "first_to_net_pct": 50,
+     "rushed_pct": 48,
+     "error_when_rushed_pct": 8,
+     "error_otherwise_pct": 15,
+     "rushes_opp_pct": 19
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Much stronger when serving (62% rallies won) than returning (25%).",
+     "n": 16,
+     "rallies": [
+      1,
+      2,
+      8,
+      9,
+      10,
+      11,
+      12,
+      16
+     ],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Backhand on 72% of shots (23/32).",
+     "n": 32,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (1x).",
+     "n": 1,
+     "rallies": [
+      2
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a reset (forehand) (1x).",
+     "n": 1,
+     "rallies": [
+      7
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 4x, rallies won 50%.",
+     "n": 4,
+     "rallies": [
+      1,
+      8,
+      12,
+      16
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 2x, rallies won 50%.",
+     "n": 2,
+     "rallies": [
+      2,
+      11
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 19% of shots; most with the drive (33% of 9).",
+     "n": 26,
+     "rallies": [
+      2,
+      3,
+      4,
+      6
+     ],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 1.7 s after returning.",
+     "n": 3,
+     "rallies": [],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 21.7 ft from the net; 7% of rally time at the kitchen.",
+     "n": 36,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mixes court positions: 58% of contacts from the back, 41% from mid-court, 1% at the kitchen.",
+     "n": 71,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 54%, dinks / drops / resets 38% of rally shots.",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 8% of rally shots.",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (46% forehand).",
+     "n": 67,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 35 mph - one of the hardest hitters of the 23 players here.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 14% of drives (experimental spin reading).",
+     "n": 22,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 1.8 ft above the net (experimental).",
+     "n": 6,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 52% of serves, returns and drives.",
+     "n": 27,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "vimalraj",
+   "name": "Vimalraj",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_4_XD",
+     "title": "Vishwajit / Joshika vs Vimalraj / Swetha",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Swetha"
+     ],
+     "opponents": [
+      "Vishwajit",
+      "Joshika"
+     ],
+     "shots": 33,
+     "rallies": 22,
+     "won_pct": 41,
+     "official": "Kodai Tigers won 11-9 (match card)"
+    },
+    {
+     "id": "tnppl_6_MD",
+     "title": "Sai / Rohit vs Vimalraj / Safwan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Safwan"
+     ],
+     "opponents": [
+      "Sai",
+      "Rohit"
+     ],
+     "shots": 30,
+     "rallies": 21,
+     "won_pct": 48,
+     "official": "Rockfort Terminatrz won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 63,
+    "typed": 63,
+    "mix": {
+     "drive": 29,
+     "return": 22,
+     "dink": 22,
+     "lob": 10,
+     "third-shot drive": 8,
+     "serve": 6,
+     "drop": 3
+    },
+    "mix_n": {
+     "drive": 18,
+     "return": 14,
+     "dink": 14,
+     "lob": 6,
+     "third-shot drive": 5,
+     "serve": 4,
+     "drop": 2
+    },
+    "forehand_pct": 71,
+    "stroke_n": 63,
+    "zones": {
+     "baseline": 43,
+     "transition": 57,
+     "kitchen": 0
+    },
+    "zones_n": 63,
+    "volley_pct": 40,
+    "rally_shots_n": 45,
+    "drive_pct": 51,
+    "soft_pct": 36,
+    "lob_pct": 13,
+    "speed": {
+     "serve": 17.8,
+     "return": 19.4,
+     "drive": 31.8,
+     "soft": 20.9,
+     "all": 22.9
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 9,
+     "drive": 17,
+     "soft": 9,
+     "all": 44
+    },
+    "spin": {
+     "n": 50,
+     "topspin": 30,
+     "slice": 26,
+     "drive_topspin": 19,
+     "drive_n": 21
+    },
+    "clear": {
+     "soft": 2.5,
+     "soft_n": 5,
+     "drive": 1.1,
+     "drive_n": 13
+    },
+    "deep_pct": 50,
+    "deep_n": 24
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 57% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 63,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 51%, dinks / drops / resets 36% of rally shots.",
+     "n": 45,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 13% of rally shots.",
+     "n": 45,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 71% of strokes are forehands.",
+     "n": 63,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 32 mph.",
+     "n": 17,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 19% of drives (experimental spin reading).",
+     "n": 21,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 2.5 ft above the net (experimental).",
+     "n": 5,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 50% of serves, returns and drives.",
+     "n": 24,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "swetha",
+   "name": "Swetha",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_2_WD",
+     "title": "Joshika / Krithicka vs Swetha / Virina Reddy",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Virina Reddy"
+     ],
+     "opponents": [
+      "Joshika",
+      "Krithicka"
+     ],
+     "shots": 42,
+     "rallies": 28,
+     "won_pct": 39,
+     "official": "Kodai Tigers won 11-5 (match card)"
+    },
+    {
+     "id": "tnppl_4_XD",
+     "title": "Vishwajit / Joshika vs Vimalraj / Swetha",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Vimalraj"
+     ],
+     "opponents": [
+      "Vishwajit",
+      "Joshika"
+     ],
+     "shots": 13,
+     "rallies": 8,
+     "won_pct": 50,
+     "official": "Kodai Tigers won 11-9 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 55,
+    "typed": 55,
+    "mix": {
+     "dink": 36,
+     "drive": 25,
+     "return": 15,
+     "serve": 9,
+     "third-shot drive": 5,
+     "reset": 4,
+     "lob": 4,
+     "third-shot drop": 2
+    },
+    "mix_n": {
+     "dink": 20,
+     "drive": 14,
+     "return": 8,
+     "serve": 5,
+     "third-shot drive": 3,
+     "reset": 2,
+     "lob": 2,
+     "third-shot drop": 1
+    },
+    "forehand_pct": 56,
+    "stroke_n": 55,
+    "zones": {
+     "baseline": 29,
+     "transition": 51,
+     "kitchen": 20
+    },
+    "zones_n": 55,
+    "volley_pct": 36,
+    "rally_shots_n": 42,
+    "drive_pct": 40,
+    "soft_pct": 55,
+    "lob_pct": 5,
+    "speed": {
+     "serve": 27.7,
+     "return": 17.6,
+     "drive": 26.0,
+     "soft": 20.4,
+     "all": 21.7
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 4,
+     "drive": 11,
+     "soft": 16,
+     "all": 35
+    },
+    "spin": {
+     "n": 37,
+     "topspin": 14,
+     "slice": 24,
+     "drive_topspin": 0,
+     "drive_n": 11
+    },
+    "clear": {
+     "soft": 1.0,
+     "soft_n": 7,
+     "drive": 1.0,
+     "drive_n": 7
+    },
+    "deep_pct": 44,
+    "deep_n": 16
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 71% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 55,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 55% of rally shots - among the most of the 23 players here.",
+     "n": 42,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (56% forehand).",
+     "n": 55,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 26 mph - on the softer side of the 23 players here.",
+     "n": 11,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 0% of drives (experimental spin reading).",
+     "n": 11,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 1.0 ft above the net (experimental).",
+     "n": 7,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 44% of serves, returns and drives.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "vishwajit",
+   "name": "Vishwajit",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_3_MD",
+     "title": "Rahul / Vishwajit vs Srijith / Shreenath",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Rahul"
+     ],
+     "opponents": [
+      "Srijith",
+      "Shreenath"
+     ],
+     "shots": 25,
+     "rallies": 20,
+     "won_pct": 45,
+     "official": "Kodai Tigers won 11-7 (match card)"
+    },
+    {
+     "id": "tnppl_4_XD",
+     "title": "Vishwajit / Joshika vs Vimalraj / Swetha",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Joshika"
+     ],
+     "opponents": [
+      "Vimalraj",
+      "Swetha"
+     ],
+     "shots": 25,
+     "rallies": 16,
+     "won_pct": 62,
+     "official": "Kodai Tigers won 11-9 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 50,
+    "typed": 50,
+    "mix": {
+     "drive": 42,
+     "return": 20,
+     "dink": 18,
+     "lob": 6,
+     "serve": 6,
+     "third-shot drive": 6,
+     "drop": 2
+    },
+    "mix_n": {
+     "drive": 21,
+     "return": 10,
+     "dink": 9,
+     "lob": 3,
+     "serve": 3,
+     "third-shot drive": 3,
+     "drop": 1
+    },
+    "forehand_pct": 58,
+    "stroke_n": 50,
+    "zones": {
+     "baseline": 50,
+     "transition": 50,
+     "kitchen": 0
+    },
+    "zones_n": 50,
+    "volley_pct": 38,
+    "rally_shots_n": 37,
+    "drive_pct": 65,
+    "soft_pct": 27,
+    "lob_pct": 8,
+    "speed": {
+     "serve": 22.8,
+     "return": null,
+     "drive": 31.6,
+     "soft": 19.7,
+     "all": 30.1
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 0,
+     "drive": 15,
+     "soft": 8,
+     "all": 27
+    },
+    "spin": {
+     "n": 37,
+     "topspin": 27,
+     "slice": 22,
+     "drive_topspin": 22,
+     "drive_n": 18
+    },
+    "clear": {
+     "soft": 1.0,
+     "soft_n": 4,
+     "drive": 1.2,
+     "drive_n": 8
+    },
+    "deep_pct": 50,
+    "deep_n": 16
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
+     "n": 50,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 65% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 37,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 8% of rally shots.",
+     "n": 37,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 58% of strokes are forehands.",
+     "n": 50,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 32 mph.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 22% of drives (experimental spin reading).",
+     "n": 18,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 50% of serves, returns and drives.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "joshika",
+   "name": "Joshika",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_2_WD",
+     "title": "Joshika / Krithicka vs Swetha / Virina Reddy",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Krithicka"
+     ],
+     "opponents": [
+      "Swetha",
+      "Virina Reddy"
+     ],
+     "shots": 36,
+     "rallies": 24,
+     "won_pct": 50,
+     "official": "Kodai Tigers won 11-5 (match card)"
+    },
+    {
+     "id": "tnppl_4_XD",
+     "title": "Vishwajit / Joshika vs Vimalraj / Swetha",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Vishwajit"
+     ],
+     "opponents": [
+      "Vimalraj",
+      "Swetha"
+     ],
+     "shots": 12,
+     "rallies": 8,
+     "won_pct": 62,
+     "official": "Kodai Tigers won 11-9 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 48,
+    "typed": 48,
+    "mix": {
+     "drive": 35,
+     "return": 23,
+     "dink": 21,
+     "lob": 8,
+     "third-shot drive": 6,
+     "serve": 6
+    },
+    "mix_n": {
+     "drive": 17,
+     "return": 11,
+     "dink": 10,
+     "lob": 4,
+     "third-shot drive": 3,
+     "serve": 3
+    },
+    "forehand_pct": 67,
+    "stroke_n": 48,
+    "zones": {
+     "baseline": 54,
+     "transition": 44,
+     "kitchen": 2
+    },
+    "zones_n": 48,
+    "volley_pct": 41,
+    "rally_shots_n": 34,
+    "drive_pct": 59,
+    "soft_pct": 29,
+    "lob_pct": 12,
+    "speed": {
+     "serve": 14.8,
+     "return": 31.9,
+     "drive": 37.6,
+     "soft": 24.8,
+     "all": 30.0
+    },
+    "speed_n": {
+     "serve": 2,
+     "return": 4,
+     "drive": 18,
+     "soft": 5,
+     "all": 32
+    },
+    "spin": {
+     "n": 36,
+     "topspin": 22,
+     "slice": 17,
+     "drive_topspin": 20,
+     "drive_n": 15
+    },
+    "clear": {
+     "soft": 2.3,
+     "soft_n": 4,
+     "drive": 1.7,
+     "drive_n": 12
+    },
+    "deep_pct": 70,
+    "deep_n": 20
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 54% of contacts from the back, 44% from mid-court, 2% at the kitchen.",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 59%, dinks / drops / resets 29% of rally shots.",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 12% of rally shots.",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 41% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 67% of strokes are forehands.",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 38 mph - one of the hardest hitters of the 23 players here.",
+     "n": 18,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 20% of drives (experimental spin reading).",
+     "n": 15,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "rohit",
+   "name": "Rohit",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_6_MD",
+     "title": "Sai / Rohit vs Vimalraj / Safwan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Sai"
+     ],
+     "opponents": [
+      "Vimalraj",
+      "Safwan"
+     ],
+     "shots": 48,
+     "rallies": 26,
+     "won_pct": 46,
+     "official": "Rockfort Terminatrz won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 48,
+    "typed": 48,
+    "mix": {
+     "drive": 38,
+     "dink": 35,
+     "return": 10,
+     "third-shot drive": 8,
+     "reset": 6,
+     "serve": 2
+    },
+    "mix_n": {
+     "drive": 18,
+     "dink": 17,
+     "return": 5,
+     "third-shot drive": 4,
+     "reset": 3,
+     "serve": 1
+    },
+    "forehand_pct": 65,
+    "stroke_n": 48,
+    "zones": {
+     "baseline": 35,
+     "transition": 65,
+     "kitchen": 0
+    },
+    "zones_n": 48,
+    "volley_pct": 45,
+    "rally_shots_n": 42,
+    "drive_pct": 52,
+    "soft_pct": 48,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 8.1,
+     "drive": 32.8,
+     "soft": 17.6,
+     "all": 27.1
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 1,
+     "drive": 15,
+     "soft": 11,
+     "all": 27
+    },
+    "spin": {
+     "n": 33,
+     "topspin": 12,
+     "slice": 18,
+     "drive_topspin": 6,
+     "drive_n": 18
+    },
+    "clear": {
+     "soft": 2.1,
+     "soft_n": 5,
+     "drive": 1.1,
+     "drive_n": 11
+    },
+    "deep_pct": 42,
+    "deep_n": 12
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 48% of rally shots - among the most of the 23 players here.",
+     "n": 42,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 45% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 42,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 65% of strokes are forehands.",
+     "n": 48,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 33 mph.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 6% of drives (experimental spin reading).",
+     "n": 18,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Soft shots cross about 2.1 ft above the net (experimental).",
+     "n": 5,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 42% of serves, returns and drives.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "ramakrishnan",
+   "name": "Ramakrishnan",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_1_MS",
+     "title": "Rahul vs Ramakrishnan",
+     "round": "Men's singles (open) · match 1 of the tie",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Rahul"
+     ],
+     "shots": 38,
+     "rallies": 16,
+     "won_pct": 56,
+     "official": "Ramakrishnan won 11-0 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 38,
+    "typed": 38,
+    "mix": {
+     "drive": 47,
+     "third-shot drive": 21,
+     "serve": 18,
+     "return": 13
+    },
+    "mix_n": {
+     "drive": 18,
+     "third-shot drive": 8,
+     "serve": 7,
+     "return": 5
+    },
+    "forehand_pct": 62,
+    "stroke_n": 34,
+    "zones": {
+     "baseline": 89,
+     "transition": 5,
+     "kitchen": 5
+    },
+    "zones_n": 38,
+    "volley_pct": 38,
+    "rally_shots_n": 26,
+    "drive_pct": 100,
+    "soft_pct": 0,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 46.7,
+     "return": 44.8,
+     "drive": 49.0,
+     "soft": null,
+     "all": 47.6
+    },
+    "speed_n": {
+     "serve": 2,
+     "return": 2,
+     "drive": 19,
+     "soft": 0,
+     "all": 23
+    },
+    "spin": {
+     "n": 25,
+     "topspin": 44,
+     "slice": 24,
+     "drive_topspin": 37,
+     "drive_n": 19
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.7,
+     "drive_n": 9
+    },
+    "deep_pct": 69,
+    "deep_n": 26
+   },
+   "singles": [
+    {
+     "match": "tnppl_1_MS",
+     "won_pct": 56,
+     "won_on_serve_pct": 75,
+     "won_on_return_pct": 38,
+     "dist_per_rally_ft": 31,
+     "top_sprint_mph": 9.8,
+     "net_reached_pct": 27,
+     "first_to_net_pct": 50,
+     "rushed_pct": 19,
+     "error_when_rushed_pct": 0,
+     "error_otherwise_pct": 24,
+     "rushes_opp_pct": 48
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Much stronger when serving (75% rallies won) than returning (38%).",
+     "n": 16,
+     "rallies": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      13,
+      14,
+      17
+     ],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Backhand on 38% of shots (13/34).",
+     "n": 34,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (2x).",
+     "n": 2,
+     "rallies": [
+      1,
+      8
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a third-shot drive (forehand) (2x).",
+     "n": 2,
+     "rallies": [
+      3,
+      13
+     ],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 7x, rallies won 86%.",
+     "n": 7,
+     "rallies": [
+      3,
+      4,
+      5,
+      6,
+      13,
+      14,
+      17
+     ],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 48% of shots; most with the drive (67% of 12).",
+     "n": 25,
+     "rallies": [
+      1,
+      2,
+      4,
+      7,
+      8,
+      12,
+      16,
+      17
+     ],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 2.835 s after returning.",
+     "n": 2,
+     "rallies": [],
+     "low_sample": true,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 21.5 ft from the net; 8% of rally time at the kitchen.",
+     "n": 38,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_1_MS",
+     "match_title": "Rahul vs Ramakrishnan"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 89% of contacts from the baseline area.",
+     "n": 38,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 100% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 26,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 62% of strokes are forehands.",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 49 mph - one of the hardest hitters of the 23 players here.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 37% of drives (experimental spin reading).",
+     "n": 19,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 69% of serves, returns and drives.",
+     "n": 26,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "suneel",
+   "name": "Suneel",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_5_MD50",
+     "title": "Suneel / Krishnakumar vs Himanshu / Sivashankar Sivan",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Krishnakumar"
+     ],
+     "opponents": [
+      "Himanshu",
+      "Sivashankar Sivan"
+     ],
+     "shots": 32,
+     "rallies": 19,
+     "won_pct": 63,
+     "official": "Kodai Tigers won 11-10 (match card)"
+    },
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Shravan",
+      "Sarveswar"
+     ],
+     "opponents": [
+      "Manish",
+      "Sanjay",
+      "Srijith",
+      "Sivasankar Shivan"
+     ],
+     "shots": 5,
+     "rallies": 4,
+     "won_pct": 50,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 37,
+    "typed": 37,
+    "mix": {
+     "dink": 41,
+     "drive": 27,
+     "return": 14,
+     "lob": 8,
+     "overhead": 3,
+     "serve": 3,
+     "drop": 3,
+     "third-shot drive": 3
+    },
+    "mix_n": {
+     "dink": 15,
+     "drive": 10,
+     "return": 5,
+     "lob": 3,
+     "overhead": 1,
+     "serve": 1,
+     "drop": 1,
+     "third-shot drive": 1
+    },
+    "forehand_pct": 51,
+    "stroke_n": 37,
+    "zones": {
+     "baseline": 54,
+     "transition": 41,
+     "kitchen": 5
+    },
+    "zones_n": 37,
+    "volley_pct": 39,
+    "rally_shots_n": 31,
+    "drive_pct": 35,
+    "soft_pct": 52,
+    "lob_pct": 10,
+    "speed": {
+     "serve": null,
+     "return": null,
+     "drive": 37.3,
+     "soft": 22.2,
+     "all": 23.7
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 0,
+     "drive": 7,
+     "soft": 11,
+     "all": 22
+    },
+    "spin": {
+     "n": 30,
+     "topspin": 33,
+     "slice": 23,
+     "drive_topspin": 50,
+     "drive_n": 8
+    },
+    "clear": {
+     "soft": 1.9,
+     "soft_n": 3,
+     "drive": 2.1,
+     "drive_n": 2
+    },
+    "deep_pct": 70,
+    "deep_n": 10
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 54% of contacts from the back, 41% from mid-court, 5% at the kitchen.",
+     "n": 37,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 52% of rally shots - among the most of the 23 players here.",
+     "n": 31,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 10% of rally shots.",
+     "n": 31,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (51% forehand).",
+     "n": 37,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 37 mph - one of the hardest hitters of the 23 players here.",
+     "n": 7,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 50% of drives (experimental spin reading).",
+     "n": 8,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
+     "n": 10,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "srijith",
+   "name": "Srijith",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_3_MD",
+     "title": "Rahul / Vishwajit vs Srijith / Shreenath",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Shreenath"
+     ],
+     "opponents": [
+      "Rahul",
+      "Vishwajit"
+     ],
+     "shots": 32,
+     "rallies": 20,
+     "won_pct": 50,
+     "official": "Kodai Tigers won 11-7 (match card)"
+    },
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Manish",
+      "Sanjay",
+      "Sivasankar Shivan"
+     ],
+     "opponents": [
+      "Shravan",
+      "Sarveswar",
+      "Suneel"
+     ],
+     "shots": 2,
+     "rallies": 2,
+     "won_pct": 100,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 34,
+    "typed": 34,
+    "mix": {
+     "dink": 38,
+     "drive": 21,
+     "third-shot drive": 15,
+     "serve": 12,
+     "return": 9,
+     "lob": 3,
+     "reset": 3
+    },
+    "mix_n": {
+     "dink": 13,
+     "drive": 7,
+     "third-shot drive": 5,
+     "serve": 4,
+     "return": 3,
+     "lob": 1,
+     "reset": 1
+    },
+    "forehand_pct": 65,
+    "stroke_n": 34,
+    "zones": {
+     "baseline": 35,
+     "transition": 59,
+     "kitchen": 6
+    },
+    "zones_n": 34,
+    "volley_pct": 44,
+    "rally_shots_n": 27,
+    "drive_pct": 44,
+    "soft_pct": 52,
+    "lob_pct": 4,
+    "speed": {
+     "serve": 40.0,
+     "return": 5.2,
+     "drive": 28.6,
+     "soft": 16.4,
+     "all": 19.7
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 1,
+     "drive": 9,
+     "soft": 9,
+     "all": 23
+    },
+    "spin": {
+     "n": 29,
+     "topspin": 21,
+     "slice": 38,
+     "drive_topspin": 18,
+     "drive_n": 11
+    },
+    "clear": {
+     "soft": 2.2,
+     "soft_n": 4,
+     "drive": 2.0,
+     "drive_n": 3
+    },
+    "deep_pct": 62,
+    "deep_n": 8
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 52% of rally shots - among the most of the 23 players here.",
+     "n": 27,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 44% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 27,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 65% of strokes are forehands.",
+     "n": 34,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 29 mph - on the softer side of the 23 players here.",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 18% of drives (experimental spin reading).",
+     "n": 11,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 62% of serves, returns and drives.",
+     "n": 8,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "himanshu",
+   "name": "Himanshu",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_5_MD50",
+     "title": "Suneel / Krishnakumar vs Himanshu / Sivashankar Sivan",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Sivashankar Sivan"
+     ],
+     "opponents": [
+      "Suneel",
+      "Krishnakumar"
+     ],
+     "shots": 25,
+     "rallies": 17,
+     "won_pct": 47,
+     "official": "Kodai Tigers won 11-10 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 25,
+    "typed": 25,
+    "mix": {
+     "drive": 52,
+     "dink": 12,
+     "third-shot drive": 12,
+     "return": 12,
+     "serve": 8,
+     "drop": 4
+    },
+    "mix_n": {
+     "drive": 13,
+     "dink": 3,
+     "third-shot drive": 3,
+     "return": 3,
+     "serve": 2,
+     "drop": 1
+    },
+    "forehand_pct": 52,
+    "stroke_n": 25,
+    "zones": {
+     "baseline": 28,
+     "transition": 68,
+     "kitchen": 4
+    },
+    "zones_n": 25,
+    "volley_pct": 55,
+    "rally_shots_n": 20,
+    "drive_pct": 80,
+    "soft_pct": 20,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 23.1,
+     "return": 13.0,
+     "drive": 30.1,
+     "soft": 17.3,
+     "all": 25.1
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 1,
+     "drive": 12,
+     "soft": 3,
+     "all": 17
+    },
+    "spin": {
+     "n": 21,
+     "topspin": 10,
+     "slice": 29,
+     "drive_topspin": 14,
+     "drive_n": 14
+    },
+    "clear": {
+     "soft": 0.5,
+     "soft_n": 2,
+     "drive": 1.1,
+     "drive_n": 9
+    },
+    "deep_pct": 56,
+    "deep_n": 9
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 72% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 25,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 80% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 55% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (52% forehand).",
+     "n": 25,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 30 mph.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 14% of drives (experimental spin reading).",
+     "n": 14,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 56% of serves, returns and drives.",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "virina-reddy",
+   "name": "Virina Reddy",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_2_WD",
+     "title": "Joshika / Krithicka vs Swetha / Virina Reddy",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Swetha"
+     ],
+     "opponents": [
+      "Joshika",
+      "Krithicka"
+     ],
+     "shots": 25,
+     "rallies": 17,
+     "won_pct": 71,
+     "official": "Kodai Tigers won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 25,
+    "typed": 25,
+    "mix": {
+     "drive": 44,
+     "dink": 28,
+     "return": 16,
+     "third-shot drive": 8,
+     "drop": 4
+    },
+    "mix_n": {
+     "drive": 11,
+     "dink": 7,
+     "return": 4,
+     "third-shot drive": 2,
+     "drop": 1
+    },
+    "forehand_pct": 44,
+    "stroke_n": 25,
+    "zones": {
+     "baseline": 36,
+     "transition": 48,
+     "kitchen": 16
+    },
+    "zones_n": 25,
+    "volley_pct": 29,
+    "rally_shots_n": 21,
+    "drive_pct": 62,
+    "soft_pct": 38,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 23.8,
+     "drive": 24.8,
+     "soft": 19.4,
+     "all": 22.4
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 2,
+     "drive": 12,
+     "soft": 4,
+     "all": 18
+    },
+    "spin": {
+     "n": 17,
+     "topspin": 35,
+     "slice": 29,
+     "drive_topspin": 27,
+     "drive_n": 11
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.4,
+     "drive_n": 7
+    },
+    "deep_pct": 73,
+    "deep_n": 11
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 64% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 25,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 21,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 29% of rally shots are volleys.",
+     "n": 21,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (44% forehand).",
+     "n": 25,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 25 mph - on the softer side of the 23 players here.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 27% of drives (experimental spin reading).",
+     "n": 11,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 73% of serves, returns and drives.",
+     "n": 11,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "safwan",
+   "name": "Safwan",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_6_MD",
+     "title": "Sai / Rohit vs Vimalraj / Safwan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Vimalraj"
+     ],
+     "opponents": [
+      "Sai",
+      "Rohit"
+     ],
+     "shots": 24,
+     "rallies": 19,
+     "won_pct": 53,
+     "official": "Rockfort Terminatrz won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 24,
+    "typed": 24,
+    "mix": {
+     "drive": 25,
+     "dink": 25,
+     "return": 21,
+     "third-shot drive": 12,
+     "lob": 12,
+     "drop": 4
+    },
+    "mix_n": {
+     "drive": 6,
+     "dink": 6,
+     "return": 5,
+     "third-shot drive": 3,
+     "lob": 3,
+     "drop": 1
+    },
+    "forehand_pct": 50,
+    "stroke_n": 24,
+    "zones": {
+     "baseline": 58,
+     "transition": 42,
+     "kitchen": 0
+    },
+    "zones_n": 24,
+    "volley_pct": 37,
+    "rally_shots_n": 19,
+    "drive_pct": 47,
+    "soft_pct": 37,
+    "lob_pct": 16,
+    "speed": {
+     "serve": null,
+     "return": 19.8,
+     "drive": 29.8,
+     "soft": 22.1,
+     "all": 24.4
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 2,
+     "drive": 9,
+     "soft": 5,
+     "all": 19
+    },
+    "spin": {
+     "n": 16,
+     "topspin": 19,
+     "slice": 44,
+     "drive_topspin": 0,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 1.5,
+     "soft_n": 2,
+     "drive": 1.6,
+     "drive_n": 2
+    },
+    "deep_pct": 60,
+    "deep_n": 10
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 58% of contacts from the back, 42% from mid-court, 0% at the kitchen.",
+     "n": 24,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 47%, dinks / drops / resets 37% of rally shots.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 16% of rally shots.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (50% forehand).",
+     "n": 24,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 30 mph - on the softer side of the 23 players here.",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 60% of serves, returns and drives.",
+     "n": 10,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "krithicka",
+   "name": "Krithicka",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_2_WD",
+     "title": "Joshika / Krithicka vs Swetha / Virina Reddy",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Joshika"
+     ],
+     "opponents": [
+      "Swetha",
+      "Virina Reddy"
+     ],
+     "shots": 21,
+     "rallies": 15,
+     "won_pct": 53,
+     "official": "Kodai Tigers won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 21,
+    "typed": 21,
+    "mix": {
+     "dink": 38,
+     "return": 29,
+     "drive": 24,
+     "lob": 10
+    },
+    "mix_n": {
+     "dink": 8,
+     "return": 6,
+     "drive": 5,
+     "lob": 2
+    },
+    "forehand_pct": 29,
+    "stroke_n": 21,
+    "zones": {
+     "baseline": 48,
+     "transition": 52,
+     "kitchen": 0
+    },
+    "zones_n": 21,
+    "volley_pct": 47,
+    "rally_shots_n": 15,
+    "drive_pct": 33,
+    "soft_pct": 53,
+    "lob_pct": 13,
+    "speed": {
+     "serve": null,
+     "return": 13.3,
+     "drive": 13.7,
+     "soft": 14.1,
+     "all": 13.7
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 3,
+     "drive": 2,
+     "soft": 5,
+     "all": 12
+    },
+    "spin": {
+     "n": 13,
+     "topspin": 8,
+     "slice": 46,
+     "drive_topspin": 33,
+     "drive_n": 3
+    },
+    "clear": {
+     "soft": 0.1,
+     "soft_n": 2,
+     "drive": null,
+     "drive_n": 0
+    },
+    "deep_pct": 20,
+    "deep_n": 5
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 48% of contacts from the back, 52% from mid-court, 0% at the kitchen.",
+     "n": 21,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 23 players here.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 13% of rally shots.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 71% of strokes are backhands.",
+     "n": 21,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "sarveswar",
+   "name": "Sarveswar",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Shravan",
+      "Suneel"
+     ],
+     "opponents": [
+      "Manish",
+      "Sanjay",
+      "Srijith",
+      "Sivasankar Shivan"
+     ],
+     "shots": 20,
+     "rallies": 14,
+     "won_pct": 36,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 20,
+    "typed": 20,
+    "mix": {
+     "dink": 45,
+     "drive": 20,
+     "return": 20,
+     "drop": 5,
+     "lob": 5,
+     "third-shot drive": 5
+    },
+    "mix_n": {
+     "dink": 9,
+     "drive": 4,
+     "return": 4,
+     "drop": 1,
+     "lob": 1,
+     "third-shot drive": 1
+    },
+    "forehand_pct": 75,
+    "stroke_n": 20,
+    "zones": {
+     "baseline": 25,
+     "transition": 45,
+     "kitchen": 30
+    },
+    "zones_n": 20,
+    "volley_pct": 25,
+    "rally_shots_n": 16,
+    "drive_pct": 31,
+    "soft_pct": 62,
+    "lob_pct": 6,
+    "speed": {
+     "serve": null,
+     "return": 18.4,
+     "drive": 30.8,
+     "soft": 11.1,
+     "all": 17.3
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 3,
+     "drive": 2,
+     "soft": 8,
+     "all": 13
+    },
+    "spin": {
+     "n": 17,
+     "topspin": 12,
+     "slice": 41,
+     "drive_topspin": 20,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 0.8,
+     "soft_n": 7,
+     "drive": 0.8,
+     "drive_n": 4
+    },
+    "deep_pct": 17,
+    "deep_n": 6
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 75% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 62% of rally shots - among the most of the 23 players here.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 75% of strokes are forehands.",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft shots cross about 0.8 ft above the net (experimental).",
+     "n": 7,
+     "small": true,
+     "kind": "experimental"
+    }
+   ]
+  },
+  {
+   "id": "shreenath",
+   "name": "Shreenath",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_3_MD",
+     "title": "Rahul / Vishwajit vs Srijith / Shreenath",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Srijith"
+     ],
+     "opponents": [
+      "Rahul",
+      "Vishwajit"
+     ],
+     "shots": 20,
+     "rallies": 13,
+     "won_pct": 54,
+     "official": "Kodai Tigers won 11-7 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 20,
+    "typed": 20,
+    "mix": {
+     "drive": 30,
+     "dink": 25,
+     "return": 20,
+     "lob": 15,
+     "serve": 10
+    },
+    "mix_n": {
+     "drive": 6,
+     "dink": 5,
+     "return": 4,
+     "lob": 3,
+     "serve": 2
+    },
+    "forehand_pct": 55,
+    "stroke_n": 20,
+    "zones": {
+     "baseline": 35,
+     "transition": 65,
+     "kitchen": 0
+    },
+    "zones_n": 20,
+    "volley_pct": 50,
+    "rally_shots_n": 14,
+    "drive_pct": 43,
+    "soft_pct": 36,
+    "lob_pct": 21,
+    "speed": {
+     "serve": 39.2,
+     "return": 17.8,
+     "drive": 27.8,
+     "soft": 27.4,
+     "all": 27.8
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 2,
+     "drive": 6,
+     "soft": 4,
+     "all": 14
+    },
+    "spin": {
+     "n": 13,
+     "topspin": 23,
+     "slice": 31,
+     "drive_topspin": 40,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 0.6,
+     "soft_n": 2,
+     "drive": 0.9,
+     "drive_n": 3
+    },
+    "deep_pct": 64,
+    "deep_n": 11
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 65% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 43%, dinks / drops / resets 36% of rally shots.",
+     "n": 14,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 21% of rally shots.",
+     "n": 14,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 14,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Even forehand / backhand split (55% forehand).",
+     "n": 20,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 28 mph - on the softer side of the 23 players here.",
+     "n": 6,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 64% of serves, returns and drives.",
+     "n": 11,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "sanjay",
+   "name": "Sanjay",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Manish",
+      "Srijith",
+      "Sivasankar Shivan"
+     ],
+     "opponents": [
+      "Shravan",
+      "Sarveswar",
+      "Suneel"
+     ],
+     "shots": 19,
+     "rallies": 15,
+     "won_pct": 47,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 19,
+    "typed": 19,
+    "mix": {
+     "drive": 42,
+     "return": 26,
+     "dink": 21,
+     "serve": 5,
+     "drop": 5
+    },
+    "mix_n": {
+     "drive": 8,
+     "return": 5,
+     "dink": 4,
+     "serve": 1,
+     "drop": 1
+    },
+    "forehand_pct": 37,
+    "stroke_n": 19,
+    "zones": {
+     "baseline": 37,
+     "transition": 63,
+     "kitchen": 0
+    },
+    "zones_n": 19,
+    "volley_pct": 31,
+    "rally_shots_n": 13,
+    "drive_pct": 62,
+    "soft_pct": 38,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 9.8,
+     "return": 21.0,
+     "drive": 28.6,
+     "soft": 9.6,
+     "all": 21.0
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 2,
+     "drive": 7,
+     "soft": 2,
+     "all": 12
+    },
+    "spin": {
+     "n": 13,
+     "topspin": 8,
+     "slice": 0,
+     "drive_topspin": 0,
+     "drive_n": 8
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.8,
+     "drive_n": 7
+    },
+    "deep_pct": 22,
+    "deep_n": 9
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 63% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 23 players here.",
+     "n": 13,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 31% of rally shots are volleys.",
+     "n": 13,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 63% of strokes are backhands.",
+     "n": 19,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 29 mph - on the softer side of the 23 players here.",
+     "n": 7,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Topspin on 0% of drives (experimental spin reading).",
+     "n": 8,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 22% of serves, returns and drives.",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "sivashankar-sivan",
+   "name": "Sivashankar Sivan",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_5_MD50",
+     "title": "Suneel / Krishnakumar vs Himanshu / Sivashankar Sivan",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Himanshu"
+     ],
+     "opponents": [
+      "Suneel",
+      "Krishnakumar"
+     ],
+     "shots": 17,
+     "rallies": 13,
+     "won_pct": 38,
+     "official": "Kodai Tigers won 11-10 (match card)"
+    },
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Manish",
+      "Sanjay",
+      "Srijith"
+     ],
+     "opponents": [
+      "Shravan",
+      "Sarveswar",
+      "Suneel"
+     ],
+     "shots": 1,
+     "rallies": 1,
+     "won_pct": 0,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 18,
+    "typed": 18,
+    "mix": {
+     "dink": 44,
+     "return": 22,
+     "drive": 17,
+     "serve": 11,
+     "drop": 6
+    },
+    "mix_n": {
+     "dink": 8,
+     "return": 4,
+     "drive": 3,
+     "serve": 2,
+     "drop": 1
+    },
+    "forehand_pct": 33,
+    "stroke_n": 18,
+    "zones": {
+     "baseline": 11,
+     "transition": 72,
+     "kitchen": 17
+    },
+    "zones_n": 18,
+    "volley_pct": 50,
+    "rally_shots_n": 12,
+    "drive_pct": 25,
+    "soft_pct": 75,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 67.8,
+     "return": 24.2,
+     "drive": 35.9,
+     "soft": 22.5,
+     "all": 25.1
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 1,
+     "drive": 1,
+     "soft": 7,
+     "all": 10
+    },
+    "spin": {
+     "n": 12,
+     "topspin": 8,
+     "slice": 33,
+     "drive_topspin": 0,
+     "drive_n": 3
+    },
+    "clear": {
+     "soft": 1.9,
+     "soft_n": 4,
+     "drive": null,
+     "drive_n": 0
+    },
+    "deep_pct": 80,
+    "deep_n": 5
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 89% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 18,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 75% of rally shots - among the most of the 23 players here.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 67% of strokes are backhands.",
+     "n": 18,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "manish",
+   "name": "Manish",
+   "team": "Rockfort Terminatrz",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Rockfort Terminatrz",
+     "partner": [
+      "Sanjay",
+      "Srijith",
+      "Sivasankar Shivan"
+     ],
+     "opponents": [
+      "Shravan",
+      "Sarveswar",
+      "Suneel"
+     ],
+     "shots": 17,
+     "rallies": 12,
+     "won_pct": 50,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 17,
+    "typed": 17,
+    "mix": {
+     "dink": 35,
+     "drive": 35,
+     "lob": 18,
+     "serve": 6,
+     "return": 6
+    },
+    "mix_n": {
+     "dink": 6,
+     "drive": 6,
+     "lob": 3,
+     "serve": 1,
+     "return": 1
+    },
+    "forehand_pct": 76,
+    "stroke_n": 17,
+    "zones": {
+     "baseline": 41,
+     "transition": 53,
+     "kitchen": 6
+    },
+    "zones_n": 17,
+    "volley_pct": 20,
+    "rally_shots_n": 15,
+    "drive_pct": 40,
+    "soft_pct": 40,
+    "lob_pct": 20,
+    "speed": {
+     "serve": 74.6,
+     "return": 31.6,
+     "drive": 23.0,
+     "soft": 14.6,
+     "all": 23.9
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 1,
+     "drive": 5,
+     "soft": 2,
+     "all": 12
+    },
+    "spin": {
+     "n": 14,
+     "topspin": 21,
+     "slice": 14,
+     "drive_topspin": 33,
+     "drive_n": 3
+    },
+    "clear": {
+     "soft": 0.7,
+     "soft_n": 3,
+     "drive": 2.1,
+     "drive_n": 2
+    },
+    "deep_pct": 25,
+    "deep_n": 8
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 59% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 17,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Balanced shot choice: drives 40%, dinks / drops / resets 40% of rally shots.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 20% of rally shots.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 20% of rally shots are volleys.",
+     "n": 15,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the forehand: 76% of strokes are forehands.",
+     "n": 17,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Drives at about 23 mph - on the softer side of the 23 players here.",
+     "n": 5,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 25% of serves, returns and drives.",
+     "n": 8,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "sai",
+   "name": "Sai",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_6_MD",
+     "title": "Sai / Rohit vs Vimalraj / Safwan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Rohit"
+     ],
+     "opponents": [
+      "Vimalraj",
+      "Safwan"
+     ],
+     "shots": 16,
+     "rallies": 15,
+     "won_pct": 33,
+     "official": "Rockfort Terminatrz won 11-5 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 16,
+    "typed": 16,
+    "mix": {
+     "drive": 31,
+     "dink": 25,
+     "reset": 12,
+     "serve": 12,
+     "return": 12,
+     "third-shot drive": 6
+    },
+    "mix_n": {
+     "drive": 5,
+     "dink": 4,
+     "reset": 2,
+     "serve": 2,
+     "return": 2,
+     "third-shot drive": 1
+    },
+    "forehand_pct": 31,
+    "stroke_n": 16,
+    "zones": {
+     "baseline": 62,
+     "transition": 38,
+     "kitchen": 0
+    },
+    "zones_n": 16,
+    "volley_pct": 25,
+    "rally_shots_n": 12,
+    "drive_pct": 50,
+    "soft_pct": 50,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 4.0,
+     "drive": 30.6,
+     "soft": 19.3,
+     "all": 26.3
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 1,
+     "drive": 4,
+     "soft": 3,
+     "all": 8
+    },
+    "spin": {
+     "n": 13,
+     "topspin": 15,
+     "slice": 23,
+     "drive_topspin": 20,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 0.6,
+     "soft_n": 1,
+     "drive": 2.4,
+     "drive_n": 2
+    },
+    "deep_pct": 75,
+    "deep_n": 4
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 62% of contacts from the back, 38% from mid-court, 0% at the kitchen.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 23 players here.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
+     "n": 12,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 69% of strokes are backhands.",
+     "n": 16,
+     "small": false,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "krishnakumar",
+   "name": "Krishnakumar",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_5_MD50",
+     "title": "Suneel / Krishnakumar vs Himanshu / Sivashankar Sivan",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Suneel"
+     ],
+     "opponents": [
+      "Himanshu",
+      "Sivashankar Sivan"
+     ],
+     "shots": 10,
+     "rallies": 8,
+     "won_pct": 62,
+     "official": "Kodai Tigers won 11-10 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 10,
+    "typed": 10,
+    "mix": {
+     "dink": 40,
+     "return": 30,
+     "drive": 30
+    },
+    "mix_n": {
+     "dink": 4,
+     "return": 3,
+     "drive": 3
+    },
+    "forehand_pct": 30,
+    "stroke_n": 10,
+    "zones": {
+     "baseline": 40,
+     "transition": 60,
+     "kitchen": 0
+    },
+    "zones_n": 10,
+    "volley_pct": 71,
+    "rally_shots_n": 7,
+    "drive_pct": 43,
+    "soft_pct": 57,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 6.2,
+     "drive": 37.5,
+     "soft": 12.5,
+     "all": 13.5
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 1,
+     "drive": 2,
+     "soft": 2,
+     "all": 5
+    },
+    "spin": {
+     "n": 9,
+     "topspin": 44,
+     "slice": 44,
+     "drive_topspin": 100,
+     "drive_n": 3
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 2.9,
+     "drive_n": 2
+    },
+    "deep_pct": 100,
+    "deep_n": 3
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 60% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 10,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 57% of rally shots - among the most of the 23 players here.",
+     "n": 7,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 71% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 7,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 70% of strokes are backhands.",
+     "n": 10,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  },
+  {
+   "id": "shravan",
+   "name": "Shravan",
+   "team": "Kodai Tigers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_7_TeamDoubles",
+     "title": "Kodai Tigers vs Rockfort Terminatrz (team)",
+     "round": "Team event - super doubles · rotating doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Kodai Tigers",
+     "partner": [
+      "Sarveswar",
+      "Suneel"
+     ],
+     "opponents": [
+      "Manish",
+      "Sanjay",
+      "Srijith",
+      "Sivasankar Shivan"
+     ],
+     "shots": 9,
+     "rallies": 8,
+     "won_pct": 12,
+     "official": "Kodai Tigers won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 9,
+    "typed": 9,
+    "mix": {
+     "dink": 44,
+     "serve": 22,
+     "drive": 11,
+     "lob": 11,
+     "return": 11
+    },
+    "mix_n": {
+     "dink": 4,
+     "serve": 2,
+     "drive": 1,
+     "lob": 1,
+     "return": 1
+    },
+    "forehand_pct": 33,
+    "stroke_n": 9,
+    "zones": {
+     "baseline": 22,
+     "transition": 56,
+     "kitchen": 22
+    },
+    "zones_n": 9,
+    "volley_pct": 67,
+    "rally_shots_n": 6,
+    "drive_pct": 17,
+    "soft_pct": 67,
+    "lob_pct": 17,
+    "speed": {
+     "serve": 13.1,
+     "return": null,
+     "drive": 12.9,
+     "soft": 16.9,
+     "all": 15.0
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 0,
+     "drive": 1,
+     "soft": 3,
+     "all": 6
+    },
+    "spin": {
+     "n": 4,
+     "topspin": 25,
+     "slice": 25,
+     "drive_topspin": null,
+     "drive_n": 0
+    },
+    "clear": {
+     "soft": 3.3,
+     "soft_n": 2,
+     "drive": null,
+     "drive_n": 0
+    },
+    "deep_pct": 50,
+    "deep_n": 2
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 78% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 67% of rally shots - among the most of the 23 players here.",
+     "n": 6,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Uses the lob: 17% of rally shots.",
+     "n": 6,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Takes the ball early: volleys 67% of rally shots (out of the air) - one of the highest of the 23 players here.",
+     "n": 6,
+     "small": true,
+     "kind": "style"
+    },
+    {
+     "text": "Leans on the backhand: 67% of strokes are backhands.",
+     "n": 9,
+     "small": true,
+     "kind": "style"
+    }
+   ]
+  }
+ ],
+ "n": 25,
+ "note": "Doubles shots are credited to the named hitter (identity ~98% right). Shot types, spin and net clearance carry the same accuracy notes as the match reports; spin is experimental."
+}
