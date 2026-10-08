@@ -64,3 +64,13 @@ Ball track: round-2 detector (thr 0.3). 14 tagged rallies (1 skipped: 4170-frame
 | D: + live window (rally-end model) + end of play + anchored hits | 89 / 95 / 92 | 78 / 97 / 86 |
 Flight model on the 79 tagged flights (true event times): pixels within 6 px 72% (linear drag 0.12) -> 94% (drag 0.6
 + per-flight effective gravity). Serves need g_eff ~47 ft/s^2 (topspin), long rally flights ~31 (gravity 32.2).
+
+## Landing spots vs tagged bounces (US Open, 42 tagged shots; training/eval_landing.py, 2026-10-08)
+Truth = tagged bounce pixel mapped through the ground homography (exact on the floor).
+| method | median error | 80% within |
+|---|---|---|
+| physics pass (plausible shots, n 33) | 0.65 ft | 1.29 ft |
+| 3D lifter (n 42) | 0.60 ft | 1.90 ft |
+| 2D landing from the bounce detector (n 41; detector trained on these tags) | 0.44 ft | 2.06 ft |
+Physics ~ same typical error, smaller tail. Same 37 shots: physics 0.66 vs lifter 0.53 ft median, closer on 51%.
+Use: keep current landing / speed in reports; physics adds spin (g_eff), net clearance and outlier checks.
