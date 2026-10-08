@@ -1,0 +1,18 @@
+{
+ "id": "santhosharun/pb-balltrack-infer-run",
+ "title": "pb-balltrack-infer-run",
+ "code_file": "balltrack_infer_kernel.py",
+ "language": "python",
+ "kernel_type": "script",
+ "is_private": true,
+ "enable_gpu": true,
+ "enable_internet": true,
+ "dataset_sources": [
+  "santhosharun/pb-balltrack-infer",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-8-teamsingles",
+  "santhosharun/pbvid-mens-singles-gold-2026-us-open",
+  "santhosharun/pbvid-fahey-yoshitomi-lv2026",
+  "santhosharun/pbvid-bright-patriquin-fahey-staksrud-lv2026"
+ ],
+ "machine_shape": "NvidiaTeslaT4"
+}
