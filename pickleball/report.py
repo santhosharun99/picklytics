@@ -213,6 +213,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict], hands: dict | 
         },
     }
     profile["speed"] = speed_profile(name, rallies)
+    profile["spin"] = spin_profile(name, rallies)  # experimental
     profile["running"] = running_profile(name, rallies)
     profile["placement"] = placement_profile(name, rallies)
     profile["pressure"] = pressure_profile(name, rallies)
@@ -552,6 +553,50 @@ def speed_profile(name: str, rallies: list[dict]) -> dict:
     return out
 
 
+TOPSPIN_G, SLICE_G = 40.0, 25.0  # effective gravity (ft/s^2) thresholds; pure gravity 32.2
+
+
+def _phys_shots(run_dir: Path) -> dict:
+    """{shot frame: physics record} from <run>/rally3d.json (pickleball/physics_pass.py), plausible shots only."""
+    f = Path(run_dir) / "rally3d.json"
+    if not f.exists():
+        return {}
+    return {int(k): v for k, v in json.loads(f.read_text())["shots"].items() if v.get("ok")}
+
+
+def _phys_fields(rec: dict | None) -> dict:
+    """Experimental per-shot fields: effective gravity of the outgoing flight (spin) and physics net clearance."""
+    if not rec:
+        return {"spin_g": None, "phys_clear_ft": None}
+    return {"spin_g": rec.get("g_eff"), "phys_clear_ft": rec.get("net_clear_ft")}
+
+
+def spin_kind(g: float) -> str:
+    return "topspin" if g >= TOPSPIN_G else ("slice" if g <= SLICE_G else "flat")
+
+
+def spin_profile(name: str, rallies: list[dict]) -> dict:
+    """EXPERIMENTAL (not checked against hand labels): spin and net clearance by shot group from the physics pass.
+    Spin = how fast the ball drops compared with gravity alone (pickleball/rally3d.py per-flight effective gravity):
+    topspin dips (g_eff >= 40 ft/s^2), slice / backspin floats (<= 25), flat in between."""
+    groups = {"Serve": ("serve",), "Return": ("return",), "Drive": ("drive", "third-shot drive"),
+              "Third-shot drop": ("third-shot drop",), "Reset / drop": ("reset", "drop", "dink"), "Lob": ("lob",)}
+    mine = [(r["id"], s) for r in rallies for s in r["shots"] if s["player"] == name and s.get("spin_g") is not None]
+
+    def summ(v):
+        kinds = Counter(spin_kind(s["spin_g"]) for _, s in v)
+        clr = [s["phys_clear_ft"] for _, s in v if s.get("phys_clear_ft") is not None and s["phys_clear_ft"] > -1]
+        return {"n": len(v), **{k: round(100 * kinds.get(k, 0) / len(v)) for k in ("topspin", "flat", "slice")},
+                "clear_ft": round(float(np.median(clr)), 1) if clr else None, "n_clear": len(clr),
+                "rallies": sorted({rid for rid, _ in v})}
+    out = {"groups": {}, "overall": summ(mine) if mine else None, "thresholds": {"topspin_g": TOPSPIN_G, "slice_g": SLICE_G}}
+    for label, types in groups.items():
+        v = [(rid, s) for rid, s in mine if s.get("shot") in types]
+        if len(v) >= 3:
+            out["groups"][label] = summ(v)
+    return out
+
+
 def fisher_p(k1: int, n1: int, k2: int, n2: int) -> float:
     """Two-sided Fisher exact test: are k1/n1 and k2/n2 different rates?"""
     from math import comb
@@ -659,10 +704,14 @@ def build_report(labels_path: Path, run_dirs: list[Path], video: str, out_path: 
 # point winners from the broadcast scoreboard (scoreboard.py). No analyst labels needed.
 # ---------------------------------------------------------------------------------------------
 
-def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_next_s: float = 40.0):
+def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_next_s: float = 40.0,
+                       names: dict | None = None, rules: dict | None = None, replays: bool = False):
+    """names: {pid: display name} override (e.g. P1/P2 -> players from a match card); rules: scoring rules for
+    outcome.reconstruct (target, win_by, games_to_win, scoring 'sideout'|'rally'); default best of 3 to 11."""
     from . import scoreboard as sb
     run_dir = Path(run_dir)
-    A = json.loads((run_dir / "analysis.json").read_text())
+    A = _load_named(run_dir, names, replays)
+    phys = _phys_shots(run_dir)  # experimental spin / net clearance (physics pass), {} if not run
     fps = A["meta"]["fps"]
     name_of = {pid: p.get("name") or pid for pid, p in A["players"].items()}
     tracks = load_tracks([run_dir])
@@ -673,7 +722,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
     readings = {}
     # tracking + game rules decide server, winner and games (end changes observed from the players' looks)
     from .outcome import match_from_analysis
-    track_w = {x["index"]: x for x in match_from_analysis(A, run_dir=run_dir)}
+    track_w = {x["index"]: x for x in match_from_analysis(A, run_dir=run_dir, **(rules or {}))}
 
     def reading(t0, t1):
         key = (round(t0, 1), round(t1, 1))
@@ -681,17 +730,22 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
             readings[key] = sb.stable_reading(video_file, int(t0 * fps), int(t1 * fps), sb_cfg) if sb_cfg else None
         return readings[key]
 
+    from .rally_end import MODEL as _RE_MODEL, dead_touches, endings as _endings
+    dead = dead_touches(A, run_dir) if _RE_MODEL.exists() else {}  # ball handling: not shots (scoring unchanged)
+    ends = _endings(A, run_dir, dead) if _RE_MODEL.exists() else {}
     out = []
     for k, r in enumerate(rallies):
         shots = []
-        for i, s in enumerate(sorted(shots_by[r["index"]], key=lambda s: s["frame"])):
+        live = [s for s in sorted(shots_by[r["index"]], key=lambda s: s["frame"]) if (s["rally"], s["index"]) not in dead]
+        for i, s in enumerate(live):
             p = s.get("hitter_court")
             shots.append({"i": i, "t": round(s["t"], 2), "player": name_of.get(s["player"], s["player"]), "side": s["side"],
                           "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
                           "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
                           "land": s.get("land_3d") or s.get("landing_court"),  # 3D lifter landing spot first
                           "speed_mph": s.get("ball_mph"), "speed_err": s.get("ball_mph_err"),
-                          "speed_conf": s.get("speed_conf"), "net_clear_ft": s.get("net_clear_ft")})
+                          "speed_conf": s.get("speed_conf"), "net_clear_ft": s.get("net_clear_ft"),
+                          **_phys_fields(phys.get(s["frame"]))})
         if not shots:
             continue
         for s, nxt in zip(shots, shots[1:]):
@@ -724,7 +778,7 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
                 move_t[side].append([round(f / fps, 2), round(xy[0], 2), round(xy[1], 2)])
         out.append({
             "id": r["index"], "start_t": round(r["start_t"], 2), "end_t": round(r["end_t"], 2),
-            "server": server, "winner": winner, "ending": None, "game": tw.get("game"), "score_before": tw.get("score_before"),
+            "server": server, "winner": winner, "ending": ends.get(r["index"]), "game": tw.get("game"), "score_before": tw.get("score_before"),
             "scoreboard": {"server": sb_server, "winner": sb_winner,
                            "agrees": None if sb_winner is None else (sb_winner == winner and (sb_server in (None, server)))},
             "shots": shots, "n_shots": len(shots),
@@ -735,10 +789,47 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
     return out, name_of
 
 
-def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: Path, sb_cfg: dict | None) -> dict:
-    rallies, name_of = build_rallies_auto(run_dir, video_file, sb_cfg)
-    a, b = list(name_of.values())[:2]
+def _load_named(run_dir: Path, names: dict | None, replays: bool = False) -> dict:
+    """analysis.json with players renamed; replays=True drops broadcast replays (replays.py, TNPPL stinger)."""
     A = json.loads((Path(run_dir) / "analysis.json").read_text())
+    if replays:
+        from .replays import drop_replays
+        A = drop_replays(A, run_dir)
+    for pid, n in (names or {}).items():
+        if pid in A["players"]:
+            A["players"][pid]["name"] = n
+    return A
+
+
+def overlay_check(rallies: list[dict], overlay: dict) -> None:
+    """Cross-check against the broadcast score overlay (TNPPL; overlay_truth.py). overlay = {"path", "teams":
+    [row0 name, row1 name] as used in the report, "rosters": [[...], [...]], "scoring", "singles"}.
+    Fills r["scoreboard"] = {server, winner, agrees, score} where the overlay gives a verdict."""
+    from .overlay_truth import rally_truth
+    rs = sorted(rallies, key=lambda r: r["start_t"])
+    truth = rally_truth(overlay["path"], [{"index": r["id"], "start_t": r["start_t"], "end_t": r["end_t"]} for r in rs],
+                        overlay["rosters"], scoring=overlay.get("scoring", "sideout"),
+                        use_server_name=not overlay.get("singles"), singles=bool(overlay.get("singles")))
+    team = overlay["teams"]
+    for r, t in zip(rs, truth):
+        srv = team[t["server_team"]] if t["server_team"] is not None else None
+        win = team[t["winner_team"]] if t["winner_team"] is not None else None
+        agrees = None if win is None else (win == r["winner"] and (srv is None or srv == r["server"]))
+        r["scoreboard"] = {"server": srv, "winner": win, "agrees": agrees,
+                           "score": t["before"]["score"] if t["before"] else None, "server_name": t["server"],
+                           "serve_no": t["serve_no"], "verdict": t["verdict"]}
+
+
+def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: Path, sb_cfg: dict | None,
+                      names: dict | None = None, rules: dict | None = None, overlay: dict | None = None,
+                      official: str | None = None, replays: bool = False) -> dict:
+    """overlay: TNPPL score-overlay cross-check (see overlay_check); official: the official result text
+    (e.g. from the match card), shown next to the score reconstructed from tracking."""
+    rallies, name_of = build_rallies_auto(run_dir, video_file, sb_cfg, names=names, rules=rules, replays=replays)
+    a, b = list(name_of.values())[:2]
+    A = _load_named(run_dir, names, replays)
+    if overlay:
+        overlay_check(rallies, overlay)
     hands = {p.get("name") or pid: p.get("dominant_hand") or "right" for pid, p in A["players"].items()}
     checked = [r for r in rallies if r["scoreboard"]["agrees"] is not None]
     agree = sum(r["scoreboard"]["agrees"] for r in checked)
@@ -746,10 +837,150 @@ def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: 
     report = {
         "title": f"{a} vs {b}",
         "source": f"{len(rallies)} automatically detected rallies in {games} games (full match; server and point winner from tracking"
-                  + (f"; scoreboard agrees on {agree}/{len(checked)}" if checked else "") + ")",
+                  + (f"; {'score overlay' if overlay else 'scoreboard'} agrees on {agree}/{len(checked)}" if checked else "") + ")",
         "video": video_url,
+        "official": official,
+        "replays_dropped": A.get("replays", []),
+        "rules": rules,
+        "names": names,
         "win_probability": winprob.annotate(rallies, a, b),  # adds wp_before / wp_after / importance per rally
         "players": {a: player_profile(a, b, rallies, hands), b: player_profile(b, a, rallies, hands)},
+        "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
+    }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(report, indent=1))
+    return report
+
+
+# ---------------------------------------------------------------------------------------------
+# Doubles report: the two TEAMS take the place of the two players on every page (team scoring from
+# doubles.reconstruct), plus per-player shot profiles where the hitter is named (mark-once identity,
+# <run>/hitters.json from training/identify.py).
+# ---------------------------------------------------------------------------------------------
+
+def _doubles_tracks(run_dir: Path) -> dict:
+    """frame -> {'near': [(x, y), (x, y)], 'far': [...]} court positions of the four players."""
+    A = json.loads((Path(run_dir) / "analysis.json").read_text())
+    D = A.get("depth_correction")
+    pos = {}
+    with (Path(run_dir) / "detections.jsonl").open() as fh:
+        for line in fh:
+            r = json.loads(line)
+            if not r.get("court"):
+                continue
+            sel = select_players(r.get("people", []), 2)
+            if sel:
+                d = defaultdict(list)
+                for p in sel:
+                    d[p["side"]].append(tuple(correct_depth(p["court"], D)))
+                pos[r["f"]] = dict(d)
+    return pos
+
+
+def individual_profile(name: str, shots: list[dict]) -> dict:
+    mine = [s for s in shots if s.get("hitter") == name]
+    typed = [s for s in mine if s["shot"]]
+    sp = [s["speed_mph"] for s in mine if s.get("speed_mph") and s.get("speed_conf") != "low"]
+    return {"shots": len(mine), "shot_mix": dict(Counter(s["shot"] for s in typed)),
+            "stroke": dict(Counter(s["stroke"] for s in mine if s["stroke"])),
+            "volleys": sum(1 for s in mine if s["volley"]),
+            "zones": dict(Counter(s["zone"] for s in mine if s["zone"])),
+            "median_mph": round(float(np.median(sp)), 1) if sp else None,
+            "id_conf": round(float(np.mean([s["hitter_conf"] for s in mine if s.get("hitter_conf") is not None])), 3) if mine else None}
+
+
+def build_report_doubles(run_dir: Path, video_url: str, out_path: Path, teams: list[str], kit_of_team0: int | None,
+                         rules: dict, overlay: dict | None = None, official: str | None = None,
+                         rosters: list[list[str]] | None = None, replays: bool = True) -> dict:
+    """teams: [team 0 name, team 1 name] (team 0 = overlay row 0); kit_of_team0: which kit (doubles.team_sides)
+    team 0 wears - from the identity marks, the overlay, or None = decide by agreement with the overlay.
+    rules: {"scoring", "target", "win_by", "games_to_win"}."""
+    from .doubles import reconstruct
+    run_dir = Path(run_dir)
+    A = _load_named(run_dir, None, replays)
+    phys = _phys_shots(run_dir)  # experimental spin / net clearance (physics pass), {} if not run
+    fps = A["meta"]["fps"]
+    rec = [r for r in reconstruct(run_dir, A, rules.get("scoring", "sideout"), rules.get("target", 11),
+                                  rules.get("win_by", 2), rules.get("games_to_win", 2)) if not r.get("after_match")]
+    truth = None
+    if overlay:
+        from .overlay_truth import rally_truth_seq
+        truth = rally_truth_seq(overlay["path"], rec, overlay["rosters"])
+        if kit_of_team0 is None:  # name the kits once: the mapping that agrees best with the overlay's servers
+            agree = sum(1 for r, t in zip(rec, truth) if t["server_team"] is not None and r["serve_kit"] is not None
+                        and r["serve_kit"] == t["server_team"])
+            dis = sum(1 for r, t in zip(rec, truth) if t["server_team"] is not None and r["serve_kit"] is not None
+                      and r["serve_kit"] != t["server_team"])
+            kit_of_team0 = 0 if agree >= dis else 1
+    kit_of_team0 = kit_of_team0 or 0
+    tname = lambda k: None if k is None else teams[0 if k == kit_of_team0 else 1]
+    hp = run_dir / "hitters.json"
+    hitters = json.loads(hp.read_text()) if hp.exists() else {}
+    tracks = _doubles_tracks(run_dir)
+    from .rally_end import MODEL as _RE_MODEL, dead_touches, endings as _endings
+    dead = dead_touches(A, run_dir) if _RE_MODEL.exists() else {}  # ball handling: not shots (scoring unchanged)
+    ends = _endings(A, run_dir, dead) if _RE_MODEL.exists() else {}
+    shots_by = defaultdict(list)
+    for s in A["shots"]:
+        shots_by[s["rally"]].append(s)
+    rallies = []
+    for k, r in enumerate(rec):
+        nk = r["near_kit"]
+        side_team = {"near": tname(nk), "far": tname(None if nk is None else 1 - nk)}
+        shots = []
+        live = [s for s in sorted(shots_by[r["index"]], key=lambda s: s["frame"]) if (s["rally"], s["index"]) not in dead]
+        for i, s in enumerate(live):
+            p = s.get("hitter_court")
+            h = hitters.get(f"{s['rally']}:{s['index']}") or {}
+            shots.append({"i": i, "t": round(s["t"], 2), "player": side_team[s["side"]], "side": s["side"],
+                          "hitter": h.get("name"), "hitter_conf": h.get("conf"),
+                          "shot": s.get("shot_type"), "stroke": s.get("stroke"), "volley": bool(s.get("volley")),
+                          "pos": [round(v, 1) for v in p] if p else None, "zone": s.get("hitter_zone"),
+                          "land": s.get("land_3d") or s.get("landing_court"), "speed_mph": s.get("ball_mph"),
+                          "speed_err": s.get("ball_mph_err"), "speed_conf": s.get("speed_conf"),
+                          "net_clear_ft": s.get("net_clear_ft"), "inferred": bool(s.get("inferred")),
+                          **_phys_fields(phys.get(s["frame"]))})
+        if not shots:
+            continue
+        for s, nxt in zip(shots, shots[1:]):
+            s["next_pos"] = nxt["pos"]
+        move, move_t = defaultdict(list), defaultdict(list)
+        for f in range(int(r["start_t"] * fps), int(r["end_t"] * fps) + 1, max(1, int(fps / 10))):
+            for side, xys in tracks.get(f, {}).items():
+                for xy in xys:
+                    move[side_team[side]].append([round(v, 1) for v in xy])
+                    move_t[side_team[side]].append([round(f / fps, 2), round(xy[0], 2), round(xy[1], 2)])
+        sb = {"server": None, "winner": None, "agrees": None, "score": None, "server_name": None, "serve_no": None}
+        if truth:
+            t = truth[k]
+            if t["before"]:
+                sb = {"server": teams[t["server_team"]] if t["server_team"] is not None else None,
+                      "winner": teams[t["winner_team"]] if t["winner_team"] is not None else None,
+                      "score": t["before"]["score"], "server_name": t["server"], "serve_no": t["serve_no"],
+                      "verdict": t["verdict"]}
+                w = tname(r["winner_kit"])
+                sb["agrees"] = None if sb["winner"] is None else (sb["winner"] == w and (sb["server"] in (None, tname(r["serve_kit"]))))
+        rallies.append({"id": r["index"], "start_t": round(r["start_t"], 2), "end_t": round(r["end_t"], 2),
+                        "server": tname(r["serve_kit"]), "winner": tname(r["winner_kit"]), "server_no": r.get("server_no"),
+                        "server_player": shots[0]["hitter"] if not shots[0]["inferred"] else None,
+                        "ending": ends.get(r["index"]), "game": r.get("game"), "score_before": r.get("score_before"), "how": r.get("how"),
+                        "serve_cue": r.get("serve_cue"), "scoreboard": sb, "shots": shots, "n_shots": len(shots),
+                        "movement": dict(move), "movement_t": dict(move_t), "detail": True})
+    a, b = teams
+    all_shots = [s for r in rallies for s in r["shots"]]
+    names = [n for n in dict.fromkeys(s["hitter"] for s in all_shots if s["hitter"])]
+    checked = [r for r in rallies if r["scoreboard"]["agrees"] is not None]
+    games = max((r["game"] or 1 for r in rallies), default=1)
+    report = {
+        "type": "doubles",
+        "title": f"{a} vs {b}",
+        "source": f"{len(rallies)} automatically detected rallies in {games} game{'s' if games > 1 else ''} (team scoring from tracking"
+                  + (f"; score overlay agrees on {sum(r['scoreboard']['agrees'] for r in checked)}/{len(checked)}" if checked else "") + ")",
+        "video": video_url, "official": official, "rules": rules, "replays_dropped": A.get("replays", []),
+        "teams": {a: (rosters or [[], []])[0], b: (rosters or [[], []])[1]},
+        "win_probability": None,  # winprob.py models singles side-out games only
+        "players": {a: player_profile(a, b, rallies), b: player_profile(b, a, rallies)},
+        "individuals": {n: individual_profile(n, all_shots) for n in names},
         "rallies": [{k: v for k, v in r.items() if k not in ("movement", "movement_t")} for r in rallies],
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)

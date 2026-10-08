@@ -38,6 +38,7 @@ main { max-width: 1300px; margin: 0 auto; padding: 20px 24px 60px; display: grid
 .ins { display: grid; gap: 8px; }
 .ins div { display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
 .badge { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; min-width: 72px; }
+.exp { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); border: 1px solid var(--text-muted); border-radius: 3px; padding: 1px 5px; vertical-align: middle; margin-left: 6px; }
 .badge.strength { color: var(--good); } .badge.weakness { color: var(--bad); } .badge.pattern { color: var(--series-1); }
 .small { color: var(--note); font-size: 11px; white-space: nowrap; }
 .clips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
@@ -142,6 +143,9 @@ function show(name) {
       <div class="card"><h2>Fastest shots</h2><p class="why">Click ▶ to watch.</p><div id="fastest"></div></div>
     </section>
     <section class="grid">
+      <div class="card" style="grid-column: span 3"><h2>Spin &amp; net clearance <span class="exp">experimental</span></h2><p class="why">From the ball&#39;s 3D flight. Topspin makes the ball dip faster than gravity alone, slice (backspin) makes it float. Net clearance = how high above the net tape the ball crossed. Only shots whose 3D flight is physically believable are counted.</p><div id="spin"></div></div>
+    </section>
+    <section class="grid">
       <div class="card" style="grid-column: span 3"><h2>Shot placement</h2><p class="why">Where this player's shots landed on the other side (net at the top, seen from the hitter). Dots = landing spots; click a dot to watch. "Deep" = past the kitchen, in the back 15 ft. In/out calls are not reliable yet, so they are not shown.</p><div id="placement" style="display:flex;flex-wrap:wrap;gap:18px"></div></div>
     </section>
     <section class="grid">
@@ -230,6 +234,7 @@ function renderEndings(P, col) {
   const sg = Object.entries(sp.groups);
   $("#speed").innerHTML = sg.length ? `<table><tr><th>Shot</th><th>Typical</th><th>Top</th><th>Shots</th><th></th></tr>${sg.map(([k, v]) => `<tr><td>${k}</td><td><b>${v.avg}</b> mph</td><td>${v.max ?? "–"}${v.max ? " mph" : ""}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`).join("")}</table>` : '<span class="empty">No measured speeds.</span>';
   $("#fastest").innerHTML = sp.fastest.length ? `<table>${sp.fastest.map(f => `<tr><td><b>${f.mph}</b> mph${f.err ? ` <span class="small">±${f.err}</span>` : ""}</td><td>${cap(f.shot || "shot")}</td><td>${clipButtons([f.rally])}</td></tr>`).join("")}</table>` : '<span class="empty">–</span>';
+  renderSpin(P);
   const pl = P.placement || {};
   const half = (label, g) => {
     const W = 160, Hh = 176, sx = W / 26, sy = Hh / 28, ox = 3 * sx, oy = 2 * sy;   // 20x22 ft half + margins
@@ -375,6 +380,7 @@ const ACC = {
   third: "Third-shot type: drives are recognised (83%), drops only 19% on unseen matches, so the drive vs drop split is rough; rally winner 96%. Pace ±3-4 mph; net clearance from the 3D ball path; landing depth about ±1.5 ft.",
   speed: "Typical error ±3-4 mph. Only shots where two independent measurements (flight time and 3D path) agree within 20% are used; top speeds only when they agree closely.",
   fastest: "Typical error ±3-4 mph; the ± after each speed is that shot's own uncertainty.",
+  spin: "EXPERIMENTAL - not yet checked against hand-labelled spin. The 3D flight model with spin fits 94% of ball positions (vs 72% without), and serves come out as topspin as expected; the topspin / flat / slice cut-offs are first guesses. About 1 in 5 shots has no believable 3D flight and is left out. Net clearance comes from the same flight and is not checked against hand labels either.",
   placement: "Landing spots from the 3D ball path: returned serves land in the service box 93-95% of the time (they must), so spots are good to about 1-1.5 ft. Calls within that distance of a line are not reliable.",
   running: "Player positions about ±1 ft after the far-end depth fix (checked with the kitchen rule: volleys measured inside the kitchen fell from 46% to 4%). Distances are not checked against GPS - compare the two players in the same match rather than across venues.",
   pressure: "Built from hit timing (exact to 0.03 s) and positions (±1 ft). Checked as a whole: rushed shots end as the hitter's error 22% of the time vs 15% otherwise. 'Error' = last detected shot of a lost rally; about 1 in 10 final shots is missed.",
@@ -391,6 +397,11 @@ function addAccuracy() {
     const box = $("#" + id)?.closest(".card");
     if (box && !box.querySelector(`.acc[data-k="${id}"]`)) box.insertAdjacentHTML("beforeend", note(t).replace('<p class="acc"', `<p class="acc" data-k="${id}"`));
   }
+}
+function renderSpin(P) {
+  const sp = P.spin || {}, g = Object.entries(sp.groups || {});
+  const row = (k, v) => `<tr><td>${k}</td><td>${v.topspin}%</td><td>${v.flat}%</td><td>${v.slice}%</td><td>${v.clear_ft != null ? `<b>${v.clear_ft}</b> ft` : "–"}</td><td>${v.n}</td><td>${clipButtons(v.rallies)}</td></tr>`;
+  $("#spin").innerHTML = sp.overall ? `<table><tr><th>Shot</th><th>Topspin</th><th>Flat</th><th>Slice</th><th>Net clearance (typical)</th><th>Shots</th><th></th></tr>${g.map(([k, v]) => row(k, v)).join("")}${row("<b>All shots</b>", sp.overall)}</table>` : '<span class="empty">No 3D flights for this match yet.</span>';
 }
 function renderLength(P, col) {
   $("#length").innerHTML = Object.entries(P.rally_length).map(([k, v]) => `<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${v.value ?? 0}%;background:${col}"></div></div><span style="text-align:right">${v.value ?? "–"}%</span></div><div class="small" style="color:var(--text-muted);margin:-2px 0 6px 128px">won of ${v.n} ${clipButtons(v.rallies)}</div>`).join("");
