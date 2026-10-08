@@ -1,0 +1,24 @@
+{
+ "id": "santhosharun/pb-balltrack-train-hr",
+ "title": "pb-balltrack-train-hr",
+ "code_file": "balltrack_kernel.py",
+ "language": "python",
+ "kernel_type": "script",
+ "is_private": true,
+ "enable_gpu": true,
+ "enable_internet": true,
+ "dataset_sources": [
+  "santhosharun/pb-balltrack-labels",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-1-ms",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-2-wd",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-3-md",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-4-xd",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-5-md50",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-7-teamdoubles",
+  "santhosharun/pbvid-tnppl-s2-ktvrtt-8-teamsingles",
+  "santhosharun/pbvid-bright-patriquin-fahey-staksrud-lv2026",
+  "santhosharun/pbvid-fahey-yoshitomi-lv2026",
+  "santhosharun/pbvid-mens-singles-gold-2026-us-open"
+ ],
+ "machine_shape": "NvidiaTeslaT4"
+}
