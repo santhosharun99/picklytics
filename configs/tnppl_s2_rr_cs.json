@@ -1,0 +1,249 @@
+{
+ "note": "TNPPL Season 2, Ramnad Royals (RR) vs Coimbatore Smashers (CS), Court 1 (same fixed camera). Overlay row 0 = RR, row 1 = CS. Videos tnppl/r-c/'tnppl r-c - <n>.mov' = overlay 'MATCH <n>' (checked 2026-10-09). Match card: TNPA Instagram post (2026-09-17).",
+ "rosters": {
+  "RR": [
+   "Ahana",
+   "Arihant",
+   "Ayaan",
+   "Boopathy S",
+   "Krishna",
+   "Krishna Teja",
+   "Maanasi",
+   "Ranjith",
+   "Rishi",
+   "Thomas",
+   "Yaksharath"
+  ],
+  "CS": [
+   "Anish Froilan R",
+   "Eswaran",
+   "Kavin Karthik",
+   "Mukesh",
+   "Nidithra",
+   "Niranthara",
+   "Prabanjan",
+   "Rishi Vandhan",
+   "Sanu",
+   "Sivaramakrishnan",
+   "Venkataramanan"
+  ]
+ },
+ "team_names": {
+  "RR": "Ramnad Royals",
+  "CS": "Coimbatore Smashers"
+ },
+ "matches": {
+  "tnppl_rc_1_MS": {
+   "type": "singles",
+   "teams": [
+    "Boopathy S",
+    "Kavin Karthik"
+   ],
+   "rosters": [
+    [
+     "Boopathy S"
+    ],
+    [
+     "Kavin Karthik"
+    ]
+   ],
+   "singles_overlay": true,
+   "rules": {
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1,
+    "ends_from_kit": true
+   },
+   "official": "Boopathy S (Ramnad Royals) won 11-5 (match card)"
+  },
+  "tnppl_rc_2_WD": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Ahana",
+     "Maanasi"
+    ],
+    [
+     "Niranthara",
+     "Nidithra"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Coimbatore Smashers won 11-7 (match card)"
+  },
+  "tnppl_rc_3_MD": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Boopathy S",
+     "Arihant"
+    ],
+    [
+     "Kavin Karthik",
+     "Prabanjan"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Ramnad Royals won 11-10 (match card)"
+  },
+  "tnppl_rc_4_XD": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Arihant",
+     "Maanasi"
+    ],
+    [
+     "Anish Froilan R",
+     "Niranthara"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Coimbatore Smashers won 11-8 (match card)"
+  },
+  "tnppl_rc_5_MD50": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Ranjith",
+     "Thomas"
+    ],
+    [
+     "Venkataramanan",
+     "Eswaran"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Ramnad Royals won 11-3 (match card)"
+  },
+  "tnppl_rc_6_MD": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Krishna Teja",
+     "Yaksharath"
+    ],
+    [
+     "Anish Froilan R",
+     "Rishi Vandhan"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Coimbatore Smashers won 11-2 (match card)"
+  },
+  "tnppl_rc_7_TeamDoubles": {
+   "type": "doubles",
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Rishi",
+     "Krishna",
+     "Krishna Teja",
+     "Thomas"
+    ],
+    [
+     "Sivaramakrishnan",
+     "Sanu",
+     "Prabanjan",
+     "Venkataramanan"
+    ]
+   ],
+   "rules": {
+    "scoring": "rally",
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Ramnad Royals won 25-16 (match card)",
+   "partial": "the video ends at 5-5 (about 4 minutes): only the start of the match is analysed"
+  },
+  "tnppl_rc_8_TeamSingles": {
+   "type": "singles",
+   "names": {
+    "P1": "Ramnad Royals",
+    "P2": "Coimbatore Smashers"
+   },
+   "teams": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "rosters": [
+    [
+     "Krishna",
+     "Ahana",
+     "Rishi",
+     "Ranjith",
+     "Ayaan"
+    ],
+    [
+     "Mukesh",
+     "Nidithra",
+     "Sanu",
+     "Eswaran",
+     "Rishi Vandhan"
+    ]
+   ],
+   "rules": {
+    "scoring": "rally",
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1,
+    "ends_from_kit": true
+   },
+   "rotation": {
+    "every": 5,
+    "order_note": "TNPPL super singles: slot = (combined score // 5) % 5"
+   },
+   "official": "Ramnad Royals won 25-18 (match card)",
+   "names_note": "P1/P2 -> teams to be checked from the kits"
+  }
+ }
+}
