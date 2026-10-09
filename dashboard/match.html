@@ -4,7 +4,7 @@
 <meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Match analysis · Picklytics</title>
-<link rel="stylesheet" href="theme.css?v=6">
+<link rel="stylesheet" href="theme.css?v=7">
 </head>
 <body>
 <div class="wrap"><p class="loading">Opening the match workspace…</p></div>
@@ -18,7 +18,7 @@
     const m = J.matches.find(x => x.report === report);
     if (m) { location.replace(`hub.html?m=${encodeURIComponent(m.id)}&sec=placement`); return; }
   } catch (e) { /* fall through */ }
-  document.querySelector(".wrap").innerHTML = `<div class="state-empty">No match uses the report “${report.replace(/[<>&"]/g, "")}”. <a href="./">All matches</a></div>`;
+  document.querySelector(".wrap").innerHTML = `<div class="state-empty">No match uses the report “${report.replace(/[<>&"]/g, "")}”. <a href="matches.html">All matches</a></div>`;
 })();
 </script>
 </body>

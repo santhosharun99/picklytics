@@ -3,73 +3,65 @@
 <head>
 <meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Picklytics</title>
+<title>Picklytics · pickleball intelligence, made visual</title>
+<link rel="stylesheet" href="theme.css?v=7">
 <style>
-* { box-sizing: border-box; }
-body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-.step { display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; }
-.step .n { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--paddle); color: #fff; font-size: 12.5px; font-weight: 700;
-  display: inline-flex; align-items: center; justify-content: center; transform: translateY(-2px); }
-.step h2 { margin: 0; font-size: 18px; letter-spacing: -.01em; color: var(--paddle); }
-.step .sub { color: var(--text-muted); font-size: 13px; }
-
-/* step 1: tournaments */
-.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
-.tcard { position: relative; display: flex; flex-direction: column; text-align: left; font: inherit; color: inherit; cursor: pointer;
-  border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface-1); padding: 0;
-  transition: box-shadow .15s, border-color .15s; }
-.tcard:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); }
-.tcard.on { border-color: var(--court-green); box-shadow: 0 0 0 3px var(--ball); }
-.tcard .thumb { display: block; width: 100%; height: 0; padding-top: 42%; background: var(--court-green) center / cover no-repeat; }
-.tcard .tb { display: grid; gap: 3px; padding: 12px 14px 14px; }
-.tcard .tb > span { display: block; }
-.tcard .tour { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
-.tcard .tname { font-size: 16px; font-weight: 700; color: var(--paddle); line-height: 1.3; }
-.tcard .where { font-size: 12.5px; color: var(--text-secondary); }
-.tcard .count { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
-.tcard .count b { color: var(--paddle); }
-.tcard .tick { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 50%; background: var(--ball);
-  color: var(--paddle); font-weight: 800; font-size: 13px; display: none; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff; }
-.tcard.on .tick { display: inline-flex; }
-
-/* step 2: matches of the chosen tournament */
-#matches { margin-top: 34px; }
-.thead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 20px; margin-bottom: 12px; }
-.filters { display: flex; gap: 6px; flex-wrap: wrap; }
-.group { margin: 18px 0 8px; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
-.mlist { display: grid; gap: 10px; }
-.mrow { display: grid; grid-template-columns: 136px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px;
-  border: 1px solid var(--border); border-radius: 12px; background: var(--surface-1); text-decoration: none; color: inherit;
-  transition: box-shadow .15s, border-color .15s; }
-a.mrow:hover { border-color: var(--court-green); box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-.mrow.off { opacity: .8; }
-.mrow .thumb { display: block; width: 136px; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--court-green) center / cover no-repeat; }
-.mrow .info { min-width: 0; display: grid; gap: 2px; }
-.mrow h3 { margin: 0; font-size: 15.5px; color: var(--paddle); line-height: 1.3; }
-.mrow .round { font-size: 13px; color: var(--text-secondary); }
-.mrow .res { font-size: 12.5px; color: var(--text-muted); font-variant-numeric: tabular-nums; min-height: 1.5em; }
-.mrow .side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.mrow .pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-.mrow .go { font-size: 13px; font-weight: 600; color: var(--court-green); white-space: nowrap; }
-.empty-state { border: 1px dashed var(--border); border-radius: 12px; padding: 26px; text-align: center; color: var(--text-muted); background: var(--surface-2); }
-
-.legend { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 22px;
-  font-size: 12.5px; color: var(--text-secondary); align-items: center; }
-.legend b { color: var(--paddle); font-size: 12.5px; }
-
-@media (max-width: 640px) {
-  .tgrid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .tcard .thumb { padding-top: 48%; }
-  .tcard .tb { padding: 10px 11px 12px; }
-  .tcard .tname { font-size: 14.5px; }
-  .tcard .tb > .where { display: none; }
-  .mrow { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; }
-  .mrow .thumb { width: 88px; }
-  .mrow .side { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
-  .mrow .pills { justify-content: flex-start; }
+:root { --cream: #f4f5ec; --ink: #173f35; }
+body { background: var(--cream) !important; color: var(--ink); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.lwrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+.lhead { background: transparent !important; border: 0 !important; box-shadow: none !important; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; }
+.lhead .logo img { height: 44px; width: auto; display: block; }
+.lhead nav { display: flex; align-items: center; gap: 22px; font-size: 14px; }
+.lhead nav a { color: var(--ink); text-decoration: none; }
+.lhead nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.btn-lime { background: var(--ball); color: var(--ink) !important; font-weight: 600; padding: 9px 16px; border-radius: 8px; text-decoration: none !important; }
+.btn-lime:hover { filter: brightness(.95); }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 36px; align-items: center; padding: 26px 0 64px; }
+.hero h1 { font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.035em; margin: 0 0 18px; color: #12302a; }
+.hero p.lead { font-size: 21px; margin: 0 0 28px; color: #26443c; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.cta a, .cta button { font-family: inherit; font-size: 15.5px; font-weight: 600; line-height: 1; padding: 15px 22px; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.cta .primary { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
+.cta .primary:hover { background: #0f2e27; }
+.cta .ghost { background: transparent; color: var(--ink); border: 1.5px solid #173f3566; }
+.cta .ghost:hover { background: #e7ecd9; }
+.art { position: relative; }
+.art img { width: 100%; height: auto; display: block; border-radius: 18px; box-shadow: 0 18px 50px rgba(23, 63, 53, .22); }
+.tag { position: absolute; display: inline-flex; align-items: center; gap: 8px; background: #fffffff2; color: var(--ink); border: 1px solid #173f3522;
+  border-radius: 10px; padding: 8px 12px; font-size: 13.5px; font-weight: 600; box-shadow: 0 6px 18px rgba(0,0,0,.1); }
+.tag svg { width: 18px; height: 18px; }
+.tag.speed { left: 6%; top: 10%; } .tag.move { right: 5%; top: 6%; } .tag.place { right: 8%; bottom: 10%; }
+.eyebrow { display: flex; align-items: center; gap: 16px; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: #4b6b61; margin: 6px 0 22px; }
+.eyebrow::after { content: ""; flex: 1; height: 1px; background: #173f3530; }
+.feats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.feat { background: #fbfbf6; border: 1px solid #173f351f; border-radius: 16px; padding: 24px 26px 26px; display: flex; flex-direction: column; gap: 4px; }
+.feat h2 { margin: 0; font-size: 26px; letter-spacing: -.02em; color: #12302a; }
+.feat p { margin: 0 0 16px; color: #4b6b61; font-size: 16px; }
+.feat svg.ill { width: 100%; height: auto; display: block; border-radius: 10px; }
+.feat a.more { margin-top: 14px; color: var(--court-green); font-weight: 600; font-size: 14px; text-decoration: none; }
+.feat a.more:hover { text-decoration: underline; }
+.how { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 64px; }
+.step { border-top: 3px solid var(--ink); padding-top: 14px; }
+.step b { display: block; font-size: 17px; margin-bottom: 4px; color: #12302a; }
+.step span { color: #4b6b61; font-size: 14.5px; }
+.step i { font-style: normal; font-size: 12px; color: #4b6b61; letter-spacing: .15em; }
+section { margin-bottom: 56px; }
+.lfoot { border-top: 1px solid #173f3526; padding: 26px 0 34px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.lfoot img { height: 34px; }
+.lfoot span { color: #4b6b61; font-size: 14px; }
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding-bottom: 40px; }
+  .feats { grid-template-columns: 1fr; }
+  .how { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .lwrap { padding: 0 16px; }
+  .lhead nav a:not(.btn-lime) { display: none; }
+  .hero p.lead { font-size: 18px; }
+  .tag { font-size: 12px; padding: 6px 9px; }
+  .how { grid-template-columns: 1fr; }
 }
 </style>
-<link rel="stylesheet" href="theme.css?v=6">
 </head>
 <body>
 <div class="pk-intro" id="pkIntro" hidden role="dialog" aria-label="Picklytics intro">
@@ -78,116 +70,126 @@ a.mrow:hover { border-color: var(--court-green); box-shadow: 0 4px 16px rgba(0,0
   </video>
   <button type="button" class="skip" id="pkSkip">Skip intro</button>
 </div>
+
+<div class="lwrap">
+  <header class="lhead">
+    <a class="logo" href="./" aria-label="Picklytics home"><img src="brand/picklytics-logo.webp" alt="Picklytics" width="120" height="40"></a>
+    <nav aria-label="Site"><a href="#features">Features</a><a href="#how">How it works</a><a href="players.html">Players</a><a class="btn-lime" href="matches.html">Explore analysis →</a></nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>See your game.<br>Understand every shot.</h1>
+      <p class="lead">Pickleball intelligence, made visual.</p>
+      <div class="cta">
+        <a class="primary" href="matches.html">Explore a match <span aria-hidden="true">→</span></a>
+        <button class="ghost" type="button" id="demoBtn"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 1l11 6-11 6z" fill="currentColor"/></svg> Watch the demo</button>
+      </div>
+    </div>
+    <div class="art">
+      <img src="brand/hero-court.jpg" alt="Illustrated pickleball player on court, from the Picklytics intro" width="1920" height="1080">
+      <span class="tag speed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/></svg>Speed</span>
+      <span class="tag move"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="14" cy="4" r="2"/><path d="M6 21l4-7 3 3 3-6M10 14l-2-4 5-2 3 3h4"/></svg>Movement</span>
+      <span class="tag place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Placement</span>
+    </div>
+  </section>
+
+  <section id="features" aria-labelledby="fh">
+    <div class="eyebrow" id="fh">From video to insight</div>
+    <div class="feats">
+      <article class="feat">
+        <h2>Shot placement</h2><p>See where every shot lands - and where it was intercepted.</p>
+        <svg class="ill" viewBox="0 0 400 230" role="img" aria-label="Illustration: court zones shaded by how often shots land there">
+          <rect width="400" height="230" rx="10" fill="#2e6b45"/>
+          <g transform="translate(20 22)">
+            <rect x="0" y="0" width="170" height="186" fill="none" stroke="#fff" stroke-width="2"/>
+            <rect x="0" y="0" width="57" height="62" fill="#c6f432" opacity=".55"/><rect x="57" y="0" width="56" height="62" fill="#c6f432" opacity=".25"/><rect x="113" y="0" width="57" height="62" fill="#c6f432" opacity=".35"/>
+            <rect x="0" y="62" width="57" height="62" fill="#c6f432" opacity=".2"/><rect x="57" y="62" width="56" height="62" fill="#c6f432" opacity=".45"/><rect x="113" y="62" width="57" height="62" fill="#c6f432" opacity=".15"/>
+            <rect x="0" y="124" width="57" height="62" fill="#c6f432" opacity=".1"/><rect x="57" y="124" width="56" height="62" fill="#c6f432" opacity=".3"/><rect x="113" y="124" width="57" height="62" fill="#c6f432" opacity=".12"/>
+            <path d="M57 0v186M113 0v186M0 62h170M0 124h170" stroke="#fff" stroke-opacity=".55"/>
+            <rect x="170" y="-8" width="6" height="202" fill="#173f35"/>
+            <rect x="176" y="0" width="170" height="186" fill="none" stroke="#fff" stroke-width="2"/><path d="M176 93h170M234 0v186" stroke="#fff" stroke-opacity=".55"/>
+            <circle cx="30" cy="34" r="6" fill="#c6f432"/><circle cx="88" cy="96" r="6" fill="#c6f432"/><circle cx="140" cy="26" r="6" fill="#c6f432"/><circle cx="84" cy="150" r="6" fill="#c6f432"/>
+          </g>
+        </svg>
+        <a class="more" href="matches.html">Open the court map →</a>
+      </article>
+      <article class="feat">
+        <h2>Ball speed</h2><p>Understand the pace of play, shot by shot.</p>
+        <svg class="ill" viewBox="0 0 400 230" role="img" aria-label="Illustration: a curve of ball speed over a rally">
+          <rect width="400" height="230" rx="10" fill="#fbfbf6"/>
+          <path d="M30 20v180h350" stroke="#173f3566" fill="none"/>
+          <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2e6b45" stop-opacity=".25"/><stop offset="1" stop-color="#2e6b45" stop-opacity="0"/></linearGradient></defs>
+          <path d="M30 150C60 100 80 100 100 150S140 40 160 40S200 160 230 170S270 70 300 100S340 140 380 120V200H30z" fill="url(#g)"/>
+          <path d="M30 150C60 100 80 100 100 150S140 40 160 40S200 160 230 170S270 70 300 100S340 140 380 120" stroke="#173f35" stroke-width="3" fill="none"/>
+          <circle cx="160" cy="40" r="6" fill="#c6f432" stroke="#173f35"/><circle cx="230" cy="170" r="6" fill="#c6f432" stroke="#173f35"/><circle cx="300" cy="100" r="6" fill="#c6f432" stroke="#173f35"/>
+          <text x="205" y="222" text-anchor="middle" font-size="12" fill="#4b6b61">time</text><text x="16" y="110" font-size="12" fill="#4b6b61" transform="rotate(-90 16 110)" text-anchor="middle">speed</text>
+        </svg>
+        <a class="more" href="matches.html">See estimated speeds →</a>
+      </article>
+      <article class="feat">
+        <h2>Player movement</h2><p>Follow court coverage, recovery and who gets to the net first.</p>
+        <svg class="ill" viewBox="0 0 400 230" role="img" aria-label="Illustration: two players' movement paths on the court">
+          <rect width="400" height="230" rx="10" fill="#2e6b45"/>
+          <g fill="none" stroke="#fff" stroke-width="2"><rect x="20" y="20" width="360" height="190"/><path d="M200 12v206" stroke="#173f35" stroke-width="6"/><path d="M20 115h120M260 115h120M140 20v190M260 20v190" stroke-opacity=".6"/></g>
+          <path d="M60 60C90 70 80 120 110 140S150 170 175 150" stroke="#fff" stroke-width="2.5" stroke-dasharray="6 6" fill="none"/>
+          <path d="M340 70C320 100 330 140 300 160" stroke="#c6f432" stroke-width="2.5" stroke-dasharray="6 6" fill="none"/>
+          <g fill="#173f35" stroke="#fff" stroke-width="2"><circle cx="60" cy="60" r="7"/><circle cx="110" cy="140" r="7"/><circle cx="175" cy="150" r="7"/></g>
+          <g fill="#c6f432" stroke="#173f35" stroke-width="2"><circle cx="340" cy="70" r="7"/><circle cx="300" cy="160" r="7"/></g>
+        </svg>
+        <a class="more" href="players.html">Browse players →</a>
+      </article>
+      <article class="feat">
+        <h2>Video insights</h2><p>Every insight linked to the moment it happened.</p>
+        <svg class="ill" viewBox="0 0 400 230" role="img" aria-label="Illustration: a match video with a timeline of key moments">
+          <image href="thumbs/boyer_devilliers.jpg" x="0" y="0" width="400" height="168" preserveAspectRatio="xMidYMid slice"/>
+          <circle cx="200" cy="84" r="26" fill="#173f35e6"/><path d="M192 72l20 12-20 12z" fill="#fff"/>
+          <path d="M14 196h372" stroke="#173f35" stroke-width="2"/>
+          <g stroke="#173f35" stroke-width="2"><circle cx="70" cy="196" r="6" fill="#173f35"/><circle cx="150" cy="196" r="6" fill="#c6f432"/><circle cx="196" cy="196" r="6" fill="#c6f432"/><circle cx="270" cy="196" r="6" fill="#c6f432"/><circle cx="340" cy="196" r="6" fill="#173f35"/></g>
+        </svg>
+        <a class="more" href="matches.html">Watch the clips →</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="how" aria-labelledby="hh">
+    <div class="eyebrow" id="hh">How it works</div>
+    <div class="how">
+      <div class="step"><i>01</i><b>Broadcast video in</b><span>One fixed camera is enough - no sensors, no wearables.</span></div>
+      <div class="step"><i>02</i><b>Ball, players and court tracked</b><span>Every hit, bounce and player position, frame by frame.</span></div>
+      <div class="step"><i>03</i><b>3D ball flight</b><span>Physics turns the track into speed, landing and net clearance.</span></div>
+      <div class="step"><i>04</i><b>Coach-ready analysis</b><span>Placement, speed, movement and clips - with how sure each number is.</span></div>
+    </div>
+  </section>
+
+  <footer class="lfoot">
+    <img src="brand/picklytics-logo.webp" alt="Picklytics" width="102" height="34">
+    <span>Built for a clearer view of the game. · <a href="hub.html?tab=accuracy" style="color:inherit">How accurate is each number?</a></span>
+  </footer>
+</div>
 <script>
-(() => {  // full-screen intro, then the page: once per browser session; never with reduced motion
+(() => {  // full-screen intro: once per browser session (or on "Watch the demo"); never with reduced motion
   const box = document.getElementById("pkIntro"), v = document.getElementById("pkIntroVid");
-  let seen = false; try { seen = sessionStorage.getItem("pk_intro") === "1"; } catch (e) {}
-  if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) { box.remove(); return; }
-  box.hidden = false; document.documentElement.style.overflow = "hidden";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let timer = null;
   const done = () => {
     try { sessionStorage.setItem("pk_intro", "1"); } catch (e) {}
+    clearTimeout(timer); v.pause();
     box.classList.add("out"); document.documentElement.style.overflow = "";
-    setTimeout(() => box.remove(), 550);
+    setTimeout(() => { box.hidden = true; box.classList.remove("out"); }, 550);
+  };
+  const play = () => {
+    box.hidden = false; box.classList.remove("out"); document.documentElement.style.overflow = "hidden";
+    v.currentTime = 0; timer = setTimeout(done, 9000);   // safety net if the video never starts
+    v.play().catch(done);                                  // autoplay blocked -> straight to the page
+    document.getElementById("pkSkip").focus({ preventScroll: true });
   };
   document.getElementById("pkSkip").onclick = done;
-  addEventListener("keydown", e => { if (e.key === "Escape" && box.isConnected) done(); });
+  addEventListener("keydown", e => { if (e.key === "Escape" && !box.hidden) done(); });
   v.addEventListener("ended", done); v.addEventListener("error", done);
-  setTimeout(() => box.isConnected && done(), 9000);   // safety net if the video never starts
-  v.play().catch(done);                                  // autoplay blocked -> straight to the page
-})();
-</script>
-<div class="topnav">
-  <a class="brand" href="./"><img class="mark" src="brand/picklytics-mark-white.png" alt="" width="26" height="28">Picklytics <small>performance &amp; scouting from match video</small></a>
-  <nav><a href="./" class="on">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
-</div>
-<div class="wrap">
-  <div class="step"><span class="n">1</span><h2>Choose a tournament</h2></div>
-  <div class="tgrid" id="tournaments"></div>
-
-  <section id="matches"></section>
-
-  <div class="legend"><b>How to read the numbers</b>
-    <span><span class="lvl validated">Validated</span> measured against referee logs or hand tags</span>
-    <span><span class="lvl checked">Checked</span> indirect check (game rules, consistency)</span>
-    <span><span class="lvl estimate">Estimate</span> not yet measured against ground truth</span>
-    <span><span class="lvl weak">Weak</span> known to be unreliable</span>
-  </div>
-</div>
-<div class="sitefoot">Accuracy figures come from validation against referee logs, the broadcast scoreboard and hand-tagged shots. <a href="runs.html">Developer view</a></div>
-<script>
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-let DATA, filter = "all";
-const results = {};  // report id -> "A 64% · B 36% of rallies won · 59 rallies"
-
-async function result(m) {
-  if (!m.report) return "";
-  if (!(m.report in results)) {
-    results[m.report] = fetch(`../outputs/reports/${m.report}.json`, { cache: "no-store" }).then(r => r.json()).then(R => {
-      const [a, b] = Object.keys(R.players), won = n => R.players[n].summary.rallies_won_pct.value;
-      const shots = R.rallies.reduce((s, r) => s + r.n_shots, 0);
-      // doubles rally winners from tracking are unreliable (accuracy.js): show the official result instead
-      if (R.type === "doubles") return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
-      // same rule as the match page: no tracked rally wins when the score-overlay check says they are poor
-      const ck = R.rallies.filter(r => (r.scoreboard || {}).winner), ok = ck.filter(r => r.winner === r.scoreboard.winner).length;
-      if (ck.length >= 5 && ok / ck.length < 0.85) return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
-      return `${a} ${won(a)}% · ${b} ${won(b)}% of rallies won (tracking)  ·  ${R.rallies.length} rallies, ${shots} shots`;
-    }).catch(() => "");
-  }
-  return results[m.report];
-}
-
-function renderTournaments(sel) {
-  $("#tournaments").innerHTML = DATA.tournaments.map(t => {
-    const ms = DATA.matches.filter(m => m.tournament === t.id), rep = ms.filter(m => m.report).length;
-    return `<button class="tcard${t.id === sel ? " on" : ""}" data-t="${t.id}" aria-pressed="${t.id === sel}">
-      <span class="thumb" style="background-image:url('${t.thumb}')"></span><span class="tick">✓</span>
-      <span class="tb"><span class="tour">${esc(t.tour)}</span><span class="tname">${esc(t.name)}</span><span class="where">${esc(t.where)}</span>
-        <span class="count"><b>${ms.length}</b> match${ms.length === 1 ? "" : "es"} · ${rep ? `<b>${rep}</b> with report` : "no reports yet"}</span></span>
-    </button>`;
-  }).join("");
-  document.querySelectorAll(".tcard").forEach(b => b.onclick = () => choose(b.dataset.t, true));
-}
-
-function row(m) {
-  const kind = `<span class="pill dark">${m.type}</span>`;
-  const status = m.report ? `<span class="pill green">Report ready</span>` : `<span class="pill amber">No report yet</span>`;
-  const inner = `<span class="thumb" style="background-image:url('${m.thumb}')"></span>
-    <span class="info"><h3>${esc(m.title)}</h3><span class="round">${esc(m.round)}</span><span class="res" data-res="${m.id}">${m.report ? "…" : esc(m.result || "Used for shot tagging")}</span></span>
-    <span class="side"><span class="pills">${kind}${status}</span>${m.report ? `<span class="go">Open match →</span>` : ""}</span>`;
-  return m.report ? `<a class="mrow" href="hub.html?m=${m.id}">${inner}</a>` : `<a class="mrow off" href="hub.html?m=${m.id}">${inner}</a>`;
-}
-
-function renderMatches(sel) {
-  const t = DATA.tournaments.find(x => x.id === sel);
-  if (!t) {
-    $("#matches").innerHTML = `<div class="step"><span class="n">2</span><h2>Choose a match</h2></div>
-      <div class="empty-state">Pick a tournament above to see its matches.</div>`;
-    return;
-  }
-  const all = DATA.matches.filter(m => m.tournament === sel);
-  const types = [...new Set(all.map(m => m.type))];
-  const ms = all.filter(m => filter === "all" || m.type === filter);
-  const groups = [...new Set(ms.map(m => m.group || ""))];
-  const chips = types.length > 1 ? `<div class="filters">${["all", ...types].map(k => `<button class="chip${k === filter ? " on" : ""}" data-f="${k}">${k === "all" ? "All" : k[0].toUpperCase() + k.slice(1)}<span>${k === "all" ? all.length : all.filter(m => m.type === k).length}</span></button>`).join("")}</div>` : "";
-  $("#matches").innerHTML = `<div class="thead"><div><div class="step" style="margin:0"><span class="n">2</span><h2>Choose a match</h2></div>
-      <div class="step sub" style="margin:4px 0 0 34px">${esc(t.full)} · ${esc(t.where)}</div></div>${chips}</div>
-    ${groups.map(g => `${g ? `<div class="group">Tie · ${esc(g)}</div>` : ""}<div class="mlist">${ms.filter(m => (m.group || "") === g).map(row).join("")}</div>`).join("")}`;
-  document.querySelectorAll(".filters .chip").forEach(b => b.onclick = () => { filter = b.dataset.f; renderMatches(sel); });
-  ms.forEach(async m => { const r = await result(m); const el = document.querySelector(`[data-res="${m.id}"]`); if (el && m.report) el.textContent = r; });
-}
-
-function choose(id, push) {
-  filter = "all";
-  if (push) history.pushState({ t: id }, "", id ? `?t=${id}` : "./");
-  renderTournaments(id); renderMatches(id);
-  if (push && id) $("#matches").scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-(async () => {
-  DATA = await (await fetch("matches.json", { cache: "no-store" })).json();
-  choose(new URLSearchParams(location.search).get("t"), false);
-  window.onpopstate = () => choose(new URLSearchParams(location.search).get("t"), false);
+  document.getElementById("demoBtn").onclick = play;
+  let seen = false; try { seen = sessionStorage.getItem("pk_intro") === "1"; } catch (e) {}
+  if (!seen && !reduce) play();
 })();
 </script>
 </body>

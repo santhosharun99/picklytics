@@ -21,7 +21,7 @@ async function init() {
   const q = new URLSearchParams(location.search), hash = location.hash.replace(/^#/, "");
   M = J.matches.find(m => m.id === ST.m);
   if (!M) {
-    if (ST.m) return fatal(`There is no match with the id “${esc(ST.m)}”. <a href="./">Back to all matches</a>`);
+    if (ST.m) return fatal(`There is no match with the id “${esc(ST.m)}”. <a href="matches.html">Back to all matches</a>`);
     return siteAccuracy();
   }
   if (hash === "scout") { location.replace(`scout.html?m=${encodeURIComponent(M.id)}`); return; }
@@ -84,7 +84,7 @@ function winnersReliable() {
   return !(c.n >= 5 && c.ok / c.n < 0.85);
 }
 function renderHeader() {
-  const crumb = [`<a href="./">Tournaments</a>`, T ? `<a href="./?t=${encodeURIComponent(T.id)}">${esc(T.name)}</a>` : "", M.group ? `<span>${esc(M.group)}</span>` : "", `<span class="here" aria-current="page">${esc(M.title)}</span>`].filter(Boolean);
+  const crumb = [`<a href="matches.html">Tournaments</a>`, T ? `<a href="matches.html?t=${encodeURIComponent(T.id)}">${esc(T.name)}</a>` : "", M.group ? `<span>${esc(M.group)}</span>` : "", `<span class="here" aria-current="page">${esc(M.title)}</span>`].filter(Boolean);
   $("#crumb").innerHTML = crumb.join(`<span aria-hidden="true">›</span>`);
   const sides = R ? PB.sidesOf(R) : M.players;
   const kind = M.type === "doubles" ? "Doubles" : (M.round || "").toLowerCase().includes("team") ? "Team singles" : "Singles";
@@ -902,7 +902,7 @@ function siteAccuracy() {
   $("#loading")?.remove();
   $("#navacc").classList.add("on");
   document.title = "Accuracy · Picklytics";
-  $("#crumb").innerHTML = `<a href="./">Tournaments</a><span aria-hidden="true">›</span><span class="here">Accuracy</span>`;
+  $("#crumb").innerHTML = `<a href="matches.html">Tournaments</a><span aria-hidden="true">›</span><span class="here">Accuracy</span>`;
   $("#mh").innerHTML = `<div><h1>How accurate is each number?</h1><div class="who-line">What every metric on this site is worth, and how we know. Levels: ${Object.entries(LEVELS).map(([k, [l, d]]) => `<span><span class="lvl ${k}">${l}</span> ${d}</span>`).join("")}</div></div>`;
   const groups = [...new Set(ACCURACY.map(a => a.group))], sec = $("#sec-accuracy");
   sec.hidden = false;

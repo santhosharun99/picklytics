@@ -4,7 +4,7 @@
 <meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coaching brief · Picklytics</title>
-<link rel="stylesheet" href="theme.css?v=6">
+<link rel="stylesheet" href="theme.css?v=7">
 <style>
 .bhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 24px; }
 .bhead h1 { margin: 2px 0 4px; font-size: 26px; letter-spacing: -.015em; color: var(--paddle); overflow-wrap: anywhere; }
@@ -55,7 +55,7 @@
 <body>
 <div class="topnav">
   <a class="brand" href="./"><img class="mark" src="brand/picklytics-mark-white.png" alt="" width="26" height="28">Picklytics <small>performance &amp; scouting from match video</small></a>
-  <nav aria-label="Site"><a href="./">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
+  <nav aria-label="Site"><a href="matches.html">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
 </div>
 <div class="wrap" id="main"><div class="loading">Loading brief…</div></div>
 <script>
@@ -71,7 +71,7 @@ async function init() {
   try { J = await getJSON("matches.json"); } catch (e) { return fail("The match list could not be loaded."); }
   // ?m=<match>&p=<player/team>; older links used ?report=<report>&player=<name>
   M = J.matches.find(m => m.id === q.get("m")) || J.matches.find(m => m.report && m.report === q.get("report"));
-  if (!M) return fail(`Match not found. <a href="./">All matches</a>`);
+  if (!M) return fail(`Match not found. <a href="matches.html">All matches</a>`);
   if (!M.report) return fail(`No match report for <b>${esc(M.title)}</b> yet, so there is nothing to brief from. <a href="hub.html?m=${encodeURIComponent(M.id)}">Back to the match</a>`);
   try { R = await getJSON(`../outputs/reports/${M.report}.json`); } catch (e) { return fail("The match report could not be loaded."); }
   if (R.type === "doubles") { try { DB = await getJSON(`../outputs/reports/${M.report}.doubles.json`); PB.applyHitters(R, DB); } catch (e) { DB = null; } }
@@ -103,7 +103,7 @@ function render() {
   const bh = (T2.strokes || {}).backhand || {}, nbh = Object.values(bh).reduce((a, b) => a + b, 0);
   const autoSaved = obs.map(o => `${M.id}|${SEL.key}|${o.id}`);
   $("#main").innerHTML = `
-    <nav class="crumb noprint" aria-label="Breadcrumb"><a href="./">Tournaments</a><span aria-hidden="true">›</span>${T ? `<a href="./?t=${encodeURIComponent(T.id)}">${esc(T.name)}</a><span aria-hidden="true">›</span>` : ""}<a href="hub.html?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}">${esc(M.title)}</a><span aria-hidden="true">›</span><span class="here">Coaching brief</span></nav>
+    <nav class="crumb noprint" aria-label="Breadcrumb"><a href="matches.html">Tournaments</a><span aria-hidden="true">›</span>${T ? `<a href="matches.html?t=${encodeURIComponent(T.id)}">${esc(T.name)}</a><span aria-hidden="true">›</span>` : ""}<a href="hub.html?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}">${esc(M.title)}</a><span aria-hidden="true">›</span><span class="here">Coaching brief</span></nav>
     <div class="bhead"><div style="min-width:0"><div class="note">Coaching brief · ${esc(M.event)} · ${esc(M.round)}</div>
       <h1>${esc(who())}</h1>
       <div class="ctx">${esc(M.title)}${(R.official || M.result) ? ` · <span class="badge official">Official result</span> ${esc(R.official || M.result)}` : ""} · ${shots.length} analysed shots in this match</div></div>

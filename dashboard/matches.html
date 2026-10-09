@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matches · Picklytics</title>
+<style>
+* { box-sizing: border-box; }
+body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.step { display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; }
+.step .n { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--paddle); color: #fff; font-size: 12.5px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; transform: translateY(-2px); }
+.step h2 { margin: 0; font-size: 18px; letter-spacing: -.01em; color: var(--paddle); }
+.step .sub { color: var(--text-muted); font-size: 13px; }
+
+/* step 1: tournaments */
+.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.tcard { position: relative; display: flex; flex-direction: column; text-align: left; font: inherit; color: inherit; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface-1); padding: 0;
+  transition: box-shadow .15s, border-color .15s; }
+.tcard:hover { box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+.tcard.on { border-color: var(--court-green); box-shadow: 0 0 0 3px var(--ball); }
+.tcard .thumb { display: block; width: 100%; height: 0; padding-top: 42%; background: var(--court-green) center / cover no-repeat; }
+.tcard .tb { display: grid; gap: 3px; padding: 12px 14px 14px; }
+.tcard .tb > span { display: block; }
+.tcard .tour { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
+.tcard .tname { font-size: 16px; font-weight: 700; color: var(--paddle); line-height: 1.3; }
+.tcard .where { font-size: 12.5px; color: var(--text-secondary); }
+.tcard .count { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
+.tcard .count b { color: var(--paddle); }
+.tcard .tick { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 50%; background: var(--ball);
+  color: var(--paddle); font-weight: 800; font-size: 13px; display: none; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff; }
+.tcard.on .tick { display: inline-flex; }
+
+/* step 2: matches of the chosen tournament */
+#matches { margin-top: 34px; }
+.thead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 20px; margin-bottom: 12px; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.group { margin: 18px 0 8px; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
+.mlist { display: grid; gap: 10px; }
+.mrow { display: grid; grid-template-columns: 136px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--surface-1); text-decoration: none; color: inherit;
+  transition: box-shadow .15s, border-color .15s; }
+a.mrow:hover { border-color: var(--court-green); box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+.mrow.off { opacity: .8; }
+.mrow .thumb { display: block; width: 136px; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--court-green) center / cover no-repeat; }
+.mrow .info { min-width: 0; display: grid; gap: 2px; }
+.mrow h3 { margin: 0; font-size: 15.5px; color: var(--paddle); line-height: 1.3; }
+.mrow .round { font-size: 13px; color: var(--text-secondary); }
+.mrow .res { font-size: 12.5px; color: var(--text-muted); font-variant-numeric: tabular-nums; min-height: 1.5em; }
+.mrow .side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.mrow .pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.mrow .go { font-size: 13px; font-weight: 600; color: var(--court-green); white-space: nowrap; }
+.empty-state { border: 1px dashed var(--border); border-radius: 12px; padding: 26px; text-align: center; color: var(--text-muted); background: var(--surface-2); }
+
+.legend { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 22px;
+  font-size: 12.5px; color: var(--text-secondary); align-items: center; }
+.legend b { color: var(--paddle); font-size: 12.5px; }
+
+@media (max-width: 640px) {
+  .tgrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tcard .thumb { padding-top: 48%; }
+  .tcard .tb { padding: 10px 11px 12px; }
+  .tcard .tname { font-size: 14.5px; }
+  .tcard .tb > .where { display: none; }
+  .mrow { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .mrow .thumb { width: 88px; }
+  .mrow .side { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+  .mrow .pills { justify-content: flex-start; }
+}
+</style>
+<link rel="stylesheet" href="theme.css?v=7">
+</head>
+<body>
+<div class="topnav">
+  <a class="brand" href="./"><img class="mark" src="brand/picklytics-mark-white.png" alt="" width="26" height="28">Picklytics <small>performance &amp; scouting from match video</small></a>
+  <nav><a href="matches.html" class="on">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
+</div>
+<div class="wrap">
+  <div class="step"><span class="n">1</span><h2>Choose a tournament</h2></div>
+  <div class="tgrid" id="tournaments"></div>
+
+  <section id="matches"></section>
+
+  <div class="legend"><b>How to read the numbers</b>
+    <span><span class="lvl validated">Validated</span> measured against referee logs or hand tags</span>
+    <span><span class="lvl checked">Checked</span> indirect check (game rules, consistency)</span>
+    <span><span class="lvl estimate">Estimate</span> not yet measured against ground truth</span>
+    <span><span class="lvl weak">Weak</span> known to be unreliable</span>
+  </div>
+</div>
+<div class="sitefoot">Accuracy figures come from validation against referee logs, the broadcast scoreboard and hand-tagged shots. <a href="runs.html">Developer view</a></div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+let DATA, filter = "all";
+const results = {};  // report id -> "A 64% · B 36% of rallies won · 59 rallies"
+
+async function result(m) {
+  if (!m.report) return "";
+  if (!(m.report in results)) {
+    results[m.report] = fetch(`../outputs/reports/${m.report}.json`, { cache: "no-store" }).then(r => r.json()).then(R => {
+      const [a, b] = Object.keys(R.players), won = n => R.players[n].summary.rallies_won_pct.value;
+      const shots = R.rallies.reduce((s, r) => s + r.n_shots, 0);
+      // doubles rally winners from tracking are unreliable (accuracy.js): show the official result instead
+      if (R.type === "doubles") return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
+      // same rule as the match page: no tracked rally wins when the score-overlay check says they are poor
+      const ck = R.rallies.filter(r => (r.scoreboard || {}).winner), ok = ck.filter(r => r.winner === r.scoreboard.winner).length;
+      if (ck.length >= 5 && ok / ck.length < 0.85) return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
+      return `${a} ${won(a)}% · ${b} ${won(b)}% of rallies won (tracking)  ·  ${R.rallies.length} rallies, ${shots} shots`;
+    }).catch(() => "");
+  }
+  return results[m.report];
+}
+
+function renderTournaments(sel) {
+  $("#tournaments").innerHTML = DATA.tournaments.map(t => {
+    const ms = DATA.matches.filter(m => m.tournament === t.id), rep = ms.filter(m => m.report).length;
+    return `<button class="tcard${t.id === sel ? " on" : ""}" data-t="${t.id}" aria-pressed="${t.id === sel}">
+      <span class="thumb" style="background-image:url('${t.thumb}')"></span><span class="tick">✓</span>
+      <span class="tb"><span class="tour">${esc(t.tour)}</span><span class="tname">${esc(t.name)}</span><span class="where">${esc(t.where)}</span>
+        <span class="count"><b>${ms.length}</b> match${ms.length === 1 ? "" : "es"} · ${rep ? `<b>${rep}</b> with report` : "no reports yet"}</span></span>
+    </button>`;
+  }).join("");
+  document.querySelectorAll(".tcard").forEach(b => b.onclick = () => choose(b.dataset.t, true));
+}
+
+function row(m) {
+  const kind = `<span class="pill dark">${m.type}</span>`;
+  const status = m.report ? `<span class="pill green">Report ready</span>` : `<span class="pill amber">No report yet</span>`;
+  const inner = `<span class="thumb" style="background-image:url('${m.thumb}')"></span>
+    <span class="info"><h3>${esc(m.title)}</h3><span class="round">${esc(m.round)}</span><span class="res" data-res="${m.id}">${m.report ? "…" : esc(m.result || "Used for shot tagging")}</span></span>
+    <span class="side"><span class="pills">${kind}${status}</span>${m.report ? `<span class="go">Open match →</span>` : ""}</span>`;
+  return m.report ? `<a class="mrow" href="hub.html?m=${m.id}">${inner}</a>` : `<a class="mrow off" href="hub.html?m=${m.id}">${inner}</a>`;
+}
+
+function renderMatches(sel) {
+  const t = DATA.tournaments.find(x => x.id === sel);
+  if (!t) {
+    $("#matches").innerHTML = `<div class="step"><span class="n">2</span><h2>Choose a match</h2></div>
+      <div class="empty-state">Pick a tournament above to see its matches.</div>`;
+    return;
+  }
+  const all = DATA.matches.filter(m => m.tournament === sel);
+  const types = [...new Set(all.map(m => m.type))];
+  const ms = all.filter(m => filter === "all" || m.type === filter);
+  const groups = [...new Set(ms.map(m => m.group || ""))];
+  const chips = types.length > 1 ? `<div class="filters">${["all", ...types].map(k => `<button class="chip${k === filter ? " on" : ""}" data-f="${k}">${k === "all" ? "All" : k[0].toUpperCase() + k.slice(1)}<span>${k === "all" ? all.length : all.filter(m => m.type === k).length}</span></button>`).join("")}</div>` : "";
+  $("#matches").innerHTML = `<div class="thead"><div><div class="step" style="margin:0"><span class="n">2</span><h2>Choose a match</h2></div>
+      <div class="step sub" style="margin:4px 0 0 34px">${esc(t.full)} · ${esc(t.where)}</div></div>${chips}</div>
+    ${groups.map(g => `${g ? `<div class="group">Tie · ${esc(g)}</div>` : ""}<div class="mlist">${ms.filter(m => (m.group || "") === g).map(row).join("")}</div>`).join("")}`;
+  document.querySelectorAll(".filters .chip").forEach(b => b.onclick = () => { filter = b.dataset.f; renderMatches(sel); });
+  ms.forEach(async m => { const r = await result(m); const el = document.querySelector(`[data-res="${m.id}"]`); if (el && m.report) el.textContent = r; });
+}
+
+function choose(id, push) {
+  filter = "all";
+  if (push) history.pushState({ t: id }, "", id ? `?t=${id}` : "matches.html");
+  renderTournaments(id); renderMatches(id);
+  if (push && id) $("#matches").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+(async () => {
+  DATA = await (await fetch("matches.json", { cache: "no-store" })).json();
+  choose(new URLSearchParams(location.search).get("t"), false);
+  window.onpopstate = () => choose(new URLSearchParams(location.search).get("t"), false);
+})();
+</script>
+</body>
+</html>
