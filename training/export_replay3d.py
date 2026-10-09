@@ -16,6 +16,7 @@ from pickleball.analysis import load_detections
 from pickleball.ball import track_ball
 from pickleball.ball3d import match_arcs, positions
 from pickleball.camera3d import calibrate_from_run
+from pickleball import depth
 from pickleball.depth import correct as correct_depth
 from pickleball.outcome import match_from_analysis
 from pickleball.players import select_players
@@ -24,13 +25,17 @@ ROOT = Path(__file__).resolve().parents[1]
 run, report_path, name = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3]
 meta, recs = load_detections(run)
 fps = meta["fps"]
-A = json.loads((run / "analysis.json").read_text())
+A = depth.apply(json.loads((run / "analysis.json").read_text()), run)  # positions on the run's depth model
 REP = json.loads(report_path.read_text())
 cam = calibrate_from_run(run)
 ball = track_ball(recs)
 arcs_by = match_arcs(A, ball, cam.P)
 lifted = {int(k): v for k, v in json.loads((run / "lift.json").read_text()).items()} if (run / "lift.json").exists() else {}
-outc = {o["index"]: o for o in match_from_analysis(A, run_dir=run)}
+for pid, n in (REP.get("names") or {}).items():  # same names and scoring rules as the report
+    A["players"][pid]["name"] = n
+keep = {r["id"] for r in REP["rallies"]}  # the report drops replays and post-match play
+A["rallies"] = [r for r in A["rallies"] if r["index"] in keep]
+outc = {o["index"]: o for o in match_from_analysis(A, run_dir=run, **(REP.get("rules") or {}))}
 pname = {pid: p.get("name") or pid for pid, p in A["players"].items()}
 R = {r["f"]: r for r in recs if r.get("court")}
 

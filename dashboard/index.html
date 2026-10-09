@@ -69,7 +69,7 @@ a.mrow:hover { border-color: var(--court-green); box-shadow: 0 4px 16px rgba(0,0
   .mrow .pills { justify-content: flex-start; }
 }
 </style>
-<link rel="stylesheet" href="theme.css?v=4">
+<link rel="stylesheet" href="theme.css?v=5">
 </head>
 <body>
 <div class="topnav">
@@ -102,7 +102,12 @@ async function result(m) {
     results[m.report] = fetch(`../outputs/reports/${m.report}.json`, { cache: "no-store" }).then(r => r.json()).then(R => {
       const [a, b] = Object.keys(R.players), won = n => R.players[n].summary.rallies_won_pct.value;
       const shots = R.rallies.reduce((s, r) => s + r.n_shots, 0);
-      return `${a} ${won(a)}% · ${b} ${won(b)}% of rallies won  ·  ${R.rallies.length} rallies, ${shots} shots`;
+      // doubles rally winners from tracking are unreliable (accuracy.js): show the official result instead
+      if (R.type === "doubles") return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
+      // same rule as the match page: no tracked rally wins when the score-overlay check says they are poor
+      const ck = R.rallies.filter(r => (r.scoreboard || {}).winner), ok = ck.filter(r => r.winner === r.scoreboard.winner).length;
+      if (ck.length >= 5 && ok / ck.length < 0.85) return `${R.official || m.result || "Result not available"}  ·  ${R.rallies.length} rallies, ${shots} shots analysed`;
+      return `${a} ${won(a)}% · ${b} ${won(b)}% of rallies won (tracking)  ·  ${R.rallies.length} rallies, ${shots} shots`;
     }).catch(() => "");
   }
   return results[m.report];

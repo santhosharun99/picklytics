@@ -3,301 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Match Hub</title>
-<style>
-* { box-sizing: border-box; }
-body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-.mhead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-end; }
-.plink { color: inherit; text-decoration: underline; text-decoration-color: var(--ball); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-.plink:hover { color: var(--court-green); }
-.roster { color: var(--text-muted); }
-.crumb { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: -4px; }
-.crumb a { color: var(--court-green); text-decoration: none; font-weight: 600; } .crumb a:hover { text-decoration: underline; }
-.crumb b { color: var(--text-secondary); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
-.mhead .ev { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
-.mhead h1 { margin: 2px 0 4px; font-size: 25px; letter-spacing: -.02em; color: var(--paddle); }
-.mhead .meta { color: var(--text-secondary); font-size: 13.5px; }
-.games { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
-.game { border: 1px solid var(--border); border-radius: 10px; padding: 7px 14px; text-align: center; min-width: 74px; min-height: 58px;
-  background: var(--surface-1); display: flex; flex-direction: column; justify-content: center; gap: 2px; }
-.game .g { font-size: 11px; color: var(--text-muted); }
-.game .s { font-size: 19px; font-weight: 700; color: var(--paddle); font-variant-numeric: tabular-nums; }
-.sec { display: none; padding-top: 18px; }
-.sec.on { display: block; }
-.ov { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 18px; align-items: start; }
-@media (max-width: 960px) { .ov { grid-template-columns: 1fr; } }
-.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
-.card h2 { margin: 0 0 4px; font-size: 15px; color: var(--paddle); }
-.card .why { color: var(--text-muted); font-size: 12px; margin: 0 0 12px; }
-.player video { width: 100%; border-radius: 8px; background: #000; display: block; aspect-ratio: 16 / 9; }
-.nowplay { font-size: 12.5px; color: var(--text-secondary); margin-top: 8px; min-height: 18px; }
-.ov .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.kpi { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-.kpi .l { font-size: 12px; color: var(--text-secondary); } .kpi .v { font-size: 22px; font-weight: 700; color: var(--paddle); font-variant-numeric: tabular-nums; }
-.kpi .n { font-size: 11px; color: var(--text-muted); }
-.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: 0; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 18px; margin-top: 18px; }
-@media (max-width: 640px) {
-  .card { overflow-x: auto; padding: 14px 12px; }
-  .mhead h1 { font-size: 21px; }
-  .item { flex-wrap: wrap; }
-}
-.list { display: grid; gap: 6px; }
-.item { display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; background: var(--surface-2); border-radius: 8px; font-size: 13px; }
-.item .k { font-size: 11px; font-weight: 700; text-transform: uppercase; min-width: 74px; }
-.k.strength { color: var(--good); } .k.weakness { color: var(--bad); } .k.moment { color: var(--series-1); }
-.playbtn { margin-left: auto; border: 1px solid var(--border); background: var(--surface-1); border-radius: 6px; font: inherit; font-size: 11.5px; padding: 1px 8px; cursor: pointer; white-space: nowrap; }
-.playbtn:hover { border-color: var(--court-green); }
-table.rl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13px; }
-table.rl th, table.rl td { padding: 7px 8px; border-bottom: 1px solid var(--border); text-align: left; }
-table.rl th { font-size: 12px; color: var(--text-secondary); font-weight: 600; position: sticky; top: 0; background: var(--surface-1); }
-table.rl tr:hover td { background: var(--surface-2); }
-.wpwrap svg { width: 100%; }
-.acc-note { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; }
-.notice { border: 1px dashed var(--border); border-radius: 12px; padding: 18px; color: var(--text-secondary); background: var(--surface-2); }
-</style>
-<link rel="stylesheet" href="theme.css?v=4">
-<script src="accuracy.js"></script>
+<title>Match workspace · Pickleball Analyzer</title>
+<link rel="stylesheet" href="theme.css?v=5">
+<script src="accuracy.js?v=5"></script>
+<script src="js/coach-core.js?v=2"></script>
 </head>
 <body>
 <div class="topnav">
   <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
-  <nav><a href="./">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy" id="navacc">Accuracy</a><a href="label.html">Labeller</a></nav>
+  <nav aria-label="Site"><a href="./" id="navm">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy" id="navacc">Accuracy</a><a href="label.html">Labeller</a></nav>
 </div>
 <div class="wrap">
-  <div class="mhead" id="mhead"></div>
-  <div class="tabbar" id="tabs"></div>
-  <section class="sec" id="s-overview"></section>
-  <section class="sec" id="s-players"></section>
-  <section class="sec" id="s-replay"></section>
-  <section class="sec" id="s-scout"></section>
-  <section class="sec" id="s-rallies"></section>
-  <section class="sec" id="s-accuracy"></section>
+  <nav class="crumb" id="crumb" aria-label="Breadcrumb"></nav>
+  <div class="mh" id="mh"></div>
+  <div class="wsbar" id="wsbar" hidden>
+    <nav class="secnav" id="secnav" aria-label="Match sections"></nav>
+    <div class="who" id="who"></div>
+    <div class="wsactions"><button type="button" class="cov" id="covBtn" aria-haspopup="dialog"></button><a class="btn sm" id="briefBtn" href="#">Coaching brief</a></div>
+  </div>
+  <main id="main">
+    <div class="loading" id="loading">Loading match…</div>
+    <section class="wsec" id="sec-overview" aria-labelledby="h-overview" hidden></section>
+    <section class="wsec" id="sec-placement" aria-labelledby="h-placement" hidden></section>
+    <section class="wsec" id="sec-movement" aria-labelledby="h-movement" hidden></section>
+    <section class="wsec" id="sec-partnership" aria-labelledby="h-partnership" hidden></section>
+    <section class="wsec" id="sec-clips" aria-labelledby="h-clips" hidden></section>
+    <section class="wsec" id="sec-advanced" aria-labelledby="h-advanced" hidden></section>
+    <section class="wsec" id="sec-accuracy" hidden></section>
+  </main>
 </div>
-<div class="sitefoot">Every number carries an accuracy range - see the Accuracy tab for how each one was measured.</div>
-<script>
-const $ = s => document.querySelector(s);
-const q = new URLSearchParams(location.search);
-const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
-const ACC = Object.fromEntries(ACCURACY.map(a => [a.metric, a]));
-const accTag = m => { const a = ACC[m]; return a ? `<span class="lvl ${a.level}">${LEVELS[a.level][0]}</span> <span class="acc2">${a.range}</span>` : ""; };
-let M, T = null, R = null, A = null, cur = null, PIDS = new Set();
-const pslug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const plink = (n, team) => { const id = [team && pslug(`${n} ${team}`), pslug(n)].find(x => x && PIDS.has(x)); return id ? `<a class="plink" href="player.html?p=${id}">${n}</a>` : n; };
-const TABS = [["overview", "Overview"], ["players", "Player analysis"], ["replay", "3D replay"], ["scout", "Scouting sheet"], ["rallies", "Rallies"], ["accuracy", "Accuracy"]];
-
-async function init() {
-  const J = await (await fetch("matches.json", {cache: "no-store"})).json(), all = J.matches;
-  M = all.find(m => m.id === q.get("m"));
-  if (M) T = (J.tournaments || []).find(t => t.id === M.tournament);
-  try { PIDS = new Set((await (await fetch("players.json", {cache: "no-store"})).json()).players.map(p => p.id)); } catch {}
-  if (!M) { // site-wide accuracy page
-    $("#navacc").classList.add("on");
-    $("#mhead").innerHTML = `<div class="pagehead"><h1>How accurate is each number?</h1><p>What every metric on this site is worth, and how we know.</p></div>`;
-    renderAccuracy(); $("#s-accuracy").classList.add("on"); return;
-  }
-  document.title = `${M.title} · Pickleball Analyzer`;
-  if (M.report) R = await (await fetch(`../outputs/reports/${M.report}.json`, {cache: "no-store"})).json();
-  else if (M.run) try { A = await (await fetch(`../outputs/${M.run}/analysis.json`, {cache: "no-store"})).json(); } catch {}
-  renderHead();
-  const avail = t => (R || ["overview", "accuracy"].includes(t)) && !(t === "replay" && !M.replay);
-  $("#tabs").innerHTML = TABS.map(([k, l]) => `<a href="#${k}" data-t="${k}" class="${avail(k) ? "" : "off"}">${l}</a>`).join("");
-  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
-  show(location.hash.slice(1) || q.get("tab") || "overview");
-}
-
-function games() {   // reconstructed game scores from the rally list: points = rallies won on own serve (rally scoring: every rally)
-  const g = {}, rally = R.rules && R.rules.scoring === "rally";
-  for (const r of R.rallies) if (r.game && r.winner) {
-    g[r.game] = g[r.game] || {}; if (rally || r.server === r.winner) g[r.game][r.winner] = (g[r.game][r.winner] || 0) + 1;
-  }
-  return g;
-}
-function renderHead() {
-  let right = "";
-  if (R) {
-    const names = Object.keys(R.players), g = games();
-    right = `<div class="games">${Object.entries(g).map(([k, v]) => `<div class="game"><div class="g">${R.official ? "Tracked · " : ""}Game ${k}</div><div class="s">${v[names[0]] || 0}-${v[names[1]] || 0}</div></div>`).join("")}${R.official ? `<div class="game"><div class="g">Official result</div><div class="s" style="font-size:14px">${R.official}</div></div>` : ""}</div>`;
-  } else if (M.result) right = `<div class="game"><div class="g">Result (referee)</div><div class="s" style="font-size:15px">${M.result}</div></div>`;
-  const names = R ? Object.keys(R.players) : M.players;
-  const crumb = `<nav class="crumb"><a href="./">Tournaments</a><span>›</span>${T ? `<a href="./?t=${T.id}">${T.name}</a><span>›</span>` : ""}<b>${M.title}</b></nav>`;
-  $("#mhead").innerHTML = `${crumb}<div><div class="ev">${M.event} · ${M.round}</div><h1>${M.title}</h1>
-    <div class="meta">${names.map((n, i) => `<span class="dot" style="background:var(--series-${i + 1})"></span>${plink(n)}${R && R.teams && R.teams[n] ? ` <span class="roster">(${R.teams[n].map(x => plink(x, n)).join(", ")})</span>` : ""}`).join(" &nbsp; ")} · ${M.venue}${R ? ` · score from tracking (${M.check})` : ` · ${M.check}`}</div></div>${right}`;
-}
-
-function show(t) {
-  if (!TABS.some(([k]) => k === t)) t = "overview";
-  if (!R && !["overview", "accuracy"].includes(t)) t = "overview";
-  cur = t;
-  document.querySelectorAll("#tabs a").forEach(a => a.classList.toggle("on", a.dataset.t === t));
-  document.querySelectorAll(".sec").forEach(s => s.classList.toggle("on", s.id === `s-${t}`));
-  const sec = $(`#s-${t}`);
-  if (sec.dataset.done) return;
-  sec.dataset.done = 1;
-  if (t === "overview") (R ? renderOverview : renderDoubles)();
-  else if (t === "players") sec.innerHTML = `<iframe class="frame" src="match.html?report=${M.report}&embed=1"></iframe>`;
-  else if (t === "replay") sec.innerHTML = `<iframe class="frame" src="replay3d.html?match=${M.replay}&embed=1"></iframe>`;
-  else if (t === "scout") sec.innerHTML = `<iframe class="frame" src="scout.html?report=${M.report}&embed=1"></iframe>`;
-  else if (t === "rallies") renderRallies();
-  else if (t === "accuracy") renderAccuracy();
-}
-
-// ---------------- overview (singles) ----------------
-function renderOverview() {
-  const names = Object.keys(R.players), [a, b] = names, P = R.players;
-  const RW = R.type === "doubles" ? "Rally winner (doubles)" : "Rally winner";
-  const shots = R.rallies.reduce((s, r) => s + r.n_shots, 0), lens = R.rallies.map(r => r.n_shots);
-  const kpi = (l, v, n) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="n">${n}</div></div>`;
-  const row = (label, f, metric, better = "high", unit = "") => {
-    const va = f(P[a]), vb = f(P[b]);
-    const win = (x, y) => x != null && y != null && x !== y && ((better === "high") === (x > y));
-    const cell = (x, w) => `<td class="v${w ? " win" : ""}">${x == null ? "–" : x + unit}</td>`;
-    return `<tr><td>${label}</td>${cell(va, better && win(va, vb))}${cell(vb, better && win(vb, va))}<td>${accTag(metric)}</td></tr>`;
-  };
-  const g = (o, ...k) => k.reduce((x, y) => x == null ? null : x[y], o);
-  const bh = p => { const s = p.stroke || {}, n = (s.forehand || 0) + (s.backhand || 0); return n ? Math.round(100 * (s.backhand || 0) / n) : null; };
-  const wide = p => { const s = g(p, "tactics", "strokes", "backhand") || {}, n = Object.values(s).reduce((x, y) => x + y, 0); return n ? Math.round(100 * (s.pulled_wide || 0) / n) : null; };
-  const ins = names.flatMap((n, i) => (P[n].insights || []).filter(x => x.kind !== "pattern").map(x => ({...x, who: n, i})));
-  const moments = [...R.rallies].filter(r => r.importance != null).sort((x, y) => y.importance - x.importance).slice(0, 6);
-  $("#s-overview").innerHTML = `
-    <div class="ov">
-      <div class="card player"><video id="vid" src="../${R.video}" poster="${M.thumb}" controls preload="metadata"></video><div class="nowplay" id="nowplay">Click ▶ on any rally or key moment to watch it here.</div></div>
-      <div class="card"><h2>Match at a glance</h2><p class="why">From tracking the whole broadcast.</p>
-        <div class="kpis">${kpi("Rallies", R.rallies.length, "points analysed")}${kpi("Shots", shots, "hits detected")}
-          ${kpi("Average rally", (shots / R.rallies.length).toFixed(1), "shots per rally")}${kpi("Longest rally", Math.max(...lens), "shots")}</div>
-        <p class="acc-note">${accTag("Rallies found")} rallies found · ${accTag("Hits detected")} hits found</p>${overlayNote()}</div>
-    </div>${rotationsCard()}${individualsCard()}
-    <div class="card" style="margin-top:18px"><h2>Head to head</h2><p class="why">The better value in each row is highlighted. The right column says how far each number can be trusted.</p>
-      <table class="h2h"><tr><th>Metric</th><th class="c"><span class="dot" style="background:var(--series-1)"></span>${a}</th><th class="c"><span class="dot" style="background:var(--series-2)"></span>${b}</th><th>Accuracy</th></tr>
-        ${row("Rallies won", p => p.summary.rallies_won_pct.value, RW, "high", "%")}
-        ${row("Won when serving", p => p.summary.won_on_serve_pct.value, RW, "high", "%")}
-        ${row("Won when returning", p => p.summary.won_on_return_pct.value, RW, "high", "%")}
-        ${row("Drive pace (median)", p => g(p, "speed", "groups", "Drive", "avg"), "Ball speed", "high", " mph")}
-        ${row("Serve pace (median)", p => g(p, "speed", "groups", "Serve", "avg"), "Ball speed", "high", " mph")}
-        ${row("Rushed on (under 0.3 s to spare)", p => g(p, "pressure", "faced", "rushed_pct"), "Time pressure (time to spare)", "low", "%")}
-        ${row("Rushes the opponent", p => g(p, "pressure", "applied", "rushed_opponent_pct"), "Time pressure (time to spare)", "high", "%")}
-        ${row("Gets to the net", p => g(p, "net", "reached_pct"), "Player court position", "high", "% of rallies")}
-        ${row("First to the net", p => g(p, "net", "first_pct"), "Player court position", "high", "%")}
-        ${row("Distance run per rally", p => g(p, "running", "dist_per_rally_ft"), "Distance run / running speed", null, " ft")}
-        ${row("Backhand share", bh, "Forehand / backhand", null, "%")}
-        ${row("Backhands after being pulled wide", wide, "Forced vs chosen stroke", "low", "%")}
-        ${row("Big points won", p => g(p, "big_points", "big_won_pct"), "Win probability / big points", "high", "%")}
-      </table></div>
-    <div class="grid2">
-      <div class="card wpwrap"><h2>Win probability</h2><p class="why">${a}'s live chance of winning the match before each rally. Dots = the most important rallies (click to watch).</p><div id="wp"></div>
-        <p class="acc-note">${accTag("Win probability / big points")}</p></div>
-      <div class="card"><h2>Key moments</h2><p class="why">The rallies where winning or losing moved the match odds most.</p>
-        <div class="list">${moments.map(r => `<div class="item"><span class="k moment">G${r.game} ${r.score_before}</span><span>${r.server} serving · won by <b>${r.winner || "?"}</b> · ${r.n_shots} shots</span><button class="playbtn" data-r="${r.id}">▶ ${fmt(r.start_t)}</button></div>`).join("")}</div></div>
-    </div>
-    <div class="card" style="margin-top:18px"><h2>Strengths and weaknesses</h2><p class="why">Only differences unlikely to be chance (significance test) are called a strength or weakness; everything else is in Player analysis as patterns.</p>
-      <div class="list">${ins.length ? ins.map(x => `<div class="item"><span class="k ${x.kind}">${x.kind}</span><span><span class="dot" style="background:var(--series-${x.i + 1})"></span><b>${x.who}:</b> ${x.text}</span>${x.rallies && x.rallies.length ? `<button class="playbtn" data-r="${x.rallies[0]}">▶ watch</button>` : ""}</div>`).join("") : `<div class="item">No clear strengths or weaknesses yet - one match is too little to separate them from chance. See the patterns in Player analysis.</div>`}</div></div>`;
-  drawWP(a);
-  bindPlay();
-}
-function drawWP(a) {
-  const rs = R.rallies.filter(r => r.wp_before != null), me = (R.win_probability || {}).player === a;
-  if (!rs.length) { $("#wp").innerHTML = '<span class="acc2">No score data.</span>'; return; }
-  const W = 640, H = 200, L = 34, T = 8, B = 22, X = i => L + (W - L - 8) * i / Math.max(1, rs.length - 1), Y = v => T + (H - T - B) * (1 - v / 100);
-  const val = r => 100 * (me ? r.wp_before : 1 - r.wp_before);
-  const top = new Set([...rs].sort((x, y) => y.importance - x.importance).slice(0, 6).map(r => r.id));
-  let s = `<svg viewBox="0 0 ${W} ${H}"><line x1="${L}" y1="${Y(50)}" x2="${W - 8}" y2="${Y(50)}" stroke="var(--text-muted)" stroke-dasharray="3 3"/>`;
-  [0, 50, 100].forEach(v => s += `<text x="${L - 6}" y="${Y(v) + 4}" font-size="11" text-anchor="end" fill="var(--text-muted)">${v}%</text>`);
-  rs.forEach((r, i) => { if (i && r.game !== rs[i - 1].game) s += `<line x1="${X(i - .5)}" y1="${T}" x2="${X(i - .5)}" y2="${H - B}" stroke="var(--border)"/><text x="${X(i - .5) + 4}" y="${T + 10}" font-size="11" fill="var(--text-muted)">Game ${r.game}</text>`; });
-  s += `<path d="${rs.map((r, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(val(r)).toFixed(1)}`).join("")}" fill="none" stroke="var(--series-1)" stroke-width="2.2"/>`;
-  rs.forEach((r, i) => { if (top.has(r.id)) s += `<circle cx="${X(i)}" cy="${Y(val(r))}" r="5.5" fill="var(--ball)" stroke="var(--paddle)" stroke-width="1.2" data-r="${r.id}" style="cursor:pointer"><title>G${r.game} ${r.score_before} · ${r.server} serving · won by ${r.winner}</title></circle>`; });
-  $("#wp").innerHTML = s + `<text x="${L}" y="${H - 5}" font-size="11" fill="var(--text-muted)">rallies in order →</text></svg>`;
-  document.querySelectorAll("#wp circle[data-r]").forEach(c => c.onclick = () => playRally(+c.dataset.r));
-}
-function bindPlay() { document.querySelectorAll(".playbtn[data-r]").forEach(b => b.onclick = () => playRally(+b.dataset.r)); }
-function playRally(id) {
-  if (cur !== "overview") { location.hash = "overview"; }
-  const r = R.rallies.find(x => x.id === id), v = $("#vid");
-  if (!r || !v) return;
-  const OFF = R.video_offset || 0;  // per-match video cut from a longer feed: report times are feed times
-  const go = () => { v.currentTime = Math.max(0, r.start_t - 1 - OFF); v.play().catch(() => {}); };
-  v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
-  v.ontimeupdate = () => { if (v.currentTime > r.end_t - OFF + 1.5) v.pause(); };
-  $("#nowplay").innerHTML = `Playing: game ${r.game} · ${r.score_before} · ${r.server} serving · ${r.n_shots} shots · won by <b>${r.winner || "?"}</b>`;
-  v.scrollIntoView({behavior: "smooth", block: "center"});
-}
-
-// ---------------- overview (doubles: processed, tagging only) ----------------
-async function renderDoubles() {
-  let ans = null;
-  try { ans = await (await fetch(`/api/labels/${M.queue}.shots.json`, {cache: "no-store"})).json(); } catch {}
-  const s = A ? A.summary : null, st = s ? Object.entries(s.shot_types).filter(([k]) => !["serve", "return"].includes(k)) : [];
-  const tot = st.reduce((x, [, v]) => x + v, 0);
-  $("#s-overview").innerHTML = `
-    <div class="ov">
-      <div class="card player"><video id="vid" src="../${M.video}" poster="${M.thumb}" controls preload="metadata"></video><div class="nowplay">Full match video.</div></div>
-      <div class="card"><h2>Status</h2><p class="why">This match is processed and used to teach the shot-type model. A full doubles report (two servers per side, four players, scoring) is not built yet.</p>
-        ${s ? `<div class="kpis"><div class="kpi"><div class="l">Rallies found</div><div class="v">${s.rallies}</div><div class="n">${M.check}</div></div>
-          <div class="kpi"><div class="l">Shots detected</div><div class="v">${s.shots}</div><div class="n">${accTag("Hits detected")}</div></div>
-          <div class="kpi"><div class="l">Shots you reviewed</div><div class="v">${ans ? Object.keys(ans.answers).length : 0}</div><div class="n"><a href="review.html?video=${M.queue}">open review queue →</a></div></div></div>` :
-          `<div class="notice">Still being processed.</div>`}</div>
-    </div>
-    ${st.length ? `<div class="card" style="margin-top:18px"><h2>Shot mix (rally shots)</h2><p class="why">From the shot-type model - ${accTag("Shot type")}</p>
-      ${st.sort((x, y) => y[1] - x[1]).map(([k, v]) => `<div style="display:grid;grid-template-columns:160px 1fr 70px;gap:10px;align-items:center;margin:5px 0;font-size:13px"><span>${k}</span><div style="background:var(--surface-2);height:10px;border-radius:5px;overflow:hidden"><div style="width:${100 * v / tot}%;height:100%;background:var(--series-1)"></div></div><span style="text-align:right">${Math.round(100 * v / tot)}%</span></div>`).join("")}</div>` : ""}`;
-}
-
-// ---------------- broadcast score-overlay cross-check (TNPPL) ----------------
-const hasOv = () => R.rallies.some(r => r.scoreboard && r.scoreboard.score);
-function ovStats() {
-  const c = R.rallies.map(r => [r, r.scoreboard || {}]);
-  const sv = c.filter(([, b]) => b.server), wn = c.filter(([, b]) => b.winner);
-  return {sv: sv.filter(([r, b]) => r.server === b.server).length, nsv: sv.length, wn: wn.filter(([r, b]) => r.winner === b.winner).length, nwn: wn.length};
-}
-function overlayNote() {
-  if (!hasOv()) return "";
-  const s = ovStats();
-  return `<p class="acc-note">Checked against the broadcast score overlay: server right on ${s.sv} of ${s.nsv} rallies, winner on ${s.wn} of ${s.nwn} (rallies where the overlay settles it).${R.replays_dropped && R.replays_dropped.length ? ` ${R.replays_dropped.length} broadcast replay${R.replays_dropped.length > 1 ? "s" : ""} left out.` : ""}</p>`;
-}
-function ovCell(r) {
-  const b = r.scoreboard || {};
-  if (!b.score) return `<span style="color:var(--text-muted)">–</span>`;
-  const bad = (b.winner && b.winner !== r.winner) || (b.server && b.server !== r.server);
-  const what = `${b.score.join("-")}${b.server ? ` · ${b.server} serving` : ""}${b.winner ? ` · won by ${b.winner}` : ""}`;
-  return b.winner || b.server ? `<span title="${what}" style="color:${bad ? "var(--bad)" : "var(--good)"}">${bad ? "✗" : "✓"} ${b.score.join("-")}</span>` : `<span title="${what}">${b.score.join("-")}</span>`;
-}
-function individualsCard() {
-  if (R.type !== "doubles") return "";
-  const ind = R.individuals || {}, names = Object.keys(ind);
-  const teamOf = n => Object.entries(R.teams || {}).find(([, ns]) => ns.includes(n))?.[0] || "";
-  if (!names.length) return `<div class="card" style="margin-top:18px"><h2>Players</h2><p class="why">Team numbers above. Partners wear the same kit, so per-player numbers need each player named once: <a href="identify.html?run=${M.run}">name the players →</a></p></div>`;
-  const top = m => Object.entries(m || {}).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k, v]) => `${k} ${v}`).join(", ");
-  const bh = st => { const n = (st.forehand || 0) + (st.backhand || 0); return n ? Math.round(100 * (st.backhand || 0) / n) + "%" : "–"; };
-  return `<div class="card" style="margin-top:18px"><h2>Players</h2><p class="why">Shots by the player who hit them (players named once, then followed by the system). ${accTag("Player identity (doubles)")}</p>
-    <table class="h2h"><tr><th>Player</th><th>Team</th><th class="c">Shots</th><th>Most used</th><th class="c">Backhand</th><th class="c">Volleys</th><th class="c">Median pace</th></tr>
-    ${names.sort((x, y) => teamOf(x).localeCompare(teamOf(y))).map(n => { const p = ind[n]; return `<tr><td><b>${n}</b></td><td>${teamOf(n)}</td><td style="text-align:center">${p.shots}</td><td>${top(p.shot_mix)}</td><td style="text-align:center">${bh(p.stroke)}</td><td style="text-align:center">${p.volleys}</td><td style="text-align:center">${p.median_mph ?? "–"}${p.median_mph ? " mph" : ""}</td></tr>`; }).join("")}
-    </table></div>`;
-}
-function rotationsCard() {
-  if (!R.rotations) return "";
-  const [t0, t1] = R.overlay_teams || Object.keys(R.players);
-  return `<div class="card" style="margin-top:18px"><h2>Matchups</h2><p class="why">Players rotate every 5 points in a fixed order, so the score says who was on court for every point. Points from the broadcast score overlay (all ${R.rotations.reduce((x, r) => x + r.points[0] + r.points[1], 0)} points, including any our tracking missed).</p>
-    <table class="h2h"><tr><th>Turn</th><th class="c">${t0}</th><th class="c">${t1}</th><th class="c">Points</th></tr>
-    ${R.rotations.map(r => `<tr><td>${r.slot}</td><td class="v${r.points[0] > r.points[1] ? " win" : ""}" style="text-align:center">${r.players[0]}</td><td class="v${r.points[1] > r.points[0] ? " win" : ""}" style="text-align:center">${r.players[1]}</td><td style="text-align:center">${r.points[0]}-${r.points[1]}</td></tr>`).join("")}
-    </table></div>`;
-}
-
-// ---------------- rallies ----------------
-function renderRallies() {
-  $("#s-rallies").innerHTML = `<div class="card"><h2>All rallies</h2><p class="why">Every point found in the video, with the score before it (server's score first). Click ▶ to watch on the Overview player. ${accTag(R.type === "doubles" ? "Rally winner (doubles)" : "Rally winner")}</p>
-    <div style="max-height:70vh;overflow:auto"><table class="rl"><tr><th>#</th><th>Game</th><th>Score</th><th>Server</th><th>Winner</th><th title="How the point ended - from the rally-end model (confidence in brackets)">Ended</th>${hasOv() ? "<th>Overlay</th>" : ""}<th>Shots</th><th>Length</th><th>Last shot</th><th></th></tr>
-    ${R.rallies.map((r, i) => { const l = r.shots[r.shots.length - 1] || {}; return `<tr><td>${i + 1}</td><td>${r.game ?? "–"}</td><td>${r.score_before ?? "–"}</td><td>${r.server ?? "?"}</td><td><b>${r.winner ?? "?"}</b></td><td>${r.ending ? `${{net: "net", out: "out", in: "in, not returned"}[r.ending.type] || r.ending.type} <span style="color:var(--text-muted)">(${Math.round(100 * r.ending.p)}%)</span>` : "–"}</td>${hasOv() ? `<td>${ovCell(r)}</td>` : ""}<td>${r.n_shots}</td><td>${(r.end_t - r.start_t).toFixed(1)} s</td><td>${l.player ? `${l.player.split(" ").pop()}: ${l.shot || "hit"}` : ""}</td><td><button class="playbtn" data-r="${r.id}">▶ ${fmt(r.start_t)}</button></td></tr>`; }).join("")}
-    </table></div></div>`;
-  document.querySelectorAll("#s-rallies .playbtn").forEach(b => b.onclick = () => { show("overview"); location.hash = "overview"; setTimeout(() => playRally(+b.dataset.r), 300); });
-}
-
-// ---------------- accuracy ----------------
-function renderAccuracy() {
-  const groups = [...new Set(ACCURACY.map(a => a.group))];
-  $("#s-accuracy").innerHTML = `<div class="card"><h2>Accuracy of every metric</h2><p class="why">How far each number on this site can be trusted, and how it was measured. Levels: ${Object.entries(LEVELS).map(([k, [l, d]]) => `<span class="lvl ${k}">${l}</span> ${d}`).join(" · ")}.</p>
-    <table class="h2h"><tr><th>Metric</th><th>Accuracy</th><th>Level</th><th>How we know</th></tr>
-    ${groups.map(gr => `<tr><td colspan="4" style="background:var(--surface-2);font-weight:700;color:var(--paddle)">${gr}</td></tr>` + ACCURACY.filter(a => a.group === gr).map(a => `<tr><td><b>${a.metric}</b></td><td style="min-width:200px">${a.range}</td><td><span class="lvl ${a.level}">${LEVELS[a.level][0]}</span></td><td style="color:var(--text-secondary);font-size:12.5px">${a.basis}</td></tr>`).join("")).join("")}
-    </table></div>`;
-}
-init();
-</script>
+<dialog class="dq" id="dq" aria-labelledby="dqTitle"></dialog>
+<script src="js/brief-store.js?v=1"></script>
+<script src="js/workspace.js?v=2"></script>
 </body>
 </html>

@@ -4,149 +4,123 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Player · Pickleball Analyzer</title>
+<link rel="stylesheet" href="theme.css?v=5">
 <style>
-* { box-sizing: border-box; }
-body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-.crumb { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
-.crumb a { color: var(--court-green); text-decoration: none; font-weight: 600; } .crumb a:hover { text-decoration: underline; }
 .phead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.av { flex: none; width: 58px; height: 58px; border-radius: 50%; background: var(--paddle); color: var(--ball); font-weight: 700; font-size: 21px;
-  display: inline-flex; align-items: center; justify-content: center; }
-.phead h1 { margin: 0; font-size: 27px; letter-spacing: -.02em; color: var(--paddle); }
-.phead .meta { color: var(--text-secondary); font-size: 13.5px; }
-.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); margin-top: 16px; }
-.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
-.card h2 { margin: 0 0 4px; font-size: 15px; color: var(--paddle); }
-.card .why { color: var(--text-muted); font-size: 12px; margin: 0 0 12px; }
-.wide { grid-column: 1 / -1; }
-.style { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.style li { display: flex; gap: 10px; align-items: baseline; padding: 9px 12px; background: var(--surface-2); border-radius: 8px; }
-.style li .t { flex: 1; color: var(--text-primary); }
-.style li .n { flex: none; font-size: 11.5px; color: var(--text-muted); white-space: nowrap; }
-.ptype { margin: 12px 0 8px; font-size: 13px; color: var(--text-secondary); }
-.ptype:first-of-type { margin-top: 4px; }
-.cl { color: var(--court-green); text-decoration: none; font-weight: 600; margin-left: 6px; white-space: nowrap; }
-.tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
-.tag.small { background: #fdf3e1; color: #8a5a00; } .tag.exp { border: 1px solid var(--text-muted); color: var(--text-muted); }
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
-.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
-.tile .l { font-size: 12px; color: var(--text-secondary); }
-.tile .v { font-size: 25px; font-weight: 650; color: var(--paddle); font-variant-numeric: tabular-nums; line-height: 1.25; }
-.tile .v small { font-size: 13px; font-weight: 500; }
-.tile .n { font-size: 11.5px; color: var(--text-muted); }
-.bar { display: grid; grid-template-columns: 120px minmax(0, 1fr) 46px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
-.bar .track { background: var(--surface-2); border-radius: 4px; height: 10px; overflow: hidden; }
-.bar .fill { height: 100%; border-radius: 4px; background: var(--series-1); }
-.bar span:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13px; }
-th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { color: var(--text-secondary); font-weight: 600; font-size: 12px; }
+.av { flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--court-green); color: #fff; font-weight: 700; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; }
+.phead h1 { margin: 0; font-size: 26px; letter-spacing: -.015em; color: var(--paddle); overflow-wrap: anywhere; }
+.phead .meta { color: var(--text-secondary); font-size: 14px; }
+.pscope { margin-top: 12px; font-size: 13.5px; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--border); border-left: 4px solid var(--ball); border-radius: 8px; padding: 10px 14px; }
+.fmtsec { margin-top: 26px; }
+.fmtsec > h2 { margin: 0 0 4px; font-size: 19px; color: var(--paddle); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fmtsec > .sub { margin: 0 0 12px; color: var(--text-secondary); font-size: 13.5px; }
+.permatch { font-size: 12.5px; color: var(--text-secondary); display: grid; gap: 3px; }
+.permatch a { color: var(--court-green); font-weight: 600; text-decoration: none; }
+.permatch a:hover { text-decoration: underline; }
 .mrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .mrow:last-child { border-bottom: 0; }
-.mrow .ev { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
-.mrow h3 { margin: 1px 0 2px; font-size: 15px; color: var(--paddle); }
-.mrow .d { font-size: 12.5px; color: var(--text-secondary); }
+.mrow .ev { font-size: 12.5px; color: var(--text-muted); }
+.mrow h3 { margin: 1px 0 2px; font-size: 15px; color: var(--paddle); overflow-wrap: anywhere; }
+.mrow .d { font-size: 13px; color: var(--text-secondary); }
 .mrow .links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-.btn { font-size: 12.5px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; color: var(--paddle); background: var(--surface-1); white-space: nowrap; }
-.btn:hover { border-color: var(--court-green); }
-.btn.primary { background: var(--paddle); border-color: var(--paddle); color: #fff; }
-.ins { display: grid; gap: 6px; }
-.ins div { display: flex; gap: 10px; align-items: baseline; padding: 8px 10px; background: var(--surface-2); border-radius: 8px; font-size: 13px; flex-wrap: wrap; }
-.ins .k { font-size: 11px; font-weight: 700; text-transform: uppercase; min-width: 74px; color: var(--series-1); }
-.ins .k.strength { color: var(--good); } .ins .k.weakness { color: var(--bad); }
-.ins a { margin-left: auto; font-size: 12px; color: var(--court-green); text-decoration: none; font-weight: 600; white-space: nowrap; }
-.note { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
-.empty { color: var(--text-muted); font-size: 13px; }
-@media (max-width: 640px) {
-  .card { padding: 14px 12px; overflow-x: auto; }
-  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mrow { grid-template-columns: 1fr; }
-  .mrow .links { justify-content: flex-start; }
-  .style li { flex-wrap: wrap; }
-  .bar { grid-template-columns: 96px minmax(0, 1fr) 40px; }
-}
+.style { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.style li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 8px 10px; background: var(--surface-2); border-radius: 8px; font-size: 13.5px; }
+.style li .t { flex: 1 1 260px; } .style li .n { font-size: 12px; color: var(--text-muted); }
+@media (max-width: 640px) { .mrow { grid-template-columns: 1fr; } .mrow .links { justify-content: flex-start; } }
 </style>
-<link rel="stylesheet" href="theme.css?v=4">
+<script src="accuracy.js?v=5"></script>
+<script src="js/coach-core.js?v=1"></script>
 </head>
 <body>
 <div class="topnav">
   <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
-  <nav><a href="./">Matches</a><a href="players.html" class="on">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
+  <nav aria-label="Site"><a href="./">Matches</a><a href="players.html" class="on">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
 </div>
-<div class="wrap" id="main"></div>
-<div class="sitefoot">Built from every match of this player we have analysed. Each line shows how many shots it rests on; under 15 shots it is marked "small sample".</div>
+<div class="wrap" id="main"><div class="loading">Loading player…</div></div>
 <script>
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+(function () {
+"use strict";
+const PB = window.PB, $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const getJSON = async u => { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(u); return r.json(); };
 const initials = n => n.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
-const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;
-const v = (x, unit = "") => x == null ? "–" : `${Math.round(x)}${unit}`;
-const tile = (l, val, n) => `<div class="tile"><div class="l">${l}</div><div class="v">${val}</div><div class="n">${n}</div></div>`;
-const bars = (obj, nobj) => Object.entries(obj).filter(([, p]) => p != null).map(([k, p]) =>
-  `<div class="bar"><span>${esc(cap(k))}</span><div class="track"><div class="fill" style="width:${p}%"></div></div><span>${p}%</span></div>`).join("");
+const ALIASES = { "Sivashankar Sivan": ["Sivasankar Shivan"] };   // same spelling rule as pickleball/player_db.py
 
 (async () => {
-  const D = await (await fetch("players.json", { cache: "no-store" })).json();
+  let D, J;
+  try { [D, J] = await Promise.all([getJSON("players.json"), getJSON("matches.json")]); } catch (e) { $("#main").innerHTML = `<div class="state-empty" role="alert">Player data could not be loaded.</div>`; return; }
   const p = D.players.find(x => x.id === new URLSearchParams(location.search).get("p"));
-  if (!p) { $("#main").innerHTML = `<div class="empty">Player not found. <a href="players.html">All players</a></div>`; return; }
+  if (!p) { $("#main").innerHTML = `<div class="state-empty">Player not found. <a href="players.html">All players</a></div>`; return; }
   document.title = `${p.name} · Pickleball Analyzer`;
-  const S = p.stats, sg = p.singles;
-  const won = p.matches.filter(m => m.won_pct != null);
-  const avgWon = won.length ? Math.round(won.reduce((a, m) => a + m.won_pct * m.rallies, 0) / won.reduce((a, m) => a + m.rallies, 0)) : null;
-  const factBlock = Object.entries(p.placement || {}).map(([t, pl]) => `<h3 class="ptype">${t === "singles" ? "Singles" : "Doubles"} · ${pl.n} analysed shots</h3>
-    <ul class="style">${pl.facts.map(f => `<li><span class="t">${esc(f.text)}${f.small ? '<span class="tag small">small sample</span>' : ""}</span>${f.clips.length ? `<span class="n">${f.clips.slice(0, 3).map(c => `<a class="cl" href="hub.html?m=${c[0]}#rallies" title="rally ${c[1]}">▶ ${(p.matches.find(m => m.id === c[0]) || {title: c[0]}).title.split(" vs ")[0]} · r${c[1]}</a>`).join(" ")}</span>` : ""}</li>`).join("")}</ul>`).join("");
-  const styleItems = p.style.map(l => `<li><span class="t">${esc(l.text)}${l.kind === "experimental" ? '<span class="tag exp">experimental</span>' : ""}${l.small ? '<span class="tag small">small sample</span>' : ""}</span><span class="n">${l.n} shots</span></li>`).join("");
-
+  const names = [p.name, ...(ALIASES[p.name] || [])];
+  // this player's shots in every analysed match, per format (singles and doubles never mixed)
+  const per = { singles: [], doubles: [] };
+  for (const pm of p.matches) {
+    const M = J.matches.find(m => m.id === pm.id);
+    if (!M || !M.report) continue;
+    let R; try { R = await getJSON(`../outputs/reports/${M.report}.json`); } catch (e) { continue; }
+    const sel = R.type === "doubles" ? (PB.selectionOptions(R).find(o => o.kind === "player" && names.includes(o.key))) : PB.selectionOptions(R).find(o => names.includes(o.key));
+    if (!sel) continue;
+    let DBm = null;
+    if (R.type === "doubles") { try { DBm = await getJSON(`../outputs/reports/${M.report}.doubles.json`); PB.applyHitters(R, DBm); } catch (e) { DBm = null; } }
+    const shots = PB.shotsFor(R, sel);
+    per[pm.type === "doubles" ? "doubles" : "singles"].push({ M, R, sel, pm, shots, DB: DBm });
+  }
+  const S = p.stats;
+  const fmtBlock = (fmt, list) => {
+    if (!list.length) return "";
+    const shots = list.flatMap(x => x.shots), R0 = list[0].R;
+    const obs = PB.observations(R0, list[0].sel, { shots, who: p.name, scope: list.length === 1 ? "1 match" : `${list.length} matches` });
+    const L = PB.aggregate(shots, "landing"), sp = PB.speedStats(shots);
+    const rows = PB.DEPTHS.map(d => [d, PB.WIDTHS.reduce((x, w) => x + ((L.cells[`${d} ${w}`] || []).length), 0)]);
+    const card = (o, i) => {
+      const f = Object.assign({ role: "all" }, o.link);
+      const pm = list.map(x => { const a = PB.aggregate(PB.applyFilters(x.shots, f, f.view), f.view); const c = PB.selectShots(a, f.zone || "").length;
+        const n = o.kind === "intercepted" ? ["bounced", "intercepted", "net"].reduce((t, k) => t + (a.status[k] || 0), 0) : a.denominator;
+        return `<div><a href="hub.html${PB.stateToSearch(Object.assign({ m: x.M.id, p: x.sel.key, role: "all", view: "landing" }, o.link))}">${esc(x.M.title)} →</a> ${o.kind === "intercepted" ? a.status.intercepted || 0 : c} of ${n}</div>`; }).join("");
+      return `<article class="obs"><div class="badges">${o.evidence === "human" ? '<span class="badge human">Human-reviewed</span>' : '<span class="badge auto">Automatically detected</span>'}${o.evidence === "proxy" ? '<span class="badge proxy">Includes position proxies</span>' : ""}${o.limited ? '<span class="badge limited">Limited sample</span>' : ""}</div>
+        <h3>${esc(o.headline)}</h3><div class="measure">${esc(o.measure)}</div><div class="scope">${esc(o.scope)}</div>
+        <ul class="q">${o.quality.map(q => `<li>${esc(q)}</li>`).join("")}</ul>
+        <div class="permatch"><b style="color:var(--text-secondary)">Supporting matches - open to watch the shots:</b>${pm}</div></article>`;
+    };
+    const vals = [...new Set(list.map(x => x.M.tournament))].map(t => PB.venueValidation(t).short);
+    return `<section class="fmtsec" aria-labelledby="h-${fmt}"><h2 id="h-${fmt}">${fmt === "singles" ? "Singles" : "Doubles"} <span class="fmt">${list.length} match${list.length === 1 ? "" : "es"}</span></h2>
+      <p class="sub">${shots.length} analysed shots by ${esc(p.name)}${fmt === "doubles" ? " (shots credited to them by name; team-only numbers are not shown here)" : ""} · ${list.map(x => esc(x.M.title)).join(" · ")}</p>
+      ${obs.length ? `<div class="obs-grid">${obs.map(card).join("")}</div>` : `<div class="state-empty">No observation is well enough supported in ${fmt} yet (${shots.length} shots). Counts are below.</div>`}
+      <div class="sumstrip" style="margin-top:14px">
+        <div><div class="l">Recorded landings</div><div class="v">${L.denominator}<small> of ${L.population} that bounced first</small></div><div class="n">${L.boundary.length} on a zone boundary · ${L.outside.length} estimated outside</div></div>
+        <div><div class="l">Landing depth</div><div class="v" style="font-size:17px">${rows.map(([d, n]) => `${PB.pct(n, L.denominator) ?? 0}%<small> ${d}</small>`).join(" ")}</div><div class="n">shares of the ${L.denominator} recorded landings</div></div>
+        <div><div class="l">Estimated speed <span class="badge est">estimated</span></div><div class="v">${sp.median ?? "Unknown"}<small>${sp.median != null ? " mph median" : ""}</small></div><div class="n">usable for ${sp.usable} of ${sp.n} shots · not radar-checked</div></div>
+      </div>
+      <p class="note">${vals.map(esc).join(" ")}</p>
+      ${fmt === "doubles" && list.some(x => x.DB && x.DB.players[x.sel.key]) ? `<div class="panel tablewrap" style="margin-top:12px"><h3>In the partnership <span class="badge est">estimated</span></h3><p class="sub">Per match, from named positions and the shots credited to ${esc(p.name)}.</p>
+        <table class="t"><tr><th>Match</th><th class="r">Rally-shot share</th><th class="r">Up (≤${list.find(x => x.DB).DB.up_ft} ft)</th><th class="r">On the left</th><th class="r">Middle balls</th><th class="r">Cross-overs</th><th class="r">Distance / rally</th></tr>
+        ${list.filter(x => x.DB && x.DB.players[x.sel.key]).map(x => { const q = x.DB.players[x.sel.key]; return `<tr><td><a href="hub.html?m=${x.M.id}&sec=partnership&p=${encodeURIComponent(x.sel.key)}">${esc(x.M.title)}</a></td><td class="r">${q.shots.team_rally_share_pct ?? "–"}%</td><td class="r">${q.position.up_pct ?? "–"}%</td><td class="r">${q.position.left_pct ?? "–"}%</td><td class="r">${q.middle.taken}</td><td class="r">${q.cross.n}</td><td class="r">${q.movement.dist_per_rally_ft ?? "–"} ft</td></tr>`; }).join("")}</table></div>` : ""}
+    </section>`;
+  };
   const matchRows = p.matches.map(m => `<div class="mrow"><div>
       <div class="ev">${esc(m.tournament)} · ${esc(m.type)}</div><h3>${esc(m.title)}</h3>
       <div class="d">${esc(m.round || "")}${m.partner.length ? ` · with ${esc(m.partner.join(", "))}` : ""} · vs ${esc(m.opponents.join(" / "))}</div>
-      <div class="d">${m.shots} shots by ${esc(p.name.split(" ")[0])} in ${m.rallies} rallies${m.won_pct != null ? ` · ${m.team ? "team " : ""}won ${m.won_pct}% of those rallies` : ""}${m.official ? ` · ${esc(m.official)}` : ""}</div></div>
-      <div class="links"><a class="btn primary" href="hub.html?m=${m.id}">Open match →</a>${m.type === "singles" ? `<a class="btn" href="hub.html?m=${m.id}#players">Player report</a>` : `<a class="btn" href="hub.html?m=${m.id}#players">Team report</a>`}</div></div>`).join("");
-
-  const speedRows = [["Serve", S.speed.serve, S.speed_n.serve], ["Return", S.speed.return, S.speed_n.return], ["Drive", S.speed.drive, S.speed_n.drive], ["Dink / drop / reset", S.speed.soft, S.speed_n.soft], ["All shots", S.speed.all, S.speed_n.all]]
-    .filter(([, x]) => x != null).map(([k, x, n]) => `<tr><td>${k}</td><td><b>${Math.round(x)}</b> mph</td><td>${n ?? ""}</td></tr>`).join("");
-
-  const sgl = sg.length ? `<div class="card wide"><h2>Singles: movement, net and time pressure</h2><p class="why">From the full singles report of each match (positions about ±1 ft; "rushed" = less than 0.3 s to spare).</p>
-    <table><tr><th>Match</th><th>Rallies won</th><th>On serve</th><th>On return</th><th>Distance / rally</th><th>Top sprint</th><th>Gets to net</th><th>Rushed on</th><th>Rushes opponent</th></tr>
-    ${sg.map(x => { const m = p.matches.find(y => y.id === x.match); return `<tr><td><a href="hub.html?m=${x.match}" style="color:var(--court-green);font-weight:600;text-decoration:none">${esc(m ? m.title : x.match)}</a></td><td>${v(x.won_pct, "%")}</td><td>${v(x.won_on_serve_pct, "%")}</td><td>${v(x.won_on_return_pct, "%")}</td><td>${v(x.dist_per_rally_ft, " ft")}</td><td>${x.top_sprint_mph ?? "–"} mph</td><td>${v(x.net_reached_pct, "%")}</td><td>${v(x.rushed_pct, "%")}</td><td>${v(x.rushes_opp_pct, "%")}</td></tr>`; }).join("")}</table></div>` : "";
-
-  const ins = p.insights.length ? `<div class="card wide"><h2>Patterns from match reports</h2><p class="why">Findings from the singles report of each match. Strength / weakness only when unlikely to be chance; otherwise a pattern.</p>
-    <div class="ins">${p.insights.slice(0, 10).map(i => `<div><span class="k ${i.kind}">${i.kind}</span><span>${esc(i.text)}</span><a href="hub.html?m=${i.match}#players">${esc(i.match_title)} →</a></div>`).join("")}</div></div>` : "";
-
+      <div class="d">${m.shots} shots by ${esc(p.name)} in ${m.rallies} rallies${m.official ? ` · <span class="badge official">Official</span> ${esc(m.official)}` : ""}</div></div>
+      <div class="links"><a class="btn primary sm" href="hub.html?m=${m.id}&p=${encodeURIComponent(m.type === "doubles" ? p.name : p.name)}">Open match workspace →</a><a class="btn sm" href="scout.html?m=${m.id}&p=${encodeURIComponent(p.name)}">Coaching brief</a></div></div>`).join("");
+  const styleItems = p.style.map(l => `<li><span class="t">${esc(l.text)}${l.kind === "experimental" ? ' <span class="badge exp">experimental</span>' : ""}${l.small ? ' <span class="badge limited">limited sample</span>' : ""}</span><span class="n">${l.n} shots</span></li>`).join("");
+  const sg = p.singles || [], v = (x, u = "") => x == null ? "–" : `${Math.round(x)}${u}`;
+  const total = per.singles.length + per.doubles.length;
   $("#main").innerHTML = `
-    <nav class="crumb"><a href="players.html">Players</a><span>›</span><span>${esc(p.name)}</span></nav>
-    <div class="phead"><span class="av">${initials(p.name)}</span><div><h1>${esc(p.name)}</h1>
-      <div class="meta">${p.team ? esc(p.team) + " · " : ""}${esc(p.tournaments.join(" · "))} · ${S.shots} shots in ${p.matches.length} match${p.matches.length === 1 ? "" : "es"}</div></div></div>
-
-    <div class="kpis">
-      ${tile("Matches", p.matches.length, `${p.matches.filter(m => m.type === "singles").length} singles · ${p.matches.filter(m => m.type === "doubles").length} doubles`)}
-      ${tile("Shots", S.shots, "hits credited to this player")}
-      ${tile(p.matches.some(m => m.team) ? "Rallies won (team)" : "Rallies won", avgWon == null ? "–" : avgWon + "%", "of the rallies they played")}
-      ${(() => { const t = Object.entries(p.placement || {}).sort((a, b) => b[1].n - a[1].n)[0]; return tile("Est. speed (median)", t && t[1].speed_median != null ? `${t[1].speed_median}<small> mph</small>` : "–", t ? `${t[1].speed_n} measurable ${t[0]} shots` : ""); })()}
-      ${tile("Forehand", S.forehand_pct == null ? "–" : S.forehand_pct + "%", `of ${S.stroke_n} strokes`)}
-      ${tile("Volleys", S.volley_pct == null ? "–" : S.volley_pct + "%", `of ${S.rally_shots_n} rally shots`)}
-    </div>
-
-    <div class="grid">
-      <div class="card wide"><h2>Placement &amp; speed</h2><p class="why">Facts measured from the ball and player tracking, shot by shot, with how many shots each rests on. Singles and doubles are kept apart. "Intercepted" = the opponent hit the ball before it bounced (that is not where it landed). Speed = estimated launch speed off the paddle (not checked against radar).</p>
-        ${factBlock || '<span class="empty">No placement data yet.</span>'}
-        <div class="note">Observed landings were checked against hand-tagged bounces: US Open median 0.5 ft away (same zone 27 of 35), TNPPL median 1.0 ft (same zone 22 of 32 - less reliable); other venues are not validated. Unresolved shots are left out of landing and interception counts.</div></div>
-
-      <div class="card wide"><h2>From shot-type labels <span class="tag exp">secondary</span></h2><p class="why">Older summary built on the automatic shot-type labels and court positions, compared with the other players here (pros and TNPPL together - different levels).</p>
-        <ul class="style">${styleItems || '<li><span class="t">Not enough shots yet.</span></li>'}</ul>
-        <div class="note">Shot types are automatic (drives and dinks mostly right; drops and resets often missed), so "drive" vs "soft" shares are rough. ${esc(D.note)}</div></div>
-
-      <div class="card"><h2>Shot mix</h2><p class="why">All typed shots (${S.typed}).</p>${bars(S.mix)}</div>
-      <div class="card"><h2>Where they hit from</h2><p class="why">Position at contact (${S.zones_n} shots): kitchen = within 7 ft of the net, transition = 7-15 ft, baseline = deeper.</p>${bars(S.zones)}
-        ${S.deep_n ? `<div class="note">Hits deep (back 15 ft of the other side) on <b>${S.deep_pct}%</b> of serves, returns and drives (${S.deep_n}).</div>` : ""}</div>
-      <div class="card"><h2>Spin &amp; net clearance <span class="tag exp">experimental</span></h2><p class="why">From the 3D ball flight; not yet checked against hand labels.</p>
-        ${S.spin.n ? `<div class="bar"><span>Topspin</span><div class="track"><div class="fill" style="width:${S.spin.topspin}%"></div></div><span>${S.spin.topspin}%</span></div>
-          <div class="bar"><span>Slice</span><div class="track"><div class="fill" style="width:${S.spin.slice}%"></div></div><span>${S.spin.slice}%</span></div>
-          <div class="note">${S.spin.n} shots with a believable 3D flight${S.spin.drive_n ? ` · drives with topspin: ${S.spin.drive_topspin}% of ${S.spin.drive_n}` : ""}${S.clear.soft != null ? ` · soft shots clear the net by about ${S.clear.soft} ft (${S.clear.soft_n})` : ""}${S.clear.drive != null ? ` · drives by about ${S.clear.drive} ft (${S.clear.drive_n})` : ""}.</div>` : '<span class="empty">No 3D flights yet.</span>'}</div>
-      ${sgl}
-      ${ins}
-      <div class="card wide"><h2>Matches</h2><p class="why">Every match of ${esc(p.name)} we have analysed. Open the match for scores, rallies and video.</p>${matchRows}</div>
-    </div>`;
+    <nav class="crumb" aria-label="Breadcrumb"><a href="players.html">Players</a><span aria-hidden="true">›</span><span class="here">${esc(p.name)}</span></nav>
+    <div class="phead"><span class="av" aria-hidden="true">${initials(p.name)}</span><div style="min-width:0"><h1>${esc(p.name)}</h1>
+      <div class="meta">${p.team ? esc(p.team) + " · " : ""}${esc(p.tournaments.join(" · "))}</div></div></div>
+    <p class="pscope"><b>Scope:</b> ${p.matches.length} analysed match${p.matches.length === 1 ? "" : "es"} (${p.matches.filter(m => m.type === "singles").length} singles, ${p.matches.filter(m => m.type === "doubles").length} doubles) - only matches we have video for. This is not a complete career profile. Singles and doubles are kept apart.${total < p.matches.length ? ` ${p.matches.length - total} match${p.matches.length - total === 1 ? " has" : "es have"} no placement report yet.` : ""}</p>
+    ${fmtBlock("singles", per.singles)}${fmtBlock("doubles", per.doubles)}
+    ${!total ? `<div class="state-empty" style="margin-top:20px">No placement data for this player yet.</div>` : ""}
+    <section class="fmtsec" aria-labelledby="h-m"><h2 id="h-m">Matches</h2><div class="panel">${matchRows}</div></section>
+    <section class="fmtsec" aria-labelledby="h-sec"><h2 id="h-sec">Secondary technical detail</h2><p class="sub">Older summaries built on automatic shot-type labels, plus experimental measures. Read with their labels.</p>
+      <details class="more"><summary>From shot-type labels <span class="s"><span class="badge auto">automatic labels</span> compared with the other players here (different levels)</span></summary><div class="body"><ul class="style">${styleItems || "<li>Not enough shots yet.</li>"}</ul><p class="note">Shot types are automatic (drives and dinks mostly right; drops and resets often missed). ${esc(D.note)}</p></div></details>
+      <details class="more"><summary>Spin &amp; net clearance <span class="s"><span class="badge exp">experimental</span></span></summary><div class="body note">${S.spin.n ? `Topspin ${S.spin.topspin}%, slice ${S.spin.slice}% of ${S.spin.n} shots with a believable 3D flight${S.clear.soft != null ? `; soft shots clear the net by about ${S.clear.soft} ft (${S.clear.soft_n})` : ""}${S.clear.drive != null ? `; drives by about ${S.clear.drive} ft (${S.clear.drive_n})` : ""}. Not checked against hand labels.` : "No 3D flights yet."}</div></details>
+      ${sg.length ? `<details class="more"><summary>Singles: movement and time pressure <span class="s"><span class="badge est">estimated</span> per match</span></summary><div class="body tablewrap"><table class="t"><tr><th>Match</th><th class="r">Distance / rally</th><th class="r">Top sprint</th><th class="r">Reached net</th><th class="r">Rushed on</th><th class="r">Rushes opponent</th></tr>
+        ${sg.map(x => { const m = p.matches.find(y => y.id === x.match); return `<tr><td><a href="hub.html?m=${x.match}&sec=movement&p=${encodeURIComponent(p.name)}">${esc(m ? m.title : x.match)}</a></td><td class="r">${v(x.dist_per_rally_ft, " ft")}</td><td class="r">${x.top_sprint_mph ?? "–"} mph</td><td class="r">${v(x.net_reached_pct, "%")}</td><td class="r">${v(x.rushed_pct, "%")}</td><td class="r">${v(x.rushes_opp_pct, "%")}</td></tr>`; }).join("")}</table></div></details>` : ""}
+    </section>`;
+})();
 })();
 </script>
 </body>

@@ -82,7 +82,8 @@ async function init() {
   roster = parseRoster(M);
   try { F = await (await fetch(`../outputs/${want}/identity_frames.json`, {cache: "no-store"})).json(); } catch { F = null; }
   if (!F || !F.frames.length) {
-    $("#help").innerHTML = `This match is not prepared yet. Run:<pre>PYTHONPATH=. python3 training/identify.py ${want}</pre>`;
+    $("#stage").style.display = "none";   // no frames: don't leave an empty black player on screen
+    $("#help").innerHTML = `<b>This match is not ready for naming yet</b> - the frames with every player boxed have not been prepared yet. Run:<pre>PYTHONPATH=. python3 training/identify.py ${want}</pre>Then reload this page.`;
     return;
   }
   L = (await (await fetch(`/api/labels/${F.label}.identity.json`, {cache: "no-store"})).json()) || {video: F.video, marks: [], answers: []};

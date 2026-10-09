@@ -1,0 +1,250 @@
+{
+ "note": "TNPPL Season 2, Kodai Tigers (KT) vs Rockfort Terminatrz Trichy (RTT), Court 1. Overlay row 0 = KT, row 1 = RTT. Kits: KT red & black, RTT dark blue. Format: data/reference/tnppl_s2_format.json.",
+ "rosters": {
+  "KT": [
+   "Rahul",
+   "Joshika",
+   "Krithicka",
+   "Vishwajit",
+   "Suneel",
+   "Krishnakumar",
+   "Sai",
+   "Rohit",
+   "Shravan",
+   "Sarveswar",
+   "Nanthini",
+   "Kumaravel"
+  ],
+  "RTT": [
+   "Ramakrishnan",
+   "Swetha",
+   "Virina Reddy",
+   "Srijith",
+   "Shreenath",
+   "Vimalraj",
+   "Himanshu",
+   "Sivashankar Sivan",
+   "Safwan",
+   "Manish",
+   "Sanjay",
+   "Atul"
+  ]
+ },
+ "matches": {
+  "tnppl_1_MS": {
+   "type": "singles",
+   "names": {
+    "P1": "Ramakrishnan",
+    "P2": "Rahul"
+   },
+   "teams": [
+    "Rahul",
+    "Ramakrishnan"
+   ],
+   "rosters": [
+    [
+     "Rahul"
+    ],
+    [
+     "Ramakrishnan"
+    ]
+   ],
+   "singles_overlay": true,
+   "rules": {
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1,
+    "ends_from_kit": true
+   },
+   "official": "Ramakrishnan won 11-0 (match card)",
+   "overlay_note": "serve line stuck on RAMAKRISHNAN all match: only score changes are used"
+  },
+  "tnppl_8_TeamSingles": {
+   "type": "singles",
+   "names": {
+    "P1": "Kodai Tigers",
+    "P2": "Rockfort Terminatrz"
+   },
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Sai",
+     "Nanthini",
+     "Rohit",
+     "Krishnakumar",
+     "Kumaravel"
+    ],
+    [
+     "Safwan",
+     "Virina Reddy",
+     "Manish",
+     "Himanshu",
+     "Atul"
+    ]
+   ],
+   "rules": {
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1,
+    "scoring": "rally",
+    "ends_from_kit": true
+   },
+   "rotation": {
+    "every": 5,
+    "order_note": "Men Open, Women, Men Open, Men 50+, Men Open; slot = (combined score // 5) % 5"
+   },
+   "official": "Rockfort Terminatrz won 25-10 (match card)"
+  },
+  "tnppl_2_WD": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Joshika",
+     "Krithicka"
+    ],
+    [
+     "Swetha",
+     "Virina Reddy"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Kodai Tigers won 11-5 (match card)"
+  },
+  "tnppl_3_MD": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Rahul",
+     "Vishwajit"
+    ],
+    [
+     "Srijith",
+     "Shreenath"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Kodai Tigers won 11-7 (match card)"
+  },
+  "tnppl_4_XD": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Vishwajit",
+     "Joshika"
+    ],
+    [
+     "Vimalraj",
+     "Swetha"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Kodai Tigers won 11-9 (match card)"
+  },
+  "tnppl_5_MD50": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Suneel",
+     "Krishnakumar"
+    ],
+    [
+     "Himanshu",
+     "Sivashankar Sivan"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Kodai Tigers won 11-10 (match card)"
+  },
+  "tnppl_6_MD": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Sai",
+     "Rohit"
+    ],
+    [
+     "Vimalraj",
+     "Safwan"
+    ]
+   ],
+   "rules": {
+    "scoring": "sideout",
+    "target": 11,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Rockfort Terminatrz won 11-5 (match card)"
+  },
+  "tnppl_7_TeamDoubles": {
+   "type": "doubles",
+   "teams": [
+    "Kodai Tigers",
+    "Rockfort Terminatrz"
+   ],
+   "rosters": [
+    [
+     "Shravan",
+     "Sarveswar",
+     "Suneel"
+    ],
+    [
+     "Manish",
+     "Sanjay",
+     "Srijith",
+     "Sivasankar Shivan"
+    ]
+   ],
+   "rules": {
+    "scoring": "rally",
+    "target": 25,
+    "win_by": 1,
+    "games_to_win": 1
+   },
+   "official": "Kodai Tigers won 25-18 (match card)"
+  }
+ },
+ "rig": "tnppl_court1"
+}

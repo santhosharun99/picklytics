@@ -80,5 +80,8 @@ is model-to-model consistency, not accuracy. Las Vegas and Europe are not valida
   compare). Until then it stays unknown.
 - Interception needs the automatic volley flag; a wrong flag leaves the shot unresolved rather than intercepted.
 - Origins from the 3D fit can be off for contacts far from the camera; 1 in 5 origins is a feet proxy.
+- Feet-proxy origins use the player depth correction (pickleball/depth.py). Its TNPPL recalibration (kitchen-line
+  rule, 2026-10-09; docs/DOUBLES.md) moved 31 of 922 origins into another zone, all feet proxies (mostly kitchen ->
+  midcourt and behind -> deep); 3D-fit origins and landings do not depend on it.
 - Doubles: shots are credited to the named hitter where identity exists; team-level otherwise. Rally outcomes are
   not used in placement facts.

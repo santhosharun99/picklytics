@@ -75,7 +75,7 @@ python3 training/build_report.py labels/<video>.json outputs/<run> [outputs/<run
     --video data/videos/<video>.mp4 --out outputs/reports/<name>.json
 ```
 
-Open http://127.0.0.1:8001/dashboard/match.html?report=<name>: per-player summary, strengths / weaknesses /
+Open http://127.0.0.1:8001/dashboard/hub.html?m=<match id> (match workspace; old match.html?report=<name> links forward there): per-player summary, strengths / weaknesses /
 patterns, shot mix, forehand vs backhand, 3rd shot, contact map, coverage heatmap, how rallies ended, and clips.
 
 ## Labelling & accuracy

@@ -57,6 +57,14 @@ def build(root: Path) -> dict:
         if not f.exists():
             continue
         R = json.loads(f.read_text())
+        dbl = f.with_name(f.stem + ".doubles.json")   # doubles: corrected hitters (pickleball/doubles_players.py)
+        if dbl.exists():
+            H = json.loads(dbl.read_text()).get("hitters", {})
+            for r in R["rallies"]:
+                for s in r["shots"]:
+                    h = H.get(f"{r['id']}:{s['i']}")
+                    if h is not None:
+                        s["hitter"] = h["name"]
         doubles = R.get("type") == "doubles"
         if doubles:
             people = {ALIASES.get(n, n) for n in R.get("individuals", {})}

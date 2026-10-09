@@ -1,0 +1,67 @@
+{
+ "h_ft": 0.53,
+ "method": "rig: kitchen line (pooled) - kept: inside the 90% range of the latest estimate",
+ "latest_estimate": 0.561,
+ "range90": [
+  0.506,
+  0.65
+ ],
+ "kitchen": {
+  "rule": "kitchen line (returner's partner at the serve)",
+  "stances": {
+   "near": 40,
+   "far": 104
+  },
+  "h_ft": 0.587,
+  "from_net_ft": {
+   "raw": {
+    "near": 6.71,
+    "far": 12.59
+   },
+   "corrected": {
+    "near": 9.01,
+    "far": 9.01
+   }
+  }
+ },
+ "servers": {
+  "rule": "server stance (pooled)",
+  "stances": {
+   "near": 323,
+   "far": 158
+  },
+  "h_ft": 0.535,
+  "behind_baseline_ft": {
+   "near": 1.75,
+   "far": 1.75
+  }
+ },
+ "runs": [
+  "tnppl_1_MS",
+  "tnppl_2_WD",
+  "tnppl_3_MD",
+  "tnppl_4_XD",
+  "tnppl_5_MD50",
+  "tnppl_6_MD",
+  "tnppl_7_TeamDoubles",
+  "tnppl_8_TeamSingles",
+  "tnppl_st_1_MS",
+  "tnppl_st_2_WD",
+  "tnppl_st_3_MD",
+  "tnppl_st_4_XD",
+  "tnppl_st_5_MD50",
+  "tnppl_st_6_MD",
+  "tnppl_st_7_TeamDoubles",
+  "tnppl_st_8_TeamSingles"
+ ],
+ "camera_median": [
+  10.36,
+  63.05,
+  8.878
+ ],
+ "camera_spread_ft": [
+  0.96,
+  3.42,
+  0.83
+ ]
+}

@@ -12,8 +12,9 @@ from pathlib import Path
 import numpy as np
 
 from . import winprob
+from . import depth
 from .depth import correct as correct_depth
-from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y, court_zone
+from .court import KITCHEN_FAR_Y, KITCHEN_NEAR_Y, NET_Y, UP_FT, court_zone
 from .players import select_players
 
 HEAT_FT = 2.0
@@ -29,8 +30,7 @@ def load_tracks(run_dirs: list[Path]):
     """frame -> {'near': (x, y), 'far': (x, y)} court positions of the two players."""
     pos = {}
     for d in run_dirs:
-        a = Path(d) / "analysis.json"
-        D = json.loads(a.read_text()).get("depth_correction") if a.exists() else None  # pickleball/depth.py
+        D = depth.for_run(d) if (Path(d) / "analysis.json").exists() else None  # pickleball/depth.py
         with (Path(d) / "detections.jsonl").open() as fh:
             for line in fh:
                 r = json.loads(line)
@@ -171,13 +171,13 @@ def player_profile(name: str, opponent: str, rallies: list[dict], hands: dict | 
     depths = [d for _, d in pts]
     contact = [_own_half(*s["pos"]) for s in mine if s["pos"]]
 
-    # time to reach the kitchen line (within 9 ft of net) after hitting the return
+    # time to reach the kitchen line (within UP_FT of the net) after hitting the return
     arrive = []
     for r in rallies:
         if r["server"] == opponent and len(r["shots"]) >= 2:
             t0 = r["shots"][1]["t"]
             for t, x, y in r.get("movement_t", {}).get(name, []):
-                if t >= t0 and _own_half(x, y)[1] <= 9:
+                if t >= t0 and _own_half(x, y)[1] <= UP_FT:
                     arrive.append(round(t - t0, 2))
                     break
 
@@ -207,7 +207,7 @@ def player_profile(name: str, opponent: str, rallies: list[dict], hands: dict | 
         "movement": {
             "heatmap": {"cell_ft": HEAT_FT, "grid": heat.astype(int).tolist()},
             "avg_depth_ft": round(float(np.mean(depths)), 1) if depths else None,
-            "kitchen_time_pct": _pct(sum(d <= 9 for d in depths), len(depths)),
+            "kitchen_time_pct": _pct(sum(d <= UP_FT for d in depths), len(depths)), "kitchen_ft": UP_FT,
             "contact_points": [[round(x, 1), round(d, 1)] for x, d in contact],
             "return_to_kitchen_s": {"median": float(np.median(arrive)) if arrive else None, "n": len(arrive)},
         },
@@ -398,7 +398,7 @@ def pressure_profile(name: str, rallies: list[dict]) -> dict:
     }
 
 
-NET_FT, NET_HOLD_S = 9.0, 0.5  # "at the net" = within 9 ft of it (kitchen line + a step), held for 0.5 s
+NET_FT, NET_HOLD_S = UP_FT, 0.5  # "at the net" = within UP_FT of it (court.py), held for 0.5 s
 
 
 def _net_arrival(track, t0):
@@ -841,8 +841,9 @@ def build_rallies_auto(run_dir: Path, video_file: str, sb_cfg: dict | None, max_
 
 
 def _load_named(run_dir: Path, names: dict | None, replays: bool = False) -> dict:
-    """analysis.json with players renamed; replays=True drops broadcast replays (replays.py, TNPPL stinger)."""
-    A = json.loads((Path(run_dir) / "analysis.json").read_text())
+    """analysis.json with players renamed and positions on the run's depth model (depth.apply); replays=True drops
+    broadcast replays (replays.py, TNPPL stinger)."""
+    A = depth.apply(json.loads((Path(run_dir) / "analysis.json").read_text()), run_dir)
     if replays:
         from .replays import drop_replays
         A = drop_replays(A, run_dir)
@@ -911,8 +912,7 @@ def build_report_auto(run_dir: Path, video_file: str, video_url: str, out_path: 
 
 def _doubles_tracks(run_dir: Path) -> dict:
     """frame -> {'near': [(x, y), (x, y)], 'far': [...]} court positions of the four players."""
-    A = json.loads((Path(run_dir) / "analysis.json").read_text())
-    D = A.get("depth_correction")
+    D = depth.for_run(run_dir)   # pickleball/depth.py
     pos = {}
     with (Path(run_dir) / "detections.jsonl").open() as fh:
         for line in fh:

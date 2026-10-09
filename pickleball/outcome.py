@@ -94,14 +94,16 @@ def _right_half(side: str, x: float) -> bool:
     return x > 10.0 if side == "near" else x < 10.0
 
 
-def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: float, add_missed: bool = False):
+def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: float, add_missed: bool = False,
+                      win_by: int = 2, games_to_win: int = 2, scoring: str = "sideout"):
     """One pass of the rules for a given set of end changes (players change ends after rally k for k in
-    switch_after). Scores are per player SLOT ("A" = near player at the start)."""
+    switch_after). Scores are per player SLOT ("A" = near player at the start).
+    scoring "sideout": only the server scores; "rally": the rally winner scores (and serves next)."""
     out, game, swapped = [], 1, False
     score = {"A": 0, "B": 0}
     parity_hits = 0
     first_server, violations = {}, 0  # rule: the first server alternates from game to game
-    games_won = {"A": 0, "B": 0}      # best of 3: a player's 2nd game ends the match
+    games_won = {"A": 0, "B": 0}      # best of 3: a player's 2nd game ends the match (games_to_win)
     match_over = False
     for k, r in enumerate(rallies):
         slot = lambda side, sw: ("A" if side == "near" else "B") if not sw else ("B" if side == "near" else "A")
@@ -121,14 +123,14 @@ def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: flo
         before = f"{score[s]}-{score[o]}"
         nxt = rallies[k + 1] if k + 1 < len(rallies) else None
         gap = (nxt["start_t"] - r["end_t"]) if nxt else None
-        game_point = score[s] + 1 >= target and score[s] + 1 - score[o] >= 2
+        game_point = score[s] + 1 >= target and score[s] + 1 - score[o] >= win_by
         sw_next = swapped != (k in switch_after)
         if nxt is None or (game_point and gap > game_break_s):
             w = s
         else:
             w = slot(nxt["server_side"], sw_next)  # the rally winner serves next
-        if w == s:
-            score[s] += 1
+        if w == s or scoring == "rally":
+            score[w] += 1
         if match_over:  # after someone won 2 games: warm-down / post-match play, not part of the match
             out.append({**r, "game": None, "after_match": True, "server_slot": s, "winner_slot": w,
                         "score_before": None, "parity_ok": None, "missed_points_before": 0, "swapped": swapped})
@@ -145,13 +147,13 @@ def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: flo
             if rallies[j]["start_t"] - rallies[j - 1]["end_t"] > game_break_s and j > k + 1:
                 break
             rallies_left += 1
-        match_would_end = games_won[s] + 1 >= 2
-        reached = score[s] >= target and score[s] - score[o] >= 2
-        assumed = long_break and next_first_ok and w == s and score[s] >= target - 2 and score[s] - score[o] >= 2
+        match_would_end = games_won[w] + 1 >= games_to_win
+        reached = score[w] >= target and score[w] - score[o if w == s else s] >= win_by
+        assumed = long_break and next_first_ok and w == s and score[s] >= target - 2 and score[s] - score[o] >= win_by
         fake_match_end = match_would_end and rallies_left >= 3  # play continues: that was not match point
         if (reached or assumed) and not fake_match_end:
-            games_won[s] += 1
-            match_over = games_won[s] >= 2
+            games_won[w] += 1
+            match_over = games_won[w] >= games_to_win
             game += 1  # game over (or its last points were not seen and a long break followed)
             score = {"A": 0, "B": 0}
         swapped = sw_next
@@ -159,7 +161,7 @@ def _reconstruct_once(rallies, switch_after: set, target: int, game_break_s: flo
 
 
 def reconstruct(rallies: list[dict], target: int = 11, game_break_s: float = 40.0, switch_break_s: float = 40.0,
-                switch_after: set | None = None, max_breaks: int = 10) -> list[dict]:
+                switch_after: set | None = None, max_breaks: int = 10, **rules) -> list[dict]:
     """Rules-based reconstruction (singles, side-out scoring). rallies (time order):
     {"start_t","end_t","server_side","serve_x"}.
 
@@ -169,14 +171,14 @@ def reconstruct(rallies: list[dict], target: int = 11, game_break_s: float = 40.
     the serve-position rule (right half on an even own score, left on odd) over the whole match. Returns copies with game, server_slot, winner_slot, score_before
     (server-receiver), parity_ok, missed_points_before, swapped (True = slot A is on the far side)."""
     if switch_after is not None:
-        return _reconstruct_once(rallies, set(switch_after), target, game_break_s)[0]
+        return _reconstruct_once(rallies, set(switch_after), target, game_break_s, **rules)[0]
     cands = [k for k in range(len(rallies) - 1)
              if rallies[k + 1]["start_t"] - rallies[k]["end_t"] > switch_break_s]
     cands = sorted(cands, key=lambda k: rallies[k + 1]["start_t"] - rallies[k]["end_t"], reverse=True)[:max_breaks]
     best = None
     for mask in range(1 << len(cands)):
         sw = {cands[i] for i in range(len(cands)) if mask >> i & 1}
-        out, (hits, viol) = _reconstruct_once(rallies, sw, target, game_break_s)
+        out, (hits, viol) = _reconstruct_once(rallies, sw, target, game_break_s, **rules)
         key = (-viol, hits, -len(sw))  # first server alternates by game; best serve-position fit; fewest end changes
         if best is None or key > best[0]:
             best = (key, out)
@@ -210,6 +212,22 @@ def name_sides(recon: list[dict], side_votes: list[dict]) -> list[dict]:
     return out
 
 
+def _kit_end_changes(votes: list[dict], persist: int = 2) -> set:
+    """End changes from the kit-colour identity of the near-side hitters (teams in clearly different kits):
+    an end change after rally k when the near player's identity flips and stays flipped for `persist` rallies.
+    Needed for rotating team formats, where the near player's LOOK changes at every rotation."""
+    near = [v["near"].most_common(1)[0][0] if v["near"] else
+            (next((n for n in {x for vv in votes for x in vv["far"]} if n not in v["far"]), None) if v["far"] else None)
+            for v in votes]
+    out, cur = set(), next((n for n in near if n), None)
+    for k in range(len(near)):
+        nxt = [n for n in near[k + 1:k + 1 + persist] if n]
+        if cur and len(nxt) == persist and all(n != cur for n in nxt):
+            out.add(k)
+            cur = nxt[0]
+    return out
+
+
 def match_from_analysis(A: dict, run_dir=None, **kw) -> list[dict]:
     """Rules-based reconstruction straight from an analysis.json dict (one entry per rally, time order).
     With run_dir, end changes are OBSERVED from the near player's look (appearance.end_changes);
@@ -229,6 +247,8 @@ def match_from_analysis(A: dict, run_dir=None, **kw) -> list[dict]:
             if not s.get("inferred"):
                 v[s["side"]][name.get(s["player"], s["player"])] += 1
         votes.append(v)
+    if kw.pop("ends_from_kit", False) and "switch_after" not in kw:
+        kw["switch_after"] = _kit_end_changes(votes)
     if run_dir is not None and "switch_after" not in kw:
         from .appearance import end_changes, near_looks
         sw = end_changes(near_looks(run_dir, seq))

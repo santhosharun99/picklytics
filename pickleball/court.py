@@ -13,6 +13,10 @@ from ultralytics import YOLO
 COURT_W, COURT_L = 20.0, 44.0
 NET_Y = 22.0
 KITCHEN_FAR_Y, KITCHEN_NEAR_Y = 15.0, 29.0
+# "Up" / at the kitchen line / at the net = within UP_FT of the net (measured, depth-corrected feet). Player positions
+# pile up from the kitchen line (7 ft) to ~11 ft, peaking at 8-10 ft, at every venue; 10.5 ft misclassifies the
+# least rally time (docs/DOUBLES.md "Up line"). Used by kitchen time, net arrival, contact zones and doubles "up".
+UP_FT = 10.5
 
 # Keypoint order of the court model (see training/train_court.py).
 COURT_POINTS = np.array([

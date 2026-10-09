@@ -3,173 +3,193 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scouting Sheet</title>
+<title>Coaching brief · Pickleball Analyzer</title>
+<link rel="stylesheet" href="theme.css?v=5">
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-header { padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
-header h1 { margin: 0; font-size: 21px; }
-header .sub { color: var(--text-secondary); font-size: 13px; }
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-.tab { border: 1px solid var(--border); background: var(--surface-2); font: inherit; padding: 6px 14px; border-radius: 999px; cursor: pointer; color: inherit; text-decoration: none; }
-main { max-width: 1100px; margin: 0 auto; padding: 18px 24px 40px; display: grid; gap: 18px; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
-@media (max-width: 860px) { main { grid-template-columns: 1fr; } }
-.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; min-width: 0; }
-.card h2 { margin: 0 0 10px; font-size: 15px; }
-.plan { display: grid; gap: 12px; counter-reset: k; }
-.pt { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-.pt:last-child { border-bottom: 0; padding-bottom: 0; }
-.pt::before { counter-increment: k; content: counter(k); width: 26px; height: 26px; border-radius: 50%; background: var(--paddle); color: var(--ball);
-  font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-.pt .h { font-weight: 650; color: var(--paddle); font-size: 14.5px; }
-.pt .t { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
-.pt .m { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
-.conf { font-size: 11px; font-weight: 600; border-radius: 999px; padding: 1px 8px; border: 1px solid; }
-.conf.solid { color: var(--series-1); border-color: var(--series-1); }
-.conf.indicative { color: var(--note); border-color: var(--note); }
-.conf.thin { color: var(--text-muted); border-color: var(--border); }
-.knums { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.kn { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-.kn .l { font-size: 12px; color: var(--text-secondary); }
-.kn .v { font-size: 22px; font-weight: 650; color: var(--paddle); font-variant-numeric: tabular-nums; }
-.kn .n { font-size: 11px; color: var(--text-muted); }
-.clip { border: 1px solid var(--border); background: var(--surface-1); font: inherit; font-size: 11px; border-radius: 6px; padding: 1px 7px; cursor: pointer; color: inherit; }
-.small { font-size: 12px; color: var(--text-muted); }
-.acc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 20; }
-.modal.on { display: flex; }
-.modal .box { background: #fff; border-radius: 12px; padding: 14px; width: min(960px, 94vw); }
-.modal video { width: 100%; border-radius: 8px; background: #000; }
-.modal .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.bhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 24px; }
+.bhead h1 { margin: 2px 0 4px; font-size: 26px; letter-spacing: -.015em; color: var(--paddle); overflow-wrap: anywhere; }
+.bhead .ctx { color: var(--text-secondary); font-size: 14px; }
+.bactions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bsec { margin-top: 22px; }
+.bsec > h2 { margin: 0 0 4px; font-size: 18px; color: var(--paddle); }
+.bsec > .sub { margin: 0 0 12px; color: var(--text-secondary); font-size: 13.5px; }
+.item { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 6px; break-inside: avoid; }
+.item + .item { margin-top: 12px; }
+.item h3 { margin: 0; font-size: 16px; color: var(--paddle); line-height: 1.35; }
+.item .measure { font-weight: 650; font-variant-numeric: tabular-nums; }
+.item .scope { font-size: 12.5px; color: var(--text-secondary); }
+.item ul.q { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--text-muted); }
+.item .clips { font-size: 12.5px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.item .clips a { color: var(--court-green); font-weight: 600; text-decoration: none; }
+.item .clips a:hover { text-decoration: underline; }
+.item .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cnote { border-left: 4px solid var(--ball); background: var(--lime-bg); border-radius: 0 8px 8px 0; padding: 8px 10px; }
+.cnote label { display: block; font-size: 12px; font-weight: 700; color: var(--lime-ink); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.cnote textarea { width: 100%; min-height: 58px; font: inherit; font-size: 14px; border: 1px solid #d5ea8f; border-radius: 6px; padding: 6px 8px; background: #fff; resize: vertical; }
+.cnote .ptext { white-space: pre-wrap; display: none; }
+.saved-tag { font-size: 12px; color: var(--text-muted); }
+.kgrid { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-1); overflow: hidden; }
+.kgrid > div { padding: 12px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 0 -1px -1px 0; }
+.kgrid .l { font-size: 12.5px; color: var(--text-secondary); } .kgrid .v { font-size: 19px; font-weight: 700; color: var(--paddle); font-variant-numeric: tabular-nums; } .kgrid .v small { font-size: 13px; font-weight: 500; color: var(--text-secondary); } .kgrid .n { font-size: 12px; color: var(--text-muted); }
+.sec2 li { margin: 4px 0; }
+.qbox { font-size: 12.5px; color: var(--text-secondary); background: var(--surface-1); border: 1px dashed var(--border-strong); border-radius: var(--radius); padding: 12px 14px; }
+.qbox p { margin: 0 0 6px; } .qbox p:last-child { margin: 0; }
+.printonly { display: none; }
 @media print {
-  html { background: #fff !important; } body { border: 0 !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
-  .noprint, .clip, .modal { display: none !important; } main { grid-template-columns: 1.6fr 1fr; padding: 8px 0; }
-  .card { break-inside: avoid; }
+  @page { margin: 14mm 12mm; }
+  body { font-size: 11.5pt; }
+  .bhead h1 { font-size: 20pt; }
+  .item, .kgrid, .qbox { border-color: #bbb; }
+  .cnote textarea { display: none; } .cnote .ptext { display: block; }
+  .cnote.empty { display: none; }
+  .printonly { display: block; }
+  .item .clips a { color: inherit; }
+  .bsec { break-inside: auto; }
+  .bsec > h2 { break-after: avoid; }
 }
 </style>
-<link rel="stylesheet" href="theme.css?v=4">
-<script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
-
+<script src="accuracy.js?v=5"></script>
+<script src="js/coach-core.js?v=1"></script>
+<script src="js/brief-store.js?v=1"></script>
 </head>
 <body>
-<header>
-  <div><h1 id="title">Scouting sheet</h1><div class="sub" id="sub"></div></div>
-  <div class="tabs noprint"><span id="tabs" class="tabs"></span><button class="tab" onclick="print()">Print</button><a class="tab noembed" id="back">Full analysis</a></div>
-</header>
-<main>
-  <section class="card"><h2>How to play them</h2><div class="plan" id="plan"></div></section>
-  <div style="display:grid;gap:18px;align-content:start">
-    <section class="card"><h2>Key numbers</h2><div class="knums" id="nums"></div></section>
-    <section class="card"><h2>How sure is this?</h2><p class="acc" id="acc"></p></section>
-  </div>
-</main>
-<div class="modal" id="modal"><div class="box">
-  <div class="row"><b id="clipTitle"></b><button class="tab" id="closeClip">Close</button></div>
-  <video id="clipVideo" controls></video>
-  <div class="row" style="margin-top:8px"><span class="small" id="clipInfo"></span><span><button class="tab" id="prevClip">◀</button> <button class="tab" id="nextClip">▶</button></span></div>
-</div></div>
+<div class="topnav">
+  <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
+  <nav aria-label="Site"><a href="./">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
+</div>
+<div class="wrap" id="main"><div class="loading">Loading brief…</div></div>
 <script>
-const $ = s => document.querySelector(s);
-const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
-const q = new URLSearchParams(location.search), file = q.get("report") || "boyer_devilliers_full";
-let R, byId = {}, clipSet = [], clipIdx = 0;
+(function () {
+"use strict";
+const PB = window.PB, $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const getJSON = async u => { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(u); return r.json(); };
+const q = new URLSearchParams(location.search);
+let J, M, T, R, SEL, RNO, DB = null;
 
-// confidence label from sample size (the metric's own accuracy is listed under "How sure is this?")
-const conf = n => n >= 20 ? ["solid", `solid · ${n}`] : n >= 8 ? ["indicative", `indicative · ${n}`] : ["thin", `thin · ${n}`];
-const clips = ids => (ids || []).slice(0, 5).map(id => `<button class="clip" data-r="${id}" data-set="${ids.join(",")}">▶ ${fmt(byId[id]?.start_t || 0)}</button>`).join("");
-const pct = (a, b) => b ? Math.round(100 * a / b) : null;
+async function init() {
+  try { J = await getJSON("matches.json"); } catch (e) { return fail("The match list could not be loaded."); }
+  // ?m=<match>&p=<player/team>; older links used ?report=<report>&player=<name>
+  M = J.matches.find(m => m.id === q.get("m")) || J.matches.find(m => m.report && m.report === q.get("report"));
+  if (!M) return fail(`Match not found. <a href="./">All matches</a>`);
+  if (!M.report) return fail(`No match report for <b>${esc(M.title)}</b> yet, so there is nothing to brief from. <a href="hub.html?m=${encodeURIComponent(M.id)}">Back to the match</a>`);
+  try { R = await getJSON(`../outputs/reports/${M.report}.json`); } catch (e) { return fail("The match report could not be loaded."); }
+  if (R.type === "doubles") { try { DB = await getJSON(`../outputs/reports/${M.report}.doubles.json`); PB.applyHitters(R, DB); } catch (e) { DB = null; } }
+  T = (J.tournaments || []).find(t => t.id === M.tournament);
+  RNO = new Map(R.rallies.map((r, i) => [r.id, i + 1]));
+  SEL = PB.resolveSelection(R, q.get("p") || q.get("player") || "");
+  history.replaceState(null, "", `?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}`);
+  render();
+}
+function fail(h) { $("#main").innerHTML = `<div class="state-empty" role="alert">${h}</div>`; }
+const who = () => SEL.kind === "side" && R.type === "doubles" ? `${SEL.key} (team)` : SEL.key;
+const ws = st => `hub.html${PB.stateToSearch(Object.assign({ m: M.id, p: SEL.key }, st))}`;
 
-function plan(name, P, opp, O) {
-  const out = [], add = (h, t, n, ids) => out.push({h, t, n, ids});
-  const T = P.tactics || {}, bh = (T.strokes || {}).backhand || {}, nb = Object.values(bh).reduce((a, b) => a + b, 0);
-  if (nb >= 8) {
-    const wide = pct(bh.pulled_wide || 0, nb), body = pct(bh.near_body || 0, nb);
-    if (wide >= 50) add("Stretch them to the backhand side",
-      `${wide}% of ${name}'s backhands came after being pulled wide - ${opp} was already finding that gap. ${body}% were hit with the ball near the body.`, nb, (T.stroke_rallies || {})["backhand:pulled_wide"]);
-    else add("Don't expect free points on the backhand",
-      `${name} sets up well: ${body}% of backhands were hit with the ball near the body, only ${wide}% after being pulled wide.`, nb, (T.stroke_rallies || {})["backhand:near_body"]);
-  }
-  const fc = (P.pressure || {}).faced || {}, ofc = (O.pressure || {}).faced || {};
-  if (fc.n) {
-    const worse = fc.error_when_rushed_pct != null && fc.error_otherwise_pct != null && fc.error_when_rushed_pct > fc.error_otherwise_pct;
-    add(fc.rushed_pct > (ofc.rushed_pct ?? 0) ? "Take time away from them" : "They take time away from you",
-      `${name} was rushed (under 0.3 s to spare) on ${fc.rushed_pct}% of shots vs ${ofc.rushed_pct ?? "–"}% for ${opp}.` +
-      (worse ? ` When rushed, ${fc.error_when_rushed_pct}% of their shots ended the rally as an error vs ${fc.error_otherwise_pct}% otherwise.` : ` Errors do not rise much when rushed (${fc.error_when_rushed_pct}% vs ${fc.error_otherwise_pct}%).`),
-      fc.n_rushed, fc.rushed_rallies);
-  }
-  const nt = P.net || {};
-  if (nt.n_contested >= 6 && nt.won_when_first_pct != null && nt.won_when_opp_first_pct != null) {
-    const d = nt.won_when_first_pct - nt.won_when_opp_first_pct;
-    add(d >= 15 ? "Beat them to the net" : "Net position matters less for them",
-      `${name} won ${nt.won_when_first_pct}% of rallies when first to the net (${nt.n_first}x) and ${nt.won_when_opp_first_pct}% when ${opp} got there first (${nt.n_opp_first}x). Reaches the net in ${nt.reached_pct}% of rallies.`,
-      nt.n_contested, nt.first_rallies);
-  } else if (nt.rallies) add("They stay back", `${name} reaches the net in only ${nt.reached_pct}% of rallies - expect long baseline exchanges.`, nt.rallies, []);
-  const th = Object.entries(P.third_shot || {}).sort((a, b) => b[1].count - a[1].count)[0];
-  if (th) {
-    const tot = Object.values(P.third_shot).reduce((a, v) => a + v.count, 0), [k, v] = th;
-    add(`When they serve, expect a ${k.replace("third-shot ", "")} third ball`,
-      `${v.count} of ${tot} third shots${v.mph ? `, median ${v.mph} mph` : ""}${v.low_pct != null ? `, ${v.low_pct}% low over the net` : ""}${v.deep_pct != null ? `, ${v.deep_pct}% deep` : ""}. ${name} won ${v.won_pct}% of those rallies.`,
-      v.count, v.rallies);
-  }
-  const resp = Object.entries(T.response || {}).filter(([, v]) => v.n >= 5 && v.rushed_pct != null).sort((a, b) => b[1].rushed_pct - a[1].rushed_pct)[0];
-  if (resp) add(`Their hardest ball to handle: your ${resp[0].toLowerCase()}`,
-    `Against ${opp}'s ${resp[0].toLowerCase()} ${name} moved ${resp[1].moved_ft} ft on average and was rushed on ${resp[1].rushed_pct}% (${resp[1].n} shots).`, resp[1].n, resp[1].rallies);
-  const sit = (T.situations || []).filter(x => x.n >= 5 && !["serve", "return"].includes((x.shots[0] || [])[0]))[0];
-  if (sit) {
-    const W = {net: "at the net", mid: "in mid-court", back: "at the back"};
-    add(`Their go-to pattern: ${sit.shots[0][0]} from ${W[sit.me]}`,
-      `With ${opp} ${W[sit.opp]}, ${name} played ${sit.shots[0][0]} ${pct(sit.shots[0][1], sit.n)}% of the time${sit.cross_pct != null ? `, ${sit.cross_pct}% cross-court` : ""}; won ${sit.won_pct}% of those rallies.`, sit.n, sit.rallies);
-  }
-  const s = P.summary || {};
-  if (s.won_on_serve_pct?.value != null) add("Serve vs return",
-    `${name} won ${s.won_on_serve_pct.value}% of rallies on serve (${s.won_on_serve_pct.n}) and ${s.won_on_return_pct.value}% on return (${s.won_on_return_pct.n}).`,
-    s.won_on_serve_pct.n + s.won_on_return_pct.n, []);
-  return out;
+function clipLinks(item) {
+  if (!item.clips || !item.clips.length) return "";
+  return `<div class="clips"><span>Supporting clips:</span>${item.clips.map((c, i) => `<a href="${esc(item.link)}${item.link.includes("?") ? "&" : "?"}clip=${i + 1}">rally ${RNO.get(c.rally) ?? c.rally} (${PB.fmtTime(c.t)})</a>`).join(" ")}<a class="noprint" href="${esc(item.link)}">open in the workspace →</a></div>`;
 }
+function render() {
+  document.title = `Coaching brief · ${SEL.key} · ${M.title}`;
+  const shots = PB.shotsFor(R, SEL), obs = PB.observations(R, SEL, { shots, who: who() });
+  const saved = PBBrief.list(M.id, SEL.key), stored = PBBrief.available();
+  const val = PB.venueValidation(M.tournament);
+  const opts = PB.selectionOptions(R);
+  const L = PB.aggregate(shots, "landing"), sp = PB.speedStats(shots);
+  const roleSpeed = [["serve", "Serves"], ["return", "Returns"], ["third", "Third shots"], ["later", "Later rally shots"]].map(([k, l]) => [l, PB.speedStats(PB.applyFilters(shots, { role: k }, "origin"))]);
+  const rows = PB.DEPTHS.map(d => [d, PB.WIDTHS.reduce((x, w) => x + ((L.cells[`${d} ${w}`] || []).length), 0)]);
+  const P = R.players[SEL.side] || {}, T2 = P.tactics || {};
+  const third = Object.entries(P.third_shot || {}).sort((a, b) => b[1].count - a[1].count), thirdN = third.reduce((x, [, v]) => x + v.count, 0);
+  const bh = (T2.strokes || {}).backhand || {}, nbh = Object.values(bh).reduce((a, b) => a + b, 0);
+  const autoSaved = obs.map(o => `${M.id}|${SEL.key}|${o.id}`);
+  $("#main").innerHTML = `
+    <nav class="crumb noprint" aria-label="Breadcrumb"><a href="./">Tournaments</a><span aria-hidden="true">›</span>${T ? `<a href="./?t=${encodeURIComponent(T.id)}">${esc(T.name)}</a><span aria-hidden="true">›</span>` : ""}<a href="hub.html?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}">${esc(M.title)}</a><span aria-hidden="true">›</span><span class="here">Coaching brief</span></nav>
+    <div class="bhead"><div style="min-width:0"><div class="note">Coaching brief · ${esc(M.event)} · ${esc(M.round)}</div>
+      <h1>${esc(who())}</h1>
+      <div class="ctx">${esc(M.title)}${(R.official || M.result) ? ` · <span class="badge official">Official result</span> ${esc(R.official || M.result)}` : ""} · ${shots.length} analysed shots in this match</div></div>
+      <div class="bactions noprint">${opts.length > 1 ? `<label class="sr" for="bwho">Brief for</label><select id="bwho" class="btn">${opts.map(o => `<option value="${esc(o.key)}"${o.key === SEL.key ? " selected" : ""}>${esc(o.kind === "side" && R.type === "doubles" ? `${o.key} (team)` : o.key)}</option>`).join("")}</select>` : ""}
+        <a class="btn" href="hub.html?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}">← Match workspace</a><button type="button" class="btn primary" id="printBtn">Print / save PDF</button></div></div>
 
-function show(name) {
-  const names = Object.keys(R.players), opp = names.find(n => n !== name), P = R.players[name], O = R.players[opp];
-  history.replaceState(null, "", `?report=${file}&player=${encodeURIComponent(name)}`);
-  $("#title").textContent = `Scouting sheet · ${name}`;
-  $("#sub").textContent = `From ${R.title} · ${R.source}`;
-  $("#tabs").innerHTML = names.map(n => `<button class="tab" style="${n === name ? "background:var(--paddle);color:#fff" : ""}" data-p="${n}">${n}</button>`).join("");
-  document.querySelectorAll("#tabs .tab").forEach(b => b.onclick = () => show(b.dataset.p));
-  $("#back").href = `match.html?report=${file}`;
-  $("#plan").innerHTML = plan(name, P, opp, O).map(p => { const [c, lab] = conf(p.n);
-    return `<div class="pt"><div><div class="h">${p.h}</div><div class="t">${p.t}</div><div class="m"><span class="conf ${c}">${lab}</span>${clips(p.ids)}</div></div></div>`; }).join("");
-  const s = P.summary, sp = (P.speed || {}).groups || {}, fc = (P.pressure || {}).faced || {}, rn = P.running || {}, nt = P.net || {};
-  const num = (l, v, n) => `<div class="kn"><div class="l">${l}</div><div class="v">${v ?? "–"}</div><div class="n">${n}</div></div>`;
-  $("#nums").innerHTML = num("Rallies won", s.rallies_won_pct.value + "%", `${s.rallies_won_pct.n} rallies`) +
-    num("Won on serve", s.won_on_serve_pct.value + "%", `${s.won_on_serve_pct.n} rallies`) +
-    num("Won on return", s.won_on_return_pct.value + "%", `${s.won_on_return_pct.n} rallies`) +
-    num("Drive pace", sp.Drive ? sp.Drive.avg + " mph" : null, sp.Drive ? `median of ${sp.Drive.n}` : "") +
-    num("Rushed on", fc.rushed_pct != null ? fc.rushed_pct + "%" : null, `of ${fc.n || 0} shots`) +
-    num("Gets to the net", nt.reached_pct != null ? nt.reached_pct + "%" : null, `of ${nt.rallies || 0} rallies`) +
-    num("Runs per rally", rn.dist_per_rally_ft != null ? rn.dist_per_rally_ft + " ft" : null, `top sprint ${rn.top_sprint_mph ?? "–"} mph`) +
-    num("Backhand share", P.stroke ? Math.round(100 * (P.stroke.backhand || 0) / ((P.stroke.backhand || 0) + (P.stroke.forehand || 0))) + "%" : null, "of shots");
-  $("#acc").innerHTML = `Labels: <b>solid</b> = 20+ examples, <b>indicative</b> = 8-19, <b>thin</b> = under 8 - treat thin points as things to watch for, not facts. ` +
-    `All from one match unless stated. Measured accuracy: rally winner 96%, server 98%, hits found 86-94%, forehand/backhand 95%, ` +
-    `shot types on new matches: drives 83%, dinks 78%, lobs 42%, drops 19%, resets 4%, player positions about ±1 ft, ball speed ±3-4 mph. ` +
-    `"Rushed" uses hit timing (exact to 0.03 s) and positions; "error" = the last detected shot of a lost rally (about 1 in 10 final shots is missed).`;
-  document.querySelectorAll(".clip").forEach(b => b.onclick = () => { clipSet = b.dataset.set.split(",").map(Number); clipIdx = Math.max(0, clipSet.indexOf(+b.dataset.r)); play(); $("#modal").classList.add("on"); });
+    <section class="bsec" aria-labelledby="h1s"><h2 id="h1s">Saved for this brief</h2>
+      <p class="sub">${stored ? "Saved on this device (this browser only) - not shared or synced." : "Browser storage is blocked here, so saved items last only until this page is closed."} Coach notes are your own words, kept apart from the measured numbers.</p>
+      ${saved.length ? saved.map(itemHTML).join("") : `<div class="state-empty">Nothing saved yet. Use <b>Save to brief</b> on an observation below, or on a court selection in <a href="${ws({ sec: "placement" })}">Placement &amp; speed</a>.</div>`}
+    </section>
+
+    <section class="bsec" aria-labelledby="h2s"><h2 id="h2s">Automatic observations</h2>
+      <p class="sub">Descriptive tendencies from the tracking, each with its count, scope and evidence. Shown only when the sample clears fixed minimums - ${obs.length} ${obs.length === 1 ? "is" : "are"} supported here. They are not tactical advice.</p>
+      ${saved.some(x => autoSaved.includes(x.id)) ? `<p class="note">${saved.filter(x => autoSaved.includes(x.id)).length} of these ${saved.filter(x => autoSaved.includes(x.id)).length === 1 ? "is" : "are"} already in your saved items above and not repeated here.</p>` : ""}
+      ${obs.length ? obs.map((o, i) => PBBrief.has(autoSaved[i]) ? "" : `<article class="item"><div class="row">${o.evidence === "human" ? '<span class="badge human">Human-reviewed</span>' : '<span class="badge auto">Automatically detected</span>'}${o.evidence === "proxy" ? '<span class="badge proxy">Includes position proxies</span>' : ""}${o.limited ? '<span class="badge limited">Limited sample</span>' : ""}</div>
+        <h3>${esc(o.headline)}</h3><div class="measure">${esc(o.measure)}</div><div class="scope">${esc(o.scope)}</div>
+        <ul class="q">${[...o.quality, ...(o.kind === "landing" && val ? [val.short] : [])].map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+        ${clipLinks({ link: ws(Object.assign({ role: "all", view: "landing" }, o.link)), clips: obsClips(o) })}
+        <div class="row noprint"><button type="button" class="btn sm" data-save="${i}" aria-pressed="${PBBrief.has(autoSaved[i])}">${PBBrief.has(autoSaved[i]) ? "✓ Saved - add a note above" : "Save and add a note"}</button></div></article>`).join("")
+        : `<div class="state-empty">No observation is well enough supported for ${esc(who())} in this match (${shots.length} analysed shots). The numbers below are still valid as counts.</div>`}
+    </section>
+
+    <section class="bsec" aria-labelledby="h3s"><h2 id="h3s">Placement &amp; speed numbers</h2>
+      <p class="sub">${esc(who())} · all shots in this match · estimated speed = launch speed off the paddle, median whole mph, usable estimates only (not radar-checked).</p>
+      <div class="kgrid">
+        <div><div class="l">Recorded landings (observed first bounce)</div><div class="v">${L.denominator}<small> of ${L.population} that bounced first</small></div><div class="n">${L.boundary.length} on a zone boundary · ${L.outside.length} estimated outside</div></div>
+        <div><div class="l">Landing depth</div><div class="v">${rows.map(([d, n]) => `${PB.pct(n, L.denominator) ?? 0}%<small> ${d}</small>`).join(" ")}</div><div class="n">shares of the ${L.denominator} landings (boundary / outside ones in no row)</div></div>
+        <div><div class="l">Outgoing flight</div><div class="v" style="font-size:15px">${[["bounced", "bounced first"], ["intercepted", "intercepted"], ["net", "net"], ["unresolved", "unresolved"]].map(([k, l]) => `${L.status[k] || 0} ${l}`).join(" · ")}</div><div class="n">of ${shots.length} shots</div></div>
+        <div><div class="l">Estimated speed, all shots</div><div class="v">${sp.median ?? "–"}<small>${sp.median != null ? " mph" : ""}</small></div><div class="n">usable for ${sp.usable} of ${sp.n}</div></div>
+        ${roleSpeed.map(([l, s]) => `<div><div class="l">Estimated speed, ${l.toLowerCase()}</div><div class="v">${s.median ?? "Unknown"}<small>${s.median != null ? " mph" : ""}</small></div><div class="n">usable for ${s.usable} of ${s.n}${s.usable && s.usable < 10 ? " · limited sample" : ""}</div></div>`).join("")}
+      </div>
+    </section>
+
+    ${DB ? partnershipBlock() : ""}
+    ${!(SEL.kind === "player") && (third.length || nbh >= 8 || (P.net && P.net.rallies && R.type !== "doubles")) ? `<section class="bsec" aria-labelledby="h4s"><h2 id="h4s">Secondary: from automatic shot-type labels and positions</h2>
+      <p class="sub"><span class="badge auto">Automatic labels</span> drives and dinks are mostly recognised; drops (19%) and resets (4%) are often missed, so treat type splits as rough.</p>
+      <ul class="sec2">
+        ${third.length ? `<li>Third shots by label: ${third.map(([k, v]) => `${esc(k)} ${v.count}`).join(", ")} (of ${thirdN}).</li>` : ""}
+        ${nbh >= 8 ? `<li>Backhands by the move before them (${nbh}): pulled wide ${PB.pct(bh.pulled_wide || 0, nbh)}%, near the body ${PB.pct(bh.near_body || 0, nbh)}%, ran around ${PB.pct(bh.ran_around || 0, nbh)}% <span class="badge est">estimated</span>.</li>` : ""}
+        ${P.net && P.net.rallies && R.type !== "doubles" ? `<li>Reached the net in ${P.net.reached_pct}% of ${P.net.rallies} rallies (median ${P.net.median_arrival_s ?? "–"} s after the serve) <span class="badge est">estimated</span>.</li>` : ""}
+      </ul></section>` : ""}
+
+    <section class="bsec" aria-labelledby="h5s"><h2 id="h5s">How far to trust this</h2>
+      <div class="qbox"><p><b>Venue:</b> ${esc(val.detail)}</p>
+        <p><b>Evidence:</b> landings ${L.recorded.filter(s => PB.evidenceOf(s, "landing") === "human").length} human-reviewed, ${L.recorded.filter(s => PB.evidenceOf(s, "landing") !== "human").length} automatic. Locations are seen from behind the hitter (left = hitter's left); zones: kitchen 0–7 ft, midcourt 7–14.5 ft, deep 14.5–22 ft from the net, thirds across.</p>
+        <p><b>Scope:</b> one match (${esc(M.title)}). ${R.type === "doubles" ? "Doubles rally winners from tracking are unreliable and are not used. " : ""}Projected landings of intercepted balls are not available. Speed is not checked against radar.</p>
+        <p class="printonly">Printed from Pickleball Analyzer · ${new Date().toLocaleDateString()} · full detail: hub.html?m=${esc(M.id)}</p></div>
+    </section>`;
+  $("#printBtn").onclick = () => print();
+  $("#bwho") && ($("#bwho").onchange = e => { SEL = PB.resolveSelection(R, e.target.value); history.replaceState(null, "", `?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}`); render(); });
+  $$("[data-save]").forEach(b => b.onclick = () => {
+    const o = obs[+b.dataset.save], id = autoSaved[+b.dataset.save];
+    if (PBBrief.has(id)) PBBrief.remove(id);
+    else PBBrief.add({ id, match: M.id, who: SEL.key, auto: true, headline: o.headline, measure: o.measure, scope: o.scope, quality: o.quality, link: ws(Object.assign({ role: "all", view: "landing" }, o.link)), clips: obsClips(o) });
+    render();
+    if (PBBrief.has(id)) $(`textarea[data-id="${CSS.escape(id)}"]`)?.focus();
+  });
+  $$("textarea[data-id]").forEach(t => t.addEventListener("input", () => { PBBrief.setNote(t.dataset.id, t.value); t.closest(".cnote").querySelector(".ptext").textContent = t.value; t.closest(".cnote").classList.toggle("empty", !t.value.trim()); }));
+  $$("[data-remove]").forEach(b => b.onclick = () => { PBBrief.remove(b.dataset.remove); render(); });
 }
-function play() {
-  const r = byId[clipSet[clipIdx]], v = $("#clipVideo");
-  $("#clipTitle").textContent = `Rally at ${fmt(r.start_t)} · ${r.n_shots} shots${r.winner ? " · won by " + r.winner : ""}`;
-  $("#clipInfo").textContent = `${clipIdx + 1} of ${clipSet.length}`;
-  if (!v.src.endsWith(R.video)) v.src = "../" + R.video;
-  const OFF = R.video_offset || 0;  // per-match video cut from a longer feed: report times are feed times
-  const go = () => { v.currentTime = Math.max(0, r.start_t - 1 - OFF); v.play(); };
-  v.readyState ? go() : v.addEventListener("loadedmetadata", go, {once: true});
-  v.ontimeupdate = () => { if (v.currentTime > r.end_t - OFF + 1.5) v.pause(); };
+function partnershipBlock() {
+  const T0 = DB.teams[SEL.side]; if (!T0) return "";
+  const pl = Object.entries(DB.players).filter(([, p]) => p.team === SEL.side);
+  const pc = v => v == null ? "–" : v + "%";
+  return `<section class="bsec" aria-labelledby="hps"><h2 id="hps">Partnership: ${esc(SEL.side)}</h2>
+    <p class="sub"><span class="badge est">estimated</span> from named player positions (about ±1 ft; depth-corrected: ${!DB.depth ? "none" : String(DB.depth.method).startsWith("rig") ? "one value for this court and camera" : {"kitchen line": "kitchen-line rule", rules: "server-stance rule"}[DB.depth.method] || "default height"}) and the shots credited to each player. “Up” = within ${DB.up_ft} ft of the net.</p>
+    <div class="kgrid">
+      <div><div class="l">Both partners up</div><div class="v">${pc(T0.formation_time_pct.both_up)}<small> of rally time</small></div><div class="n">both back ${pc(T0.formation_time_pct.both_back)} · ${T0.pair_rallies} rallies</div></div>
+      <div><div class="l">Distance between partners</div><div class="v">${T0.spacing.median_ft ?? "–"}<small> ft</small></div><div class="n">${T0.spacing.lateral_ft ?? "–"} ft sideways (median)</div></div>
+      <div><div class="l">Side switches</div><div class="v">${T0.switches.rallies}<small> of ${T0.switches.of} rallies</small></div><div class="n">left side: ${Object.entries(T0.left_side_pct).map(([n, v]) => `${esc(n)} ${v}%`).join(", ")}</div></div>
+      ${pl.map(([n, p]) => `<div><div class="l">${esc(n)}${SEL.key === n ? " (this brief)" : ""}</div><div class="v" style="font-size:15px">${pc(p.shots.team_rally_share_pct)} of rally shots · up ${pc(p.position.up_pct)}</div><div class="n">${p.middle.taken} middle balls · ${p.cross.n} cross-overs · left ${pc(p.position.left_pct)} · ${p.movement.dist_per_rally_ft ?? "–"} ft per rally</div></div>`).join("")}
+    </div></section>`;
 }
-$("#closeClip").onclick = () => { $("#modal").classList.remove("on"); $("#clipVideo").pause(); };
-$("#prevClip").onclick = () => { clipIdx = (clipIdx - 1 + clipSet.length) % clipSet.length; play(); };
-$("#nextClip").onclick = () => { clipIdx = (clipIdx + 1) % clipSet.length; play(); };
-(async () => {
-  R = await (await fetch(`../outputs/reports/${file}.json`, {cache: "no-store"})).json();
-  R.rallies.forEach(r => byId[r.id] = r);
-  show(q.get("player") && R.players[q.get("player")] ? q.get("player") : Object.keys(R.players)[0]);
+function obsClips(o) {
+  const f = Object.assign({ role: "all" }, o.link), agg = PB.aggregate(PB.applyFilters(PB.shotsFor(R, SEL), f, f.view), f.view);
+  return PB.selectShots(agg, f.zone || "").slice(0, 8).map(s => ({ rally: s.rid, t: Math.round(PB.clipWindow(R, s, f.view).hit) }));
+}
+function itemHTML(x) {
+  return `<article class="item"><div class="row">${x.auto ? '<span class="badge auto">Automatic observation</span>' : '<span class="badge est">Court selection saved by the coach</span>'}<span class="saved-tag">saved ${new Date(x.saved).toLocaleDateString()}</span></div>
+    <h3>${esc(x.headline)}</h3><div class="measure">${esc(x.measure)}</div><div class="scope">${esc(x.scope)}</div>
+    ${x.quality && x.quality.length ? `<ul class="q">${x.quality.map(z => `<li>${esc(z)}</li>`).join("")}</ul>` : ""}
+    ${clipLinks(x)}
+    <div class="cnote${x.note && x.note.trim() ? "" : " empty"}"><label for="n-${esc(x.id)}">Coach note</label><textarea id="n-${esc(x.id)}" data-id="${esc(x.id)}" placeholder="Your note (saved on this device as you type)">${esc(x.note || "")}</textarea><div class="ptext">${esc(x.note || "")}</div></div>
+    <div class="row noprint"><button type="button" class="btn sm ghost" data-remove="${esc(x.id)}">Remove from brief</button></div></article>`;
+}
+init();
 })();
 </script>
 </body>
