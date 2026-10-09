@@ -429,12 +429,13 @@
    "round": "Men's singles (open) · match 1 of the tie",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_1_MS.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_1_MS.jpg",
    "result": "Boopathy S (Ramnad Royals) won 11-5 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: server right on 21 of 25 rallies, winner on 16 of 24",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_1_MS"
+   "run": "tnppl_rc_1_MS",
+   "report": "tnppl_rc_1_MS"
   },
   {
    "id": "tnppl_rc_2_WD",
@@ -448,12 +449,13 @@
    "round": "Women's doubles",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_2_WD.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_2_WD.jpg",
    "result": "Coimbatore Smashers won 11-7 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: serving team right on 12 of 14 rallies, rally winner on 7 of 13",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_2_WD"
+   "run": "tnppl_rc_2_WD",
+   "report": "tnppl_rc_2_WD"
   },
   {
    "id": "tnppl_rc_3_MD",
@@ -467,12 +469,13 @@
    "round": "Men's doubles (open)",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_3_MD.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_3_MD.jpg",
    "result": "Ramnad Royals won 11-10 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: serving team right on 19 of 20 rallies, rally winner on 12 of 19",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_3_MD"
+   "run": "tnppl_rc_3_MD",
+   "report": "tnppl_rc_3_MD"
   },
   {
    "id": "tnppl_rc_4_XD",
@@ -486,12 +489,13 @@
    "round": "Mixed doubles",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_4_XD.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_4_XD.jpg",
    "result": "Coimbatore Smashers won 11-8 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: serving team right on 12 of 15 rallies, rally winner on 10 of 15",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_4_XD"
+   "run": "tnppl_rc_4_XD",
+   "report": "tnppl_rc_4_XD"
   },
   {
    "id": "tnppl_rc_5_MD50",
@@ -505,12 +509,13 @@
    "round": "Men's 50+ doubles",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_5_MD50.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_5_MD50.jpg",
    "result": "Ramnad Royals won 11-3 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: serving team right on 17 of 18 rallies, rally winner on 9 of 17",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_5_MD50"
+   "run": "tnppl_rc_5_MD50",
+   "report": "tnppl_rc_5_MD50"
   },
   {
    "id": "tnppl_rc_6_MD",
@@ -524,12 +529,13 @@
    "round": "Men's doubles (open)",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_6_MD.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_6_MD.jpg",
    "result": "Coimbatore Smashers won 11-2 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: serving team right on 14 of 16 rallies, rally winner on 5 of 16",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_6_MD"
+   "run": "tnppl_rc_6_MD",
+   "report": "tnppl_rc_6_MD"
   },
   {
    "id": "tnppl_rc_7_TeamDoubles",
@@ -561,12 +567,13 @@
    "round": "Team event - super singles · rotating singles, rally scoring to 25",
    "venue": "Court 1 · indoor",
    "video": "data/videos/TNPPL_S2_RRvCS_8_TeamSingles.mp4",
-   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "thumb": "thumbs/tnppl_rc_8_TeamSingles.jpg",
    "result": "Ramnad Royals won 25-18 (match card)",
-   "check": "Processing",
+   "check": "Score overlay: server right on 12 of 27 rallies, winner on 5 of 12",
    "tournament": "tnppl_s2",
    "group": "Ramnad Royals vs Coimbatore Smashers",
-   "run": "tnppl_rc_8_TeamSingles"
+   "run": "tnppl_rc_8_TeamSingles",
+   "report": "tnppl_rc_8_TeamSingles"
   }
  ],
  "tournaments": [

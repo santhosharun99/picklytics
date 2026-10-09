@@ -557,7 +557,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 87% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 87% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 82,
      "small": false,
      "kind": "label"
@@ -575,7 +575,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 42 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 42 mph - one of the hardest hitters of the 47 players here.",
      "n": 54,
      "small": false,
      "kind": "label"
@@ -1135,7 +1135,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 95% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 95% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 94,
      "small": false,
      "kind": "label"
@@ -1153,7 +1153,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 43 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 43 mph - one of the hardest hitters of the 47 players here.",
      "n": 77,
      "small": false,
      "kind": "label"
@@ -1704,7 +1704,7 @@
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 70,
      "small": false,
      "kind": "label"
@@ -2257,7 +2257,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 79,
      "small": false,
      "kind": "label"
@@ -2275,7 +2275,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 39 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 39 mph - one of the hardest hitters of the 47 players here.",
      "n": 58,
      "small": false,
      "kind": "label"
@@ -2885,7 +2885,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 66% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 66% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 61,
      "small": false,
      "kind": "label"
@@ -2923,6 +2923,1247 @@
     {
      "text": "Hits deep (back 15 ft) on 62% of serves, returns and drives.",
      "n": 37,
+     "small": false,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "boopathy-s",
+   "name": "Boopathy S",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_1_MS",
+     "title": "Boopathy S vs Kavin Karthik",
+     "round": "Men's singles (open) · match 1 of the tie",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Kavin Karthik"
+     ],
+     "shots": 50,
+     "rallies": 27,
+     "won_pct": 59,
+     "official": "Boopathy S (Ramnad Royals) won 11-5 (match card)"
+    },
+    {
+     "id": "tnppl_rc_3_MD",
+     "title": "Boopathy S / Arihant vs Kavin Karthik / Prabanjan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Arihant"
+     ],
+     "opponents": [
+      "Kavin Karthik",
+      "Prabanjan"
+     ],
+     "shots": 15,
+     "rallies": 12,
+     "won_pct": 33,
+     "official": "Ramnad Royals won 11-10 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 65,
+    "typed": 65,
+    "mix": {
+     "drive": 28,
+     "return": 20,
+     "serve": 20,
+     "third-shot drive": 18,
+     "dink": 9,
+     "reset": 3,
+     "lob": 2
+    },
+    "mix_n": {
+     "drive": 18,
+     "return": 13,
+     "serve": 13,
+     "third-shot drive": 12,
+     "dink": 6,
+     "reset": 2,
+     "lob": 1
+    },
+    "forehand_pct": 54,
+    "stroke_n": 56,
+    "zones": {
+     "baseline": 66,
+     "transition": 29,
+     "kitchen": 5
+    },
+    "zones_n": 65,
+    "volley_pct": 36,
+    "rally_shots_n": 39,
+    "drive_pct": 77,
+    "soft_pct": 21,
+    "lob_pct": 3,
+    "speed": {
+     "serve": 45.5,
+     "return": 39.4,
+     "drive": 35.8,
+     "soft": 28.4,
+     "all": 37.6
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 5,
+     "drive": 21,
+     "soft": 5,
+     "all": 34
+    },
+    "spin": {
+     "n": 36,
+     "topspin": 25,
+     "slice": 19,
+     "drive_topspin": 35,
+     "drive_n": 20
+    },
+    "clear": {
+     "soft": 1.2,
+     "soft_n": 4,
+     "drive": 1.2,
+     "drive_n": 13
+    },
+    "deep_pct": 41,
+    "deep_n": 39
+   },
+   "placement": {
+    "singles": {
+     "n": 50,
+     "status": {
+      "unresolved": 18,
+      "bounced": 28,
+      "intercepted": 2,
+      "net": 2
+     },
+     "landing_usable": 23,
+     "landing_observed": 28,
+     "landing_zones": {
+      "deep centre": 1,
+      "midcourt right": 6,
+      "deep left": 2,
+      "midcourt centre": 1,
+      "midcourt left": 2,
+      "deep right": 9,
+      "deep wide-right": 1,
+      "behind left": 1
+     },
+     "interception_zones": {
+      "behind centre": 1
+     },
+     "intercepted": 2,
+     "speed_n": 29,
+     "speed_median": 36,
+     "facts": [
+      {
+       "text": "Of 50 analysed shots: 28 bounced before the opponent's contact, 2 were intercepted, 2 ended at the net, 18 are unresolved.",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 9 usable serve bounces, 3 landed deep right.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         14,
+         290.53
+        ],
+        [
+         "tnppl_rc_1_MS",
+         19,
+         459.53
+        ],
+        [
+         "tnppl_rc_1_MS",
+         27,
+         731.37
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable return bounces, 2 landed deep right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         18,
+         440.7
+        ],
+        [
+         "tnppl_rc_1_MS",
+         24,
+         668.93
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 3 landed deep right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         13,
+         266.43
+        ],
+        [
+         "tnppl_rc_1_MS",
+         15,
+         392.17
+        ],
+        [
+         "tnppl_rc_1_MS",
+         26,
+         710.4
+        ]
+       ]
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         12,
+         246.43
+        ],
+        [
+         "tnppl_rc_1_MS",
+         22,
+         630.4
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 29 measurable shots: 36 mph.",
+       "n": 29,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         22,
+         630.4
+        ],
+        [
+         "tnppl_rc_1_MS",
+         5,
+         84.37
+        ],
+        [
+         "tnppl_rc_1_MS",
+         22,
+         628.07
+        ],
+        [
+         "tnppl_rc_1_MS",
+         8,
+         142.0
+        ],
+        [
+         "tnppl_rc_1_MS",
+         19,
+         459.53
+        ],
+        [
+         "tnppl_rc_1_MS",
+         26,
+         708.6
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 33 of 50 shots with a certain origin; most often from behind the baseline (left) (16).",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         5,
+         82.13
+        ],
+        [
+         "tnppl_rc_1_MS",
+         5,
+         84.37
+        ],
+        [
+         "tnppl_rc_1_MS",
+         9,
+         166.27
+        ],
+        [
+         "tnppl_rc_1_MS",
+         10,
+         198.77
+        ],
+        [
+         "tnppl_rc_1_MS",
+         10,
+         201.0
+        ],
+        [
+         "tnppl_rc_1_MS",
+         12,
+         243.73
+        ]
+       ]
+      }
+     ]
+    },
+    "doubles": {
+     "n": 15,
+     "status": {
+      "unresolved": 8,
+      "bounced": 7
+     },
+     "landing_usable": 5,
+     "landing_observed": 7,
+     "landing_zones": {
+      "deep wide-right": 1,
+      "midcourt centre": 2,
+      "deep left": 1,
+      "behind right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 7,
+     "speed_median": 36,
+     "facts": [
+      {
+       "text": "Of 15 analysed shots: 7 bounced before the opponent's contact, 0 were intercepted, 0 ended at the net, 8 are unresolved.",
+       "n": 15,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Median estimated speed on 7 measurable shots: 36 mph.",
+       "n": 7,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         31,
+         930.87
+        ],
+        [
+         "tnppl_rc_3_MD",
+         13,
+         421.03
+        ],
+        [
+         "tnppl_rc_3_MD",
+         18,
+         548.23
+        ],
+        [
+         "tnppl_rc_3_MD",
+         17,
+         529.53
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         169.23
+        ],
+        [
+         "tnppl_rc_3_MD",
+         8,
+         309.7
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 7 of 15 shots with a certain origin; most often from midcourt centre (3).",
+       "n": 15,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         1,
+         8.07
+        ],
+        [
+         "tnppl_rc_3_MD",
+         5,
+         107.87
+        ],
+        [
+         "tnppl_rc_3_MD",
+         8,
+         309.7
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [
+    {
+     "match": "tnppl_rc_1_MS",
+     "won_pct": 59,
+     "won_on_serve_pct": 73,
+     "won_on_return_pct": 42,
+     "dist_per_rally_ft": 16,
+     "top_sprint_mph": 10.6,
+     "net_reached_pct": 46,
+     "first_to_net_pct": 48,
+     "rushed_pct": 60,
+     "error_when_rushed_pct": 17,
+     "error_otherwise_pct": 25,
+     "rushes_opp_pct": 29
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Much stronger when serving (73% rallies won) than returning (42%).",
+     "n": 27,
+     "rallies": [
+      5,
+      6,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      19,
+      23,
+      26,
+      27
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Backhand on 44% of shots (18/41).",
+     "n": 41,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (2x).",
+     "n": 2,
+     "rallies": [
+      2,
+      21
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a third-shot drive (forehand) (3x).",
+     "n": 3,
+     "rallies": [
+      5,
+      10,
+      27
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 11x, rallies won 73%.",
+     "n": 11,
+     "rallies": [
+      5,
+      6,
+      10,
+      11,
+      12,
+      13,
+      14,
+      19,
+      23,
+      26,
+      27
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 3x, rallies won 100%.",
+     "n": 3,
+     "rallies": [
+      8,
+      9,
+      15
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Wins 43% of short rallies vs 100% of long ones: better in long rallies.",
+     "n": 15,
+     "rallies": [
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 29% of shots; most with the drive (50% of 6).",
+     "n": 31,
+     "rallies": [
+      4,
+      11,
+      12,
+      13,
+      14,
+      21,
+      22,
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 0.2 s after returning.",
+     "n": 8,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 20.2 ft from the net; 17% of rally time at the kitchen.",
+     "n": 50,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mixes court positions: 66% of contacts from the back, 29% from mid-court, 5% at the kitchen.",
+     "n": 65,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 77% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 39,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (54% forehand).",
+     "n": 56,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 36 mph.",
+     "n": 21,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 35% of drives (experimental spin reading).",
+     "n": 20,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 41% of serves, returns and drives.",
+     "n": 39,
+     "small": false,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "kavin-karthik",
+   "name": "Kavin Karthik",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_1_MS",
+     "title": "Boopathy S vs Kavin Karthik",
+     "round": "Men's singles (open) · match 1 of the tie",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Boopathy S"
+     ],
+     "shots": 50,
+     "rallies": 27,
+     "won_pct": 41,
+     "official": "Boopathy S (Ramnad Royals) won 11-5 (match card)"
+    },
+    {
+     "id": "tnppl_rc_3_MD",
+     "title": "Boopathy S / Arihant vs Kavin Karthik / Prabanjan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Prabanjan"
+     ],
+     "opponents": [
+      "Boopathy S",
+      "Arihant"
+     ],
+     "shots": 15,
+     "rallies": 10,
+     "won_pct": 60,
+     "official": "Ramnad Royals won 11-10 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 65,
+    "typed": 65,
+    "mix": {
+     "drive": 32,
+     "return": 23,
+     "serve": 18,
+     "third-shot drive": 12,
+     "dink": 6,
+     "drop": 3,
+     "lob": 3,
+     "third-shot drop": 2
+    },
+    "mix_n": {
+     "drive": 21,
+     "return": 15,
+     "serve": 12,
+     "third-shot drive": 8,
+     "dink": 4,
+     "drop": 2,
+     "lob": 2,
+     "third-shot drop": 1
+    },
+    "forehand_pct": 56,
+    "stroke_n": 59,
+    "zones": {
+     "baseline": 78,
+     "transition": 18,
+     "kitchen": 3
+    },
+    "zones_n": 65,
+    "volley_pct": 21,
+    "rally_shots_n": 38,
+    "drive_pct": 76,
+    "soft_pct": 18,
+    "lob_pct": 5,
+    "speed": {
+     "serve": 26.8,
+     "return": 44.2,
+     "drive": 37.5,
+     "soft": 29.1,
+     "all": 38.2
+    },
+    "speed_n": {
+     "serve": 4,
+     "return": 6,
+     "drive": 16,
+     "soft": 3,
+     "all": 30
+    },
+    "spin": {
+     "n": 45,
+     "topspin": 9,
+     "slice": 27,
+     "drive_topspin": 14,
+     "drive_n": 22
+    },
+    "clear": {
+     "soft": 1.6,
+     "soft_n": 2,
+     "drive": 1.3,
+     "drive_n": 13
+    },
+    "deep_pct": 59,
+    "deep_n": 39
+   },
+   "placement": {
+    "singles": {
+     "n": 50,
+     "status": {
+      "unresolved": 12,
+      "net": 2,
+      "bounced": 32,
+      "intercepted": 4
+     },
+     "landing_usable": 23,
+     "landing_observed": 32,
+     "landing_zones": {
+      "kitchen right": 1,
+      "deep left": 3,
+      "midcourt left": 3,
+      "kitchen wide-right": 1,
+      "behind centre": 1,
+      "kitchen left": 1,
+      "deep right": 6,
+      "behind right": 2,
+      "deep centre": 2,
+      "midcourt centre": 2,
+      "behind left": 1
+     },
+     "interception_zones": {
+      "midcourt right": 1,
+      "kitchen right": 1
+     },
+     "intercepted": 4,
+     "speed_n": 34,
+     "speed_median": 40,
+     "facts": [
+      {
+       "text": "Of 50 analysed shots: 32 bounced before the opponent's contact, 4 were intercepted, 2 ended at the net, 12 are unresolved.",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable serve bounces, 2 landed deep left.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         4,
+         66.17
+        ],
+        [
+         "tnppl_rc_1_MS",
+         7,
+         116.27
+        ]
+       ]
+      },
+      {
+       "text": "Of 9 usable return bounces, 3 landed deep right.",
+       "n": 9,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         8,
+         143.03
+        ],
+        [
+         "tnppl_rc_1_MS",
+         10,
+         199.87
+        ],
+        [
+         "tnppl_rc_1_MS",
+         14,
+         291.63
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 2 landed midcourt left.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         4,
+         67.77
+        ],
+        [
+         "tnppl_rc_1_MS",
+         24,
+         670.17
+        ]
+       ]
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         25,
+         687.37
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 34 measurable shots: 40 mph.",
+       "n": 34,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         4,
+         69.87
+        ],
+        [
+         "tnppl_rc_1_MS",
+         11,
+         221.83
+        ],
+        [
+         "tnppl_rc_1_MS",
+         13,
+         265.43
+        ],
+        [
+         "tnppl_rc_1_MS",
+         12,
+         244.83
+        ],
+        [
+         "tnppl_rc_1_MS",
+         21,
+         554.37
+        ],
+        [
+         "tnppl_rc_1_MS",
+         9,
+         167.37
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 28 of 50 shots with a certain origin; most often from behind the baseline (left) (13).",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_1_MS",
+         1,
+         8.33
+        ],
+        [
+         "tnppl_rc_1_MS",
+         1,
+         9.93
+        ],
+        [
+         "tnppl_rc_1_MS",
+         3,
+         46.07
+        ],
+        [
+         "tnppl_rc_1_MS",
+         13,
+         267.93
+        ],
+        [
+         "tnppl_rc_1_MS",
+         13,
+         269.27
+        ],
+        [
+         "tnppl_rc_1_MS",
+         14,
+         291.63
+        ]
+       ]
+      }
+     ]
+    },
+    "doubles": {
+     "n": 15,
+     "status": {
+      "unresolved": 4,
+      "bounced": 7,
+      "intercepted": 4
+     },
+     "landing_usable": 7,
+     "landing_observed": 7,
+     "landing_zones": {
+      "kitchen right": 1,
+      "midcourt right": 1,
+      "deep centre": 1,
+      "behind left": 1,
+      "midcourt left": 3
+     },
+     "interception_zones": {
+      "deep left": 1
+     },
+     "intercepted": 4,
+     "speed_n": 11,
+     "speed_median": 37,
+     "facts": [
+      {
+       "text": "Of 15 analysed shots: 7 bounced before the opponent's contact, 4 were intercepted, 0 ended at the net, 4 are unresolved.",
+       "n": 15,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         7,
+         162.73
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         163.67
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         165.53
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         168.87
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 11 measurable shots: 37 mph.",
+       "n": 11,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         13,
+         422.27
+        ],
+        [
+         "tnppl_rc_3_MD",
+         24,
+         731.77
+        ],
+        [
+         "tnppl_rc_3_MD",
+         5,
+         106.63
+        ],
+        [
+         "tnppl_rc_3_MD",
+         28,
+         886.1
+        ],
+        [
+         "tnppl_rc_3_MD",
+         14,
+         448.23
+        ],
+        [
+         "tnppl_rc_3_MD",
+         19,
+         609.73
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 5 of 15 shots with a certain origin; most often from behind the baseline (centre) (5).",
+       "n": 15,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         7,
+         161.03
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         162.73
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         163.67
+        ],
+        [
+         "tnppl_rc_3_MD",
+         13,
+         422.27
+        ],
+        [
+         "tnppl_rc_3_MD",
+         29,
+         899.13
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [
+    {
+     "match": "tnppl_rc_1_MS",
+     "won_pct": 41,
+     "won_on_serve_pct": 58,
+     "won_on_return_pct": 27,
+     "dist_per_rally_ft": 21,
+     "top_sprint_mph": 10.6,
+     "net_reached_pct": 50,
+     "first_to_net_pct": 52,
+     "rushed_pct": 29,
+     "error_when_rushed_pct": 56,
+     "error_otherwise_pct": 5,
+     "rushes_opp_pct": 60
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Much stronger when serving (58% rallies won) than returning (27%).",
+     "n": 27,
+     "rallies": [
+      1,
+      2,
+      3,
+      4,
+      7,
+      17,
+      18,
+      20,
+      21,
+      22,
+      24,
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Backhand on 48% of shots (21/44).",
+     "n": 44,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (5x).",
+     "n": 5,
+     "rallies": [
+      9,
+      12,
+      14,
+      22,
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a third-shot drive (forehand) (2x).",
+     "n": 2,
+     "rallies": [
+      3,
+      20
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 8x, rallies won 50%.",
+     "n": 8,
+     "rallies": [
+      3,
+      4,
+      7,
+      18,
+      20,
+      21,
+      24,
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Wins 57% of short rallies vs 0% of long ones: better in short rallies.",
+     "n": 15,
+     "rallies": [
+      1,
+      2,
+      3,
+      5,
+      7,
+      9,
+      10,
+      15,
+      16,
+      17,
+      19,
+      20,
+      23,
+      27
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "weakness",
+     "text": "Breaks down under time pressure: 56% of rushed shots end the rally as an error vs 5% otherwise (9 rushed shots).",
+     "n": 9,
+     "rallies": [
+      4,
+      11,
+      12,
+      13,
+      14,
+      21,
+      22,
+      25
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 60% of shots; most with the serve (80% of 5).",
+     "n": 30,
+     "rallies": [
+      1,
+      2,
+      3,
+      6,
+      11,
+      13,
+      18,
+      21,
+      24,
+      25,
+      26
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 1.57 s after returning.",
+     "n": 14,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 20.5 ft from the net; 16% of rally time at the kitchen.",
+     "n": 50,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_1_MS",
+     "match_title": "Boopathy S vs Kavin Karthik"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 78% of contacts from the baseline area.",
+     "n": 65,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 76% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 38,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 21% of rally shots are volleys.",
+     "n": 38,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (56% forehand).",
+     "n": 59,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 38 mph - one of the hardest hitters of the 47 players here.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 14% of drives (experimental spin reading).",
+     "n": 22,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 59% of serves, returns and drives.",
+     "n": 39,
      "small": false,
      "kind": "label"
     }
@@ -3519,6 +4760,447 @@
    ]
   },
   {
+   "id": "ramnad-royals",
+   "name": "Ramnad Royals",
+   "team": null,
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_8_TeamSingles",
+     "title": "Ramnad Royals vs Coimbatore Smashers (super singles)",
+     "round": "Team event - super singles · rotating singles, rally scoring to 25",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Coimbatore Smashers"
+     ],
+     "shots": 57,
+     "rallies": 27,
+     "won_pct": 41,
+     "official": "Ramnad Royals won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 57,
+    "typed": 57,
+    "mix": {
+     "drive": 49,
+     "return": 26,
+     "serve": 12,
+     "third-shot drive": 11,
+     "lob": 2
+    },
+    "mix_n": {
+     "drive": 28,
+     "return": 15,
+     "serve": 7,
+     "third-shot drive": 6,
+     "lob": 1
+    },
+    "forehand_pct": 75,
+    "stroke_n": 51,
+    "zones": {
+     "baseline": 93,
+     "transition": 7,
+     "kitchen": 0
+    },
+    "zones_n": 57,
+    "volley_pct": 34,
+    "rally_shots_n": 35,
+    "drive_pct": 97,
+    "soft_pct": 0,
+    "lob_pct": 3,
+    "speed": {
+     "serve": 42.0,
+     "return": 39.2,
+     "drive": 36.0,
+     "soft": null,
+     "all": 36.3
+    },
+    "speed_n": {
+     "serve": 3,
+     "return": 8,
+     "drive": 22,
+     "soft": 0,
+     "all": 34
+    },
+    "spin": {
+     "n": 34,
+     "topspin": 15,
+     "slice": 26,
+     "drive_topspin": 13,
+     "drive_n": 23
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 1.3,
+     "drive_n": 15
+    },
+    "deep_pct": 72,
+    "deep_n": 40
+   },
+   "placement": {
+    "singles": {
+     "n": 57,
+     "status": {
+      "bounced": 34,
+      "unresolved": 21,
+      "intercepted": 1,
+      "net": 1
+     },
+     "landing_usable": 29,
+     "landing_observed": 34,
+     "landing_zones": {
+      "behind centre": 1,
+      "deep right": 9,
+      "midcourt right": 3,
+      "midcourt left": 1,
+      "deep centre": 7,
+      "deep left": 5,
+      "behind right": 1,
+      "behind left": 1,
+      "kitchen left": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 34,
+     "speed_median": 38,
+     "facts": [
+      {
+       "text": "Of 57 analysed shots: 34 bounced before the opponent's contact, 1 were intercepted, 1 ended at the net, 21 are unresolved.",
+       "n": 57,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 6 usable serve bounces, 2 landed midcourt right.",
+       "n": 6,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         3,
+         162.27
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         4,
+         192.2
+        ]
+       ]
+      },
+      {
+       "text": "Of 8 usable return bounces, 3 landed deep right.",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         4,
+         194.4
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         25,
+         708.93
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         27,
+         749.7
+        ]
+       ]
+      },
+      {
+       "text": "Of 12 usable later-shot bounces, 5 landed deep right.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         2,
+         132.33
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         254.6
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         23,
+         669.3
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         27,
+         765.97
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         28,
+         780.8
+        ]
+       ]
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         25,
+         710.93
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 34 measurable shots: 38 mph.",
+       "n": 34,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         12,
+         439.3
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         28,
+         779.27
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         27,
+         760.63
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         250.4
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         4,
+         194.4
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         21,
+         608.13
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 40 of 57 shots with a certain origin; most often from behind the baseline (centre) (18).",
+       "n": 57,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         1,
+         96.73
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         1,
+         99.37
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         4,
+         192.2
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         6,
+         215.67
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         250.4
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         252.73
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [
+    {
+     "match": "tnppl_rc_8_TeamSingles",
+     "won_pct": 41,
+     "won_on_serve_pct": 50,
+     "won_on_return_pct": 33,
+     "dist_per_rally_ft": 23,
+     "top_sprint_mph": 10.4,
+     "net_reached_pct": 33,
+     "first_to_net_pct": 43,
+     "rushed_pct": 18,
+     "error_when_rushed_pct": 0,
+     "error_otherwise_pct": 11,
+     "rushes_opp_pct": 38
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 25% of shots (13/51).",
+     "n": 51,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (forehand) (3x).",
+     "n": 3,
+     "rallies": [
+      11,
+      23,
+      24
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a drive (forehand) (3x).",
+     "n": 3,
+     "rallies": [
+      3,
+      17,
+      27
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 4x, rallies won 25%.",
+     "n": 4,
+     "rallies": [
+      2,
+      16,
+      23,
+      28
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: drive 3x, rallies won 67%.",
+     "n": 3,
+     "rallies": [
+      3,
+      19,
+      20
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 38% of shots; most with the return (36% of 11).",
+     "n": 29,
+     "rallies": [
+      6,
+      12,
+      16,
+      21,
+      23,
+      25,
+      26,
+      27,
+      28
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 1.97 s after returning.",
+     "n": 7,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 22.1 ft from the net; 7% of rally time at the kitchen.",
+     "n": 57,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 93% of contacts from the baseline area.",
+     "n": 57,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 97% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 35,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 75% of strokes are forehands.",
+     "n": 51,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 36 mph.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 13% of drives (experimental spin reading).",
+     "n": 23,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 72% of serves, returns and drives.",
+     "n": 40,
+     "small": false,
+     "kind": "label"
+    }
+   ]
+  },
+  {
    "id": "kannan",
    "name": "Kannan",
    "team": "Twin Eagles Hosur",
@@ -3937,7 +5619,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 91% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 35,
      "small": false,
      "kind": "label"
@@ -4262,13 +5944,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 47 players here.",
      "n": 38,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 42% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 42% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 38,
      "small": false,
      "kind": "label"
@@ -4730,7 +6412,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 70% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 70% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 27,
      "small": false,
      "kind": "label"
@@ -4748,7 +6430,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 31 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 31 mph - on the softer side of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -4768,6 +6450,466 @@
     {
      "text": "Hits deep (back 15 ft) on 54% of serves, returns and drives.",
      "n": 35,
+     "small": false,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "coimbatore-smashers",
+   "name": "Coimbatore Smashers",
+   "team": null,
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_8_TeamSingles",
+     "title": "Ramnad Royals vs Coimbatore Smashers (super singles)",
+     "round": "Team event - super singles · rotating singles, rally scoring to 25",
+     "type": "singles",
+     "tournament": "TNPPL Season 2",
+     "team": null,
+     "partner": [],
+     "opponents": [
+      "Ramnad Royals"
+     ],
+     "shots": 50,
+     "rallies": 27,
+     "won_pct": 59,
+     "official": "Ramnad Royals won 25-18 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 50,
+    "typed": 50,
+    "mix": {
+     "drive": 38,
+     "serve": 26,
+     "third-shot drive": 22,
+     "return": 12,
+     "drop": 2
+    },
+    "mix_n": {
+     "drive": 19,
+     "serve": 13,
+     "third-shot drive": 11,
+     "return": 6,
+     "drop": 1
+    },
+    "forehand_pct": 57,
+    "stroke_n": 44,
+    "zones": {
+     "baseline": 80,
+     "transition": 20,
+     "kitchen": 0
+    },
+    "zones_n": 50,
+    "volley_pct": 13,
+    "rally_shots_n": 31,
+    "drive_pct": 97,
+    "soft_pct": 3,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 37.4,
+     "return": 34.8,
+     "drive": 34.8,
+     "soft": null,
+     "all": 35.6
+    },
+    "speed_n": {
+     "serve": 9,
+     "return": 2,
+     "drive": 20,
+     "soft": 0,
+     "all": 31
+    },
+    "spin": {
+     "n": 31,
+     "topspin": 29,
+     "slice": 26,
+     "drive_topspin": 24,
+     "drive_n": 25
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 1.1,
+     "drive_n": 11
+    },
+    "deep_pct": 53,
+    "deep_n": 36
+   },
+   "placement": {
+    "singles": {
+     "n": 50,
+     "status": {
+      "unresolved": 16,
+      "bounced": 31,
+      "intercepted": 2,
+      "net": 1
+     },
+     "landing_usable": 28,
+     "landing_observed": 31,
+     "landing_zones": {
+      "deep right": 2,
+      "behind left": 1,
+      "deep centre": 7,
+      "deep left": 4,
+      "behind centre": 1,
+      "kitchen wide-left": 1,
+      "midcourt right": 2,
+      "midcourt left": 2,
+      "kitchen left": 1,
+      "midcourt centre": 4,
+      "kitchen right": 1,
+      "kitchen centre": 2
+     },
+     "interception_zones": {
+      "midcourt centre": 1
+     },
+     "intercepted": 2,
+     "speed_n": 31,
+     "speed_median": 33,
+     "facts": [
+      {
+       "text": "Of 50 analysed shots: 31 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 16 are unresolved.",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 11 usable serve bounces, 3 landed deep left.",
+       "n": 11,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         7,
+         228.17
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         14,
+         470.43
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         25,
+         707.93
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable return bounces, 2 landed midcourt right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         16,
+         511.9
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         20,
+         584.9
+        ]
+       ]
+      },
+      {
+       "text": "Of 5 usable third-shot bounces, 3 landed deep centre.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         6,
+         216.77
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         251.5
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         27,
+         750.5
+        ]
+       ]
+      },
+      {
+       "text": "Of 7 usable later-shot bounces, 2 landed kitchen centre.",
+       "n": 7,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         27,
+         764.77
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         28,
+         780.0
+        ]
+       ]
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         254.0
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         25,
+         710.3
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 31 measurable shots: 33 mph.",
+       "n": 31,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         25,
+         707.93
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         3,
+         163.73
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         20,
+         587.0
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         14,
+         470.43
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         7,
+         228.17
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         254.0
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 31 of 50 shots with a certain origin; most often from behind the baseline (right) (11).",
+       "n": 50,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_8_TeamSingles",
+         8,
+         251.5
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         13,
+         453.63
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         19,
+         567.33
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         20,
+         587.0
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         22,
+         643.33
+        ],
+        [
+         "tnppl_rc_8_TeamSingles",
+         22,
+         649.07
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [
+    {
+     "match": "tnppl_rc_8_TeamSingles",
+     "won_pct": 59,
+     "won_on_serve_pct": 67,
+     "won_on_return_pct": 50,
+     "dist_per_rally_ft": 25,
+     "top_sprint_mph": 10.0,
+     "net_reached_pct": 38,
+     "first_to_net_pct": 57,
+     "rushed_pct": 38,
+     "error_when_rushed_pct": 0,
+     "error_otherwise_pct": 17,
+     "rushes_opp_pct": 18
+    }
+   ],
+   "insights": [
+    {
+     "kind": "pattern",
+     "text": "Backhand on 43% of shots (19/44).",
+     "n": 44,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies lost on their own drive (backhand) (1x).",
+     "n": 1,
+     "rallies": [
+      8
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Most rallies won with a drive (forehand) (4x).",
+     "n": 4,
+     "rallies": [
+      13,
+      20,
+      21,
+      25
+     ],
+     "low_sample": true,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Third shot: third-shot drive 10x, rallies won 60%.",
+     "n": 10,
+     "rallies": [
+      6,
+      8,
+      12,
+      13,
+      14,
+      22,
+      24,
+      25,
+      26,
+      27
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Rushes the opponent on 18% of shots; most with the third-shot drive (29% of 7).",
+     "n": 33,
+     "rallies": [
+      3,
+      8,
+      16,
+      17,
+      25,
+      28
+     ],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Reaches the kitchen line about 2.2 s after returning.",
+     "n": 5,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    },
+    {
+     "kind": "pattern",
+     "text": "Plays on average 21.7 ft from the net; 11% of rally time at the kitchen.",
+     "n": 50,
+     "rallies": [],
+     "low_sample": false,
+     "match": "tnppl_rc_8_TeamSingles",
+     "match_title": "Ramnad Royals vs Coimbatore Smashers (super singles)"
+    }
+   ],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 80% of contacts from the baseline area.",
+     "n": 50,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 97% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 31,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 13% of rally shots are volleys.",
+     "n": 31,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (57% forehand).",
+     "n": 44,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 35 mph.",
+     "n": 20,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Serves at about 37 mph.",
+     "n": 9,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 24% of drives (experimental spin reading).",
+     "n": 25,
+     "small": false,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 53% of serves, returns and drives.",
+     "n": 36,
      "small": false,
      "kind": "label"
     }
@@ -5040,7 +7182,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 61% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 61% of rally shots - among the most of the 47 players here.",
      "n": 38,
      "small": false,
      "kind": "label"
@@ -5058,7 +7200,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 16 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 16 mph - on the softer side of the 47 players here.",
      "n": 5,
      "small": true,
      "kind": "label"
@@ -5328,7 +7470,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 60% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Balanced shot choice: drives 60%, dinks / drops / resets 40% of rally shots.",
      "n": 30,
      "small": false,
      "kind": "label"
@@ -5340,7 +7482,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 31 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 31 mph - on the softer side of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -5619,13 +7761,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 74% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 74% of rally shots - among the most of the 47 players here.",
      "n": 39,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 54% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 54% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 39,
      "small": false,
      "kind": "label"
@@ -5637,7 +7779,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 50 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 50 mph - one of the hardest hitters of the 47 players here.",
      "n": 6,
      "small": true,
      "kind": "label"
@@ -5913,13 +8055,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 47 players here.",
      "n": 38,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 58% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 58% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 38,
      "small": false,
      "kind": "label"
@@ -5931,7 +8073,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 46 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 46 mph - one of the hardest hitters of the 47 players here.",
      "n": 11,
      "small": true,
      "kind": "label"
@@ -6219,7 +8361,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Balanced shot choice: drives 62%, dinks / drops / resets 31% of rally shots.",
      "n": 32,
      "small": false,
      "kind": "label"
@@ -6237,7 +8379,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 39 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 39 mph - one of the hardest hitters of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -6655,7 +8797,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 83% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 83% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 23,
      "small": false,
      "kind": "label"
@@ -6673,7 +8815,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 31 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 31 mph - on the softer side of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -6970,7 +9112,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 30 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 30 mph - on the softer side of the 47 players here.",
      "n": 16,
      "small": false,
      "kind": "label"
@@ -7397,7 +9539,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 100% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 100% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 26,
      "small": false,
      "kind": "label"
@@ -7409,7 +9551,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 49 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 49 mph - one of the hardest hitters of the 47 players here.",
      "n": 19,
      "small": false,
      "kind": "label"
@@ -7680,7 +9822,7 @@
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 54% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 54% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 24,
      "small": false,
      "kind": "label"
@@ -7993,6 +10135,618 @@
    ]
   },
   {
+   "id": "arihant",
+   "name": "Arihant",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_3_MD",
+     "title": "Boopathy S / Arihant vs Kavin Karthik / Prabanjan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Boopathy S"
+     ],
+     "opponents": [
+      "Kavin Karthik",
+      "Prabanjan"
+     ],
+     "shots": 14,
+     "rallies": 10,
+     "won_pct": 30,
+     "official": "Ramnad Royals won 11-10 (match card)"
+    },
+    {
+     "id": "tnppl_rc_4_XD",
+     "title": "Arihant / Maanasi vs Anish Froilan R / Niranthara",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Maanasi"
+     ],
+     "opponents": [
+      "Anish Froilan R",
+      "Niranthara"
+     ],
+     "shots": 14,
+     "rallies": 10,
+     "won_pct": 20,
+     "official": "Coimbatore Smashers won 11-8 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 28,
+    "typed": 28,
+    "mix": {
+     "drive": 43,
+     "dink": 18,
+     "return": 14,
+     "third-shot drive": 11,
+     "lob": 7,
+     "serve": 4,
+     "drop": 4
+    },
+    "mix_n": {
+     "drive": 12,
+     "dink": 5,
+     "return": 4,
+     "third-shot drive": 3,
+     "lob": 2,
+     "serve": 1,
+     "drop": 1
+    },
+    "forehand_pct": 68,
+    "stroke_n": 28,
+    "zones": {
+     "baseline": 50,
+     "transition": 50,
+     "kitchen": 0
+    },
+    "zones_n": 28,
+    "volley_pct": 48,
+    "rally_shots_n": 23,
+    "drive_pct": 65,
+    "soft_pct": 26,
+    "lob_pct": 9,
+    "speed": {
+     "serve": 21.1,
+     "return": 14.8,
+     "drive": 42.1,
+     "soft": 24.0,
+     "all": 32.8
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 1,
+     "drive": 13,
+     "soft": 5,
+     "all": 22
+    },
+    "spin": {
+     "n": 24,
+     "topspin": 29,
+     "slice": 8,
+     "drive_topspin": 15,
+     "drive_n": 13
+    },
+    "clear": {
+     "soft": -0.6,
+     "soft_n": 1,
+     "drive": 0.8,
+     "drive_n": 8
+    },
+    "deep_pct": 33,
+    "deep_n": 9
+   },
+   "placement": {
+    "doubles": {
+     "n": 28,
+     "status": {
+      "bounced": 15,
+      "unresolved": 8,
+      "intercepted": 5
+     },
+     "landing_usable": 12,
+     "landing_observed": 15,
+     "landing_zones": {
+      "midcourt left": 1,
+      "deep centre": 2,
+      "midcourt centre": 1,
+      "behind left": 1,
+      "midcourt right": 5,
+      "behind right": 1,
+      "kitchen left": 1
+     },
+     "interception_zones": {},
+     "intercepted": 5,
+     "speed_n": 23,
+     "speed_median": 34,
+     "facts": [
+      {
+       "text": "Of 28 analysed shots: 15 bounced before the opponent's contact, 5 were intercepted, 0 ended at the net, 8 are unresolved.",
+       "n": 28,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable return bounces, 2 landed midcourt right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         19,
+         612.6
+        ],
+        [
+         "tnppl_rc_4_XD",
+         20,
+         646.57
+        ]
+       ]
+      },
+      {
+       "text": "5 shots were intercepted by the opponent.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         7,
+         166.67
+        ],
+        [
+         "tnppl_rc_3_MD",
+         13,
+         422.8
+        ],
+        [
+         "tnppl_rc_4_XD",
+         4,
+         219.7
+        ],
+        [
+         "tnppl_rc_4_XD",
+         7,
+         271.83
+        ],
+        [
+         "tnppl_rc_4_XD",
+         16,
+         545.17
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 23 measurable shots: 34 mph.",
+       "n": 23,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         13,
+         427.9
+        ],
+        [
+         "tnppl_rc_4_XD",
+         3,
+         108.77
+        ],
+        [
+         "tnppl_rc_3_MD",
+         17,
+         528.0
+        ],
+        [
+         "tnppl_rc_4_XD",
+         5,
+         239.53
+        ],
+        [
+         "tnppl_rc_4_XD",
+         20,
+         646.57
+        ],
+        [
+         "tnppl_rc_3_MD",
+         13,
+         422.8
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 10 of 28 shots with a certain origin; most often from midcourt left (4).",
+       "n": 28,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         6,
+         146.43
+        ],
+        [
+         "tnppl_rc_3_MD",
+         7,
+         164.57
+        ],
+        [
+         "tnppl_rc_4_XD",
+         16,
+         545.17
+        ],
+        [
+         "tnppl_rc_4_XD",
+         20,
+         649.6
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
+     "n": 28,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 65% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 23,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 9% of rally shots.",
+     "n": 23,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Takes the ball early: volleys 48% of rally shots (out of the air) - one of the highest of the 47 players here.",
+     "n": 23,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 68% of strokes are forehands.",
+     "n": 28,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 42 mph - one of the hardest hitters of the 47 players here.",
+     "n": 13,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 15% of drives (experimental spin reading).",
+     "n": 13,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 33% of serves, returns and drives.",
+     "n": 9,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "anish-froilan-r",
+   "name": "Anish Froilan R",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_4_XD",
+     "title": "Arihant / Maanasi vs Anish Froilan R / Niranthara",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Niranthara"
+     ],
+     "opponents": [
+      "Arihant",
+      "Maanasi"
+     ],
+     "shots": 17,
+     "rallies": 12,
+     "won_pct": 58,
+     "official": "Coimbatore Smashers won 11-8 (match card)"
+    },
+    {
+     "id": "tnppl_rc_6_MD",
+     "title": "Krishna Teja / Yaksharath vs Anish Froilan R / Rishi Vandhan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Rishi Vandhan"
+     ],
+     "opponents": [
+      "Krishna Teja",
+      "Yaksharath"
+     ],
+     "shots": 9,
+     "rallies": 8,
+     "won_pct": 38,
+     "official": "Coimbatore Smashers won 11-2 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 26,
+    "typed": 26,
+    "mix": {
+     "drive": 31,
+     "dink": 31,
+     "return": 15,
+     "lob": 12,
+     "third-shot drive": 8,
+     "drop": 4
+    },
+    "mix_n": {
+     "drive": 8,
+     "dink": 8,
+     "return": 4,
+     "lob": 3,
+     "third-shot drive": 2,
+     "drop": 1
+    },
+    "forehand_pct": 54,
+    "stroke_n": 26,
+    "zones": {
+     "baseline": 50,
+     "transition": 50,
+     "kitchen": 0
+    },
+    "zones_n": 26,
+    "volley_pct": 27,
+    "rally_shots_n": 22,
+    "drive_pct": 45,
+    "soft_pct": 41,
+    "lob_pct": 14,
+    "speed": {
+     "serve": null,
+     "return": 20.6,
+     "drive": 30.8,
+     "soft": 22.4,
+     "all": 29.4
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 2,
+     "drive": 8,
+     "soft": 5,
+     "all": 17
+    },
+    "spin": {
+     "n": 20,
+     "topspin": 10,
+     "slice": 35,
+     "drive_topspin": 12,
+     "drive_n": 8
+    },
+    "clear": {
+     "soft": 1.6,
+     "soft_n": 3,
+     "drive": 1.3,
+     "drive_n": 5
+    },
+    "deep_pct": 70,
+    "deep_n": 10
+   },
+   "placement": {
+    "doubles": {
+     "n": 26,
+     "status": {
+      "bounced": 10,
+      "intercepted": 3,
+      "unresolved": 12,
+      "net": 1
+     },
+     "landing_usable": 7,
+     "landing_observed": 10,
+     "landing_zones": {
+      "behind right": 1,
+      "deep right": 1,
+      "midcourt left": 1,
+      "deep centre": 2,
+      "behind centre": 1,
+      "midcourt centre": 1
+     },
+     "interception_zones": {
+      "deep right": 1
+     },
+     "intercepted": 3,
+     "speed_n": 20,
+     "speed_median": 34,
+     "facts": [
+      {
+       "text": "Of 26 analysed shots: 10 bounced before the opponent's contact, 3 were intercepted, 1 ended at the net, 12 are unresolved.",
+       "n": 26,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "3 shots were intercepted by the opponent.",
+       "n": 3,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_4_XD",
+         7,
+         275.63
+        ],
+        [
+         "tnppl_rc_4_XD",
+         11,
+         409.13
+        ],
+        [
+         "tnppl_rc_4_XD",
+         14,
+         475.73
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 20 measurable shots: 34 mph.",
+       "n": 20,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         4,
+         86.37
+        ],
+        [
+         "tnppl_rc_4_XD",
+         16,
+         545.63
+        ],
+        [
+         "tnppl_rc_4_XD",
+         4,
+         218.63
+        ],
+        [
+         "tnppl_rc_4_XD",
+         22,
+         703.83
+        ],
+        [
+         "tnppl_rc_6_MD",
+         1,
+         1.23
+        ],
+        [
+         "tnppl_rc_6_MD",
+         13,
+         351.47
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 12 of 26 shots with a certain origin; most often from behind the baseline (centre) (7).",
+       "n": 26,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_4_XD",
+         11,
+         409.13
+        ],
+        [
+         "tnppl_rc_4_XD",
+         12,
+         428.57
+        ],
+        [
+         "tnppl_rc_4_XD",
+         16,
+         540.6
+        ],
+        [
+         "tnppl_rc_4_XD",
+         19,
+         626.7
+        ],
+        [
+         "tnppl_rc_4_XD",
+         21,
+         678.7
+        ],
+        [
+         "tnppl_rc_6_MD",
+         7,
+         194.17
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
+     "n": 26,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Balanced shot choice: drives 45%, dinks / drops / resets 41% of rally shots.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 14% of rally shots.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 27% of rally shots are volleys.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (54% forehand).",
+     "n": 26,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 31 mph - on the softer side of the 47 players here.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 12% of drives (experimental spin reading).",
+     "n": 8,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 70% of serves, returns and drives.",
+     "n": 10,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
    "id": "aparajitha",
    "name": "Aparajitha",
    "team": "Salem Super Smashers",
@@ -8234,13 +10988,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 53% of rally shots - among the most of the 47 players here.",
      "n": 19,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 19,
      "small": false,
      "kind": "label"
@@ -8252,7 +11006,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 26 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 26 mph - on the softer side of the 47 players here.",
      "n": 6,
      "small": true,
      "kind": "label"
@@ -8511,13 +11265,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 77% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 77% of rally shots - among the most of the 47 players here.",
      "n": 22,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 64% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 64% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 22,
      "small": false,
      "kind": "label"
@@ -8529,7 +11283,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 38 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 38 mph - one of the hardest hitters of the 47 players here.",
      "n": 5,
      "small": true,
      "kind": "label"
@@ -8782,13 +11536,13 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 64% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 64% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 22,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 41% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 41% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 22,
      "small": false,
      "kind": "label"
@@ -8800,7 +11554,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 28 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 28 mph - on the softer side of the 47 players here.",
      "n": 12,
      "small": true,
      "kind": "label"
@@ -9062,7 +11816,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 24 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 24 mph - on the softer side of the 47 players here.",
      "n": 10,
      "small": true,
      "kind": "label"
@@ -9076,6 +11830,283 @@
     {
      "text": "Hits deep (back 15 ft) on 25% of serves, returns and drives.",
      "n": 12,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "maanasi",
+   "name": "Maanasi",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_2_WD",
+     "title": "Ahana / Maanasi vs Niranthara / Nidithra",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Ahana"
+     ],
+     "opponents": [
+      "Niranthara",
+      "Nidithra"
+     ],
+     "shots": 17,
+     "rallies": 14,
+     "won_pct": 36,
+     "official": "Coimbatore Smashers won 11-7 (match card)"
+    },
+    {
+     "id": "tnppl_rc_4_XD",
+     "title": "Arihant / Maanasi vs Anish Froilan R / Niranthara",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Arihant"
+     ],
+     "opponents": [
+      "Anish Froilan R",
+      "Niranthara"
+     ],
+     "shots": 5,
+     "rallies": 5,
+     "won_pct": 60,
+     "official": "Coimbatore Smashers won 11-8 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 22,
+    "typed": 22,
+    "mix": {
+     "drive": 36,
+     "dink": 27,
+     "return": 18,
+     "serve": 9,
+     "reset": 5,
+     "third-shot drive": 5
+    },
+    "mix_n": {
+     "drive": 8,
+     "dink": 6,
+     "return": 4,
+     "serve": 2,
+     "reset": 1,
+     "third-shot drive": 1
+    },
+    "forehand_pct": 55,
+    "stroke_n": 22,
+    "zones": {
+     "baseline": 50,
+     "transition": 50,
+     "kitchen": 0
+    },
+    "zones_n": 22,
+    "volley_pct": 56,
+    "rally_shots_n": 16,
+    "drive_pct": 56,
+    "soft_pct": 44,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 7.3,
+     "return": 13.0,
+     "drive": 42.0,
+     "soft": 12.9,
+     "all": 23.6
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 4,
+     "drive": 9,
+     "soft": 4,
+     "all": 18
+    },
+    "spin": {
+     "n": 17,
+     "topspin": 12,
+     "slice": 18,
+     "drive_topspin": 14,
+     "drive_n": 7
+    },
+    "clear": {
+     "soft": 0.8,
+     "soft_n": 3,
+     "drive": 1.8,
+     "drive_n": 5
+    },
+    "deep_pct": 31,
+    "deep_n": 13
+   },
+   "placement": {
+    "doubles": {
+     "n": 22,
+     "status": {
+      "bounced": 12,
+      "unresolved": 5,
+      "intercepted": 4,
+      "net": 1
+     },
+     "landing_usable": 9,
+     "landing_observed": 12,
+     "landing_zones": {
+      "behind centre": 1,
+      "deep right": 1,
+      "deep centre": 4,
+      "kitchen centre": 1,
+      "kitchen wide-left": 1,
+      "midcourt right": 1
+     },
+     "interception_zones": {
+      "deep centre": 1,
+      "kitchen right": 1
+     },
+     "intercepted": 4,
+     "speed_n": 16,
+     "speed_median": 32,
+     "facts": [
+      {
+       "text": "Of 22 analysed shots: 12 bounced before the opponent's contact, 4 were intercepted, 1 ended at the net, 5 are unresolved.",
+       "n": 22,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "4 shots were intercepted by the opponent.",
+       "n": 4,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         14,
+         386.37
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 16 measurable shots: 32 mph.",
+       "n": 16,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         2,
+         24.97
+        ],
+        [
+         "tnppl_rc_2_WD",
+         14,
+         386.37
+        ],
+        [
+         "tnppl_rc_2_WD",
+         3,
+         41.67
+        ],
+        [
+         "tnppl_rc_2_WD",
+         6,
+         194.63
+        ],
+        [
+         "tnppl_rc_2_WD",
+         20,
+         532.0
+        ],
+        [
+         "tnppl_rc_2_WD",
+         12,
+         306.43
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 9 of 22 shots with a certain origin; most often from behind the baseline (centre) (5).",
+       "n": 22,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         3,
+         41.67
+        ],
+        [
+         "tnppl_rc_2_WD",
+         4,
+         60.33
+        ],
+        [
+         "tnppl_rc_2_WD",
+         6,
+         194.63
+        ],
+        [
+         "tnppl_rc_2_WD",
+         11,
+         286.67
+        ],
+        [
+         "tnppl_rc_4_XD",
+         21,
+         679.43
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Balanced shot choice: drives 56%, dinks / drops / resets 44% of rally shots.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Takes the ball early: volleys 56% of rally shots (out of the air) - one of the highest of the 47 players here.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (55% forehand).",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 42 mph - one of the hardest hitters of the 47 players here.",
+     "n": 9,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 14% of drives (experimental spin reading).",
+     "n": 7,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 31% of serves, returns and drives.",
+     "n": 13,
      "small": true,
      "kind": "label"
     }
@@ -9304,13 +12335,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 47% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 47% of rally shots - among the most of the 47 players here.",
      "n": 15,
      "small": false,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 15,
      "small": false,
      "kind": "label"
@@ -9843,7 +12874,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 28 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 28 mph - on the softer side of the 47 players here.",
      "n": 9,
      "small": true,
      "kind": "label"
@@ -9859,6 +12890,261 @@
      "n": 8,
      "small": true,
      "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "thomas",
+   "name": "Thomas",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_5_MD50",
+     "title": "Ranjith / Thomas vs Venkataramanan / Eswaran",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Ranjith"
+     ],
+     "opponents": [
+      "Venkataramanan",
+      "Eswaran"
+     ],
+     "shots": 22,
+     "rallies": 13,
+     "won_pct": 31,
+     "official": "Ramnad Royals won 11-3 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 22,
+    "typed": 22,
+    "mix": {
+     "dink": 27,
+     "drive": 18,
+     "lob": 14,
+     "return": 14,
+     "serve": 14,
+     "third-shot drive": 9,
+     "drop": 5
+    },
+    "mix_n": {
+     "dink": 6,
+     "drive": 4,
+     "lob": 3,
+     "return": 3,
+     "serve": 3,
+     "third-shot drive": 2,
+     "drop": 1
+    },
+    "forehand_pct": 59,
+    "stroke_n": 22,
+    "zones": {
+     "baseline": 55,
+     "transition": 41,
+     "kitchen": 5
+    },
+    "zones_n": 22,
+    "volley_pct": 25,
+    "rally_shots_n": 16,
+    "drive_pct": 38,
+    "soft_pct": 44,
+    "lob_pct": 19,
+    "speed": {
+     "serve": 13.4,
+     "return": 11.1,
+     "drive": 26.9,
+     "soft": 17.9,
+     "all": 14.8
+    },
+    "speed_n": {
+     "serve": 2,
+     "return": 1,
+     "drive": 4,
+     "soft": 4,
+     "all": 14
+    },
+    "spin": {
+     "n": 17,
+     "topspin": 6,
+     "slice": 41,
+     "drive_topspin": 0,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 2.1,
+     "soft_n": 5,
+     "drive": null,
+     "drive_n": 0
+    },
+    "deep_pct": 43,
+    "deep_n": 7
+   },
+   "placement": {
+    "doubles": {
+     "n": 22,
+     "status": {
+      "unresolved": 9,
+      "bounced": 10,
+      "intercepted": 2,
+      "net": 1
+     },
+     "landing_usable": 8,
+     "landing_observed": 10,
+     "landing_zones": {
+      "midcourt wide-left": 1,
+      "kitchen right": 1,
+      "behind left": 2,
+      "deep right": 3,
+      "deep left": 1
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 17,
+     "speed_median": 29,
+     "facts": [
+      {
+       "text": "Of 22 analysed shots: 10 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 9 are unresolved.",
+       "n": 22,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         6,
+         229.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         17,
+         565.53
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 17 measurable shots: 29 mph.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         128.5
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         16,
+         525.07
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         125.17
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         7,
+         251.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         715.63
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         4,
+         155.13
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 10 of 22 shots with a certain origin; most often from behind the baseline (centre) (5).",
+       "n": 22,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         128.5
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         6,
+         229.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         7,
+         243.63
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         7,
+         251.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         715.63
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 55% of contacts from the back, 41% from mid-court, 5% at the kitchen.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Balanced shot choice: drives 38%, dinks / drops / resets 44% of rally shots.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 19% of rally shots.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
+     "n": 16,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 59% of strokes are forehands.",
+     "n": 22,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Soft shots cross about 2.1 ft above the net (experimental).",
+     "n": 5,
+     "small": true,
+     "kind": "experimental"
     }
    ]
   },
@@ -10121,7 +13407,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 40 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 40 mph - one of the hardest hitters of the 47 players here.",
      "n": 6,
      "small": true,
      "kind": "label"
@@ -10344,7 +13630,7 @@
      "kind": "label"
     },
     {
-     "text": "Balanced shot choice: drives 54%, dinks / drops / resets 46% of rally shots.",
+     "text": "Soft-game player: dinks, drops and resets are 46% of rally shots - among the most of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -10360,6 +13646,529 @@
      "n": 7,
      "small": true,
      "kind": "experimental"
+    }
+   ]
+  },
+  {
+   "id": "nidithra",
+   "name": "Nidithra",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_2_WD",
+     "title": "Ahana / Maanasi vs Niranthara / Nidithra",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Niranthara"
+     ],
+     "opponents": [
+      "Ahana",
+      "Maanasi"
+     ],
+     "shots": 19,
+     "rallies": 12,
+     "won_pct": 67,
+     "official": "Coimbatore Smashers won 11-7 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 19,
+    "typed": 19,
+    "mix": {
+     "drive": 58,
+     "return": 21,
+     "lob": 11,
+     "dink": 5,
+     "drop": 5
+    },
+    "mix_n": {
+     "drive": 11,
+     "return": 4,
+     "lob": 2,
+     "dink": 1,
+     "drop": 1
+    },
+    "forehand_pct": 58,
+    "stroke_n": 19,
+    "zones": {
+     "baseline": 68,
+     "transition": 32,
+     "kitchen": 0
+    },
+    "zones_n": 19,
+    "volley_pct": 40,
+    "rally_shots_n": 15,
+    "drive_pct": 73,
+    "soft_pct": 13,
+    "lob_pct": 13,
+    "speed": {
+     "serve": null,
+     "return": 38.3,
+     "drive": 28.8,
+     "soft": 13.9,
+     "all": 28.1
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 1,
+     "drive": 7,
+     "soft": 2,
+     "all": 12
+    },
+    "spin": {
+     "n": 16,
+     "topspin": 19,
+     "slice": 25,
+     "drive_topspin": 30,
+     "drive_n": 10
+    },
+    "clear": {
+     "soft": 3.1,
+     "soft_n": 1,
+     "drive": 1.7,
+     "drive_n": 6
+    },
+    "deep_pct": 29,
+    "deep_n": 7
+   },
+   "placement": {
+    "doubles": {
+     "n": 19,
+     "status": {
+      "bounced": 9,
+      "unresolved": 7,
+      "intercepted": 3
+     },
+     "landing_usable": 8,
+     "landing_observed": 9,
+     "landing_zones": {
+      "deep centre": 1,
+      "midcourt right": 1,
+      "midcourt centre": 1,
+      "deep right": 2,
+      "kitchen right": 1,
+      "deep left": 1,
+      "kitchen centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 3,
+     "speed_n": 16,
+     "speed_median": 32,
+     "facts": [
+      {
+       "text": "Of 19 analysed shots: 9 bounced before the opponent's contact, 3 were intercepted, 0 ended at the net, 7 are unresolved.",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "3 shots were intercepted by the opponent.",
+       "n": 3,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         17,
+         446.17
+        ],
+        [
+         "tnppl_rc_2_WD",
+         17,
+         447.7
+        ],
+        [
+         "tnppl_rc_2_WD",
+         21,
+         551.9
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 16 measurable shots: 32 mph.",
+       "n": 16,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         17,
+         451.3
+        ],
+        [
+         "tnppl_rc_2_WD",
+         20,
+         533.57
+        ],
+        [
+         "tnppl_rc_2_WD",
+         9,
+         247.0
+        ],
+        [
+         "tnppl_rc_2_WD",
+         17,
+         446.17
+        ],
+        [
+         "tnppl_rc_2_WD",
+         21,
+         549.13
+        ],
+        [
+         "tnppl_rc_2_WD",
+         4,
+         63.6
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 7 of 19 shots with a certain origin; most often from behind the baseline (centre) (4).",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         11,
+         287.3
+        ],
+        [
+         "tnppl_rc_2_WD",
+         16,
+         425.6
+        ],
+        [
+         "tnppl_rc_2_WD",
+         17,
+         447.7
+        ],
+        [
+         "tnppl_rc_2_WD",
+         21,
+         549.13
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 68% of contacts from the back, 32% from mid-court, 0% at the kitchen.",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 73% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 15,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 13% of rally shots.",
+     "n": 15,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 58% of strokes are forehands.",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 29 mph - on the softer side of the 47 players here.",
+     "n": 7,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 30% of drives (experimental spin reading).",
+     "n": 10,
+     "small": true,
+     "kind": "experimental"
+    }
+   ]
+  },
+  {
+   "id": "niranthara",
+   "name": "Niranthara",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_2_WD",
+     "title": "Ahana / Maanasi vs Niranthara / Nidithra",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Nidithra"
+     ],
+     "opponents": [
+      "Ahana",
+      "Maanasi"
+     ],
+     "shots": 8,
+     "rallies": 8,
+     "won_pct": 75,
+     "official": "Coimbatore Smashers won 11-7 (match card)"
+    },
+    {
+     "id": "tnppl_rc_4_XD",
+     "title": "Arihant / Maanasi vs Anish Froilan R / Niranthara",
+     "round": "Mixed doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Anish Froilan R"
+     ],
+     "opponents": [
+      "Arihant",
+      "Maanasi"
+     ],
+     "shots": 11,
+     "rallies": 10,
+     "won_pct": 60,
+     "official": "Coimbatore Smashers won 11-8 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 19,
+    "typed": 19,
+    "mix": {
+     "drive": 32,
+     "dink": 26,
+     "serve": 21,
+     "return": 16,
+     "lob": 5
+    },
+    "mix_n": {
+     "drive": 6,
+     "dink": 5,
+     "serve": 4,
+     "return": 3,
+     "lob": 1
+    },
+    "forehand_pct": 58,
+    "stroke_n": 19,
+    "zones": {
+     "baseline": 37,
+     "transition": 63,
+     "kitchen": 0
+    },
+    "zones_n": 19,
+    "volley_pct": 25,
+    "rally_shots_n": 12,
+    "drive_pct": 50,
+    "soft_pct": 42,
+    "lob_pct": 8,
+    "speed": {
+     "serve": 26.7,
+     "return": 44.7,
+     "drive": 43.6,
+     "soft": 17.7,
+     "all": 22.9
+    },
+    "speed_n": {
+     "serve": 4,
+     "return": 1,
+     "drive": 4,
+     "soft": 5,
+     "all": 15
+    },
+    "spin": {
+     "n": 16,
+     "topspin": 6,
+     "slice": 25,
+     "drive_topspin": 0,
+     "drive_n": 6
+    },
+    "clear": {
+     "soft": 1.6,
+     "soft_n": 2,
+     "drive": 3.9,
+     "drive_n": 5
+    },
+    "deep_pct": 78,
+    "deep_n": 9
+   },
+   "placement": {
+    "doubles": {
+     "n": 19,
+     "status": {
+      "unresolved": 5,
+      "bounced": 14
+     },
+     "landing_usable": 10,
+     "landing_observed": 14,
+     "landing_zones": {
+      "deep centre": 3,
+      "deep right": 2,
+      "midcourt right": 1,
+      "kitchen centre": 1,
+      "kitchen left": 1,
+      "behind wide-left": 1,
+      "behind centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 15,
+     "speed_median": 38,
+     "facts": [
+      {
+       "text": "Of 19 analysed shots: 14 bounced before the opponent's contact, 0 were intercepted, 0 ended at the net, 5 are unresolved.",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable serve bounces, 2 landed deep right.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         20,
+         530.7
+        ],
+        [
+         "tnppl_rc_4_XD",
+         11,
+         406.47
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 15 measurable shots: 38 mph.",
+       "n": 15,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_4_XD",
+         21,
+         677.2
+        ],
+        [
+         "tnppl_rc_4_XD",
+         10,
+         381.3
+        ],
+        [
+         "tnppl_rc_4_XD",
+         5,
+         238.83
+        ],
+        [
+         "tnppl_rc_2_WD",
+         18,
+         463.93
+        ],
+        [
+         "tnppl_rc_4_XD",
+         9,
+         361.03
+        ],
+        [
+         "tnppl_rc_4_XD",
+         17,
+         556.87
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 6 of 19 shots with a certain origin; most often from behind the baseline (right) (4).",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         20,
+         530.7
+        ],
+        [
+         "tnppl_rc_4_XD",
+         9,
+         361.03
+        ],
+        [
+         "tnppl_rc_4_XD",
+         16,
+         544.17
+        ],
+        [
+         "tnppl_rc_4_XD",
+         17,
+         556.87
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 63% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Balanced shot choice: drives 50%, dinks / drops / resets 42% of rally shots.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 8% of rally shots.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 58% of strokes are forehands.",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 0% of drives (experimental spin reading).",
+     "n": 6,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 78% of serves, returns and drives.",
+     "n": 9,
+     "small": true,
+     "kind": "label"
     }
    ]
   },
@@ -10560,7 +14369,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 47 players here.",
      "n": 16,
      "small": false,
      "kind": "label"
@@ -10572,7 +14381,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 41 mph - one of the hardest hitters of the 35 players here.",
+     "text": "Drives at about 41 mph - one of the hardest hitters of the 47 players here.",
      "n": 6,
      "small": true,
      "kind": "label"
@@ -10831,7 +14640,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 47% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 47% of rally shots - among the most of the 47 players here.",
      "n": 15,
      "small": false,
      "kind": "label"
@@ -10843,7 +14652,7 @@
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 47% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 15,
      "small": false,
      "kind": "label"
@@ -10851,6 +14660,494 @@
     {
      "text": "Even forehand / backhand split (53% forehand).",
      "n": 19,
+     "small": false,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "venkataramanan",
+   "name": "Venkataramanan",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_5_MD50",
+     "title": "Ranjith / Thomas vs Venkataramanan / Eswaran",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Eswaran"
+     ],
+     "opponents": [
+      "Ranjith",
+      "Thomas"
+     ],
+     "shots": 19,
+     "rallies": 15,
+     "won_pct": 60,
+     "official": "Ramnad Royals won 11-3 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 19,
+    "typed": 19,
+    "mix": {
+     "drive": 32,
+     "dink": 26,
+     "return": 21,
+     "drop": 16,
+     "reset": 5
+    },
+    "mix_n": {
+     "drive": 6,
+     "dink": 5,
+     "return": 4,
+     "drop": 3,
+     "reset": 1
+    },
+    "forehand_pct": 47,
+    "stroke_n": 19,
+    "zones": {
+     "baseline": 37,
+     "transition": 63,
+     "kitchen": 0
+    },
+    "zones_n": 19,
+    "volley_pct": 53,
+    "rally_shots_n": 15,
+    "drive_pct": 40,
+    "soft_pct": 60,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 16.8,
+     "drive": 29.6,
+     "soft": 14.0,
+     "all": 25.9
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 2,
+     "drive": 5,
+     "soft": 5,
+     "all": 12
+    },
+    "spin": {
+     "n": 15,
+     "topspin": 13,
+     "slice": 20,
+     "drive_topspin": 0,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": 2.7,
+     "soft_n": 2,
+     "drive": 1.2,
+     "drive_n": 3
+    },
+    "deep_pct": 40,
+    "deep_n": 5
+   },
+   "placement": {
+    "doubles": {
+     "n": 19,
+     "status": {
+      "bounced": 4,
+      "intercepted": 2,
+      "unresolved": 12,
+      "net": 1
+     },
+     "landing_usable": 4,
+     "landing_observed": 4,
+     "landing_zones": {
+      "midcourt right": 1,
+      "midcourt centre": 1,
+      "deep centre": 1,
+      "behind right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 2,
+     "speed_n": 14,
+     "speed_median": 28,
+     "facts": [
+      {
+       "text": "Of 19 analysed shots: 4 bounced before the opponent's contact, 2 were intercepted, 1 ended at the net, 12 are unresolved.",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "2 shots were intercepted by the opponent.",
+       "n": 2,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         4,
+         160.27
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         17,
+         564.67
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 14 measurable shots: 28 mph.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         23,
+         745.2
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         6,
+         230.4
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         17,
+         560.67
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         17,
+         564.67
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         12,
+         416.07
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         9,
+         351.2
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 4 of 19 shots with a certain origin; most often from midcourt right (4).",
+       "n": 19,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         4,
+         161.53
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         7,
+         250.77
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         14,
+         469.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         21,
+         665.8
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 63% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 47 players here.",
+     "n": 15,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Takes the ball early: volleys 53% of rally shots (out of the air) - one of the highest of the 47 players here.",
+     "n": 15,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (47% forehand).",
+     "n": 19,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 30 mph - on the softer side of the 47 players here.",
+     "n": 5,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "eswaran",
+   "name": "Eswaran",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_5_MD50",
+     "title": "Ranjith / Thomas vs Venkataramanan / Eswaran",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Venkataramanan"
+     ],
+     "opponents": [
+      "Ranjith",
+      "Thomas"
+     ],
+     "shots": 17,
+     "rallies": 12,
+     "won_pct": 58,
+     "official": "Ramnad Royals won 11-3 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 17,
+    "typed": 17,
+    "mix": {
+     "dink": 29,
+     "drive": 24,
+     "return": 24,
+     "serve": 12,
+     "lob": 12
+    },
+    "mix_n": {
+     "dink": 5,
+     "drive": 4,
+     "return": 4,
+     "serve": 2,
+     "lob": 2
+    },
+    "forehand_pct": 65,
+    "stroke_n": 17,
+    "zones": {
+     "baseline": 53,
+     "transition": 47,
+     "kitchen": 0
+    },
+    "zones_n": 17,
+    "volley_pct": 27,
+    "rally_shots_n": 11,
+    "drive_pct": 36,
+    "soft_pct": 45,
+    "lob_pct": 18,
+    "speed": {
+     "serve": 7.0,
+     "return": 6.1,
+     "drive": 39.5,
+     "soft": 15.4,
+     "all": 15.7
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 2,
+     "drive": 2,
+     "soft": 4,
+     "all": 11
+    },
+    "spin": {
+     "n": 11,
+     "topspin": 9,
+     "slice": 9,
+     "drive_topspin": 25,
+     "drive_n": 4
+    },
+    "clear": {
+     "soft": 1.8,
+     "soft_n": 3,
+     "drive": 1.0,
+     "drive_n": 1
+    },
+    "deep_pct": 14,
+    "deep_n": 7
+   },
+   "placement": {
+    "doubles": {
+     "n": 17,
+     "status": {
+      "net": 1,
+      "unresolved": 6,
+      "bounced": 9,
+      "intercepted": 1
+     },
+     "landing_usable": 8,
+     "landing_observed": 9,
+     "landing_zones": {
+      "behind wide-left": 1,
+      "deep centre": 2,
+      "midcourt left": 1,
+      "midcourt right": 1,
+      "midcourt centre": 2,
+      "deep right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 11,
+     "speed_median": 23,
+     "facts": [
+      {
+       "text": "Of 17 analysed shots: 9 bounced before the opponent's contact, 1 were intercepted, 1 ended at the net, 6 are unresolved.",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Of 5 usable later-shot bounces, 2 landed midcourt centre.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         719.3
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         724.53
+        ]
+       ]
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         13,
+         455.43
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 11 measurable shots: 23 mph.",
+       "n": 11,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         12,
+         421.23
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         10,
+         375.9
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         124.07
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         728.37
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         731.07
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         20,
+         633.87
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 3 of 17 shots with a certain origin; most often from midcourt right (3).",
+       "n": 17,
+       "small": false,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         4,
+         154.83
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         12,
+         418.77
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         25,
+         768.5
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 53% of contacts from the back, 47% from mid-court, 0% at the kitchen.",
+     "n": 17,
+     "small": false,
+     "kind": "label"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 45% of rally shots - among the most of the 47 players here.",
+     "n": 11,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 18% of rally shots.",
+     "n": 11,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 27% of rally shots are volleys.",
+     "n": 11,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 65% of strokes are forehands.",
+     "n": 17,
      "small": false,
      "kind": "label"
     }
@@ -11080,7 +15377,7 @@
      "kind": "label"
     },
     {
-     "text": "Balanced shot choice: drives 46%, dinks / drops / resets 46% of rally shots.",
+     "text": "Soft-game player: dinks, drops and resets are 46% of rally shots - among the most of the 47 players here.",
      "n": 13,
      "small": true,
      "kind": "label"
@@ -11309,7 +15606,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 47 players here.",
      "n": 10,
      "small": true,
      "kind": "label"
@@ -11321,7 +15618,7 @@
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 50% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 10,
      "small": true,
      "kind": "label"
@@ -11543,7 +15840,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 50% of rally shots - among the most of the 47 players here.",
      "n": 12,
      "small": true,
      "kind": "label"
@@ -11813,13 +16110,13 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 64% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 64% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 11,
      "small": true,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 55% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 55% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 11,
      "small": true,
      "kind": "label"
@@ -11831,7 +16128,7 @@
      "kind": "label"
     },
     {
-     "text": "Drives at about 32 mph - on the softer side of the 35 players here.",
+     "text": "Drives at about 32 mph - on the softer side of the 47 players here.",
      "n": 6,
      "small": true,
      "kind": "label"
@@ -12062,7 +16359,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 47 players here.",
      "n": 10,
      "small": true,
      "kind": "label"
@@ -12072,6 +16369,720 @@
      "n": 15,
      "small": false,
      "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "prabanjan",
+   "name": "Prabanjan",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_3_MD",
+     "title": "Boopathy S / Arihant vs Kavin Karthik / Prabanjan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Kavin Karthik"
+     ],
+     "opponents": [
+      "Boopathy S",
+      "Arihant"
+     ],
+     "shots": 14,
+     "rallies": 10,
+     "won_pct": 50,
+     "official": "Ramnad Royals won 11-10 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 14,
+    "typed": 14,
+    "mix": {
+     "drive": 50,
+     "dink": 14,
+     "serve": 14,
+     "drop": 7,
+     "lob": 7,
+     "return": 7
+    },
+    "mix_n": {
+     "drive": 7,
+     "dink": 2,
+     "serve": 2,
+     "drop": 1,
+     "lob": 1,
+     "return": 1
+    },
+    "forehand_pct": 57,
+    "stroke_n": 14,
+    "zones": {
+     "baseline": 64,
+     "transition": 36,
+     "kitchen": 0
+    },
+    "zones_n": 14,
+    "volley_pct": 36,
+    "rally_shots_n": 11,
+    "drive_pct": 64,
+    "soft_pct": 27,
+    "lob_pct": 9,
+    "speed": {
+     "serve": 36.5,
+     "return": null,
+     "drive": 28.3,
+     "soft": 20.9,
+     "all": 20.9
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 0,
+     "drive": 6,
+     "soft": 3,
+     "all": 11
+    },
+    "spin": {
+     "n": 11,
+     "topspin": 27,
+     "slice": 36,
+     "drive_topspin": 33,
+     "drive_n": 6
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 1.9,
+     "drive_n": 2
+    },
+    "deep_pct": 25,
+    "deep_n": 8
+   },
+   "placement": {
+    "doubles": {
+     "n": 14,
+     "status": {
+      "bounced": 4,
+      "unresolved": 9,
+      "intercepted": 1
+     },
+     "landing_usable": 4,
+     "landing_observed": 4,
+     "landing_zones": {
+      "midcourt right": 1,
+      "deep centre": 2,
+      "deep right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 11,
+     "speed_median": 24,
+     "facts": [
+      {
+       "text": "Of 14 analysed shots: 4 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 9 are unresolved.",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         1,
+         7.03
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 11 measurable shots: 24 mph.",
+       "n": 11,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         7,
+         167.2
+        ],
+        [
+         "tnppl_rc_3_MD",
+         30,
+         912.5
+        ],
+        [
+         "tnppl_rc_3_MD",
+         21,
+         666.13
+        ],
+        [
+         "tnppl_rc_3_MD",
+         25,
+         772.13
+        ],
+        [
+         "tnppl_rc_3_MD",
+         31,
+         932.27
+        ],
+        [
+         "tnppl_rc_3_MD",
+         1,
+         5.8
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 2 of 14 shots with a certain origin; most often from deep centre (5).",
+       "n": 14,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_3_MD",
+         1,
+         3.87
+        ],
+        [
+         "tnppl_rc_3_MD",
+         1,
+         5.8
+        ],
+        [
+         "tnppl_rc_3_MD",
+         20,
+         630.73
+        ],
+        [
+         "tnppl_rc_3_MD",
+         20,
+         632.37
+        ],
+        [
+         "tnppl_rc_3_MD",
+         31,
+         932.27
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 64% of contacts from the back, 36% from mid-court, 0% at the kitchen.",
+     "n": 14,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 64% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 11,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 9% of rally shots.",
+     "n": 11,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Even forehand / backhand split (57% forehand).",
+     "n": 14,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 28 mph - on the softer side of the 47 players here.",
+     "n": 6,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 33% of drives (experimental spin reading).",
+     "n": 6,
+     "small": true,
+     "kind": "experimental"
+    },
+    {
+     "text": "Hits deep (back 15 ft) on 25% of serves, returns and drives.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "ahana",
+   "name": "Ahana",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_2_WD",
+     "title": "Ahana / Maanasi vs Niranthara / Nidithra",
+     "round": "Women's doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Maanasi"
+     ],
+     "opponents": [
+      "Niranthara",
+      "Nidithra"
+     ],
+     "shots": 12,
+     "rallies": 9,
+     "won_pct": 44,
+     "official": "Coimbatore Smashers won 11-7 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 12,
+    "typed": 12,
+    "mix": {
+     "drive": 50,
+     "dink": 25,
+     "return": 17,
+     "lob": 8
+    },
+    "mix_n": {
+     "drive": 6,
+     "dink": 3,
+     "return": 2,
+     "lob": 1
+    },
+    "forehand_pct": 83,
+    "stroke_n": 12,
+    "zones": {
+     "baseline": 42,
+     "transition": 58,
+     "kitchen": 0
+    },
+    "zones_n": 12,
+    "volley_pct": 30,
+    "rally_shots_n": 10,
+    "drive_pct": 60,
+    "soft_pct": 30,
+    "lob_pct": 10,
+    "speed": {
+     "serve": null,
+     "return": null,
+     "drive": 37.0,
+     "soft": 63.8,
+     "all": 37.0
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 0,
+     "drive": 6,
+     "soft": 1,
+     "all": 8
+    },
+    "spin": {
+     "n": 10,
+     "topspin": 0,
+     "slice": 40,
+     "drive_topspin": 0,
+     "drive_n": 6
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.6,
+     "drive_n": 5
+    },
+    "deep_pct": 40,
+    "deep_n": 5
+   },
+   "placement": {
+    "doubles": {
+     "n": 12,
+     "status": {
+      "unresolved": 5,
+      "bounced": 6,
+      "intercepted": 1
+     },
+     "landing_usable": 5,
+     "landing_observed": 6,
+     "landing_zones": {
+      "deep centre": 2,
+      "deep left": 1,
+      "midcourt left": 1,
+      "midcourt right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 10,
+     "speed_median": 30,
+     "facts": [
+      {
+       "text": "Of 12 analysed shots: 6 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 5 are unresolved.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         17,
+         450.87
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 10 measurable shots: 30 mph.",
+       "n": 10,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         18,
+         465.1
+        ],
+        [
+         "tnppl_rc_2_WD",
+         21,
+         550.33
+        ],
+        [
+         "tnppl_rc_2_WD",
+         16,
+         424.77
+        ],
+        [
+         "tnppl_rc_2_WD",
+         17,
+         446.77
+        ],
+        [
+         "tnppl_rc_2_WD",
+         21,
+         555.7
+        ],
+        [
+         "tnppl_rc_2_WD",
+         17,
+         450.87
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 4 of 12 shots with a certain origin; most often from kitchen centre (2).",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_2_WD",
+         8,
+         232.97
+        ],
+        [
+         "tnppl_rc_2_WD",
+         16,
+         424.77
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 58% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Balanced shot choice: drives 60%, dinks / drops / resets 30% of rally shots.",
+     "n": 10,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Uses the lob: 10% of rally shots.",
+     "n": 10,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 30% of rally shots are volleys.",
+     "n": 10,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 83% of strokes are forehands.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Drives at about 37 mph.",
+     "n": 6,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 0% of drives (experimental spin reading).",
+     "n": 6,
+     "small": true,
+     "kind": "experimental"
+    }
+   ]
+  },
+  {
+   "id": "krishna-teja",
+   "name": "Krishna Teja",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_6_MD",
+     "title": "Krishna Teja / Yaksharath vs Anish Froilan R / Rishi Vandhan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Yaksharath"
+     ],
+     "opponents": [
+      "Anish Froilan R",
+      "Rishi Vandhan"
+     ],
+     "shots": 12,
+     "rallies": 9,
+     "won_pct": 44,
+     "official": "Coimbatore Smashers won 11-2 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 12,
+    "typed": 12,
+    "mix": {
+     "drive": 33,
+     "return": 25,
+     "third-shot drive": 17,
+     "dink": 8,
+     "reset": 8,
+     "serve": 8
+    },
+    "mix_n": {
+     "drive": 4,
+     "return": 3,
+     "third-shot drive": 2,
+     "dink": 1,
+     "reset": 1,
+     "serve": 1
+    },
+    "forehand_pct": 67,
+    "stroke_n": 12,
+    "zones": {
+     "baseline": 50,
+     "transition": 50,
+     "kitchen": 0
+    },
+    "zones_n": 12,
+    "volley_pct": 12,
+    "rally_shots_n": 8,
+    "drive_pct": 75,
+    "soft_pct": 25,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": null,
+     "drive": 33.0,
+     "soft": 20.9,
+     "all": 28.1
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 0,
+     "drive": 4,
+     "soft": 1,
+     "all": 5
+    },
+    "spin": {
+     "n": 10,
+     "topspin": 30,
+     "slice": 20,
+     "drive_topspin": 50,
+     "drive_n": 6
+    },
+    "clear": {
+     "soft": 0.1,
+     "soft_n": 1,
+     "drive": -0.2,
+     "drive_n": 3
+    },
+    "deep_pct": 100,
+    "deep_n": 5
+   },
+   "placement": {
+    "doubles": {
+     "n": 12,
+     "status": {
+      "intercepted": 1,
+      "bounced": 7,
+      "unresolved": 4
+     },
+     "landing_usable": 6,
+     "landing_observed": 7,
+     "landing_zones": {
+      "behind left": 1,
+      "behind centre": 1,
+      "midcourt left": 3,
+      "deep centre": 1
+     },
+     "interception_zones": {},
+     "intercepted": 1,
+     "speed_n": 10,
+     "speed_median": 23,
+     "facts": [
+      {
+       "text": "Of 12 analysed shots: 7 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 4 are unresolved.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         2,
+         29.37
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 10 measurable shots: 23 mph.",
+       "n": 10,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         3,
+         47.23
+        ],
+        [
+         "tnppl_rc_6_MD",
+         14,
+         372.77
+        ],
+        [
+         "tnppl_rc_6_MD",
+         14,
+         374.57
+        ],
+        [
+         "tnppl_rc_6_MD",
+         7,
+         195.93
+        ],
+        [
+         "tnppl_rc_6_MD",
+         2,
+         29.37
+        ],
+        [
+         "tnppl_rc_6_MD",
+         8,
+         226.2
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 3 of 12 shots with a certain origin; most often from midcourt centre (3).",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         2,
+         29.37
+        ],
+        [
+         "tnppl_rc_6_MD",
+         2,
+         34.7
+        ],
+        [
+         "tnppl_rc_6_MD",
+         14,
+         372.77
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mixes court positions: 50% of contacts from the back, 50% from mid-court, 0% at the kitchen.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 75% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 12% of rally shots are volleys.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the forehand: 67% of strokes are forehands.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Topspin on 50% of drives (experimental spin reading).",
+     "n": 6,
+     "small": true,
+     "kind": "experimental"
     }
    ]
   },
@@ -12282,7 +17293,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Balanced shot choice: drives 62%, dinks / drops / resets 25% of rally shots.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -12295,6 +17306,229 @@
     },
     {
      "text": "Lets the ball bounce: only 12% of rally shots are volleys.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the backhand: 58% of strokes are backhands.",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "ranjith",
+   "name": "Ranjith",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_5_MD50",
+     "title": "Ranjith / Thomas vs Venkataramanan / Eswaran",
+     "round": "Men's 50+ doubles",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Thomas"
+     ],
+     "opponents": [
+      "Venkataramanan",
+      "Eswaran"
+     ],
+     "shots": 12,
+     "rallies": 9,
+     "won_pct": 22,
+     "official": "Ramnad Royals won 11-3 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 12,
+    "typed": 12,
+    "mix": {
+     "dink": 50,
+     "return": 17,
+     "drive": 17,
+     "serve": 17
+    },
+    "mix_n": {
+     "dink": 6,
+     "return": 2,
+     "drive": 2,
+     "serve": 2
+    },
+    "forehand_pct": 42,
+    "stroke_n": 12,
+    "zones": {
+     "baseline": 33,
+     "transition": 50,
+     "kitchen": 17
+    },
+    "zones_n": 12,
+    "volley_pct": 25,
+    "rally_shots_n": 8,
+    "drive_pct": 25,
+    "soft_pct": 75,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 90.7,
+     "return": null,
+     "drive": 28.2,
+     "soft": 15.7,
+     "all": 23.9
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 0,
+     "drive": 2,
+     "soft": 5,
+     "all": 8
+    },
+    "spin": {
+     "n": 9,
+     "topspin": 44,
+     "slice": 0,
+     "drive_topspin": 0,
+     "drive_n": 2
+    },
+    "clear": {
+     "soft": 1.2,
+     "soft_n": 2,
+     "drive": null,
+     "drive_n": 0
+    },
+    "deep_pct": 50,
+    "deep_n": 2
+   },
+   "placement": {
+    "doubles": {
+     "n": 12,
+     "status": {
+      "bounced": 6,
+      "unresolved": 4,
+      "intercepted": 1,
+      "net": 1
+     },
+     "landing_usable": 5,
+     "landing_observed": 6,
+     "landing_zones": {
+      "kitchen centre": 2,
+      "midcourt centre": 1,
+      "midcourt left": 1,
+      "deep left": 1
+     },
+     "interception_zones": {
+      "kitchen centre": 1
+     },
+     "intercepted": 1,
+     "speed_n": 8,
+     "speed_median": 24,
+     "facts": [
+      {
+       "text": "Of 12 analysed shots: 6 bounced before the opponent's contact, 1 were intercepted, 1 ended at the net, 4 are unresolved.",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         126.67
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 8 measurable shots: 24 mph.",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         13,
+         452.63
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         4,
+         153.97
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         12,
+         420.23
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         17,
+         560.07
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         126.67
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         22,
+         726.27
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 1 of 12 shots with a certain origin; most often from deep right (3).",
+       "n": 12,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         123.77
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         3,
+         126.67
+        ],
+        [
+         "tnppl_rc_5_MD50",
+         13,
+         452.63
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 67% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 12,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 75% of rally shots - among the most of the 47 players here.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 25% of rally shots are volleys.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -12516,7 +17750,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 60% of rally shots - among the most of the 47 players here.",
      "n": 10,
      "small": true,
      "kind": "label"
@@ -12962,7 +18196,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 62% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 62% of rally shots - among the most of the 47 players here.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -12974,7 +18208,7 @@
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 62% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 62% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -13168,13 +18402,13 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 67% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 67% of rally shots - among the most of the 47 players here.",
      "n": 9,
      "small": true,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 56% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 56% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 9,
      "small": true,
      "kind": "label"
@@ -13393,7 +18627,7 @@
      "kind": "label"
     },
     {
-     "text": "Soft-game player: dinks, drops and resets are 71% of rally shots - among the most of the 35 players here.",
+     "text": "Soft-game player: dinks, drops and resets are 71% of rally shots - among the most of the 47 players here.",
      "n": 7,
      "small": true,
      "kind": "label"
@@ -13574,7 +18808,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 62% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Balanced shot choice: drives 62%, dinks / drops / resets 38% of rally shots.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -13739,7 +18973,7 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 75% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Power over touch: drives are 75% of rally shots (after the serve and return) - among the most of the 47 players here.",
      "n": 4,
      "small": true,
      "kind": "label"
@@ -13752,6 +18986,220 @@
     },
     {
      "text": "Leans on the backhand: 75% of strokes are backhands.",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    }
+   ]
+  },
+  {
+   "id": "yaksharath",
+   "name": "Yaksharath",
+   "team": "Ramnad Royals",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_6_MD",
+     "title": "Krishna Teja / Yaksharath vs Anish Froilan R / Rishi Vandhan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Ramnad Royals",
+     "partner": [
+      "Krishna Teja"
+     ],
+     "opponents": [
+      "Anish Froilan R",
+      "Rishi Vandhan"
+     ],
+     "shots": 8,
+     "rallies": 6,
+     "won_pct": 67,
+     "official": "Coimbatore Smashers won 11-2 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 8,
+    "typed": 8,
+    "mix": {
+     "drive": 62,
+     "third-shot drive": 12,
+     "serve": 12,
+     "return": 12
+    },
+    "mix_n": {
+     "drive": 5,
+     "third-shot drive": 1,
+     "serve": 1,
+     "return": 1
+    },
+    "forehand_pct": 38,
+    "stroke_n": 8,
+    "zones": {
+     "baseline": 38,
+     "transition": 62,
+     "kitchen": 0
+    },
+    "zones_n": 8,
+    "volley_pct": 17,
+    "rally_shots_n": 6,
+    "drive_pct": 100,
+    "soft_pct": 0,
+    "lob_pct": 0,
+    "speed": {
+     "serve": 31.9,
+     "return": 25.0,
+     "drive": 28.3,
+     "soft": null,
+     "all": 28.4
+    },
+    "speed_n": {
+     "serve": 1,
+     "return": 1,
+     "drive": 4,
+     "soft": 0,
+     "all": 6
+    },
+    "spin": {
+     "n": 6,
+     "topspin": 0,
+     "slice": 33,
+     "drive_topspin": 0,
+     "drive_n": 5
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.8,
+     "drive_n": 3
+    },
+    "deep_pct": 50,
+    "deep_n": 6
+   },
+   "placement": {
+    "doubles": {
+     "n": 8,
+     "status": {
+      "unresolved": 5,
+      "bounced": 2,
+      "intercepted": 1
+     },
+     "landing_usable": 1,
+     "landing_observed": 2,
+     "landing_zones": {
+      "midcourt centre": 1
+     },
+     "interception_zones": {
+      "midcourt right": 1
+     },
+     "intercepted": 1,
+     "speed_n": 6,
+     "speed_median": 33,
+     "facts": [
+      {
+       "text": "Of 8 analysed shots: 2 bounced before the opponent's contact, 1 were intercepted, 0 ended at the net, 5 are unresolved.",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "1 shots were intercepted by the opponent.",
+       "n": 1,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         13,
+         350.93
+        ]
+       ]
+      },
+      {
+       "text": "Median estimated speed on 6 measurable shots: 33 mph.",
+       "n": 6,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         5,
+         125.73
+        ],
+        [
+         "tnppl_rc_6_MD",
+         13,
+         350.93
+        ],
+        [
+         "tnppl_rc_6_MD",
+         5,
+         128.67
+        ],
+        [
+         "tnppl_rc_6_MD",
+         17,
+         414.9
+        ],
+        [
+         "tnppl_rc_6_MD",
+         6,
+         144.87
+        ],
+        [
+         "tnppl_rc_6_MD",
+         12,
+         336.43
+        ]
+       ]
+      },
+      {
+       "text": "Hits from behind the baseline on 2 of 8 shots with a certain origin; most often from deep centre (2).",
+       "n": 8,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         5,
+         125.73
+        ],
+        [
+         "tnppl_rc_6_MD",
+         13,
+         355.87
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Plays forward: 62% of contacts are inside the baseline area (transition or kitchen).",
+     "n": 8,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Power over touch: drives are 100% of rally shots (after the serve and return) - among the most of the 47 players here.",
+     "n": 6,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Lets the ball bounce: only 17% of rally shots are volleys.",
+     "n": 6,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the backhand: 62% of strokes are backhands.",
      "n": 8,
      "small": true,
      "kind": "label"
@@ -13899,13 +19347,13 @@
      "kind": "label"
     },
     {
-     "text": "Power over touch: drives are 60% of rally shots (after the serve and return) - among the most of the 35 players here.",
+     "text": "Balanced shot choice: drives 60%, dinks / drops / resets 40% of rally shots.",
      "n": 5,
      "small": true,
      "kind": "label"
     },
     {
-     "text": "Takes the ball early: volleys 60% of rally shots (out of the air) - one of the highest of the 35 players here.",
+     "text": "Takes the ball early: volleys 60% of rally shots (out of the air) - one of the highest of the 47 players here.",
      "n": 5,
      "small": true,
      "kind": "label"
@@ -13917,8 +19365,166 @@
      "kind": "label"
     }
    ]
+  },
+  {
+   "id": "rishi-vandhan",
+   "name": "Rishi Vandhan",
+   "team": "Coimbatore Smashers",
+   "tournaments": [
+    "TNPPL Season 2"
+   ],
+   "matches": [
+    {
+     "id": "tnppl_rc_6_MD",
+     "title": "Krishna Teja / Yaksharath vs Anish Froilan R / Rishi Vandhan",
+     "round": "Men's doubles (open)",
+     "type": "doubles",
+     "tournament": "TNPPL Season 2",
+     "team": "Coimbatore Smashers",
+     "partner": [
+      "Anish Froilan R"
+     ],
+     "opponents": [
+      "Krishna Teja",
+      "Yaksharath"
+     ],
+     "shots": 5,
+     "rallies": 5,
+     "won_pct": 20,
+     "official": "Coimbatore Smashers won 11-2 (match card)"
+    }
+   ],
+   "stats": {
+    "shots": 5,
+    "typed": 5,
+    "mix": {
+     "drive": 20,
+     "return": 20,
+     "serve": 20,
+     "drop": 20,
+     "dink": 20
+    },
+    "mix_n": {
+     "drive": 1,
+     "return": 1,
+     "serve": 1,
+     "drop": 1,
+     "dink": 1
+    },
+    "forehand_pct": 40,
+    "stroke_n": 5,
+    "zones": {
+     "baseline": 80,
+     "transition": 20,
+     "kitchen": 0
+    },
+    "zones_n": 5,
+    "volley_pct": 33,
+    "rally_shots_n": 3,
+    "drive_pct": 33,
+    "soft_pct": 67,
+    "lob_pct": 0,
+    "speed": {
+     "serve": null,
+     "return": 8.1,
+     "drive": 30.9,
+     "soft": 25.1,
+     "all": 21.0
+    },
+    "speed_n": {
+     "serve": 0,
+     "return": 1,
+     "drive": 1,
+     "soft": 2,
+     "all": 4
+    },
+    "spin": {
+     "n": 4,
+     "topspin": 50,
+     "slice": 50,
+     "drive_topspin": 100,
+     "drive_n": 1
+    },
+    "clear": {
+     "soft": null,
+     "soft_n": 0,
+     "drive": 0.7,
+     "drive_n": 1
+    },
+    "deep_pct": 67,
+    "deep_n": 3
+   },
+   "placement": {
+    "doubles": {
+     "n": 5,
+     "status": {
+      "bounced": 3,
+      "unresolved": 2
+     },
+     "landing_usable": 3,
+     "landing_observed": 3,
+     "landing_zones": {
+      "deep right": 1,
+      "midcourt wide-right": 1,
+      "midcourt right": 1
+     },
+     "interception_zones": {},
+     "intercepted": 0,
+     "speed_n": 4,
+     "speed_median": 17,
+     "facts": [
+      {
+       "text": "Of 5 analysed shots: 3 bounced before the opponent's contact, 0 were intercepted, 0 ended at the net, 2 are unresolved.",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": []
+      },
+      {
+       "text": "Hits from behind the baseline on 3 of 5 shots with a certain origin; most often from behind the baseline (centre) (2).",
+       "n": 5,
+       "small": true,
+       "kind": "fact",
+       "clips": [
+        [
+         "tnppl_rc_6_MD",
+         1,
+         3.1
+        ],
+        [
+         "tnppl_rc_6_MD",
+         8,
+         220.8
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   "singles": [],
+   "insights": [],
+   "style": [
+    {
+     "text": "Mostly a back-court player: 80% of contacts from the baseline area.",
+     "n": 5,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Soft-game player: dinks, drops and resets are 67% of rally shots - among the most of the 47 players here.",
+     "n": 3,
+     "small": true,
+     "kind": "label"
+    },
+    {
+     "text": "Leans on the backhand: 60% of strokes are backhands.",
+     "n": 5,
+     "small": true,
+     "kind": "label"
+    }
+   ]
   }
  ],
- "n": 44,
+ "n": 62,
  "note": "Doubles shots are credited to the named hitter (identity ~98% right). Shot types, spin and net clearance carry the same accuracy notes as the match reports; spin is experimental."
 }
