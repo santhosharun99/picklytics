@@ -56,7 +56,11 @@
     "ends_from_kit": true
    },
    "official": "Kannan (Twin Eagles Hosur) won 11-7 (match card)",
-   "names_note": "P1/P2 -> names to be set from the first analysed serve / kit"
+   "names": {
+    "P1": "Kannan",
+    "P2": "Rishi Raghavendra"
+   },
+   "names_check": "P1 near at 625 s wears the KANNAN shirt (TEH black/gold); P2 light SSS kit (frames checked 2026-10-09)"
   },
   "tnppl_st_2_WD": {
    "type": "doubles",
@@ -239,7 +243,14 @@
     "scoring": "rally",
     "ends_from_kit": true
    },
-   "official": "Salem Super Smashers won 25-23 (match card)"
+   "official": "Salem Super Smashers won 25-23 (match card)",
+   "rotation": {
+    "every": 5,
+    "order_note": "same TNPPL super-singles format as KT v RTT: slot = (combined score // 5) % 5"
+   },
+   "names_check": "P1 = light SSS kit, P2 = black/gold TEH kit (frames checked 2026-10-09)"
   }
- }
+ },
+ "rig": "tnppl_court1",
+ "kits": "SSS light grey / white, TEH black & gold"
 }

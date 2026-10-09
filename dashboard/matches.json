@@ -256,6 +256,158 @@
    "check": "Score overlay: winner right on 13 of 14, server on 21 of 26 checked rallies; 26 of 35 points found",
    "tournament": "tnppl_s2",
    "group": "Kodai Tigers vs Rockfort Terminatrz Trichy"
+  },
+  {
+   "id": "tnppl_st_1_MS",
+   "type": "singles",
+   "title": "Rishi Raghavendra vs Kannan",
+   "players": [
+    "Rishi Raghavendra",
+    "Kannan"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Men's singles (open) · match 1 of the tie",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_1_MS",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_1_MS.mp4",
+   "thumb": "thumbs/tnppl_st_1_MS.jpg",
+   "check": "Score overlay: server right on 9 of 13 rallies, winner on 6 of 10 (overlay stops at 7-10)",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_2_WD",
+   "type": "doubles",
+   "title": "Aparajitha / Dakshanasree vs Swetha / Aashritha",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Women's doubles",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_2_WD",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_2_WD.mp4",
+   "thumb": "thumbs/tnppl_st_2_WD.jpg",
+   "check": "Score overlay: serving team right on 12 of 17 rallies, rally winner on 10 of 17",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_3_MD",
+   "type": "doubles",
+   "title": "Rishi Raghavendra / Eshwar vs Gowtham / Vishnu",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_3_MD",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_3_MD.mp4",
+   "thumb": "thumbs/tnppl_st_3_MD.jpg",
+   "check": "Score overlay: serving team right on 16 of 21 rallies, rally winner on 14 of 20",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_4_XD",
+   "type": "doubles",
+   "title": "Vishal / Aparajitha vs Sanjay / Swetha",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Mixed doubles",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_4_XD",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_4_XD.mp4",
+   "thumb": "thumbs/tnppl_st_4_XD.jpg",
+   "check": "Score overlay: serving team right on 22 of 22 rallies, rally winner on 14 of 21",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_5_MD50",
+   "type": "doubles",
+   "title": "Ranvir Ranjit / Senthilkumar vs Ramesh / Vasudevan",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Men's 50+ doubles",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_5_MD50",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_5_MD50.mp4",
+   "thumb": "thumbs/tnppl_st_5_MD50.jpg",
+   "check": "Score overlay: serving team right on 13 of 16 rallies, rally winner on 9 of 15",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_6_MD",
+   "type": "doubles",
+   "title": "Dhakshin / Vishal vs Sanjay / Sandeep",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_6_MD",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_6_MD.mp4",
+   "thumb": "thumbs/tnppl_st_6_MD.jpg",
+   "check": "Score overlay: serving team right on 27 of 34 rallies, rally winner on 19 of 34",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_7_TeamDoubles",
+   "type": "doubles",
+   "title": "Salem Super Smashers vs Twin Eagles Hosur (team)",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Team event - super doubles · rotating doubles, rally scoring to 25",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_7_TeamDoubles",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_7_TeamDoubles.mp4",
+   "thumb": "thumbs/tnppl_st_7_TeamDoubles.jpg",
+   "check": "Score overlay: serving team right on 26 of 28 rallies, rally winner on 23 of 27",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
+  },
+  {
+   "id": "tnppl_st_8_TeamSingles",
+   "type": "singles",
+   "title": "Salem Super Smashers vs Twin Eagles Hosur (super singles)",
+   "players": [
+    "Salem Super Smashers",
+    "Twin Eagles Hosur"
+   ],
+   "event": "TNPPL Season 2 · Salem Super Smashers vs Twin Eagles Hosur",
+   "round": "Team event - super singles · rotating singles, rally scoring to 25",
+   "venue": "Court 1 · indoor",
+   "report": "tnppl_st_8_TeamSingles",
+   "replay": null,
+   "video": "data/videos/TNPPL_S2_SSSvTEH_8_TeamSingles.mp4",
+   "thumb": "thumbs/tnppl_st_8_TeamSingles.jpg",
+   "check": "Score overlay: server right on 21 of 27 rallies, winner on 12 of 14",
+   "tournament": "tnppl_s2",
+   "group": "Salem Super Smashers vs Twin Eagles Hosur"
   }
  ],
  "tournaments": [
