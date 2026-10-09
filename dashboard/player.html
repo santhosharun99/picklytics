@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Player · Pickleball Analyzer</title>
-<link rel="stylesheet" href="theme.css?v=5">
+<title>Player · Picklytics</title>
+<link rel="stylesheet" href="theme.css?v=6">
 <style>
 .phead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .av { flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--court-green); color: #fff; font-weight: 700; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; }
@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="topnav">
-  <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
+  <a class="brand" href="./"><img class="mark" src="brand/picklytics-mark-white.png" alt="" width="26" height="28">Picklytics <small>performance &amp; scouting from match video</small></a>
   <nav aria-label="Site"><a href="./">Matches</a><a href="players.html" class="on">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
 </div>
 <div class="wrap" id="main"><div class="loading">Loading player…</div></div>
@@ -51,7 +51,7 @@ const ALIASES = { "Sivashankar Sivan": ["Sivasankar Shivan"] };   // same spelli
   try { [D, J] = await Promise.all([getJSON("players.json"), getJSON("matches.json")]); } catch (e) { $("#main").innerHTML = `<div class="state-empty" role="alert">Player data could not be loaded.</div>`; return; }
   const p = D.players.find(x => x.id === new URLSearchParams(location.search).get("p"));
   if (!p) { $("#main").innerHTML = `<div class="state-empty">Player not found. <a href="players.html">All players</a></div>`; return; }
-  document.title = `${p.name} · Pickleball Analyzer`;
+  document.title = `${p.name} · Picklytics`;
   const names = [p.name, ...(ALIASES[p.name] || [])];
   // this player's shots in every analysed match, per format (singles and doubles never mixed)
   const per = { singles: [], doubles: [] };

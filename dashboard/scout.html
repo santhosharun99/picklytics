@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8"><link rel="icon" href="brand/picklytics-mark.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Coaching brief · Pickleball Analyzer</title>
-<link rel="stylesheet" href="theme.css?v=5">
+<title>Coaching brief · Picklytics</title>
+<link rel="stylesheet" href="theme.css?v=6">
 <style>
 .bhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 24px; }
 .bhead h1 { margin: 2px 0 4px; font-size: 26px; letter-spacing: -.015em; color: var(--paddle); overflow-wrap: anywhere; }
@@ -54,7 +54,7 @@
 </head>
 <body>
 <div class="topnav">
-  <a class="brand" href="./"><i></i>Pickleball Analyzer <small>performance &amp; scouting from match video</small></a>
+  <a class="brand" href="./"><img class="mark" src="brand/picklytics-mark-white.png" alt="" width="26" height="28">Picklytics <small>performance &amp; scouting from match video</small></a>
   <nav aria-label="Site"><a href="./">Matches</a><a href="players.html">Players</a><a href="review.html">Shot review</a><a href="hub.html?tab=accuracy">Accuracy</a><a href="label.html">Labeller</a></nav>
 </div>
 <div class="wrap" id="main"><div class="loading">Loading brief…</div></div>
@@ -150,7 +150,7 @@ function render() {
       <div class="qbox"><p><b>Venue:</b> ${esc(val.detail)}</p>
         <p><b>Evidence:</b> landings ${L.recorded.filter(s => PB.evidenceOf(s, "landing") === "human").length} human-reviewed, ${L.recorded.filter(s => PB.evidenceOf(s, "landing") !== "human").length} automatic. Locations are seen from behind the hitter (left = hitter's left); zones: kitchen 0–7 ft, midcourt 7–14.5 ft, deep 14.5–22 ft from the net, thirds across.</p>
         <p><b>Scope:</b> one match (${esc(M.title)}). ${R.type === "doubles" ? "Doubles rally winners from tracking are unreliable and are not used. " : ""}Projected landings of intercepted balls are not available. Speed is not checked against radar.</p>
-        <p class="printonly">Printed from Pickleball Analyzer · ${new Date().toLocaleDateString()} · full detail: hub.html?m=${esc(M.id)}</p></div>
+        <p class="printonly">Printed from Picklytics · ${new Date().toLocaleDateString()} · full detail: hub.html?m=${esc(M.id)}</p></div>
     </section>`;
   $("#printBtn").onclick = () => print();
   $("#bwho") && ($("#bwho").onchange = e => { SEL = PB.resolveSelection(R, e.target.value); history.replaceState(null, "", `?m=${encodeURIComponent(M.id)}&p=${encodeURIComponent(SEL.key)}`); render(); });

@@ -81,6 +81,7 @@ section.tiles + .acc { margin: -6px 2px 0; border-top: 0; padding-top: 0; }
   padding: 9px 24px; background: var(--court-green-dark); color: #fff; }
 .topnav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; font-size: 17px; color: #fff; text-decoration: none; }
 .topnav .brand i { width: 14px; height: 14px; border-radius: 50%; background: var(--ball); display: inline-block; }
+.topnav .brand .mark { height: 28px; width: auto; display: block; flex: none; }
 .topnav .brand small { font-weight: 500; color: #c9d8cd; font-size: 12.5px; letter-spacing: 0; }
 .topnav nav { display: flex; gap: 4px; flex-wrap: wrap; }
 .topnav nav a { color: #e3ece5; text-decoration: none; font-size: 13.5px; padding: 6px 12px; border-radius: 999px; }
@@ -407,3 +408,12 @@ dialog.dq li { margin: 2px 0; }
   #clipSlot .player .now { grid-area: now; } #clipSlot .player .vwrap { grid-area: v; } #clipSlot .player .ctrl { grid-area: ctrl; }
   #clipSlot .player #plDesc { grid-area: desc; } #clipSlot .player .playlist { grid-area: list; max-height: 620px; }
 }
+
+/* ---------- Picklytics intro (home page, once per browser session) ---------- */
+.pk-intro { position: fixed; inset: 0; z-index: 1000; background: #f4f5ec; display: grid; place-items: center; transition: opacity .5s ease; }
+.pk-intro video { width: 100%; height: 100%; object-fit: contain; background: #f4f5ec; }
+.pk-intro.out { opacity: 0; pointer-events: none; }
+.pk-intro .skip { position: absolute; right: 22px; bottom: 20px; border: 1px solid #173f3540; background: #ffffffe6; color: #173f35; border-radius: 999px;
+  padding: 9px 18px; font: 600 14px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; }
+.pk-intro .skip:hover { background: #d9efab; }
+@media (prefers-reduced-motion: reduce) { .pk-intro { display: none; } }

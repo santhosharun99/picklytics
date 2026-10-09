@@ -33,7 +33,7 @@ async function init() {
   }
   else if (M.run) { try { A = await getJSON(`../outputs/${M.run}/analysis.json`); } catch (e) { /* status view copes */ } }
   if (hash || q.has("tab")) history.replaceState(null, "", PB.stateToSearch(ST));
-  document.title = `${M.title} · Pickleball Analyzer`;
+  document.title = `${M.title} · Picklytics`;
   $("#loading")?.remove();
   renderHeader();
   $("#wsbar").hidden = false;
@@ -901,7 +901,7 @@ function bindDQ() { $("#dqClose").onclick = () => $("#dq").close(); $("#dq").onc
 function siteAccuracy() {
   $("#loading")?.remove();
   $("#navacc").classList.add("on");
-  document.title = "Accuracy · Pickleball Analyzer";
+  document.title = "Accuracy · Picklytics";
   $("#crumb").innerHTML = `<a href="./">Tournaments</a><span aria-hidden="true">›</span><span class="here">Accuracy</span>`;
   $("#mh").innerHTML = `<div><h1>How accurate is each number?</h1><div class="who-line">What every metric on this site is worth, and how we know. Levels: ${Object.entries(LEVELS).map(([k, [l, d]]) => `<span><span class="lvl ${k}">${l}</span> ${d}</span>`).join("")}</div></div>`;
   const groups = [...new Set(ACCURACY.map(a => a.group))], sec = $("#sec-accuracy");
