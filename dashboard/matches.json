@@ -416,6 +416,157 @@
    "group": "Salem Super Smashers vs Twin Eagles Hosur",
    "run": "tnppl_st_8_TeamSingles",
    "result": "Salem Super Smashers won 25-23 (match card)"
+  },
+  {
+   "id": "tnppl_rc_1_MS",
+   "type": "singles",
+   "title": "Boopathy S vs Kavin Karthik",
+   "players": [
+    "Boopathy S",
+    "Kavin Karthik"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Men's singles (open) · match 1 of the tie",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_1_MS.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Boopathy S (Ramnad Royals) won 11-5 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_1_MS"
+  },
+  {
+   "id": "tnppl_rc_2_WD",
+   "type": "doubles",
+   "title": "Ahana / Maanasi vs Niranthara / Nidithra",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Women's doubles",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_2_WD.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Coimbatore Smashers won 11-7 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_2_WD"
+  },
+  {
+   "id": "tnppl_rc_3_MD",
+   "type": "doubles",
+   "title": "Boopathy S / Arihant vs Kavin Karthik / Prabanjan",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_3_MD.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Ramnad Royals won 11-10 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_3_MD"
+  },
+  {
+   "id": "tnppl_rc_4_XD",
+   "type": "doubles",
+   "title": "Arihant / Maanasi vs Anish Froilan R / Niranthara",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Mixed doubles",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_4_XD.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Coimbatore Smashers won 11-8 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_4_XD"
+  },
+  {
+   "id": "tnppl_rc_5_MD50",
+   "type": "doubles",
+   "title": "Ranjith / Thomas vs Venkataramanan / Eswaran",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Men's 50+ doubles",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_5_MD50.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Ramnad Royals won 11-3 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_5_MD50"
+  },
+  {
+   "id": "tnppl_rc_6_MD",
+   "type": "doubles",
+   "title": "Krishna Teja / Yaksharath vs Anish Froilan R / Rishi Vandhan",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Men's doubles (open)",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_6_MD.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Coimbatore Smashers won 11-2 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_6_MD"
+  },
+  {
+   "id": "tnppl_rc_7_TeamDoubles",
+   "type": "doubles",
+   "title": "Ramnad Royals vs Coimbatore Smashers (team)",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Team event - super doubles · full footage not available",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_7_TeamDoubles.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Ramnad Royals won 25-16 (match card)",
+   "check": "Full footage not available - not analysed",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers"
+  },
+  {
+   "id": "tnppl_rc_8_TeamSingles",
+   "type": "singles",
+   "title": "Ramnad Royals vs Coimbatore Smashers (super singles)",
+   "players": [
+    "Ramnad Royals",
+    "Coimbatore Smashers"
+   ],
+   "event": "TNPPL Season 2 · Ramnad Royals vs Coimbatore Smashers",
+   "round": "Team event - super singles · rotating singles, rally scoring to 25",
+   "venue": "Court 1 · indoor",
+   "video": "data/videos/TNPPL_S2_RRvCS_8_TeamSingles.mp4",
+   "thumb": "thumbs/tnppl_1_MS.jpg",
+   "result": "Ramnad Royals won 25-18 (match card)",
+   "check": "Processing",
+   "tournament": "tnppl_s2",
+   "group": "Ramnad Royals vs Coimbatore Smashers",
+   "run": "tnppl_rc_8_TeamSingles"
   }
  ],
  "tournaments": [
