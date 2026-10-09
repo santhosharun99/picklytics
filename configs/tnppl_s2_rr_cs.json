@@ -54,7 +54,12 @@
     "games_to_win": 1,
     "ends_from_kit": true
    },
-   "official": "Boopathy S (Ramnad Royals) won 11-5 (match card)"
+   "official": "Boopathy S (Ramnad Royals) won 11-5 (match card)",
+   "names": {
+    "P1": "Boopathy S",
+    "P2": "Kavin Karthik"
+   },
+   "names_check": "P2 near wears the KAVIN shirt (CS black), P1 RR maroon kit (frames checked 2026-10-09)"
   },
   "tnppl_rc_2_WD": {
    "type": "doubles",
@@ -245,5 +250,6 @@
    "official": "Ramnad Royals won 25-18 (match card)",
    "names_note": "P1/P2 -> teams to be checked from the kits"
   }
- }
+ },
+ "kits": "RR maroon, CS black / purple"
 }
