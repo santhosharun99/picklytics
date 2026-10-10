@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 data/pklmart/
 .kaggle_stage/
+.private/
