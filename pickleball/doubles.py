@@ -302,6 +302,14 @@ def reconstruct(run_dir, A: dict, scoring: str = "sideout", target: int = 11, wi
                 games_to_win: int = 2, game_break_s: float = 60.0, serve_cue: str = "combined") -> list[dict]:
     """Team-level doubles match reconstruction. serve_cue: 'firsthit' (side of the first hit), 'formation'
     (formation_serve_side) or 'combined' (formation when its gap >= FORMATION_MIN_GAP_FT, else first hit)."""
+    seq = serve_cues(run_dir, A, serve_cue)
+    if scoring == "rally":
+        return score_rally(seq, target, win_by)
+    return score_sideout(seq, target, win_by, games_to_win, game_break_s)
+
+
+def serve_cues(run_dir, A: dict, serve_cue: str = "combined") -> list[dict]:
+    """serving_sequence with the serving side from the chosen cue (see reconstruct) and overrides applied."""
     seq = serving_sequence(run_dir, A)
     if serve_cue != "firsthit":
         fm = formation_serve_side(run_dir, A)
@@ -315,6 +323,4 @@ def reconstruct(run_dir, A: dict, scoring: str = "sideout", target: int = 11, wi
             nk = s["near_kit"]
             s["serve_kit"] = None if nk is None else (nk if s["serve_side"] == "near" else 1 - nk)
     _serve_override(run_dir, seq)
-    if scoring == "rally":
-        return score_rally(seq, target, win_by)
-    return score_sideout(seq, target, win_by, games_to_win, game_break_s)
+    return seq
